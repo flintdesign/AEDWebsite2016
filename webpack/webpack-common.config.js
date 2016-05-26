@@ -18,29 +18,11 @@ module.exports = {
       include: path.join(__dirname, '../source')
     },
     {
-      test: /\.scss$/,
-      loaders: [
-        'style-loader',
-        'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
-        'autoprefixer-loader?browsers=last 2 version',
-        'sass-loader'
-      ],
-      include: path.join(__dirname, '../source')
-    },
-    {
-      test: /\.css$/,
-      loaders: [
-        'style-loader',
-        'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
-      ],
-      include: path.join(__dirname, '../source')
-    },
-    {
       test: /\.(png|jpg|jpeg|svg|woff|otf|ttf)$/, loader: 'url-loader?limit=8192'
     }
   ],
   resolve: {
     root: path.join(__dirname, '../source'),
-    extensions: ['', '.js', '.scss', '.css', '.png', '.jpg', '.jpeg', '.svg', '.woff', '.otf', '.ttf']
+    extensions: ['', '.js', '.css', '.png', '.jpg', '.jpeg', '.svg', '.woff', '.otf', '.ttf']
   }
 };
