@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Name from './name';
 
-import styles from './names.scss';
-
 class NameList extends Component {
   static propTypes = {
     names: PropTypes.array.isRequired,
@@ -20,7 +18,7 @@ class NameList extends Component {
     const { names, actions } = this.props;
     return (
       <div>
-        <h3 className={styles.header}>Names!</h3>
+        <h3>Names!</h3>
         {names.map(name => <Name key={name} name={name} actions={actions} />)}
         <a onClick={this.addName}>Add Name</a>
       </div>
