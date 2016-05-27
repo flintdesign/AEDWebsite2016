@@ -1,7 +1,7 @@
 // Use this file for config options that should be uniform
 // between webpack environment configs
 
-var path = require('path');
+const path = require('path');
 
 module.exports = {
   preLoaders: [
@@ -14,7 +14,8 @@ module.exports = {
   loaders: [
     {
       test: /\.js$/,
-      loaders: ['react-hot', 'babel'],
+      exclude: /node_modules/,
+      loaders: ['react-hot', 'babel-loader'],
       include: path.join(__dirname, '../source')
     },
     {

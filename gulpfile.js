@@ -20,7 +20,7 @@ gulp.task('stylus', function () {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(paths.stylusMain, ['stylus']);
+  gulp.watch("source/css/**/*.styl", ['stylus']);
 });
 
 
