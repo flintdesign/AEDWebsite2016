@@ -14,12 +14,16 @@ App.propTypes = {
   actions: PropTypes.object.isRequired
 };
 
+const mapStateToProps = (state) => ({
+  names: state.names,
+  titles: state.names.map(n => n.title)
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  actions: bindActionCreators(NameActions, dispatch)
+});
+
 export default connect(
-  (state) => ({
-    names: state.names,
-    titles: state.names.map(n => n.title)
-  }),
-  (dispatch) => ({
-    actions: bindActionCreators(NameActions, dispatch)
-  })
+  mapStateToProps,
+  mapDispatchToProps
 )(App);
