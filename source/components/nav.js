@@ -6,7 +6,7 @@ export default function Nav() {
   return (
     <nav>
       <div className="links__left">
-        <Link className="nav__link" to={'/'}>Home</Link>
+        <Link className="nav__link" to={'/'}>Elephant<br />Database</Link>
         {' '}
         <div className="search__container">
           <Search />

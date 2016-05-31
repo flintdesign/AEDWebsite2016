@@ -3,9 +3,14 @@ import Nav from '../components/nav';
 
 export default function App(props) {
   return (
-    <div className="container">
-      <Nav />
-      {props.children}
+    <div className="container main__container">
+      <main>
+        <Nav />
+        {props.children}
+      </main>
+      <aside>
+        <h1>Sidebar</h1>
+      </aside>
     </div>
   );
 }
