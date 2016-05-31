@@ -1,0 +1,67 @@
+@import 'typography'
+
+aside
+  width 35%
+  background #f7f7f7
+  min-height 100vh
+
+.sidebar__inner
+  padding 20px 40px
+  background #f7f7f7
+  &:first-child
+    background #ededed
+    color black
+  h1
+    font-size 32px
+    margin 25px 0 15px
+    font-weight 600
+
+.sidebar__top-nav
+  margin 0 0 15px 0
+  padding-left 0
+  display flex
+  justify-content space-between
+  width 70%
+  li
+    font-size 13px
+    position relative
+    line-height 1
+
+.sidebar__year__current
+  @extend .small-current
+
+.sidebar__viz-type
+  margin-left 0
+  padding-left 0
+
+.sidebar__viz-type li
+  @extend .small-heading
+  line-height 1
+  margin-bottom 10px
+  display table
+  &.current
+    @extend .small-current
+
+.sidebar__stats-table
+  width 100%
+  margin-bottom 30px
+  thead
+    @extend .small-heading
+    color #bababa
+    border-bottom 1px solid
+    td:last-child
+      text-align right
+  tbody td
+    padding 3px 0
+    &:last-child
+      font-weight bold
+      text-align right
+
+.sidebar__table-container
+  border-bottom 2px solid #dcdcdc
+  h3
+    font-weight 600
+    padding 10px 0
+
+.heading__small
+  @extend .small-heading

@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
 import Nav from '../components/nav';
+import Sidebar from '../components/sidebar';
+import TotalCount from '../components/total_count';
 
 export default function App(props) {
   return (
@@ -8,9 +10,8 @@ export default function App(props) {
         <Nav />
         {props.children}
       </main>
-      <aside>
-        <h1>Sidebar</h1>
-      </aside>
+      <Sidebar />
+      <TotalCount />
     </div>
   );
 }

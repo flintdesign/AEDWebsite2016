@@ -16,7 +16,7 @@ export default function Nav() {
         <Link className="nav__link" to={'/about'}>About</Link>
         {' '}
         <Link className="nav__link" to={'/resources'}>Resources</Link>
-        <span>Toggle Sidebar</span>
+        <span>S</span>
       </div>
     </nav>
   );
