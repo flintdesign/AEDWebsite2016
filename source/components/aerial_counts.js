@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
 
 export default class AerialCounts extends Component {
   constructor(props, context) {
@@ -15,9 +15,10 @@ export default class AerialCounts extends Component {
 
   render() {
     const className = `${this.state.toggled ? 'open' : 'closed'} sidebar__table-container`;
+    const { title } = this.props;
     return (
       <div className={className}>
-        <h3 onClick={this.handleClick}>Aerial or Ground Counts</h3>
+        <h3 onClick={this.handleClick}>{title}</h3>
         <table className="sidebar__stats-table">
           <tbody>
             <tr>
@@ -42,3 +43,7 @@ export default class AerialCounts extends Component {
     );
   }
 }
+
+AerialCounts.propTypes = {
+  title: PropTypes.string.isRequired
+};

@@ -56,19 +56,20 @@ export default function Sidebar() {
 
         <h4 className="heading__small">Counts by Data Category</h4>
 
-        <AerialCounts />
+        <AerialCounts
+          title="Aerial or Ground Counts"
+        />
 
-        <div className="sidebar__table-container">
-          <h3>Direct Sample and Reliable Dung Counts</h3>
-        </div>
+        <AerialCounts
+          title="Direct Sample and Reliable Dung Counts"
+        />
 
-        <div className="sidebar__table-container">
-          <h3>Other Dung Counts</h3>
-        </div>
-
-        <div className="sidebar__table-container">
-          <h3>Informed Guesses</h3>
-        </div>
+        <AerialCounts
+          title="Other Dung Counts"
+        />
+        <AerialCounts
+          title="Informed Guesses"
+        />
 
       </section>
     </aside>
