@@ -1,4 +1,5 @@
 import React from 'react';
+import AerialCounts from './aerial_counts';
 
 export default function Sidebar() {
   return (
@@ -55,29 +56,7 @@ export default function Sidebar() {
 
         <h4 className="heading__small">Counts by Data Category</h4>
 
-        <div className="sidebar__table-container">
-          <h3>Aerial or Ground Counts</h3>
-          <table className="sidebar__stats-table">
-            <tbody>
-              <tr>
-                <td>Definite</td>
-                <td>57,312</td>
-              </tr>
-              <tr>
-                <td>Probable</td>
-                <td>0</td>
-              </tr>
-              <tr>
-                <td>Possible</td>
-                <td>0</td>
-              </tr>
-              <tr>
-                <td>Speculative</td>
-                <td>0</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <AerialCounts />
 
         <div className="sidebar__table-container">
           <h3>Direct Sample and Reliable Dung Counts</h3>
