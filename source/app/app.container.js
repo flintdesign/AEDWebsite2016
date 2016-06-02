@@ -28,7 +28,7 @@ export default class App extends Component {
         <main className={this.state.showSidebar ? null : 'full-width'}>
           <Nav
             onHandleClick={this.onHandleClick}
-            showSecondaryLinks={!this.state.showSidebar}
+            showSidebar={this.state.showSidebar}
           />
           {children}
         </main>

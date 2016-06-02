@@ -4,6 +4,8 @@ aside
   background #f7f7f7
   min-height 100vh
   transition width 250ms
+  position relative
+  z-index 2
   &.open
     width 35%
     display block
@@ -13,10 +15,10 @@ aside
 
 .sidebar__inner
   padding 20px 40px
-  background #f7f7f7
+  background #fff
   &:first-child
-    background #ededed
-    color black
+    background $brand-dark
+    color #fff
     height 20vh
     min-height 200px
   &:last-child
@@ -58,7 +60,7 @@ aside
   margin-bottom 30px
   thead
     @extend .small-heading
-    color #bababa
+    color $text-light
     border-bottom 1px solid
     td:last-child
       text-align right
@@ -79,7 +81,7 @@ aside
       display inline-block
       position absolute
       right 10px
-      color #bababa
+      color $text-light
   &.closed
     h3:after
       content '\276f'

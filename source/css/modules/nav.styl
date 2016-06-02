@@ -1,8 +1,12 @@
-nav
+.site-nav
   display flex
   justify-content space-between
   padding 15px $nav-margin
   align-items center
+  position absolute
+  top 10px
+  right 10px
+  z-index 3
 
 .links__left
   display flex
@@ -12,9 +16,6 @@ nav
   &.full-width
     width 100%
 
-.links__right a, span
-  margin-left $nav-margin
-
 .nav__link
   text-transform uppercase
   letter-spacing 1px
@@ -23,3 +24,15 @@ nav
   font-weight bold
   line-height 1.2
 
+.sidebar__toggle
+  position fixed
+  top 10px
+  right 0
+  padding 10px 15px
+  color #e3e3e3
+  cursor pointer
+  &.closed
+    background $brand-dark-md
+    border-radius 6px 0 0 6px
+  &.open
+    background none

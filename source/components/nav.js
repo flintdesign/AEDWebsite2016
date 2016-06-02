@@ -1,30 +1,25 @@
 import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
+// import { Link } from 'react-router';
 import Search from './search';
 
 export default function Nav(props) {
-  const linksLeftClass = `${props.showSecondaryLinks ? null : 'full-width'} links__left`;
-  const secondaryLinkClass = `${props.showSecondaryLinks ? 'shown__ib' : 'hidden'} nav__link`;
+  const symbol = props.showSidebar ? { __html: '&rarr;&nbsp;|' } : { __html: '&larr;' };
+  const toggleClassName = props.showSidebar ? 'sidebar__toggle open' : 'sidebar__toggle closed';
   return (
-    <nav>
-      <div className={linksLeftClass}>
-        <Link className="nav__link" to={'/'}>Elephant<br />Database</Link>
-        {' '}
-        <div className="search__container">
-          <Search />
-        </div>
+    <nav className="site-nav">
+      <div className="search__container">
+        <Search />
       </div>
-      <div className="links__right">
-        <Link className={secondaryLinkClass} to={'/about'}>About</Link>
-        {' '}
-        <Link className={secondaryLinkClass} to={'/resources'}>Resources</Link>
-        <span onClick={props.onHandleClick}>S</span>
-      </div>
+      <div
+        className={toggleClassName}
+        onClick={props.onHandleClick}
+        dangerouslySetInnerHTML={symbol}
+      />
     </nav>
   );
 }
 
 Nav.propTypes = {
   onHandleClick: PropTypes.func.isRequired,
-  showSecondaryLinks: PropTypes.bool.isRequired
+  showSidebar: PropTypes.bool.isRequired
 };
