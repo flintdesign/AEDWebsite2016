@@ -6,9 +6,37 @@
 .search__input
   border 1.5px solid $border
   width 100%
-  border-radius 4px
   padding 12px 15px
   box-shadow inset 0 0 2px #ddd
+  float right
+  &.focused
+    width 100%
+    border-radius 4px
+    transition width ease 300ms, border-radius 50ms ease 50ms
+  &.blurred
+    border-radius 50%
+    width 7%
+    transition width ease 300ms, border-radius 100ms ease 150ms
+
+.icon__magnifying-glass
+  position absolute
+  border 2.5px solid #888
+  border-radius 30px
+  width 14px
+  height 14px
+  display inline-block
+  right 7.25%
+  top 25px
+  cursor text
+  &:after
+    content ''
+    width 2.5px
+    height 8px
+    position absolute
+    top 8px
+    left -3px
+    transform rotate(45deg)
+    background #888
 
 ::-webkit-input-placeholder
   text-transform uppercase
