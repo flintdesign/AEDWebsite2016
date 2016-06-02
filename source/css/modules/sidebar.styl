@@ -26,8 +26,37 @@ aside
     height 80vh
   h1
     font-size 32px
-    margin 25px 0 15px
+    margin 55px 0 15px
     font-weight 600
+
+.sidebar__year-nav__container
+  position relative
+  &:after
+    position absolute
+    content '\203A'
+    transform rotate(90deg)
+    left 42px
+    top 4px
+
+.sidebar__year-nav
+  border 1px solid #fff
+  border-width 0 0 1px 0
+  background $brand-dark
+  -webkit-appearance: none
+  padding 3px 16px 3px 0
+  color #fff
+  border-radius 0
+  font-size 14px
+  display table
+  position absolute
+  li:not(.current)
+    display none
+  &:hover
+    li
+      cursor pointer
+      display block
+      &:hover
+        font-weight bold
 
 .sidebar__top-nav
   margin 0 0 15px 0

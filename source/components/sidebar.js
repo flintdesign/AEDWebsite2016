@@ -6,17 +6,15 @@ export default function Sidebar(props) {
   return (
     <aside className={showSidebar ? 'open' : 'closed'}>
       <section className="sidebar__inner">
-        <ul className="sidebar__top-nav">
-          <li className="sidebar__year__current">2013</li>
-          <li>/</li>
-          <li>2006</li>
-          <li>/</li>
-          <li>2002</li>
-          <li>/</li>
-          <li>1998</li>
-          <li>/</li>
-          <li>1995</li>
-        </ul>
+        <div className="sidebar__year-nav__container">
+          <ul className="sidebar__year-nav">
+            <li className="current">2013</li>
+            <li>2006</li>
+            <li>2002</li>
+            <li>1998</li>
+            <li>1995</li>
+          </ul>
+        </div>
         <h1 className="sidebar__entity-name">Africa</h1>
         <nav className="sidebar__viz-type">
           <ul>
