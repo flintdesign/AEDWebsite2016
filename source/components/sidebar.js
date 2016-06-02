@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import AerialCounts from './aerial_counts';
 
-export default function Sidebar() {
+export default function Sidebar(props) {
+  const { showSidebar } = props;
   return (
-    <aside>
+    <aside className={showSidebar ? 'open' : 'closed'}>
       <section className="sidebar__inner">
         <ul className="sidebar__top-nav">
           <li className="sidebar__year__current">2013</li>
@@ -75,3 +76,7 @@ export default function Sidebar() {
     </aside>
   );
 }
+
+Sidebar.propTypes = {
+  showSidebar: PropTypes.bool.isRequired
+};

@@ -1,9 +1,15 @@
 @import 'typography'
 
 aside
-  width 35%
   background #f7f7f7
   min-height 100vh
+  transition width 250ms
+  &.open
+    width 35%
+    display block
+  &.closed
+    width 0%
+    display none
 
 .sidebar__inner
   padding 20px 40px
