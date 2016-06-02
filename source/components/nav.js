@@ -3,10 +3,11 @@ import { Link } from 'react-router';
 import Search from './search';
 
 export default function Nav(props) {
+  const linksLeftClass = `${props.showSecondaryLinks ? null : 'full-width'} links__left`;
   const secondaryLinkClass = `${props.showSecondaryLinks ? 'shown__ib' : 'hidden'} nav__link`;
   return (
     <nav>
-      <div className="links__left">
+      <div className={linksLeftClass}>
         <Link className="nav__link" to={'/'}>Elephant<br />Database</Link>
         {' '}
         <div className="search__container">
