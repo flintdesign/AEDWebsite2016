@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Nav from '../components/nav';
 import Sidebar from '../components/sidebar';
 import TotalCount from '../components/total_count';
+import HelpNav from '../components/help_nav';
 
 export default class App extends Component {
   constructor(props, context) {
@@ -23,6 +24,7 @@ export default class App extends Component {
     const isHome = location.pathname === '/';
     const sidebar = isHome ? <Sidebar showSidebar={this.state.showSidebar} /> : null;
     const totalCount = isHome ? <TotalCount /> : null;
+    const helpNav = isHome ? <HelpNav /> : null;
     return (
       <div className="container main__container">
         <main className={this.state.showSidebar ? null : 'full-width'}>
@@ -34,6 +36,7 @@ export default class App extends Component {
         </main>
         {sidebar}
         {totalCount}
+        {helpNav}
       </div>
     );
   }
