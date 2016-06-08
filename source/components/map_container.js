@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Map, TileLayer, Polygon } from 'react-leaflet';
+import { Map, TileLayer, GeoJson } from 'react-leaflet';
 
 export default class MapContainer extends Component {
   constructor(props, context) {
@@ -7,7 +7,7 @@ export default class MapContainer extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.state = {
       markerPosition: [0, 0],
-      positions: [[]]
+      data: {}
     };
   }
 
@@ -15,13 +15,11 @@ export default class MapContainer extends Component {
     const self = this;
     fetch('/flat/map.json')
       .then(r => r.json())
-      .then(d => d.coordinates[0])
-      .then(c => c.map(pairs => pairs.map(p => [p[1], p[0]])))
-      .then(p => self.setState({ positions: p }));
+      .then(d => self.setState({ data: d }));
   }
 
-  handleClick() {
-    console.log('clicked');
+  handleClick(e) {
+    window.location = e.target.options.href;
   }
 
   render() {
@@ -30,8 +28,9 @@ export default class MapContainer extends Component {
         <TileLayer
           url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
         />
-        <Polygon
-          positions={this.state.positions}
+        <GeoJson
+          href="http://google.com"
+          data={this.state.data}
           onClick={this.handleClick}
         />
       </Map>
