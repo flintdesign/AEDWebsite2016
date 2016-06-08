@@ -1,24 +1,40 @@
-import React from 'react';
-import { Map, Marker, Popup, TileLayer, Polygon } from 'react-leaflet';
+import React, { Component } from 'react';
+import { Map, TileLayer, Polygon } from 'react-leaflet';
 
-export default function MapContainer() {
-  const position = [0, 0];
-  const polygonPositions = fetch('http://www.elephantdatabase.org/region/2/map.json', { mode: 'no-cors' })
-    .then(r => console.log(r));
-    // .then(r => r.json())
-    // .then(d => console.log(d.features.coordinates[0]));
+export default class MapContainer extends Component {
+  constructor(props, context) {
+    super(props, context);
+    this.handleClick = this.handleClick.bind(this);
+    this.state = {
+      markerPosition: [0, 0],
+      positions: [[]]
+    };
+  }
 
-  return (
-    <Map center={position} zoom={5}>
-      <TileLayer
-        url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-      />
-      <Polygon positions={polygonPositions} />
-      <Marker position={position}>
-        <Popup>
-          <span>A pretty CSS3 popup.<br />Easily customizable.</span>
-        </Popup>
-      </Marker>
-    </Map>
-  );
+  componentWillMount() {
+    const self = this;
+    fetch('/flat/map.json')
+      .then(r => r.json())
+      .then(d => d.coordinates[0])
+      .then(c => c.map(pairs => pairs.map(p => [p[1], p[0]])))
+      .then(p => self.setState({ positions: p }));
+  }
+
+  handleClick() {
+    console.log('clicked');
+  }
+
+  render() {
+    return (
+      <Map center={this.state.markerPosition} zoom={5}>
+        <TileLayer
+          url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+        />
+        <Polygon
+          positions={this.state.positions}
+          onClick={this.handleClick}
+        />
+      </Map>
+    );
+  }
 }
