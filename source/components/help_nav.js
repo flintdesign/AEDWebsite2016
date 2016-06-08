@@ -1,17 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
 export default class HelpNav extends Component {
   constructor(props, context) {
     super(props, context);
-    this.toggleActiveClass = this.toggleActiveClass.bind(this);
     this.state = {
-      active: false
+      active: this.props.location.query.nav === 'true'
     };
   }
 
-  toggleActiveClass() {
-    this.setState({ active: !this.state.active });
+  componentWillReceiveProps(newProps) {
+    this.setState({ active: newProps.location.query.nav });
   }
 
   render() {
@@ -19,7 +18,7 @@ export default class HelpNav extends Component {
     return (
       <div>
         <div className={navClassName}>
-          <span onClick={this.toggleActiveClass} className="help-nav__close">&times;</span>
+          <Link to="/" className="help-nav__close">&times;</Link>
           <ul>
             <li>
               <Link to="/about">About</Link>
@@ -29,13 +28,17 @@ export default class HelpNav extends Component {
             </li>
           </ul>
         </div>
-        <div
-          onClick={this.toggleActiveClass}
+        <Link
+          to="/?nav=true"
           className="help-nav"
         >
           ?
-        </div>
+        </Link>
       </div>
     );
   }
 }
+
+HelpNav.propTypes = {
+  location: PropTypes.object.isRequired,
+};

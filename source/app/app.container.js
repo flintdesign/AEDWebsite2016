@@ -24,7 +24,7 @@ export default class App extends Component {
     const isHome = location.pathname === '/';
     const sidebar = isHome ? <Sidebar showSidebar={this.state.showSidebar} /> : null;
     const totalCount = isHome ? <TotalCount /> : null;
-    const helpNav = isHome ? <HelpNav /> : null;
+    const helpNav = isHome ? <HelpNav location={this.props.location} /> : null;
     return (
       <div className="container main__container">
         <main className={this.state.showSidebar ? null : 'full-width'}>
@@ -44,5 +44,6 @@ export default class App extends Component {
 
 App.propTypes = {
   children: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired
+  location: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired
 };
