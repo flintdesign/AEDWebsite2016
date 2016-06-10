@@ -53,7 +53,10 @@ export default class MapContainer extends Component {
   render() {
     /* eslint no-unused-vars: [0] */
     const center = this.getCenter(this.state.data.coordinates);
-    const icon = divIcon({ className: 'my-div-icon', html: '<h1>Hi, Jenna! Custom text</h1>' });
+    const icon = divIcon({
+      className: 'my-div-icon',
+      html: '<h1 class="leaflet-marker-icon__label">Hi, Jenna! Custom text</h1>'
+    });
     return (
       <Map
         center={this.state.markerPosition}
