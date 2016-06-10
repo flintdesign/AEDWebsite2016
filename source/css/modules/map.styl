@@ -1,3 +1,7 @@
+$stroke-opacity = 0
+$fill-opacity = 0.7
+$hover-fill-opacity = 0.9
+
 .leaflet-container
   width 100%
   height 100%
@@ -12,3 +16,34 @@
   margin 0 auto
   left -75px
   position absolute
+
+path
+  transition fill-opacity 150ms ease-in-out
+  &.eastern-africa
+    stroke #6fd4f2
+    fill #6fd4f2
+    stroke-opacity $stroke-opacity
+    fill-opacity $fill-opacity
+    &:hover
+      fill-opacity $hover-fill-opacity
+  &.central-africa
+    stroke #60d085
+    fill #60d085
+    stroke-opacity $stroke-opacity
+    fill-opacity $fill-opacity
+    &:hover
+      fill-opacity $hover-fill-opacity
+  &.west-africa
+    stroke #6fd4f2
+    fill #6fd4f2
+    stroke-opacity $stroke-opacity
+    fill-opacity $fill-opacity
+    &:hover
+      fill-opacity $hover-fill-opacity
+  &.southern-africa
+    stroke #75e7d0.7
+    fill #75e7d0.7
+    stroke-opacity $stroke-opacity
+    fill-opacity $fill-opacity
+    &:hover
+      fill-opacity $hover-fill-opacity

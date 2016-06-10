@@ -3,3 +3,4 @@ public/assets
 npm-debug.log
 .*.sw?
 .*.*.sw?
+.DS_Store
