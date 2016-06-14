@@ -10,10 +10,12 @@ export default class MapContainer extends Component {
     this.onZoomEnd = this.onZoomEnd.bind(this);
     this.africaMaxBounds = this.africaMaxBounds.bind(this);
     this.getAverage = this.getAverage.bind(this);
+    this.getLabelFontSize = this.getLabelFontSize.bind(this);
     this.state = {
       markerPosition: [0, 0],
       scrolled: 0,
-      geoJSONData: []
+      geoJSONData: [],
+      zoomLevel: 4
     };
   }
 
@@ -43,7 +45,7 @@ export default class MapContainer extends Component {
 
   onZoomEnd(e) {
     /* eslint no-underscore-dangle: [0] */
-    // e.target._zoom
+    this.setState({ zoomLevel: e.target._zoom });
   }
 
   getCenter(coords) {
@@ -71,13 +73,10 @@ export default class MapContainer extends Component {
     return ary.reduce((prev, current) => prev + current) / ary.length;
   }
 
-  flatten(ary) {
-    ary.reduce((a, b) => a.concat(b));
-    return ary;
-  }
-
-  handleClick(e) {
-    window.location = e.target.options.href;
+  getLabelFontSize() {
+    // 18px is base font size, and it should gradually increase
+    // as the map zooms in.
+    return 18 + (2 * Math.abs(4 - this.state.zoomLevel));
   }
 
   africaMaxBounds() {
@@ -85,6 +84,15 @@ export default class MapContainer extends Component {
       [38.5730952, -20.8207639],
       [-40.7265232, 65.6147961]
     ];
+  }
+
+  flatten(ary) {
+    ary.reduce((a, b) => a.concat(b));
+    return ary;
+  }
+
+  handleClick(e) {
+    window.location = e.target.options.href;
   }
 
   regionMeta() {
@@ -133,7 +141,8 @@ export default class MapContainer extends Component {
           const center = self.getCenter(coords);
           const icon = divIcon({
             className: 'leaflet-marker-icon',
-            html: `<h1 class="leaflet-marker-icon__label">${self.regionMeta()[d.id].title}</h1>`
+            html: `<h1 style="font-size:${self.getLabelFontSize()}px"
+                  class="leaflet-marker-icon__label">${self.regionMeta()[d.id].title}</h1>`
           });
           labels.push(
             <Marker
@@ -150,7 +159,7 @@ export default class MapContainer extends Component {
     return (
       <Map
         center={this.state.markerPosition}
-        zoom={4}
+        zoom={this.state.zoomLevel}
         minZoom={4}
         maxBounds={this.africaMaxBounds()}
         maxZoom={12}
