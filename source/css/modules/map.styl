@@ -17,33 +17,29 @@ $hover-fill-opacity = 0.9
   left -75px
   position absolute
 
+.mapsvg
+  stroke-opacity $stroke-opacity
+  fill-opacity $fill-opacity
+  &:hover
+    fill-opacity $hover-fill-opacity
+
+
+
 path
   transition fill-opacity 150ms ease-in-out
   &.eastern-africa
     stroke #6fd4f2
     fill #6fd4f2
-    stroke-opacity $stroke-opacity
-    fill-opacity $fill-opacity
-    &:hover
-      fill-opacity $hover-fill-opacity
+    @extend .mapsvg
   &.central-africa
     stroke #60d085
     fill #60d085
-    stroke-opacity $stroke-opacity
-    fill-opacity $fill-opacity
-    &:hover
-      fill-opacity $hover-fill-opacity
+    @extend .mapsvg
   &.west-africa
     stroke #6fd4f2
     fill #6fd4f2
-    stroke-opacity $stroke-opacity
-    fill-opacity $fill-opacity
-    &:hover
-      fill-opacity $hover-fill-opacity
+    @extend .mapsvg
   &.southern-africa
     stroke #75e7d0.7
     fill #75e7d0.7
-    stroke-opacity $stroke-opacity
-    fill-opacity $fill-opacity
-    &:hover
-      fill-opacity $hover-fill-opacity
+    @extend .mapsvg
