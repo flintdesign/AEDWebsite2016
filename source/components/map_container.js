@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { withRouter } from 'react-router';
 import { Map, TileLayer, Marker, GeoJson } from 'react-leaflet';
 import { divIcon, getZoom } from 'leaflet';
 
-export default class MapContainer extends Component {
+class MapContainer extends Component {
   constructor(props, context) {
     super(props, context);
     this.handleClick = this.handleClick.bind(this);
@@ -92,7 +93,7 @@ export default class MapContainer extends Component {
   }
 
   handleClick(e) {
-    window.location = e.target.options.href;
+    this.props.router.push(e.target.options.href);
   }
 
   regionMeta() {
@@ -100,22 +101,26 @@ export default class MapContainer extends Component {
       2: {
         className: 'central-africa',
         title: 'Central Africa',
-        color: '#60D085'
+        color: '#60D085',
+        href: '/2013/central-africa'
       },
       3: {
         className: 'eastern-africa',
         title: 'Eastern Africa',
-        color: '#6FD4F2'
+        color: '#6FD4F2',
+        href: '/2013/eastern-africa'
       },
       5: {
         className: 'west-africa',
         title: 'West Africa',
-        color: '#9DDC52'
+        color: '#9DDC52',
+        href: '/2013/west-africa'
       },
       6: {
         className: 'southern-africa',
         title: 'Southern Africa',
-        color: '#75E7D1'
+        color: '#75E7D1',
+        href: '/2013/southern-africa'
       }
     };
   }
@@ -131,9 +136,10 @@ export default class MapContainer extends Component {
         geoJSONObjs.push(
           <GeoJson
             key={d.id}
-            href="http://google.com"
+            href={self.regionMeta()[d.id].href}
             data={d}
             className={self.regionMeta()[d.id].className}
+            onClick={self.handleClick}
           />
         );
         if (d.coordinates) {
@@ -174,3 +180,11 @@ export default class MapContainer extends Component {
     );
   }
 }
+
+MapContainer.propTypes = {
+  router: React.PropTypes.shape({
+    push: React.PropTypes.func.isRequired
+  }).isRequired
+};
+
+export default withRouter(MapContainer);

@@ -17,6 +17,7 @@ render((
         <IndexRoute component={MapContainer} />
         <Route path={'/about'} component={About} />
         <Route path={'/resources'} component={Resources} />
+        <Route path={'/:year/:region'} component={MapContainer} />
       </Route>
     </Router>
   </Provider>
