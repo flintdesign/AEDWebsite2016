@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
 import AerialCounts from './aerial_counts';
+import CountTypeToggle from './count_type_toggle';
 
 export default function Sidebar(props) {
-  const { showSidebar } = props;
+  const { showSidebar, location } = props;
   return (
     <aside className={showSidebar ? 'open' : 'closed'}>
       <section className="sidebar__inner">
@@ -18,11 +19,13 @@ export default function Sidebar(props) {
         <h1 className="sidebar__entity-name">Africa</h1>
         <nav className="sidebar__viz-type">
           <ul>
-            <li className="current">Summary totals</li>
-            <li>Area of range covered</li>
+            <li className="current">Summary totals & Area of range covered</li>
             <li>Continental & regional totals</li>
           </ul>
         </nav>
+        <CountTypeToggle
+          location={location}
+        />
       </section>
 
       <section className="sidebar__inner">
@@ -76,5 +79,6 @@ export default function Sidebar(props) {
 }
 
 Sidebar.propTypes = {
-  showSidebar: PropTypes.bool.isRequired
+  showSidebar: PropTypes.bool.isRequired,
+  location: PropTypes.object
 };

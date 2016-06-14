@@ -16,6 +16,8 @@ aside
 .sidebar__inner
   padding 20px 40px
   background #fff
+  -webkit-font-smoothing antialiased
+  position relative
   &:first-child
     background $brand-dark
     color #fff
@@ -25,12 +27,13 @@ aside
     overflow-y auto
     height 80vh
   h1
-    font-size 32px
-    margin 55px 0 15px
+    font-size 40px
+    margin 55px 0 20px
     font-weight 600
 
 .sidebar__year-nav__container
   position relative
+  -webkit-font-smoothing auto
   &:after
     position absolute
     content '\203A'
@@ -84,6 +87,11 @@ aside
   &.current
     @extend .small-current
 
+.sidebar__entity-name
+  font-family "lemonde-journal", Georgia, serif
+  font-weight 700
+  font-style normal
+
 .sidebar__stats-table
   width 100%
   margin-bottom 30px
@@ -98,6 +106,43 @@ aside
     &:last-child
       font-weight bold
       text-align right
+
+.count-type-toggle
+  position absolute
+  bottom 15px
+  right 15px
+  display flex
+  justify-content space-between
+  li
+    padding 2px 7px
+    cursor pointer
+    -webkit-font-smoothing auto
+    letter-spacing 1px
+    font-size 12px
+    width 50px
+    text-align center
+    &:first-child
+      border-radius 4px 0 0 4px
+    &:last-child
+      border-radius 0 4px 4px 0
+    &.active
+      background #1E1B1C
+      border-top 1px solid #3F3C3D
+      border-left 1px solid #3F3C3D
+      border-bottom 1px solid #3F3C3D
+      transition background 200ms ease-in-out
+      cursor text
+      pointer-events none
+      &:hover
+        background lighten(#1E1B1C, 5%)
+    &:not(.active)
+      background #4F4C4D
+      border 1px solid #313031
+      &:hover
+        background lighten(#4F4C4D, 5%)
+    a
+      color #fff
+      text-decoration none
 
 .sidebar__table-container
   border-bottom 2px solid #dcdcdc

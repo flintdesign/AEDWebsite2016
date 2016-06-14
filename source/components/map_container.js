@@ -23,8 +23,12 @@ class MapContainer extends Component {
   componentWillMount() {
     const self = this;
     const regionIds = [2, 3, 5];
-    //const regionIds = [2, 3, 5, 6];
-    regionIds.map(id => fetch(`/region/${id}/geojson_map.json`)
+    const headers = {
+      Authorization: `Basic ${btoa('pachyderm:cop17')}`
+    };
+    // const regionIds = [2, 3, 5, 6];
+    // regionIds.map(id => fetch(`http://staging.elephantdatabase.org/api/region/${id}/geojson_map`, { headers })
+    regionIds.map(id => fetch(`/region/${id}/geojson_map.json`, { headers })
       .then(r => r.json())
       .then(d => {
         let obj = {};

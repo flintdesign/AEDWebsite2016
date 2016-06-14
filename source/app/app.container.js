@@ -22,9 +22,17 @@ export default class App extends Component {
   render() {
     const { children, location } = this.props;
     const isHome = location.pathname === '/';
-    const sidebar = isHome ? <Sidebar showSidebar={this.state.showSidebar} /> : null;
-    const totalCount = isHome ? <TotalCount /> : null;
-    const helpNav = isHome ? <HelpNav location={this.props.location} /> : null;
+    let sidebar;
+    let totalCount;
+    let helpNav;
+    if (isHome) {
+      sidebar = (<Sidebar
+        location={location}
+        showSidebar={this.state.showSidebar}
+      />);
+      totalCount = <TotalCount />;
+      helpNav = <HelpNav location={this.props.location} />;
+    }
     return (
       <div className="container main__container">
         <main className={this.state.showSidebar ? null : 'full-width'}>
