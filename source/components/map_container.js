@@ -74,9 +74,9 @@ export default class MapContainer extends Component {
   }
 
   getLabelFontSize() {
-    // 18px is base font size, and it should gradually increase
+    // 16px is base font size, and it should gradually increase
     // as the map zooms in.
-    return 18 + (2 * Math.abs(4 - this.state.zoomLevel));
+    return 16 + (2 * Math.abs(4 - this.state.zoomLevel));
   }
 
   africaMaxBounds() {
