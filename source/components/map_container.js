@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Map, TileLayer, Marker, getCenter, GeoJson } from 'react-leaflet';
+import { Map, TileLayer, Marker, GeoJson } from 'react-leaflet';
 import { divIcon, getZoom } from 'leaflet';
 
 export default class MapContainer extends Component {
@@ -9,6 +9,7 @@ export default class MapContainer extends Component {
     this.getCenter = this.getCenter.bind(this);
     this.onZoomEnd = this.onZoomEnd.bind(this);
     this.africaMaxBounds = this.africaMaxBounds.bind(this);
+    this.getAverage = this.getAverage.bind(this);
     this.state = {
       markerPosition: [0, 0],
       scrolled: 0,
@@ -48,25 +49,32 @@ export default class MapContainer extends Component {
   getCenter(coords) {
     const lats = [];
     const longs = [];
-    const data = coords[0][0];
-    if (!data) {
-      return [];
-    }
-    for (let i = 0; i < data.length; i++) {
-      if (data[i][1] && data[i][0]) {
-        lats.push(data[i][1]); longs.push(data[i][0]);
+    const self = this;
+    let max = 0;
+    // Iterate through the coords property of the geoJSON to find
+    // the longest array. Some geoJSON objs can contain a deeply
+    // nested array of coordinates if, for example, it's a country
+    // that contains several islands off its coast.
+    for (let i = 0; i < coords.length; i++) {
+      if (coords[i].length > max) {
+        max = coords[i];
       }
     }
-    lats.sort((a, b) => a - b);
-    longs.sort((a, b) => a - b);
-    return [lats[lats.length / 2], longs[longs.length / 2]];
+    const iterable = max[0];
+    for (let j = 0; j < iterable.length; j++) {
+      lats.push(iterable[j][1]); longs.push(iterable[j][0]);
+    }
+    return [this.getAverage(lats), this.getAverage(longs)];
+  }
+
+  getAverage(ary) {
+    return ary.reduce((prev, current) => prev + current) / ary.length;
   }
 
   flatten(ary) {
     ary.reduce((a, b) => a.concat(b));
     return ary;
   }
-
 
   handleClick(e) {
     window.location = e.target.options.href;
@@ -107,20 +115,38 @@ export default class MapContainer extends Component {
   render() {
     /* eslint no-unused-vars: [0] */
     // const center = this.getCenter(this.state.data.coordinates);
-    const icon = divIcon({
-      className: 'leaflet-marker-icon',
-      html: '<h1 class="leaflet-marker-icon__label">Hi, Jenna! Custom text</h1>'
-    });
-    let geoJSONObjs = [];
+    const geoJSONObjs = [];
+    const labels = [];
     if (this.state.geoJSONData) {
       const self = this;
-      geoJSONObjs = this.state.geoJSONData.map((d) => <GeoJson
-        key={d.id}
-        href="http://google.com"
-        data={d}
-        className={self.regionMeta()[d.id].className}
-      />);
+      this.state.geoJSONData.map((d) => {
+        geoJSONObjs.push(
+          <GeoJson
+            key={d.id}
+            href="http://google.com"
+            data={d}
+            className={self.regionMeta()[d.id].className}
+          />
+        );
+        if (d.coordinates) {
+          const coords = self.flatten(d.coordinates);
+          const center = self.getCenter(coords);
+          const icon = divIcon({
+            className: 'leaflet-marker-icon',
+            html: `<h1 class="leaflet-marker-icon__label">${self.regionMeta()[d.id].title}</h1>`
+          });
+          labels.push(
+            <Marker
+              key={d.id}
+              position={center}
+              icon={icon}
+            />
+          );
+        }
+        return d;
+      });
     }
+
     return (
       <Map
         center={this.state.markerPosition}
@@ -131,9 +157,10 @@ export default class MapContainer extends Component {
         onZoomEnd={this.onZoomEnd}
       >
         <TileLayer
-          url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+          url="https://api.mapbox.com/styles/v1/simmonsjenna/cioyjrwve0022bfnjvnq4syt9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoic2ltbW9uc2plbm5hIiwiYSI6ImNpb3lqcTR5OTAxdXZ1b204YTJ2NDU1YnkifQ.bkB3-GvA42q9QdG4n_7Onw"
         />
         {geoJSONObjs}
+        {labels}
       </Map>
     );
   }
