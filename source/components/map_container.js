@@ -13,6 +13,8 @@ class MapContainer extends Component {
     this.africaMaxBounds = this.africaMaxBounds.bind(this);
     this.getAverage = this.getAverage.bind(this);
     this.getLabelFontSize = this.getLabelFontSize.bind(this);
+    this.mapboxURL = this.mapboxURL.bind(this);
+    this.mapboxAccessToken = this.mapboxAccessToken.bind(this);
     this.state = {
       markerPosition: [0, 0],
       scrolled: 0,
@@ -102,6 +104,15 @@ class MapContainer extends Component {
     // 16px is base font size, and it should gradually increase
     // as the map zooms in.
     return 16 + (2 * Math.abs(4 - this.state.zoomLevel));
+  }
+
+  mapboxAccessToken() {
+    /* eslint max-len: [0] */
+    return 'pk.eyJ1Ijoic2ltbW9uc2plbm5hIiwiYSI6ImNpb3lqcTR5OTAxdXZ1b204YTJ2NDU1YnkifQ.bkB3-GvA42q9QdG4n_7Onw';
+  }
+
+  mapboxURL() {
+    return 'https://api.mapbox.com/styles/v1/simmonsjenna/cioyjrwve0022bfnjvnq4syt9';
   }
 
   africaMaxBounds() {
@@ -195,7 +206,7 @@ class MapContainer extends Component {
         onZoomEnd={this.onZoomEnd}
       >
         <TileLayer
-          url="https://api.mapbox.com/styles/v1/simmonsjenna/cioyjrwve0022bfnjvnq4syt9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoic2ltbW9uc2plbm5hIiwiYSI6ImNpb3lqcTR5OTAxdXZ1b204YTJ2NDU1YnkifQ.bkB3-GvA42q9QdG4n_7Onw"
+          url={`${this.mapboxURL()}/tiles/256/{z}/{x}/{y}?access_token=${this.mapboxAccessToken()}`}
         />
         {geoJSONObjs}
         {labels}
