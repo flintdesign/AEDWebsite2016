@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { withRouter } from 'react-router';
 import { Map, TileLayer, Marker, GeoJson } from 'react-leaflet';
 import { divIcon, getZoom } from 'leaflet';
+import flattenDeep from 'lodash.flattendeep';
 
 class MapContainer extends Component {
   constructor(props, context) {
@@ -58,20 +59,37 @@ class MapContainer extends Component {
   getCenter(coords) {
     const lats = [];
     const longs = [];
-    const self = this;
-    let max = 0;
+    let maxVariance = 0;
+    let indexOfMaxVariance = 0;
     // Iterate through the coords property of the geoJSON to find
-    // the longest array. Some geoJSON objs can contain a deeply
-    // nested array of coordinates if, for example, it's a country
-    // that contains several islands off its coast.
+    // the structure with the greatest East-West variance.
+    // Some geoJSON objs can contain a deeply nested array of coordinates
+    // if, for example, it's a country that contains several islands off its coast.
+    // The structure with the greatest E-W variance is most likely to be the one
+    // on the mainland (i.e., the one we want to label). Previously, we just used
+    // the structure with the most points, but this resulted in at least
+    // one false positive where a small coastal island had more points than
+    // the large continental region.
     for (let i = 0; i < coords.length; i++) {
-      if (coords[i].length > max) {
-        max = coords[i];
+      const localLats = [];
+      const points = flattenDeep(coords[i]);
+      // Once we've completely flattened the nested array,
+      // the latitudes are all the even indices in the
+      // resulting array.
+      for (let j = 0; j < points.length; j++) {
+        if (j % 2 === 0) { localLats.push(points[j]); }
+      }
+      const max = Math.max.apply(Math, localLats);
+      const min = Math.min.apply(Math, localLats);
+      const localVariance = Math.abs(max - min);
+      if (localVariance > maxVariance) {
+        maxVariance = localVariance;
+        indexOfMaxVariance = i;
       }
     }
-    const iterable = max[0];
-    for (let j = 0; j < iterable.length; j++) {
-      lats.push(iterable[j][1]); longs.push(iterable[j][0]);
+    const iterable = coords[indexOfMaxVariance][0];
+    for (let k = 0; k < iterable.length; k++) {
+      lats.push(iterable[k][1]); longs.push(iterable[k][0]);
     }
     return [this.getAverage(lats), this.getAverage(longs)];
   }
@@ -133,7 +151,6 @@ class MapContainer extends Component {
 
   render() {
     /* eslint no-unused-vars: [0] */
-    // const center = this.getCenter(this.state.data.coordinates);
     const geoJSONObjs = [];
     const labels = [];
     if (this.state.geoJSONData) {
