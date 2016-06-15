@@ -30,27 +30,29 @@ class MapContainer extends Component {
     // regionIds.map(id => fetch(`http://staging.elephantdatabase.org/api/region/${id}/geojson_map`, { headers })
     regionIds.map(id => fetch(`/region/${id}/geojson_map.json`, { headers })
       .then(r => r.json())
-      .then(d => {
-        let obj = {};
-        if (d.coordinates.length > 1) {
-          obj = {
-            id,
-            type: d.type,
-            coordinates: d.coordinates.map(self.flatten)
-          };
-        } else {
-          obj = Object.assign(d, { id });
-        }
-        const dataObjs = self.state.geoJSONData;
-        dataObjs.push(obj);
-        return self.setState({ geoJSONData: dataObjs });
-      })
-    );
+      .then(d => self.setGeoJSON(d, id)));
   }
 
   onZoomEnd(e) {
     /* eslint no-underscore-dangle: [0] */
     this.setState({ zoomLevel: e.target._zoom });
+  }
+
+  setGeoJSON(data, id) {
+    const self = this;
+    let obj = {};
+    if (data.coordinates.length > 1) {
+      obj = {
+        id,
+        type: data.type,
+        coordinates: data.coordinates.map(self.flatten)
+      };
+    } else {
+      obj = Object.assign(data, { id });
+    }
+    const dataObjs = self.state.geoJSONData;
+    dataObjs.push(obj);
+    return self.setState({ geoJSONData: dataObjs });
   }
 
   getCenter(coords) {
