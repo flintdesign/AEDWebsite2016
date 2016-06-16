@@ -114,18 +114,18 @@ aside
   display flex
   justify-content space-between
   li
-    padding 2px 7px
     cursor pointer
     -webkit-font-smoothing auto
     letter-spacing 1px
     font-size 12px
     width 50px
     text-align center
-    &:first-child
+    margin -2px
+    &:first-of-type a
       border-radius 4px 0 0 4px
-    &:last-child
+    &:last-of-type a
       border-radius 0 4px 4px 0
-    &.active
+    &.active a
       background #1E1B1C
       border-top 1px solid #3F3C3D
       border-left 1px solid #3F3C3D
@@ -135,7 +135,7 @@ aside
       pointer-events none
       &:hover
         background lighten(#1E1B1C, 5%)
-    &:not(.active)
+    &:not(.active) a
       background #4F4C4D
       border 1px solid #313031
       &:hover
@@ -143,6 +143,7 @@ aside
     a
       color #fff
       text-decoration none
+      padding 3px 7px
 
 .sidebar__table-container
   border-bottom 2px solid #dcdcdc
