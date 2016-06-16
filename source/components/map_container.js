@@ -25,13 +25,8 @@ class MapContainer extends Component {
 
   componentWillMount() {
     const self = this;
-    const regionIds = [2, 3, 5];
-    const headers = {
-      Authorization: `Basic ${btoa('pachyderm:cop17')}`
-    };
-    // const regionIds = [2, 3, 5, 6];
-    // regionIds.map(id => fetch(`http://staging.elephantdatabase.org/api/region/${id}/geojson_map`, { headers })
-    regionIds.map(id => fetch(`/region/${id}/geojson_map.json`, { headers })
+    const regionIds = [2, 3, 4, 5];
+    regionIds.map(id => fetch(`http://dev.elephantdatabase.org/api/region/${id}/geojson_map`)
       .then(r => r.json())
       .then(d => self.setGeoJSON(d, id)));
   }
@@ -134,10 +129,10 @@ class MapContainer extends Component {
   regionMeta() {
     return {
       2: {
-        className: 'central-africa',
-        title: 'Central Africa',
+        className: 'eastern-africa',
+        title: 'Eastern Africa',
         color: '#60D085',
-        href: '/2013/central-africa'
+        href: '/2013/eastern-africa'
       },
       3: {
         className: 'eastern-africa',
@@ -145,13 +140,13 @@ class MapContainer extends Component {
         color: '#6FD4F2',
         href: '/2013/eastern-africa'
       },
-      5: {
+      4: {
         className: 'west-africa',
         title: 'West Africa',
         color: '#9DDC52',
         href: '/2013/west-africa'
       },
-      6: {
+      5: {
         className: 'southern-africa',
         title: 'Southern Africa',
         color: '#75E7D1',
