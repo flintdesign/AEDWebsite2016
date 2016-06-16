@@ -11,7 +11,7 @@ class MapContainer extends Component {
     this.getCenter = this.getCenter.bind(this);
     this.onZoomEnd = this.onZoomEnd.bind(this);
     this.africaMaxBounds = this.africaMaxBounds.bind(this);
-    this.getAverage = this.getAverage.bind(this);
+    this.getMidpoint = this.getMidpoint.bind(this);
     this.getLabelFontSize = this.getLabelFontSize.bind(this);
     this.mapboxURL = this.mapboxURL.bind(this);
     this.mapboxAccessToken = this.mapboxAccessToken.bind(this);
@@ -88,11 +88,14 @@ class MapContainer extends Component {
     for (let k = 0; k < iterable.length; k++) {
       lats.push(iterable[k][1]); longs.push(iterable[k][0]);
     }
-    return [this.getAverage(lats), this.getAverage(longs)];
+    return [this.getMidpoint(lats), this.getMidpoint(longs)];
   }
 
-  getAverage(ary) {
-    return ary.reduce((prev, current) => prev + current) / ary.length;
+  getMidpoint(ary) {
+    const max = Math.max.apply(Math, ary);
+    const min = Math.min.apply(Math, ary);
+    const difference = (max - min) / 2;
+    return min + difference;
   }
 
   getLabelFontSize() {
