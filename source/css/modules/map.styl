@@ -1,6 +1,10 @@
 $stroke-opacity = 0
-$fill-opacity = 0.79
-$hover-fill-opacity = 0.95
+$fill-opacity = 0.75
+$hover-fill-opacity = 0.85
+$eastern = #6fd4f2
+$central = #60d085
+$west = #9DDC52
+$southern = #75e7d0
 
 .leaflet-container
   width 100%
@@ -25,26 +29,36 @@ $hover-fill-opacity = 0.95
 .mapsvg
   stroke-opacity $stroke-opacity
   fill-opacity $fill-opacity
+  stroke-opacity 1
+  stroke-width 2
   &:hover
     fill-opacity $hover-fill-opacity
-
-
+    stroke-opacity 1
+    stroke-width 2
 
 path
-  transition fill-opacity 150ms ease-in-out
+  transition fill-opacity 200ms ease-in-out, stroke-width 200ms ease-in-out
   &.eastern-africa
-    stroke #6fd4f2
-    fill #6fd4f2
+    stroke $eastern
+    fill $eastern
     @extend .mapsvg
+    &:hover
+      stroke darken($eastern, 20%)
   &.central-africa
     stroke #60d085
     fill #60d085
     @extend .mapsvg
+    &:hover
+      stroke darken($central, 20%)
   &.west-africa
     stroke #9DDC52
     fill #9DDC52
     @extend .mapsvg
+    &:hover
+      stroke darken($west, 20%)
   &.southern-africa
     stroke #75e7d0
     fill #75e7d0
     @extend .mapsvg
+    &:hover
+      stroke darken($southern, 20%)
