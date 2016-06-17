@@ -6,9 +6,11 @@ import App from './app/app.container';
 import MapContainer from './components/map_container';
 import Resources from './components/resources';
 import About from './components/about';
-import configureStore from './store/configureStore';
+import { createStore, applyMiddleware } from 'redux';
+import rootReducer from './store/reducer';
+import thunk from 'redux-thunk';
 
-const store = configureStore();
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 render((
   <Provider store={store}>

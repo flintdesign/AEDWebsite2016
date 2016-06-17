@@ -1,9 +1,23 @@
 import React, { PropTypes } from 'react';
-import AerialCounts from './aerial_counts';
+import { Link } from 'react-router';
+//import AerialCounts from './aerial_counts';
+import ContinentalRegional from './continental_regional';
 import CountTypeToggle from './count_type_toggle';
 
 export default function Sidebar(props) {
-  const { showSidebar, location } = props;
+  const { showSidebar, location, regionData, vizTypeChange } = props;
+  let continentalRegional;
+
+  console.log('in sidebar');
+  console.log(regionData.regionData);
+  if (regionData) {
+    continentalRegional = (
+      <ContinentalRegional
+        data={regionData.regionData}
+      />
+    );
+  }
+
   return (
     <aside className={showSidebar ? 'open' : 'closed'}>
       <section className="sidebar__inner">
@@ -19,8 +33,16 @@ export default function Sidebar(props) {
         <h1 className="sidebar__entity-name">Africa</h1>
         <nav className="sidebar__viz-type">
           <ul>
-            <li className="current">Summary totals & Area of range covered</li>
-            <li>Continental & regional totals</li>
+            <li onClick={vizTypeChange}>
+              <Link to={{ query: { viz_type: 'summary_area' } }}>
+                Summary totals & Area of range covered
+              </Link>
+            </li>
+            <li onClick={vizTypeChange}>
+              <Link to={{ query: { viz_type: 'continental_regional' } }}>
+                Continental & regional totals
+              </Link>
+            </li>
           </ul>
         </nav>
         <CountTypeToggle
@@ -58,20 +80,7 @@ export default function Sidebar(props) {
 
         <h4 className="heading__small">Counts by Data Category</h4>
 
-        <AerialCounts
-          title="Aerial or Ground Counts"
-        />
-
-        <AerialCounts
-          title="Direct Sample and Reliable Dung Counts"
-        />
-
-        <AerialCounts
-          title="Other Dung Counts"
-        />
-        <AerialCounts
-          title="Informed Guesses"
-        />
+        {continentalRegional}
 
       </section>
     </aside>
@@ -80,5 +89,7 @@ export default function Sidebar(props) {
 
 Sidebar.propTypes = {
   showSidebar: PropTypes.bool.isRequired,
-  location: PropTypes.object
+  location: PropTypes.object,
+  regionData: PropTypes.object,
+  vizTypeChange: PropTypes.func.isRequired
 };

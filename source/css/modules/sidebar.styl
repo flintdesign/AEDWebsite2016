@@ -75,11 +75,15 @@ aside
   margin-left 0
   padding-left 0
 
-.sidebar__viz-type li
+.sidebar__viz-type li a
   @extend .small-heading
   line-height 1
   margin-bottom 10px
   display table
+  color #fff
+  text-decoration none
+  &:hover
+    text-decoration underline
   &.current
     @extend .small-current
 
