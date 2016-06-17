@@ -1,16 +1,17 @@
 import React, { PropTypes } from 'react';
+import { formatNumber } from '../utils/format_utils.js';
 
 export default function ContinentalRegional(props) {
-  const { data } = props;
-  const regions = data.regions && data.regions.map((r, i) => (
+  const { regions } = props;
+  const regionMarkup = regions && regions.map((r, i) => (
     <tr key={i}>
       <td className="regional-totals__region-name">
         {r.region}
         {'  '}
-        <span>{parseInt(r.RANGE_AREA, 10).toLocaleString()} km<sup>2</sup></span>
+        <span>{formatNumber(r.RANGE_AREA)} km<sup>2</sup></span>
       </td>
       <td className="regional-totals__estimate">
-        {parseInt(r.ESTIMATE, 10).toLocaleString()}
+        {formatNumber(r.RANGE_AREA)}
       </td>
     </tr>
   ));
@@ -20,7 +21,7 @@ export default function ContinentalRegional(props) {
       <h4 className="heading__small">Counts by Region</h4>
       <table className="regional-totals">
         <tbody>
-          {regions}
+          {regionMarkup}
         </tbody>
       </table>
     </div>
@@ -28,5 +29,5 @@ export default function ContinentalRegional(props) {
 }
 
 ContinentalRegional.propTypes = {
-  data: PropTypes.object
+  regions: PropTypes.object
 };

@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 //import AerialCounts from './aerial_counts';
+import ContinentalRollup from './continental_rollup';
 import ContinentalRegional from './continental_regional';
 import CountTypeToggle from './count_type_toggle';
 import { FETCH_REGION_DATA, RECEIVE_REGION_DATA } from '../actions/app_actions';
@@ -78,40 +79,19 @@ class Sidebar extends Component {
         </section>
 
         <section className="sidebar__inner">
-          <table className="sidebar__stats-table">
-            <thead>
-              <tr>
-                <td>Total 2013 elephant counts</td>
-                <td>Compare</td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Definite</td>
-                <td>401,732</td>
-              </tr>
-              <tr>
-                <td>Probable</td>
-                <td>71,736</td>
-              </tr>
-              <tr>
-                <td>Possible</td>
-                <td>96,685</td>
-              </tr>
-              <tr>
-                <td>Speculative</td>
-                <td>62,429</td>
-              </tr>
-            </tbody>
-          </table>
-
           {loading &&
             <h1>Loading <span className="loading-spinner"></span></h1>
           }
 
           {!isEmpty(regions) &&
+            <ContinentalRollup
+              data={regions.regions_sums[0]}
+            />
+          }
+
+          {!isEmpty(regions) &&
             <ContinentalRegional
-              data={regions}
+              regions={regions.regions}
             />
           }
 
