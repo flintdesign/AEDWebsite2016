@@ -4,7 +4,6 @@ import Nav from '../components/nav';
 import Sidebar from '../components/sidebar';
 import TotalCount from '../components/total_count';
 import HelpNav from '../components/help_nav';
-import { fetchRegionData } from '../actions/app_actions';
 
 class App extends Component {
   constructor(props, context) {
@@ -22,7 +21,7 @@ class App extends Component {
   }
 
   render() {
-    const { children, location, onVizTypeChange, regionData } = this.props;
+    const { children, location, regions, loading, dispatch } = this.props;
     const isHome = location.pathname === '/';
     let sidebar;
     let totalCount;
@@ -31,8 +30,9 @@ class App extends Component {
       sidebar = (<Sidebar
         location={location}
         showSidebar={this.state.showSidebar}
-        vizTypeChange={onVizTypeChange}
-        regionData={regionData}
+        regions={regions}
+        loading={loading}
+        dispatch={dispatch}
       />);
       totalCount = <TotalCount />;
       helpNav = <HelpNav location={this.props.location} />;
@@ -58,16 +58,17 @@ App.propTypes = {
   children: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
-  onVizTypeChange: PropTypes.func.isRequired,
-  regionData: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired
+  regions: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
+  dispatch: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state) => ({ regionData: state.regionData });
-
-const mapDispatchToProps = (dispatch) => ({
-  onVizTypeChange: () => dispatch(fetchRegionData)
+const mapStateToProps = (state) => ({
+  regions: state.regionData.regions,
+  loading: state.regionData.loading
 });
+
+const mapDispatchToProps = (dispatch) => ({ dispatch: dispatch });
 
 export default connect(
   mapStateToProps,
