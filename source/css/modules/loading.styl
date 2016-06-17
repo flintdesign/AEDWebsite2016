@@ -1,0 +1,40 @@
+$border-transparent = rgba(0, 0, 0, 0.2)
+$border-width = 3px
+$anim-border = #6fd4f2
+$anim-duration = 300ms
+
+.loading-spinner
+  display inline-block
+  margin 0
+  font-size  10px
+  position relative
+  top 5px
+  text-indent  -9999em
+  border-top  $border-width solid $border-transparent
+  border-right $border-width solid $border-transparent
+  border-bottom $border-width solid $border-transparent
+  border-left $border-width solid $anim-border
+  -webkit-animation  load $anim-duration infinite linear
+  animation  load $anim-duration infinite linear
+
+.loading-spinner,
+.loading-spinner::after
+  border-radius 50%
+  width 20px
+  height 20px
+
+@-webkit-keyframes load
+  0%
+    -webkit-transform  rotate(0deg)
+    transform  rotate(0deg)
+  100%
+    -webkit-transform  rotate(360deg)
+    transform  rotate(360deg)
+
+@keyframes load
+  0%
+    -webkit-transform  rotate(0deg)
+    transform  rotate(0deg)
+  100%
+    -webkit-transform  rotate(360deg)
+    transform  rotate(360deg)

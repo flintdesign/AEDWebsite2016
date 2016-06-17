@@ -4,14 +4,26 @@ import { Link } from 'react-router';
 import ContinentalRegional from './continental_regional';
 import CountTypeToggle from './count_type_toggle';
 import { FETCH_REGION_DATA, RECEIVE_REGION_DATA } from '../actions/app_actions';
+import isEmpty from 'lodash.isempty';
 
 class Sidebar extends Component {
   constructor(props, context) {
     super(props, context);
     this.handleClick = this.handleClick.bind(this);
+    this.getCurrentTitle = this.getCurrentTitle.bind(this);
+    this.state = {
+      currentTitle: null
+    };
   }
 
-  handleClick() {
+  getCurrentTitle(title) {
+    return this.state.currentTitle === title ? 'active' : null;
+  }
+
+  handleClick(e) {
+    this.setState({
+      currentTitle: e.target.dataset.title
+    });
     const dispatch = this.props.dispatch;
     dispatch({ type: FETCH_REGION_DATA });
     fetch('http://staging.elephantdatabase.org/api/continent/2/2013/add')
@@ -24,14 +36,6 @@ class Sidebar extends Component {
 
   render() {
     const { showSidebar, location, regions, loading } = this.props;
-
-    const loadingAnim = loading && (<h1>Loading</h1>);
-
-    const continentalRegional = regions && (
-      <ContinentalRegional
-        data={regions}
-      />
-    );
 
     return (
       <aside className={showSidebar ? 'open' : 'closed'}>
@@ -49,12 +53,20 @@ class Sidebar extends Component {
           <nav className="sidebar__viz-type">
             <ul>
               <li onClick={this.handleClick}>
-                <Link to={{ query: { viz_type: 'summary_area' } }}>
+                <Link
+                  className={this.getCurrentTitle('summary')}
+                  data-title={'summary'}
+                  to={{ query: { viz_type: 'summary_area' } }}
+                >
                   Summary totals & Area of range covered
                 </Link>
               </li>
               <li onClick={this.handleClick}>
-                <Link to={{ query: { viz_type: 'continental_regional' } }}>
+                <Link
+                  className={this.getCurrentTitle('regional')}
+                  data-title={'regional'}
+                  to={{ query: { viz_type: 'continental_regional' } }}
+                >
                   Continental & regional totals
                 </Link>
               </li>
@@ -93,10 +105,15 @@ class Sidebar extends Component {
             </tbody>
           </table>
 
-          <h4 className="heading__small">Counts by Data Category</h4>
+          {loading &&
+            <h1>Loading <span className="loading-spinner"></span></h1>
+          }
 
-          {loadingAnim}
-          {continentalRegional}
+          {!isEmpty(regions) &&
+            <ContinentalRegional
+              data={regions}
+            />
+          }
 
         </section>
       </aside>
