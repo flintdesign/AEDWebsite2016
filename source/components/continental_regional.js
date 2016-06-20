@@ -11,7 +11,7 @@ export default function ContinentalRegional(props) {
         <span>{formatNumber(r.RANGE_AREA)} km<sup>2</sup></span>
       </td>
       <td className="regional-totals__estimate">
-        {formatNumber(r.RANGE_AREA)}
+        {formatNumber(r.ESTIMATE)}
       </td>
     </tr>
   ));

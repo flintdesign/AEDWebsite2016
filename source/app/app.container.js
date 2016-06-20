@@ -22,7 +22,7 @@ class App extends Component {
   }
 
   render() {
-    const { children, location, regions, totalEstimate, loading, dispatch } = this.props;
+    const { children, location, regions, totalEstimate, loading, dispatch, params } = this.props;
     const isHome = location.pathname === '/';
     let sidebar;
     let totalCount;
@@ -34,6 +34,7 @@ class App extends Component {
         regions={regions}
         loading={loading}
         dispatch={dispatch}
+        year={params.year || 2013}
       />);
       totalCount = (totalEstimate && <TotalCount
         count={formatNumber(totalEstimate)}

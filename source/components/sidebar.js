@@ -7,6 +7,7 @@ import CountsBySurveyCategory from './counts_by_survey_category';
 import CountTypeToggle from './count_type_toggle';
 import { FETCH_REGION_DATA, RECEIVE_REGION_DATA } from '../actions/app_actions';
 import isEmpty from 'lodash.isempty';
+import fetch from 'isomorphic-fetch';
 
 class Sidebar extends Component {
   constructor(props, context) {
@@ -28,7 +29,7 @@ class Sidebar extends Component {
     });
     const dispatch = this.props.dispatch;
     dispatch({ type: FETCH_REGION_DATA });
-    fetch('http://staging.elephantdatabase.org/api/continent/2/2013/add')
+    fetch(`http://staging.elephantdatabase.org/api/continent/2/${this.props.year}/add`)
       .then(r => r.json())
       .then(d => dispatch({
         type: RECEIVE_REGION_DATA,
@@ -113,7 +114,8 @@ Sidebar.propTypes = {
   location: PropTypes.object,
   regions: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired
+  loading: PropTypes.bool.isRequired,
+  year: PropTypes.number.isRequired
 };
 
 export default Sidebar;
