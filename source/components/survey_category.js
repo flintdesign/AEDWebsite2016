@@ -16,27 +16,34 @@ export default class AerialCounts extends Component {
 
   render() {
     const className = `${this.state.toggled ? 'open' : 'closed'} sidebar__table-container`;
-    const { data } = this.props;
+    const {
+      surveyType,
+      estimate,
+      guess_min,
+      guess_max,
+      range_assessed,
+      range_area
+    } = this.props;
     return (
       <div className={className}>
-        <h3 onClick={this.handleClick}>{data.SURVEYTYPE}</h3>
+        <h3 onClick={this.handleClick}>{surveyType}</h3>
         <table className="sidebar__stats-table">
           <tbody>
             <tr>
               <td>Estimates from Surveys</td>
-              <td>{data.ESTIMATE}</td>
+              <td>{estimate}</td>
             </tr>
             <tr>
               <td>Guesses</td>
-              <td>{formatNumber(data.GUESS_MIN)} – {formatNumber(data.GUESS_MAX)}</td>
+              <td>{formatNumber(guess_min)} – {formatNumber(guess_max)}</td>
             </tr>
             <tr>
               <td>% Known &amp; Possible Range</td>
-              <td>{formatFloat(data.CATEGORY_RANGE_ASSESSED)}%</td>
+              <td>{formatFloat(range_assessed)}%</td>
             </tr>
             <tr>
               <td>Area (km<sup>2</sup>)</td>
-              <td>{formatNumber(data.range_area)}</td>
+              <td>{formatNumber(range_area)}</td>
             </tr>
           </tbody>
         </table>
@@ -46,5 +53,10 @@ export default class AerialCounts extends Component {
 }
 
 AerialCounts.propTypes = {
-  data: PropTypes.object.isRequired
+  surveyType: PropTypes.string.isRequired,
+  estimate: PropTypes.string.isRequired,
+  guess_min: PropTypes.string.isRequired,
+  guess_max: PropTypes.string.isRequired,
+  range_assessed: PropTypes.string.isRequired,
+  range_area: PropTypes.string.isRequired
 };

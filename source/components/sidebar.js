@@ -90,7 +90,8 @@ class Sidebar extends Component {
                 data={regions.regions_sums[0]}
               />
               <CountsBySurveyCategory
-                data={regions}
+                summary_totals={regions.summary_totals}
+                areas={regions.areas}
               />
             </div>
           }

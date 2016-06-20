@@ -3,12 +3,12 @@ import find from 'lodash.find';
 import SurveyCategory from './survey_category';
 
 export default function CountsBySurveyCategory(props) {
-  const { data } = props;
+  const { summary_totals, areas } = props;
   const surveyCategories = [];
 
-  data.summary_totals.map(countType => {
+  summary_totals.map(countType => {
     let glommed = {};
-    const area = find(data.areas, a => a.category === countType.CATEGORY);
+    const area = find(areas, a => a.category === countType.CATEGORY);
     glommed = Object.assign({}, countType, area);
     return surveyCategories.push(glommed);
   });
@@ -16,7 +16,12 @@ export default function CountsBySurveyCategory(props) {
   const categories = surveyCategories.map(categoryData => (
     <SurveyCategory
       key={categoryData.SURVEYTYPE}
-      data={categoryData}
+      surveyType={categoryData.SURVEYTYPE}
+      estimate={categoryData.ESTIMATE}
+      guess_min={categoryData.GUESS_MIN}
+      guess_max={categoryData.GUESS_MAX}
+      range_assessed={categoryData.CATEGORY_RANGE_ASSESSED}
+      range_area={categoryData.range_area}
     />)
   );
 
@@ -28,5 +33,6 @@ export default function CountsBySurveyCategory(props) {
 }
 
 CountsBySurveyCategory.propTypes = {
-  data: PropTypes.object.isRequired
+  summary_totals: PropTypes.array.isRequired,
+  areas: PropTypes.array.isRequired,
 };
