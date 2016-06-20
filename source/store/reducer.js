@@ -10,7 +10,6 @@ const initialState = {
 function regions(state = initialState, action) {
   switch (action.type) {
     case RECEIVE_REGION_DATA:
-      console.log(action.data);
       return Object.assign({}, state, {
         loading: false,
         regions: action.data,

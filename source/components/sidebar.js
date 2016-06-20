@@ -7,6 +7,7 @@ import CountsBySurveyCategory from './counts_by_survey_category';
 import CountTypeToggle from './count_type_toggle';
 import { FETCH_REGION_DATA, RECEIVE_REGION_DATA } from '../actions/app_actions';
 import isEmpty from 'lodash.isempty';
+import once from 'lodash.once';
 import fetch from 'isomorphic-fetch';
 
 class Sidebar extends Component {
@@ -14,6 +15,7 @@ class Sidebar extends Component {
     super(props, context);
     this.handleClick = this.handleClick.bind(this);
     this.getCurrentTitle = this.getCurrentTitle.bind(this);
+    this.fetchAPIData = once(this.fetchAPIData.bind(this));
     this.state = {
       currentTitle: 'summary_area'
     };
@@ -23,10 +25,7 @@ class Sidebar extends Component {
     return this.state.currentTitle === title ? 'active' : null;
   }
 
-  handleClick(e) {
-    this.setState({
-      currentTitle: e.target.dataset.title
-    });
+  fetchAPIData() {
     const dispatch = this.props.dispatch;
     dispatch({ type: FETCH_REGION_DATA });
     fetch(`http://staging.elephantdatabase.org/api/continent/2/${this.props.year}/add`)
@@ -35,6 +34,13 @@ class Sidebar extends Component {
         type: RECEIVE_REGION_DATA,
         data: d
       }));
+  }
+
+  handleClick(e) {
+    this.setState({
+      currentTitle: e.target.dataset.title
+    });
+    this.fetchAPIData();
   }
 
   render() {
