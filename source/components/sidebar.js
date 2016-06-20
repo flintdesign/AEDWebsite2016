@@ -108,6 +108,7 @@ class Sidebar extends Component {
             <div>
               <TotalCounts
                 total={regions.summary_sums[0].ESTIMATE}
+                confidence={regions.summary_sums[0].CONFIDENCE}
                 guess_min={regions.summary_sums[0].GUESS_MIN}
                 guess_max={regions.summary_sums[0].GUESS_MAX}
                 range_covered={regions.regions_sums[0].PERCENT_OF_RANGE_COVERED}

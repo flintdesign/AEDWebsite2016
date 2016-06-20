@@ -4,6 +4,7 @@ import { formatNumber, formatFloat } from '../utils/format_utils.js';
 export default function TotalCounts(props) {
   const {
     total,
+    confidence,
     guess_min,
     guess_max,
     range_covered,
@@ -26,7 +27,7 @@ export default function TotalCounts(props) {
         </tr>
         <tr>
           <td className="indented font-normal">&plusmn;95% CL</td>
-          <td>{formatNumber(total)}</td>
+          <td>{formatNumber(confidence)}</td>
         </tr>
         <tr>
           <td>Guesses</td>
@@ -59,6 +60,7 @@ export default function TotalCounts(props) {
 
 TotalCounts.propTypes = {
   total: PropTypes.string.isRequired,
+  confidence: PropTypes.string.isRequired,
   guess_min: PropTypes.string.isRequired,
   guess_max: PropTypes.string.isRequired,
   range_covered: PropTypes.string.isRequired,
