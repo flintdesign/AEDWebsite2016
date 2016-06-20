@@ -9,7 +9,7 @@ export default function ContinentalRollup(props) {
     <table className="sidebar__stats-table bold-all">
       <tbody>
         <tr>
-          <td>Estimates from Survey</td>
+          <td>Estimates from Surveys</td>
           <td></td>
         </tr>
         <tr className="heading__small">2013 Elephant Numbers</tr>
