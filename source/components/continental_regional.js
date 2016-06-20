@@ -29,5 +29,5 @@ export default function ContinentalRegional(props) {
 }
 
 ContinentalRegional.propTypes = {
-  regions: PropTypes.object
+  regions: PropTypes.array
 };

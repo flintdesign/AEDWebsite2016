@@ -4,6 +4,7 @@ import Nav from '../components/nav';
 import Sidebar from '../components/sidebar';
 import TotalCount from '../components/total_count';
 import HelpNav from '../components/help_nav';
+import { formatNumber } from '../utils/format_utils';
 
 class App extends Component {
   constructor(props, context) {
@@ -21,7 +22,7 @@ class App extends Component {
   }
 
   render() {
-    const { children, location, regions, loading, dispatch } = this.props;
+    const { children, location, regions, totalEstimate, loading, dispatch } = this.props;
     const isHome = location.pathname === '/';
     let sidebar;
     let totalCount;
@@ -34,7 +35,9 @@ class App extends Component {
         loading={loading}
         dispatch={dispatch}
       />);
-      totalCount = <TotalCount />;
+      totalCount = (totalEstimate && <TotalCount
+        count={formatNumber(totalEstimate)}
+      />);
       helpNav = <HelpNav location={this.props.location} />;
     }
     return (
@@ -60,10 +63,12 @@ App.propTypes = {
   params: PropTypes.object.isRequired,
   regions: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  totalEstimate: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => ({
+  totalEstimate: state.regionData.totalEstimate,
   regions: state.regionData.regions,
   loading: state.regionData.loading
 });
