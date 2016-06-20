@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 //import AerialCounts from './aerial_counts';
 import ContinentalRollup from './continental_rollup';
 import ContinentalRegional from './continental_regional';
+import CountsBySurveyCategory from './counts_by_survey_category';
 import CountTypeToggle from './count_type_toggle';
 import { FETCH_REGION_DATA, RECEIVE_REGION_DATA } from '../actions/app_actions';
 import isEmpty from 'lodash.isempty';
@@ -13,7 +14,7 @@ class Sidebar extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.getCurrentTitle = this.getCurrentTitle.bind(this);
     this.state = {
-      currentTitle: null
+      currentTitle: 'summary_area'
     };
   }
 
@@ -83,13 +84,18 @@ class Sidebar extends Component {
             <h1>Loading <span className="loading-spinner"></span></h1>
           }
 
-          {!isEmpty(regions) &&
-            <ContinentalRollup
-              data={regions.regions_sums[0]}
-            />
+          {!isEmpty(regions) && this.state.currentTitle === 'summary' &&
+            <div>
+              <ContinentalRollup
+                data={regions.regions_sums[0]}
+              />
+              <CountsBySurveyCategory
+                data={regions}
+              />
+            </div>
           }
 
-          {!isEmpty(regions) &&
+          {!isEmpty(regions) && this.state.currentTitle === 'regional' &&
             <ContinentalRegional
               regions={regions.regions}
             />

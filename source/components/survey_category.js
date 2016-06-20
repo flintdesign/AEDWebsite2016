@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import { formatNumber, formatFloat } from '../utils/format_utils.js';
 
 export default class AerialCounts extends Component {
   constructor(props, context) {
@@ -15,27 +16,27 @@ export default class AerialCounts extends Component {
 
   render() {
     const className = `${this.state.toggled ? 'open' : 'closed'} sidebar__table-container`;
-    const { title } = this.props;
+    const { data } = this.props;
     return (
       <div className={className}>
-        <h3 onClick={this.handleClick}>{title}</h3>
+        <h3 onClick={this.handleClick}>{data.SURVEYTYPE}</h3>
         <table className="sidebar__stats-table">
           <tbody>
             <tr>
-              <td>Definite</td>
-              <td>57,312</td>
+              <td>Estimates from Surveys</td>
+              <td>{data.ESTIMATE}</td>
             </tr>
             <tr>
-              <td>Probable</td>
-              <td>0</td>
+              <td>Guesses</td>
+              <td>{formatNumber(data.GUESS_MIN)} – {formatNumber(data.GUESS_MAX)}</td>
             </tr>
             <tr>
-              <td>Possible</td>
-              <td>0</td>
+              <td>% Known &amp; Possible Range</td>
+              <td>{formatFloat(data.CATEGORY_RANGE_ASSESSED)}%</td>
             </tr>
             <tr>
-              <td>Speculative</td>
-              <td>0</td>
+              <td>Area (km<sup>2</sup>)</td>
+              <td>{formatNumber(data.range_area)}</td>
             </tr>
           </tbody>
         </table>
@@ -45,5 +46,5 @@ export default class AerialCounts extends Component {
 }
 
 AerialCounts.propTypes = {
-  title: PropTypes.string.isRequired
+  data: PropTypes.object.isRequired
 };
