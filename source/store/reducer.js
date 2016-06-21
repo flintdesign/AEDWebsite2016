@@ -10,15 +10,13 @@ const initialState = {
 function regions(state = initialState, action) {
   switch (action.type) {
     case RECEIVE_REGION_DATA:
-      return Object.assign({}, state, {
+      return { ...state,
         loading: false,
         regions: action.data,
-        totalEstimate: action.data.summary_sums[0].ESTIMATE
-      });
+        totalEstimate: action.data.summary_sums && action.data.summary_sums[0].ESTIMATE
+      };
     case FETCH_REGION_DATA:
-      return Object.assign({}, state, {
-        loading: true,
-      });
+      return { ...state, loading: true };
     default:
       return state;
   }

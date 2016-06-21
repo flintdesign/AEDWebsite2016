@@ -7,10 +7,10 @@ export default function CountTypeToggle(props) {
   return (
     <ul className="count-type-toggle">
       <li className={countType === 'ADD' || countType === undefined ? 'active' : null}>
-        <Link to={{ query: { count_type: 'ADD' } }}>ADD</Link>
+        <Link to={{ query: { ...location.query, count_type: 'ADD' } }}>ADD</Link>
       </li>
       <li className={countType === 'DPPS' ? 'active' : null}>
-        <Link to={{ query: { count_type: 'DPPS' } }}>DPPS</Link>
+        <Link to={{ query: { ...location.query, count_type: 'DPPS' } }}>DPPS</Link>
       </li>
     </ul>
   );

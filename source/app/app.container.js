@@ -34,6 +34,7 @@ class App extends Component {
         regions={regions}
         loading={loading}
         dispatch={dispatch}
+        countType={location.query.count_type}
         year={params.year || 2013}
       />);
       totalCount = (totalEstimate && <TotalCount
