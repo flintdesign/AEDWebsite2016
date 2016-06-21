@@ -8,12 +8,20 @@ const initialState = {
 };
 
 function regions(state = initialState, action) {
+  const totalEstimate = (ac) => {
+    if (ac.data.summary_sums) {
+      return ac.data.summary_sums[0].ESTIMATE;
+    } else if (ac.data.regions_sum) {
+      return ac.data.regions_sum[0].DEFINITE;
+    }
+    return 0;
+  };
   switch (action.type) {
     case RECEIVE_REGION_DATA:
       return { ...state,
         loading: false,
         regions: action.data,
-        totalEstimate: action.data.summary_sums && action.data.summary_sums[0].ESTIMATE
+        totalEstimate: totalEstimate(action)
       };
     case FETCH_REGION_DATA:
       return { ...state, loading: true };

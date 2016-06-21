@@ -198,7 +198,7 @@ class MapContainer extends Component {
       <Map
         center={this.state.markerPosition}
         zoom={this.state.zoomLevel}
-        minZoom={4}
+        minZoom={3}
         maxBounds={this.africaMaxBounds()}
         maxZoom={12}
         onZoomEnd={this.onZoomEnd}

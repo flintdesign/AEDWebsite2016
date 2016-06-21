@@ -5,14 +5,13 @@ import DPPSSidebar from './dpps_sidebar';
 import CountTypeToggle from './count_type_toggle';
 import { FETCH_REGION_DATA, RECEIVE_REGION_DATA } from '../actions/app_actions';
 import fetch from 'isomorphic-fetch';
-import once from 'lodash.once';
 
 class Sidebar extends Component {
   constructor(props, context) {
     super(props, context);
     this.handleClick = this.handleClick.bind(this);
     this.getCurrentTitle = this.getCurrentTitle.bind(this);
-    this.fetchAPIData = once(this.fetchAPIData.bind(this));
+    this.fetchAPIData = this.fetchAPIData.bind(this);
     this.state = {
       currentTitle: 'summary_area'
     };
@@ -89,14 +88,15 @@ class Sidebar extends Component {
             <h1>Loading <span className="loading-spinner"></span></h1>
           }
 
-          {(typeof this.props.countType === 'undefined' || this.props.countType === 'ADD') &&
+          {!loading &&
+            (typeof this.props.countType === 'undefined' || this.props.countType === 'ADD') &&
             <ADDSidebar
               regions={regions}
               currentTitle={this.state.currentTitle}
             />
           }
 
-          {this.props.countType === 'DPPS' &&
+          {!loading && this.props.countType === 'DPPS' &&
             <DPPSSidebar
               regions={regions}
               currentTitle={this.state.currentTitle}

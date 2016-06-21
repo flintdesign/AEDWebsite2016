@@ -60,13 +60,13 @@ export default function ParentDPPS(props) {
 }
 
 ParentDPPS.propTypes = {
-  definite: PropTypes.object.isRequired,
-  probable: PropTypes.object.isRequired,
-  possible: PropTypes.object.isRequired,
-  speculative: PropTypes.object.isRequired,
-  rangeArea: PropTypes.object.isRequired,
-  rangePercentage: PropTypes.object.isRequired,
-  rangeAssessed: PropTypes.object.isRequired,
-  iqi: PropTypes.object.isRequired,
-  pfs: PropTypes.object.isRequired,
+  definite: PropTypes.string.isRequired,
+  probable: PropTypes.string.isRequired,
+  possible: PropTypes.string.isRequired,
+  speculative: PropTypes.string.isRequired,
+  rangeArea: PropTypes.string.isRequired,
+  rangePercentage: PropTypes.string.isRequired,
+  rangeAssessed: PropTypes.string.isRequired,
+  iqi: PropTypes.string.isRequired,
+  pfs: PropTypes.string.isRequired,
 };

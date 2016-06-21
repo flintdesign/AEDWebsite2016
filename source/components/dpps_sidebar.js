@@ -7,7 +7,7 @@ export default function DPPSSidebar(props) {
   const data = regions.regions_sum && regions.regions_sum[0];
   return (
     <div>
-      {!isEmpty(regions) && currentTitle === 'summary' &&
+      {!isEmpty(regions) && currentTitle === 'summary' && data &&
         <div>
           <ParentDPPS
             definite={data.DEFINITE}
