@@ -7,6 +7,7 @@ import CountsBySurveyCategory from './counts_by_survey_category';
 
 export default function ADDSidebar(props) {
   const { regions, currentTitle } = props;
+  const data = type => regions[`${type}_sums`][0];
 
   return (
     <div>
@@ -25,15 +26,15 @@ export default function ADDSidebar(props) {
       {!isEmpty(regions) && currentTitle === 'regional' &&
         <div>
           <TotalCounts
-            total={regions.summary_sums[0].ESTIMATE}
-            confidence={regions.summary_sums[0].CONFIDENCE}
-            guess_min={regions.summary_sums[0].GUESS_MIN}
-            guess_max={regions.summary_sums[0].GUESS_MAX}
-            range_covered={regions.regions_sums[0].PERCENT_OF_RANGE_COVERED}
-            range_assessed={regions.regions_sums[0].PERCENT_OF_RANGE_ASSESSED}
-            range_area={regions.regions_sums[0].RANGE_AREA}
-            iqi={regions.regions_sums[0].IQI}
-            pfs={regions.regions_sums[0].PFS}
+            total={data('summary').ESTIMATE}
+            confidence={data('summary').CONFIDENCE}
+            guess_min={data('summary').GUESS_MIN}
+            guess_max={data('summary').GUESS_MAX}
+            range_covered={data('regions').PERCENT_OF_RANGE_COVERED}
+            range_assessed={data('regions').PERCENT_OF_RANGE_ASSESSED}
+            range_area={data('regions').RANGE_AREA}
+            iqi={data('regions').IQI}
+            pfs={data('regions').PFS}
           />
           <ContinentalRegional
             regions={regions.regions}
