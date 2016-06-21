@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { formatNumber, formatFloat } from '../utils/format_utils.js';
 
-export default class AerialCounts extends Component {
+export default class SurveyCategory extends Component {
   constructor(props, context) {
     super(props, context);
     this.handleClick = this.handleClick.bind(this);
@@ -52,7 +52,7 @@ export default class AerialCounts extends Component {
   }
 }
 
-AerialCounts.propTypes = {
+SurveyCategory.propTypes = {
   surveyType: PropTypes.string.isRequired,
   estimate: PropTypes.string.isRequired,
   guess_min: PropTypes.string.isRequired,

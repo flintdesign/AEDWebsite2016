@@ -1,13 +1,14 @@
 import React, { PropTypes } from 'react';
 import isEmpty from 'lodash.isempty';
 import ParentDPPS from './parent_dpps';
+import ChildDPPS from './child_dpps';
 
 export default function DPPSSidebar(props) {
   const { regions, currentTitle } = props;
   const data = regions.regions_sum && regions.regions_sum[0];
   return (
     <div>
-      {!isEmpty(regions) && currentTitle === 'summary' && data &&
+      {!isEmpty(regions) && currentTitle === 'regional' && data &&
         <div>
           <ParentDPPS
             definite={data.DEFINITE}
@@ -22,6 +23,15 @@ export default function DPPSSidebar(props) {
           />
         </div>
       }
+
+      {!isEmpty(regions) && currentTitle === 'regional' && data &&
+        <div>
+          <ChildDPPS
+            tablesTitle={'Numbers By Region'}
+            geographies={regions.regions}
+          />
+        </div>
+       }
     </div>
   );
 }
