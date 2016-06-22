@@ -3,8 +3,7 @@ import { Link } from 'react-router';
 import ADDSidebar from './add_sidebar';
 import DPPSSidebar from './dpps_sidebar';
 import CountTypeToggle from './count_type_toggle';
-import { FETCH_REGION_DATA, RECEIVE_REGION_DATA } from '../actions/app_actions';
-import fetch from 'isomorphic-fetch';
+import { fetchGeography } from '../api';
 
 class Sidebar extends Component {
   constructor(props, context) {
@@ -12,8 +11,6 @@ class Sidebar extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.getCurrentTitle = this.getCurrentTitle.bind(this);
     this.fetchAPIData = this.fetchAPIData.bind(this);
-    this.regionsHasCorrectKeys = this.regionsHasCorrectKeys.bind(this);
-    this.shouldRenderSidebar = this.shouldRenderSidebar.bind(this);
     this.state = {
       currentTitle: 'summary_area'
     };
@@ -24,15 +21,8 @@ class Sidebar extends Component {
   }
 
   fetchAPIData() {
-    const dispatch = this.props.dispatch;
-    const countType = this.props.countType ? this.props.countType.toLowerCase() : 'add';
-    dispatch({ type: FETCH_REGION_DATA });
-    fetch(`http://staging.elephantdatabase.org/api/continent/2/${this.props.year}/${countType}`)
-      .then(r => r.json())
-      .then(d => dispatch({
-        type: RECEIVE_REGION_DATA,
-        data: d
-      }));
+    const { dispatch, year, countType } = this.props;
+    fetchGeography(dispatch, 'continent', '2', year, countType);
   }
 
   handleClick(e) {
@@ -40,22 +30,6 @@ class Sidebar extends Component {
       currentTitle: e.target.dataset.title
     });
     this.fetchAPIData();
-  }
-
-  regionsHasCorrectKeys(vizType) {
-    const { regions } = this.props;
-    return (vizType === 'add' && regions.regions_sums) ||
-    (vizType === 'dpps' && regions.regions_sum);
-  }
-
-  shouldRenderSidebar(sidebar) {
-    const { countType, loading } = this.props;
-    if (loading) return false;
-    if (sidebar === 'add') {
-      return (typeof countType === 'undefined' || countType === 'ADD') &&
-        this.regionsHasCorrectKeys('add');
-    }
-    return countType === 'DPPS' && this.regionsHasCorrectKeys('dpps');
   }
 
   render() {
@@ -82,7 +56,7 @@ class Sidebar extends Component {
                   data-title={'summary'}
                   to={{ query: { ...location.query, viz_type: 'summary_area' } }}
                 >
-                  Summary totals &amp; Area of range covered
+                  Summary totals & Area of range covered
                 </Link>
               </li>
               <li onClick={this.handleClick}>
@@ -91,7 +65,7 @@ class Sidebar extends Component {
                   data-title={'regional'}
                   to={{ query: { ...location.query, viz_type: 'continental_regional' } }}
                 >
-                  Continental &amp; regional totals
+                  Continental & regional totals
                 </Link>
               </li>
             </ul>
@@ -106,19 +80,22 @@ class Sidebar extends Component {
             <h1>Loading <span className="loading-spinner"></span></h1>
           }
 
-          {this.shouldRenderSidebar('add') &&
+          {!loading &&
+            (typeof this.props.countType === 'undefined' || this.props.countType === 'ADD') &&
             <ADDSidebar
               regions={regions}
               currentTitle={this.state.currentTitle}
             />
           }
 
-          {this.shouldRenderSidebar('dpps') &&
+          {!loading && this.props.countType === 'DPPS' &&
             <DPPSSidebar
               regions={regions}
               currentTitle={this.state.currentTitle}
             />
           }
+
+
         </section>
       </aside>
     );
