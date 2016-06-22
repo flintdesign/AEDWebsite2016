@@ -34,26 +34,36 @@ export default function ParentDPPS(props) {
           <td>Speculative</td>
           <td>{formatNumber(speculative)}</td>
         </tr>
-        <tr>
-          <td>Range Area (km<sup>2</sup>)</td>
-          <td>{formatNumber(rangeArea)}</td>
-        </tr>
-        <tr>
-          <td>% of Continental Range</td>
-          <td>{formatNumber(rangePercentage)}</td>
-        </tr>
-        <tr>
-          <td>% of Range Assessed</td>
-          <td>{formatNumber(rangeAssessed)}</td>
-        </tr>
-        <tr>
-          <td>IQI</td>
-          <td>{formatFloat(iqi)}</td>
-        </tr>
-        <tr>
-          <td>PFS</td>
-          <td>{formatFloat(pfs)}</td>
-        </tr>
+        {rangeArea &&
+          <tr>
+            <td>Range Area (km<sup>2</sup>)</td>
+            <td>{formatNumber(rangeArea)}</td>
+          </tr>
+        }
+        {rangePercentage &&
+          <tr>
+            <td>% of Continental Range</td>
+            <td>{formatNumber(rangePercentage)}</td>
+          </tr>
+        }
+        {rangeAssessed &&
+          <tr>
+            <td>% of Range Assessed</td>
+            <td>{formatNumber(rangeAssessed)}</td>
+          </tr>
+        }
+        {iqi &&
+          <tr>
+            <td>IQI</td>
+            <td>{formatFloat(iqi)}</td>
+          </tr>
+        }
+        {pfs &&
+          <tr>
+            <td>PFS</td>
+            <td>{formatFloat(pfs)}</td>
+          </tr>
+        }
       </tbody>
     </table>
   );
@@ -64,9 +74,9 @@ ParentDPPS.propTypes = {
   probable: PropTypes.string.isRequired,
   possible: PropTypes.string.isRequired,
   speculative: PropTypes.string.isRequired,
-  rangeArea: PropTypes.string.isRequired,
-  rangePercentage: PropTypes.string.isRequired,
-  rangeAssessed: PropTypes.string.isRequired,
-  iqi: PropTypes.string.isRequired,
-  pfs: PropTypes.string.isRequired,
+  rangeArea: PropTypes.string,
+  rangePercentage: PropTypes.string,
+  rangeAssessed: PropTypes.string,
+  iqi: PropTypes.string,
+  pfs: PropTypes.string,
 };
