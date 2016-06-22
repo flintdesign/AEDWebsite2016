@@ -2,8 +2,8 @@ import React, { PropTypes } from 'react';
 import AreaRange from './area_range';
 import { formatNumber, formatFloat } from '../utils/format_utils.js';
 
-export default function ContinentalRollup(props) {
-  const { data } = props;
+export default function ParentADD(props) {
+  const { data, year } = props;
   const unassessedRange = ((100 - data.PERCENT_OF_RANGE_ASSESSED) / 100) * data.ASSESSED_RANGE;
   const unassessedPercent = 100 - data.PERCENT_OF_RANGE_ASSESSED;
   return (
@@ -14,7 +14,7 @@ export default function ContinentalRollup(props) {
             <td>Estimates from Surveys</td>
             <td></td>
           </tr>
-          <tr className="heading__small">2013 Elephant Numbers</tr>
+          <tr className="heading__small">{year} Elephant Numbers</tr>
           <tr>
             <td className="indented font-normal">Estimates from Surveys</td>
             <td>{formatNumber(data.ESTIMATE)}</td>
@@ -37,6 +37,7 @@ export default function ContinentalRollup(props) {
   );
 }
 
-ContinentalRollup.propTypes = {
-  data: PropTypes.object.isRequired
+ParentADD.propTypes = {
+  data: PropTypes.object.isRequired,
+  year: PropTypes.string.isRequired
 };

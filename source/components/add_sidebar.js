@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react';
 import isEmpty from 'lodash.isempty';
-import ContinentalRollup from './continental_rollup';
+import ParentADD from './parent_add';
 import CountsBySubGeography from './counts_by_subgeography';
 import TotalCounts from './total_counts';
 import CountsBySurveyCategory from './counts_by_survey_category';
 import { pluralize, getNextGeography } from '../utils/convenience_funcs';
 
 export default function ADDSidebar(props) {
-  const { geographies, currentTitle, currentGeography } = props;
+  const { geographies, currentTitle, currentGeography, year } = props;
   const subGeography = getNextGeography(currentGeography);
   const data = type => geographies[`${type}_sums`][0];
 
@@ -15,8 +15,9 @@ export default function ADDSidebar(props) {
     <div>
       {!isEmpty(geographies) && currentTitle === 'summary' &&
         <div>
-          <ContinentalRollup
+          <ParentADD
             data={geographies.regions_sums[0]}
+            year={year}
           />
           <CountsBySurveyCategory
             summary_totals={geographies.summary_totals}
@@ -52,5 +53,6 @@ export default function ADDSidebar(props) {
 ADDSidebar.propTypes = {
   geographies: PropTypes.object.isRequired,
   currentTitle: PropTypes.string.isRequired,
-  currentGeography: PropTypes.string.isRequired
+  currentGeography: PropTypes.string.isRequired,
+  year: PropTypes.string.isRequired
 };

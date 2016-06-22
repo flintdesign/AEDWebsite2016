@@ -51,7 +51,7 @@ class Sidebar extends Component {
   }
 
   render() {
-    const { showSidebar, location, regions, loading } = this.props;
+    const { showSidebar, location, regions, loading, year } = this.props;
 
     return (
       <aside className={showSidebar ? 'open' : 'closed'}>
@@ -103,6 +103,7 @@ class Sidebar extends Component {
               geographies={regions}
               currentTitle={this.state.currentTitle}
               currentGeography={this.props.currentGeography || 'region'}
+              year={year}
             />
           }
 

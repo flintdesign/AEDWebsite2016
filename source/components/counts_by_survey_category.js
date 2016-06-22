@@ -7,9 +7,8 @@ export default function CountsBySurveyCategory(props) {
   const surveyCategories = [];
 
   summary_totals.map(countType => {
-    let glommed = {};
     const area = find(areas, a => a.category === countType.CATEGORY);
-    glommed = Object.assign({}, countType, area);
+    const glommed = { ...countType, ...area };
     return surveyCategories.push(glommed);
   });
 
@@ -21,7 +20,7 @@ export default function CountsBySurveyCategory(props) {
       guess_min={categoryData.GUESS_MIN}
       guess_max={categoryData.GUESS_MAX}
       range_assessed={categoryData.CATEGORY_RANGE_ASSESSED}
-      range_area={categoryData.range_area}
+      range_area={categoryData.AREA}
     />)
   );
 
