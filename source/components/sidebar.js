@@ -11,6 +11,8 @@ class Sidebar extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.getCurrentTitle = this.getCurrentTitle.bind(this);
     this.fetchAPIData = this.fetchAPIData.bind(this);
+    this.regionsHasCorrectKeys = this.regionsHasCorrectKeys.bind(this);
+    this.shouldRenderSidebar = this.shouldRenderSidebar.bind(this);
     this.state = {
       currentTitle: 'summary_area'
     };
@@ -30,6 +32,22 @@ class Sidebar extends Component {
       currentTitle: e.target.dataset.title
     });
     this.fetchAPIData();
+  }
+
+  regionsHasCorrectKeys(vizType) {
+    const { regions } = this.props;
+    return (vizType === 'add' && regions.regions_sums) ||
+    (vizType === 'dpps' && regions.regions_sum);
+  }
+
+  shouldRenderSidebar(sidebar) {
+    const { countType, loading } = this.props;
+    if (loading) return false;
+    if (sidebar === 'add') {
+      return (typeof countType === 'undefined' || countType === 'ADD') &&
+        this.regionsHasCorrectKeys('add');
+    }
+    return countType === 'DPPS' && this.regionsHasCorrectKeys('dpps');
   }
 
   render() {
@@ -56,7 +74,7 @@ class Sidebar extends Component {
                   data-title={'summary'}
                   to={{ query: { ...location.query, viz_type: 'summary_area' } }}
                 >
-                  Summary totals & Area of range covered
+                  Summary totals &amp; Area of range covered
                 </Link>
               </li>
               <li onClick={this.handleClick}>
@@ -65,7 +83,7 @@ class Sidebar extends Component {
                   data-title={'regional'}
                   to={{ query: { ...location.query, viz_type: 'continental_regional' } }}
                 >
-                  Continental & regional totals
+                  Continental &amp; regional totals
                 </Link>
               </li>
             </ul>
@@ -80,22 +98,19 @@ class Sidebar extends Component {
             <h1>Loading <span className="loading-spinner"></span></h1>
           }
 
-          {!loading &&
-            (typeof this.props.countType === 'undefined' || this.props.countType === 'ADD') &&
+          {this.shouldRenderSidebar('add') &&
             <ADDSidebar
               regions={regions}
               currentTitle={this.state.currentTitle}
             />
           }
 
-          {!loading && this.props.countType === 'DPPS' &&
+          {this.shouldRenderSidebar('dpps') &&
             <DPPSSidebar
               regions={regions}
               currentTitle={this.state.currentTitle}
             />
           }
-
-
         </section>
       </aside>
     );
