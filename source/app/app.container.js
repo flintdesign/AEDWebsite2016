@@ -36,6 +36,7 @@ class App extends Component {
         dispatch={dispatch}
         countType={location.query.count_type}
         year={params.year || 2013}
+        currentGeography="continent"
       />);
       totalCount = (totalEstimate && <TotalCount
         count={formatNumber(totalEstimate)}

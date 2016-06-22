@@ -79,8 +79,8 @@ class Sidebar extends Component {
               </li>
               <li onClick={this.handleClick}>
                 <Link
-                  className={this.getCurrentTitle('regional')}
-                  data-title={'regional'}
+                  className={this.getCurrentTitle('totals')}
+                  data-title={'totals'}
                   to={{ query: { ...location.query, viz_type: 'continental_regional' } }}
                 >
                   Continental &amp; regional totals
@@ -100,8 +100,9 @@ class Sidebar extends Component {
 
           {this.shouldRenderSidebar('add') &&
             <ADDSidebar
-              regions={regions}
+              geographies={regions}
               currentTitle={this.state.currentTitle}
+              currentGeography={this.props.currentGeography || 'region'}
             />
           }
 
@@ -124,7 +125,9 @@ Sidebar.propTypes = {
   regions: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
-  year: PropTypes.number.isRequired
+  year: PropTypes.number.isRequired,
+  currentGeography: PropTypes.string.isRequired
 };
 
 export default Sidebar;
+
