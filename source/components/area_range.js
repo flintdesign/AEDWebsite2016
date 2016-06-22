@@ -1,12 +1,13 @@
 import React, { PropTypes } from 'react';
-import { formatNumber } from '../utils/format_utils.js';
 
 export default function AreaRange(props) {
-  const { rangeSurveyed, totalRange } = props;
-  const assessedInKM = formatNumber((rangeSurveyed / 100) * totalRange);
-  const assessedPercent = rangeSurveyed;
-  const unassessedPercent = 100 - rangeSurveyed;
-  const unassessedInKM = formatNumber((unassessedPercent / 100) * totalRange);
+  const {
+    totalRange,
+    assessedInKM,
+    assessedPercent,
+    unassessedInKM,
+    unassessedPercent
+  } = props;
 
   return (
     <div>
@@ -31,7 +32,7 @@ export default function AreaRange(props) {
           </tr>
           <tr>
             <td>Total Range</td>
-            <td>{formatNumber(totalRange)} km<sup>2</sup></td>
+            <td>{totalRange} km<sup>2</sup></td>
           </tr>
         </tbody>
       </table>
@@ -41,5 +42,9 @@ export default function AreaRange(props) {
 
 AreaRange.propTypes = {
   rangeSurveyed: PropTypes.string.isRequired,
-  totalRange: PropTypes.string.isRequired
+  totalRange: PropTypes.string.isRequired,
+  assessedInKM: PropTypes.string.isRequired,
+  assessedPercent: PropTypes.string.isRequired,
+  unassessedInKM: PropTypes.string.isRequired,
+  unassessedPercent: PropTypes.string.isRequired
 };

@@ -4,10 +4,17 @@ import ParentDPPS from './parent_dpps';
 import AreaRange from './area_range';
 import SurveyTypeDPPS from './survey_type_dpps';
 import ChildDPPS from './child_dpps';
+import { formatNumber } from '../utils/format_utils.js';
 
 export default function DPPSSidebar(props) {
   const { regions, currentTitle } = props;
   const data = regions.regions_sum && regions.regions_sum[0];
+
+  const rangeSurveyed = data.SURVRANGPERC;
+  const totalRange = data.RANGEAREA;
+  const assessedInKM = (rangeSurveyed / 100) * totalRange;
+  const unassessedPercent = 100 - rangeSurveyed;
+  const unassessedInKM = (unassessedPercent / 100) * totalRange;
   return (
     <div>
       {!isEmpty(regions) && currentTitle === 'summary' && data &&
@@ -20,8 +27,11 @@ export default function DPPSSidebar(props) {
           />
 
           <AreaRange
-            rangeSurveyed={data.SURVRANGPERC}
-            totalRange={data.RANGEAREA}
+            totalRange={formatNumber(data.RANGEAREA)}
+            assessedInKM={formatNumber(assessedInKM)}
+            assessedPercent={data.SURVRANGPERC}
+            unassessedInKM={formatNumber(unassessedInKM)}
+            unassessedPercent={unassessedPercent}
           />
 
           <SurveyTypeDPPS
