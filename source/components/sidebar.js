@@ -4,7 +4,8 @@ import ADDSidebar from './add_sidebar';
 import DPPSSidebar from './dpps_sidebar';
 import CountTypeToggle from './count_type_toggle';
 import { fetchGeography } from '../api';
-import { pluralize, getNextGeography } from '../utils/convenience_funcs';
+import { titleize, pluralize, getNextGeography } from '../utils/convenience_funcs';
+import compact from 'lodash.compact';
 
 class Sidebar extends Component {
   constructor(props, context) {
@@ -14,6 +15,7 @@ class Sidebar extends Component {
     this.fetchAPIData = this.fetchAPIData.bind(this);
     this.subGeographyHasCorrectKeys = this.subGeographyHasCorrectKeys.bind(this);
     this.shouldRenderSidebar = this.shouldRenderSidebar.bind(this);
+    this.getEntityName = this.getEntityName.bind(this);
     this.state = {
       currentTitle: 'summary_area'
     };
@@ -21,6 +23,11 @@ class Sidebar extends Component {
 
   getCurrentTitle(title) {
     return this.state.currentTitle === title ? 'active' : null;
+  }
+
+  getEntityName() {
+    const parts = compact(this.props.location.pathname.split('/'));
+    return parts.length ? titleize(parts[parts.length - 1]) : 'Africa';
   }
 
   fetchAPIData() {
@@ -67,7 +74,7 @@ class Sidebar extends Component {
               <li>1995</li>
             </ul>
           </div>
-          <h1 className="sidebar__entity-name">Africa</h1>
+          <h1 className="sidebar__entity-name">{this.getEntityName()}</h1>
           <nav className="sidebar__viz-type">
             <ul>
               <li onClick={this.handleClick}>

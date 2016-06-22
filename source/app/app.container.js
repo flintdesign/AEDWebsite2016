@@ -32,26 +32,6 @@ class App extends Component {
       params,
       currentGeography
     } = this.props;
-    const isHome = location.pathname === '/';
-    let sidebar;
-    let totalCount;
-    let helpNav;
-    if (isHome) {
-      sidebar = (<Sidebar
-        location={location}
-        showSidebar={this.state.showSidebar}
-        geographies={geographies}
-        loading={loading}
-        dispatch={dispatch}
-        countType={location.query.count_type}
-        year={params.year || 2013}
-        currentGeography={currentGeography}
-      />);
-      totalCount = (totalEstimate && <TotalCount
-        count={formatNumber(totalEstimate)}
-      />);
-      helpNav = <HelpNav location={location} />;
-    }
     return (
       <div className="container main__container">
         <main className={this.state.showSidebar ? null : 'full-width'}>
@@ -61,9 +41,20 @@ class App extends Component {
           />
           {children}
         </main>
-        {sidebar}
-        {totalCount}
-        {helpNav}
+        <Sidebar
+          location={location}
+          showSidebar={this.state.showSidebar}
+          geographies={geographies}
+          loading={loading}
+          dispatch={dispatch}
+          countType={location.query.count_type}
+          year={parseInt(params.year, 10) || 2013}
+          currentGeography={currentGeography}
+        />
+        {totalEstimate &&
+          <TotalCount count={formatNumber(totalEstimate)} />
+        }
+        <HelpNav location={location} />
       </div>
     );
   }

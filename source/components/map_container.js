@@ -135,7 +135,7 @@ class MapContainer extends Component {
         className: 'central-africa',
         title: 'Central Africa',
         color: '#60D085',
-        href: '/2013/eastern-africa'
+        href: '/2013/central-africa'
       },
       3: {
         className: 'eastern-africa',
