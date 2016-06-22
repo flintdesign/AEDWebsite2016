@@ -109,8 +109,9 @@ class Sidebar extends Component {
 
           {this.shouldRenderSidebar('dpps') &&
             <DPPSSidebar
-              regions={regions}
+              geographies={regions}
               currentTitle={this.state.currentTitle}
+              currentGeography={this.props.currentGeography || 'continent'}
             />
           }
         </section>

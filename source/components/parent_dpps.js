@@ -3,6 +3,7 @@ import { formatNumber, formatFloat } from '../utils/format_utils.js';
 
 export default function ParentDPPS(props) {
   const {
+    currentGeography,
     definite,
     probable,
     possible,
@@ -17,7 +18,7 @@ export default function ParentDPPS(props) {
   return (
     <table className="sidebar__stats-table bold-all">
       <tbody>
-        <tr className="heading__small">Continental Elephant Numbers</tr>
+        <tr className="heading__small">{currentGeography} Elephant Numbers</tr>
         <tr>
           <td>Definite</td>
           <td>{formatNumber(definite)}</td>
@@ -42,7 +43,7 @@ export default function ParentDPPS(props) {
         }
         {rangePercentage &&
           <tr>
-            <td>% of Continental Range</td>
+            <td>% of {currentGeography} Range</td>
             <td>{formatNumber(rangePercentage)}</td>
           </tr>
         }
@@ -70,6 +71,7 @@ export default function ParentDPPS(props) {
 }
 
 ParentDPPS.propTypes = {
+  currentGeography: PropTypes.string.isRequired,
   definite: PropTypes.string.isRequired,
   probable: PropTypes.string.isRequired,
   possible: PropTypes.string.isRequired,

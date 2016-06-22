@@ -8,10 +8,10 @@ export default function ChildDPPS(props) {
   const tables = geographies && geographies.map((g, i) => {
     const countTypes = ['Definite', 'Probable', 'Possible', 'Speculative'];
     const childMarkup = countTypes.map(type => (<tr key={type}>
-      <td className="regional-totals__region-name">
+      <td className="subgeography-totals__subgeography-name">
         {type}
       </td>
-      <td className="regional-totals__estimate">
+      <td className="subgeography-totals__estimate">
         {formatNumber(type === 'Speculative' ? g.SPECUL : g[type.toUpperCase()])}
       </td>
     </tr>));

@@ -5,10 +5,13 @@ import AreaRange from './area_range';
 import SurveyTypeDPPS from './survey_type_dpps';
 import ChildDPPS from './child_dpps';
 import { formatNumber } from '../utils/format_utils.js';
+import { pluralize, getNextGeography } from '../utils/convenience_funcs';
 
 export default function DPPSSidebar(props) {
-  const { regions, currentTitle } = props;
-  const data = regions.regions_sum && regions.regions_sum[0];
+  const { geographies, currentTitle, currentGeography } = props;
+  const subGeography = getNextGeography(currentGeography);
+  const data = geographies[`${pluralize(subGeography)}_sum`] &&
+    geographies[`${pluralize(subGeography)}_sum`][0];
 
   const rangeSurveyed = data.SURVRANGPERC;
   const totalRange = data.RANGEAREA;
@@ -17,9 +20,10 @@ export default function DPPSSidebar(props) {
   const unassessedInKM = (unassessedPercent / 100) * totalRange;
   return (
     <div>
-      {!isEmpty(regions) && currentTitle === 'summary' && data &&
+      {!isEmpty(geographies) && currentTitle === 'summary' && data &&
         <div>
           <ParentDPPS
+            currentGeography={currentGeography}
             definite={data.DEFINITE}
             probable={data.PROBABLE}
             possible={data.POSSIBLE}
@@ -35,13 +39,13 @@ export default function DPPSSidebar(props) {
           />
 
           <SurveyTypeDPPS
-            surveys={regions.area_of_range_covered_by_continent}
+            surveys={geographies.area_of_range_covered_by_continent}
             tablesTitle="Counts by Survey Category"
           />
         </div>
       }
 
-      {!isEmpty(regions) && currentTitle === 'regional' && data &&
+      {!isEmpty(geographies) && currentTitle === 'totals' && data &&
         <div>
           <ParentDPPS
             definite={data.DEFINITE}
@@ -56,8 +60,8 @@ export default function DPPSSidebar(props) {
           />
 
           <ChildDPPS
-            tablesTitle="Numbers by Region"
-            geographies={regions.regions}
+            tablesTitle={`Numbers by ${subGeography}`}
+            geographies={geographies[pluralize(subGeography)]}
           />
         </div>
        }
@@ -66,6 +70,7 @@ export default function DPPSSidebar(props) {
 }
 
 DPPSSidebar.propTypes = {
-  regions: PropTypes.object.isRequired,
-  currentTitle: PropTypes.string.isRequired
+  geographies: PropTypes.object.isRequired,
+  currentTitle: PropTypes.string.isRequired,
+  currentGeography: PropTypes.string.isRequired
 };
