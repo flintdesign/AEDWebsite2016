@@ -1,4 +1,4 @@
-import { FETCH_REGION_DATA, RECEIVE_REGION_DATA } from './actions/app_actions';
+import { FETCH_GEOGRAPHY_DATA, RECEIVE_GEOGRAPHY_DATA } from './actions/app_actions';
 import fetch from 'isomorphic-fetch';
 
 const baseAPIUrl = 'http://staging.elephantdatabase.org/api';
@@ -21,13 +21,16 @@ export function fetchGeography(dispatch, geoType, geoId, geoYear, geoCount) {
   const count = geoCount ? geoCount.toLowerCase() : 'add';
 
   // Dispatch the "loading" action
-  dispatch({ type: FETCH_REGION_DATA });
+  dispatch({ type: FETCH_GEOGRAPHY_DATA, data: { countType: count } });
 
   // Dispatch async call to the API and dispatch "receive" action with response
   fetch(`${baseAPIUrl}/${type}/${id}/${year}/${count}`)
     .then(r => r.json())
-    .then(d => dispatch({
-      type: RECEIVE_REGION_DATA,
-      data: d
-    }));
+    .then(d => {
+      const data = { ...d, type: type, countType: count };
+      dispatch({
+        type: RECEIVE_GEOGRAPHY_DATA,
+        data: data
+      });
+    });
 }

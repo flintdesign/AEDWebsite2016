@@ -1,29 +1,30 @@
 import { combineReducers } from 'redux';
-import { FETCH_REGION_DATA, RECEIVE_REGION_DATA } from '../actions/app_actions';
+import { FETCH_GEOGRAPHY_DATA, RECEIVE_GEOGRAPHY_DATA } from '../actions/app_actions';
+import { pluralize, getNextGeography } from '../utils/convenience_funcs';
 
 const initialState = {
   loading: false,
-  regions: {},
-  totalEstimate: '426032'
+  geographyData: {},
+  totalEstimate: '426032',
+  currentGeography: 'continent'
 };
 
-function regions(state = initialState, action) {
-  const totalEstimate = (ac) => {
-    if (ac.data.summary_sums) {
-      return ac.data.summary_sums[0].ESTIMATE;
-    } else if (ac.data.regions_sum) {
-      return ac.data.regions_sum[0].DEFINITE;
+function geographies(state = initialState, action) {
+  const totalEstimate = (data) => {
+    if (data.countType === 'add') {
+      return data.summary_sums[0].ESTIMATE;
     }
-    return 0;
+    return data[`${pluralize(getNextGeography(data.type))}_sum`][0].DEFINITE;
   };
   switch (action.type) {
-    case RECEIVE_REGION_DATA:
+    case RECEIVE_GEOGRAPHY_DATA:
       return { ...state,
         loading: false,
-        regions: action.data,
-        totalEstimate: totalEstimate(action)
+        geographies: action.data,
+        totalEstimate: totalEstimate(action.data),
+        currentGeography: action.data.type
       };
-    case FETCH_REGION_DATA:
+    case FETCH_GEOGRAPHY_DATA:
       return { ...state, loading: true };
     default:
       return state;
@@ -31,7 +32,7 @@ function regions(state = initialState, action) {
 }
 
 const rootReducer = combineReducers({
-  regionData: regions
+  geographyData: geographies
 });
 
 export default rootReducer;

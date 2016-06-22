@@ -22,7 +22,16 @@ class App extends Component {
   }
 
   render() {
-    const { children, location, regions, totalEstimate, loading, dispatch, params } = this.props;
+    const {
+      children,
+      location,
+      geographies,
+      totalEstimate,
+      loading,
+      dispatch,
+      params,
+      currentGeography
+    } = this.props;
     const isHome = location.pathname === '/';
     let sidebar;
     let totalCount;
@@ -31,17 +40,17 @@ class App extends Component {
       sidebar = (<Sidebar
         location={location}
         showSidebar={this.state.showSidebar}
-        regions={regions}
+        geographies={geographies}
         loading={loading}
         dispatch={dispatch}
         countType={location.query.count_type}
         year={params.year || 2013}
-        currentGeography="continent"
+        currentGeography={currentGeography}
       />);
       totalCount = (totalEstimate && <TotalCount
         count={formatNumber(totalEstimate)}
       />);
-      helpNav = <HelpNav location={this.props.location} />;
+      helpNav = <HelpNav location={location} />;
     }
     return (
       <div className="container main__container">
@@ -64,16 +73,18 @@ App.propTypes = {
   children: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
-  regions: PropTypes.object.isRequired,
+  currentGeography: PropTypes.string,
+  geographies: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
   totalEstimate: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => ({
-  totalEstimate: state.regionData.totalEstimate,
-  regions: state.regionData.regions,
-  loading: state.regionData.loading
+  totalEstimate: state.geographyData.totalEstimate,
+  geographies: state.geographyData.geographies,
+  loading: state.geographyData.loading,
+  currentGeography: state.geographyData.currentGeography
 });
 
 const mapDispatchToProps = (dispatch) => ({ dispatch: dispatch });

@@ -4,6 +4,7 @@ import ADDSidebar from './add_sidebar';
 import DPPSSidebar from './dpps_sidebar';
 import CountTypeToggle from './count_type_toggle';
 import { fetchGeography } from '../api';
+import { pluralize, getNextGeography } from '../utils/convenience_funcs';
 
 class Sidebar extends Component {
   constructor(props, context) {
@@ -11,7 +12,7 @@ class Sidebar extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.getCurrentTitle = this.getCurrentTitle.bind(this);
     this.fetchAPIData = this.fetchAPIData.bind(this);
-    this.regionsHasCorrectKeys = this.regionsHasCorrectKeys.bind(this);
+    this.subGeographyHasCorrectKeys = this.subGeographyHasCorrectKeys.bind(this);
     this.shouldRenderSidebar = this.shouldRenderSidebar.bind(this);
     this.state = {
       currentTitle: 'summary_area'
@@ -34,10 +35,11 @@ class Sidebar extends Component {
     this.fetchAPIData();
   }
 
-  regionsHasCorrectKeys(vizType) {
-    const { regions } = this.props;
-    return (vizType === 'add' && regions.regions_sums) ||
-    (vizType === 'dpps' && regions.regions_sum);
+  subGeographyHasCorrectKeys(vizType) {
+    const { geographies, currentGeography } = this.props;
+    const subGeography = getNextGeography(currentGeography);
+    return (vizType === 'add' && geographies[`${pluralize(subGeography)}_sums`]) ||
+    (vizType === 'dpps' && geographies[`${pluralize(subGeography)}_sum`]);
   }
 
   shouldRenderSidebar(sidebar) {
@@ -45,13 +47,13 @@ class Sidebar extends Component {
     if (loading) return false;
     if (sidebar === 'add') {
       return (typeof countType === 'undefined' || countType === 'ADD') &&
-        this.regionsHasCorrectKeys('add');
+        this.subGeographyHasCorrectKeys('add');
     }
-    return countType === 'DPPS' && this.regionsHasCorrectKeys('dpps');
+    return countType === 'DPPS' && this.subGeographyHasCorrectKeys('dpps');
   }
 
   render() {
-    const { showSidebar, location, regions, loading, year } = this.props;
+    const { showSidebar, location, geographies, loading, year } = this.props;
 
     return (
       <aside className={showSidebar ? 'open' : 'closed'}>
@@ -100,16 +102,16 @@ class Sidebar extends Component {
 
           {this.shouldRenderSidebar('add') &&
             <ADDSidebar
-              geographies={regions}
+              geographies={geographies}
               currentTitle={this.state.currentTitle}
-              currentGeography={this.props.currentGeography || 'region'}
+              currentGeography={this.props.currentGeography || 'continent'}
               year={year}
             />
           }
 
           {this.shouldRenderSidebar('dpps') &&
             <DPPSSidebar
-              geographies={regions}
+              geographies={geographies}
               currentTitle={this.state.currentTitle}
               currentGeography={this.props.currentGeography || 'continent'}
             />
@@ -124,7 +126,7 @@ Sidebar.propTypes = {
   showSidebar: PropTypes.bool.isRequired,
   location: PropTypes.object,
   countType: PropTypes.string,
-  regions: PropTypes.object,
+  geographies: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   year: PropTypes.number.isRequired,
@@ -132,4 +134,3 @@ Sidebar.propTypes = {
 };
 
 export default Sidebar;
-
