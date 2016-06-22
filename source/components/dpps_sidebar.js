@@ -48,6 +48,7 @@ export default function DPPSSidebar(props) {
       {!isEmpty(geographies) && currentTitle === 'totals' && data &&
         <div>
           <ParentDPPS
+            currentGeography={currentGeography}
             definite={data.DEFINITE}
             probable={data.PROBABLE}
             possible={data.POSSIBLE}

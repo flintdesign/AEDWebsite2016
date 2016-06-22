@@ -29,6 +29,8 @@ export default function ADDSidebar(props) {
       {!isEmpty(geographies) && currentTitle === 'totals' &&
         <div>
           <TotalCounts
+            currentGeography={currentGeography}
+            year={year}
             total={data('summary').ESTIMATE}
             confidence={data('summary').CONFIDENCE}
             guess_min={data('summary').GUESS_MIN}
@@ -54,5 +56,5 @@ ADDSidebar.propTypes = {
   geographies: PropTypes.object.isRequired,
   currentTitle: PropTypes.string.isRequired,
   currentGeography: PropTypes.string.isRequired,
-  year: PropTypes.string.isRequired
+  year: PropTypes.number.isRequired
 };

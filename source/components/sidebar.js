@@ -53,7 +53,7 @@ class Sidebar extends Component {
   }
 
   render() {
-    const { showSidebar, location, geographies, loading, year } = this.props;
+    const { showSidebar, location, geographies, loading, year, currentGeography } = this.props;
 
     return (
       <aside className={showSidebar ? 'open' : 'closed'}>
@@ -104,7 +104,7 @@ class Sidebar extends Component {
             <ADDSidebar
               geographies={geographies}
               currentTitle={this.state.currentTitle}
-              currentGeography={this.props.currentGeography || 'continent'}
+              currentGeography={currentGeography}
               year={year}
             />
           }
@@ -113,7 +113,7 @@ class Sidebar extends Component {
             <DPPSSidebar
               geographies={geographies}
               currentTitle={this.state.currentTitle}
-              currentGeography={this.props.currentGeography || 'continent'}
+              currentGeography={currentGeography}
             />
           }
         </section>

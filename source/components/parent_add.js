@@ -8,13 +8,13 @@ export default function ParentADD(props) {
   const unassessedPercent = 100 - data.PERCENT_OF_RANGE_ASSESSED;
   return (
     <div>
+      <h3 className="heading__small">{year} Elephant Numbers</h3>
       <table className="sidebar__stats-table bold-all">
         <tbody>
           <tr>
             <td>Estimates from Surveys</td>
             <td></td>
           </tr>
-          <tr className="heading__small">{year} Elephant Numbers</tr>
           <tr>
             <td className="indented font-normal">Estimates from Surveys</td>
             <td>{formatNumber(data.ESTIMATE)}</td>
@@ -39,5 +39,5 @@ export default function ParentADD(props) {
 
 ParentADD.propTypes = {
   data: PropTypes.object.isRequired,
-  year: PropTypes.string.isRequired
+  year: PropTypes.number.isRequired
 };

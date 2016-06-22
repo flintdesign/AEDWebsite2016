@@ -16,57 +16,59 @@ export default function ParentDPPS(props) {
   } = props;
 
   return (
-    <table className="sidebar__stats-table bold-all">
-      <tbody>
-        <tr className="heading__small">{currentGeography} Elephant Numbers</tr>
-        <tr>
-          <td>Definite</td>
-          <td>{formatNumber(definite)}</td>
-        </tr>
-        <tr>
-          <td>Probable</td>
-          <td>{formatNumber(probable)}</td>
-        </tr>
-        <tr>
-          <td>Possible</td>
-          <td>{formatNumber(possible)}</td>
-        </tr>
-        <tr>
-          <td>Speculative</td>
-          <td>{formatNumber(speculative)}</td>
-        </tr>
-        {rangeArea &&
+    <div>
+      <h3 className="heading__small">{currentGeography} Elephant Numbers</h3>
+      <table className="sidebar__stats-table bold-all">
+        <tbody>
           <tr>
-            <td>Range Area (km<sup>2</sup>)</td>
-            <td>{formatNumber(rangeArea)}</td>
+            <td>Definite</td>
+            <td>{formatNumber(definite)}</td>
           </tr>
-        }
-        {rangePercentage &&
           <tr>
-            <td>% of {currentGeography} Range</td>
-            <td>{formatNumber(rangePercentage)}</td>
+            <td>Probable</td>
+            <td>{formatNumber(probable)}</td>
           </tr>
-        }
-        {rangeAssessed &&
           <tr>
-            <td>% of Range Assessed</td>
-            <td>{formatNumber(rangeAssessed)}</td>
+            <td>Possible</td>
+            <td>{formatNumber(possible)}</td>
           </tr>
-        }
-        {iqi &&
           <tr>
-            <td>IQI</td>
-            <td>{formatFloat(iqi)}</td>
+            <td>Speculative</td>
+            <td>{formatNumber(speculative)}</td>
           </tr>
-        }
-        {pfs &&
-          <tr>
-            <td>PFS</td>
-            <td>{formatFloat(pfs)}</td>
-          </tr>
-        }
-      </tbody>
-    </table>
+          {rangeArea &&
+            <tr>
+              <td>Range Area (km<sup>2</sup>)</td>
+              <td>{formatNumber(rangeArea)}</td>
+            </tr>
+          }
+          {rangePercentage &&
+            <tr>
+              <td>% of {currentGeography} Range</td>
+              <td>{formatNumber(rangePercentage)}</td>
+            </tr>
+          }
+          {rangeAssessed &&
+            <tr>
+              <td>% of Range Assessed</td>
+              <td>{formatNumber(rangeAssessed)}</td>
+            </tr>
+          }
+          {iqi &&
+            <tr>
+              <td>IQI</td>
+              <td>{formatFloat(iqi)}</td>
+            </tr>
+          }
+          {pfs &&
+            <tr>
+              <td>PFS</td>
+              <td>{formatFloat(pfs)}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   );
 }
 

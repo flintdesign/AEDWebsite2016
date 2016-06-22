@@ -4,7 +4,7 @@ import { pluralize, getNextGeography } from '../utils/convenience_funcs';
 
 const initialState = {
   loading: false,
-  geographyData: {},
+  geographies: {},
   totalEstimate: '426032',
   currentGeography: 'continent'
 };

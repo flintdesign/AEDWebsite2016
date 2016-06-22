@@ -26,6 +26,7 @@ export default function CountsBySurveyCategory(props) {
 
   return (
     <div>
+      <h3 className="heading__small">Counts by Survey Category</h3>
       {categories}
     </div>
   );

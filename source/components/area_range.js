@@ -41,10 +41,10 @@ export default function AreaRange(props) {
 }
 
 AreaRange.propTypes = {
-  rangeSurveyed: PropTypes.string.isRequired,
   totalRange: PropTypes.string.isRequired,
   assessedInKM: PropTypes.string.isRequired,
   assessedPercent: PropTypes.string.isRequired,
   unassessedInKM: PropTypes.string.isRequired,
-  unassessedPercent: PropTypes.string.isRequired
+  unassessedPercent: PropTypes.oneOfType([React.PropTypes.string,
+    React.PropTypes.number]).isRequired
 };
