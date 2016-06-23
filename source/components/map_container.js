@@ -11,7 +11,6 @@ class MapContainer extends Component {
     super(props, context);
     this.handleClick = this.handleClick.bind(this);
     this.onZoomEnd = this.onZoomEnd.bind(this);
-    this.africaMaxBounds = this.africaMaxBounds.bind(this);
     this.getLabelFontSize = this.getLabelFontSize.bind(this);
     this.state = {
       markerPosition: [0, 0],
@@ -63,13 +62,6 @@ class MapContainer extends Component {
     return 16 + (2 * Math.abs(4 - this.state.zoomLevel));
   }
 
-  africaMaxBounds() {
-    return [
-      [38.5730952, -20.8207639],
-      [-40.7265232, 65.6147961]
-    ];
-  }
-
   handleClick(e) {
     this.props.router.push(e.target.options.href);
   }
@@ -118,7 +110,7 @@ class MapContainer extends Component {
         center={this.state.markerPosition}
         zoom={this.state.zoomLevel}
         minZoom={3}
-        maxBounds={this.africaMaxBounds()}
+        maxBounds={config.maxMapBounds}
         maxZoom={12}
         onZoomEnd={this.onZoomEnd}
       >
