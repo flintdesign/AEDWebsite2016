@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { withRouter } from 'react-router';
 import { Map, TileLayer, Marker, GeoJson } from 'react-leaflet';
-import { divIcon, getZoom } from 'leaflet';
-import flattenDeep from 'lodash.flattendeep';
+import { divIcon } from 'leaflet';
 import config from '../config';
 import { pluralize, getCenter, getNextGeography, flatten } from '../utils/convenience_funcs';
 import geoMeta from '../geometa';
@@ -76,7 +75,6 @@ class MapContainer extends Component {
   }
 
   render() {
-    /* eslint no-unused-vars: [0] */
     const geoJSONObjs = [];
     const labels = [];
     if (this.state.geoJSONData) {
@@ -135,9 +133,9 @@ class MapContainer extends Component {
 }
 
 MapContainer.propTypes = {
-  currentGeography: React.PropTypes.string.isRequired,
-  router: React.PropTypes.shape({
-    push: React.PropTypes.func.isRequired
+  currentGeography: PropTypes.string.isRequired,
+  router: PropTypes.shape({
+    push: PropTypes.func.isRequired
   }).isRequired
 };
 
