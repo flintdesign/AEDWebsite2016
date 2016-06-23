@@ -27,7 +27,7 @@ class Sidebar extends Component {
 
   getEntityName() {
     const parts = compact(this.props.location.pathname.split('/'));
-    return parts.length ? titleize(parts[parts.length - 1]) : 'Africa';
+    return parts.length > 1 ? titleize(parts[parts.length - 1]) : 'Africa';
   }
 
   fetchAPIData() {
@@ -72,11 +72,19 @@ class Sidebar extends Component {
     } = this.props;
 
     const years = ['2013', '2006', '2002', '1998', '1995'];
-    const yearLinks = years.map(y => (<li
-      key={y} className={y === this.props.params.year.toString() ? 'current' : null}
-    >
-      <Link onClick={this.handleClick} to={`/${y}/${this.props.params.region}`}>{y}</Link>
-    </li>));
+    const yearLinks = years.map(y => {
+      const toVal = compact(window.location.pathname.split('/'));
+      const linkVal = toVal.length ? [y, toVal.splice(1)].join('/') : y;
+      const className = (y === this.props.params.year) ||
+        (!this.props.params.year && y === '2013') ? 'current' : null;
+      return (
+        <li
+          key={y} className={className}
+        >
+          <Link onClick={this.handleClick} to={`/${linkVal}`}>{y}</Link>
+        </li>
+      );
+    });
 
     return (
       <aside className={showSidebar ? 'open' : 'closed'}>
