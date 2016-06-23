@@ -22,8 +22,9 @@ class MapContainer extends Component {
 
   componentWillMount() {
     const self = this;
+    const { currentGeography, currentGeographyId } = this.props;
     const nextGeo = getNextGeography(this.props.currentGeography);
-    fetch(`${config.apiBaseURL}/${this.props.currentGeography}/2/${pluralize(nextGeo)}`)
+    fetch(`${config.apiBaseURL}/${currentGeography}/${currentGeographyId}/${pluralize(nextGeo)}`)
       .then(r => r.json())
       .then(d => d.map(c => c.id))
       .then(ids => {
@@ -126,6 +127,7 @@ class MapContainer extends Component {
 
 MapContainer.propTypes = {
   currentGeography: PropTypes.string.isRequired,
+  currentGeographyId: PropTypes.number,
   router: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired

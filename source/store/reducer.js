@@ -6,7 +6,8 @@ const initialState = {
   loading: false,
   geographies: {},
   totalEstimate: '426032',
-  currentGeography: 'continent'
+  currentGeography: 'continent',
+  currentGeographyId: 2
 };
 
 function geographies(state = initialState, action) {
@@ -22,7 +23,8 @@ function geographies(state = initialState, action) {
         loading: false,
         geographies: action.data,
         totalEstimate: totalEstimate(action.data),
-        currentGeography: action.data.type
+        currentGeography: action.data.type,
+        currentGeographyId: action.data.id
       };
     case FETCH_GEOGRAPHY_DATA:
       return { ...state, loading: true };

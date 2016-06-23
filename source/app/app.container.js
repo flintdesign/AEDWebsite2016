@@ -30,7 +30,8 @@ class App extends Component {
       loading,
       dispatch,
       params,
-      currentGeography
+      currentGeography,
+      currentGeographyId,
     } = this.props;
     return (
       <div className="container main__container">
@@ -39,7 +40,10 @@ class App extends Component {
             onHandleClick={this.onHandleClick}
             showSidebar={this.state.showSidebar}
           />
-          {React.cloneElement(children, { currentGeography: currentGeography })}
+          {React.cloneElement(children, {
+            currentGeography: currentGeography,
+            currentGeographyId: currentGeographyId
+          })}
         </main>
         <Sidebar
           location={location}
@@ -51,6 +55,7 @@ class App extends Component {
           year={parseInt(params.year, 10) || 2013}
           params={params}
           currentGeography={currentGeography}
+          currentGeographyId={currentGeographyId}
         />
         {totalEstimate &&
           <TotalCount count={formatNumber(totalEstimate)} />
@@ -66,6 +71,7 @@ App.propTypes = {
   location: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
   currentGeography: PropTypes.string,
+  currentGeographyId: PropTypes.number,
   geographies: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
@@ -76,7 +82,8 @@ const mapStateToProps = (state) => ({
   totalEstimate: state.geographyData.totalEstimate,
   geographies: state.geographyData.geographies,
   loading: state.geographyData.loading,
-  currentGeography: state.geographyData.currentGeography
+  currentGeography: state.geographyData.currentGeography,
+  currentGeographyId: state.geographyData.currentGeographyId
 });
 
 const mapDispatchToProps = (dispatch) => ({ dispatch: dispatch });

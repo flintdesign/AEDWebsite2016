@@ -26,7 +26,7 @@ export function fetchGeography(dispatch, geoType, geoId, geoYear, geoCount) {
   fetch(`${config.apiBaseURL}/${type}/${id}/${year}/${count}`)
     .then(r => r.json())
     .then(d => {
-      const data = { ...d, type: type, countType: count };
+      const data = { ...d, type: type, countType: count, id: id };
       dispatch({
         type: RECEIVE_GEOGRAPHY_DATA,
         data: data
