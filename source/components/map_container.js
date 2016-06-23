@@ -83,35 +83,35 @@ class MapContainer extends Component {
       const self = this;
       const nextGeo = getNextGeography(this.props.currentGeography);
       const gMeta = geoMeta[pluralize(nextGeo)];
-      this.state.geoJSONData.map((d) => {
+      this.state.geoJSONData.map(datum => {
         geoJSONObjs.push(
           <GeoJson
-            key={d.id}
-            href={gMeta[d.id].href}
-            data={d}
-            className={gMeta[d.id].className}
+            key={datum.id}
+            href={gMeta[datum.id].href}
+            data={datum}
+            className={gMeta[datum.id].className}
             onClick={self.handleClick}
           />
         );
-        if (d.coordinates) {
-          const coords = flatten(d.coordinates);
+        if (datum.coordinates) {
+          const coords = flatten(datum.coordinates);
           const center = getCenter(coords);
           const icon = divIcon({
             className: 'leaflet-marker-icon',
             html: `<h1 style="font-size:${self.getLabelFontSize()}px"
                   class="leaflet-marker-icon__label
-                  ${getNextGeography(self.props.currentGeography)}-${d.id}">
-                  ${gMeta[d.id].title}</h1>`
+                  ${getNextGeography(self.props.currentGeography)}-${datum.id}">
+                  ${gMeta[datum.id].title}</h1>`
           });
           labels.push(
             <Marker
-              key={d.id}
+              key={datum.id}
               position={center}
               icon={icon}
             />
           );
         }
-        return d;
+        return datum;
       });
     }
 
