@@ -36,9 +36,11 @@ class Sidebar extends Component {
   }
 
   handleClick(e) {
-    this.setState({
-      currentTitle: e.target.dataset.title
-    });
+    if (e.target.dataset.title) {
+      this.setState({
+        currentTitle: e.target.dataset.title
+      });
+    }
     this.fetchAPIData();
   }
 
@@ -60,18 +62,28 @@ class Sidebar extends Component {
   }
 
   render() {
-    const { showSidebar, location, geographies, loading, year, currentGeography } = this.props;
+    const {
+      showSidebar,
+      location,
+      geographies,
+      loading,
+      year,
+      currentGeography
+    } = this.props;
+
+    const years = ['2013', '2006', '2002', '1998', '1995'];
+    const yearLinks = years.map(y => (<li
+      key={y} className={y === this.props.params.year.toString() ? 'current' : null}
+    >
+      <Link onClick={this.handleClick} to={`/${y}/${this.props.params.region}`}>{y}</Link>
+    </li>));
 
     return (
       <aside className={showSidebar ? 'open' : 'closed'}>
         <section className="sidebar__inner">
           <div className="sidebar__year-nav__container">
             <ul className="sidebar__year-nav">
-              <li className="current">2013</li>
-              <li>2006</li>
-              <li>2002</li>
-              <li>1998</li>
-              <li>1995</li>
+              {yearLinks}
             </ul>
           </div>
           <h1 className="sidebar__entity-name">{this.getEntityName()}</h1>
@@ -132,6 +144,7 @@ class Sidebar extends Component {
 Sidebar.propTypes = {
   showSidebar: PropTypes.bool.isRequired,
   location: PropTypes.object,
+  params: PropTypes.object,
   countType: PropTypes.string,
   geographies: PropTypes.object,
   dispatch: PropTypes.func.isRequired,

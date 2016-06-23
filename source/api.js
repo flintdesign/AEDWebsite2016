@@ -1,7 +1,7 @@
 import { FETCH_GEOGRAPHY_DATA, RECEIVE_GEOGRAPHY_DATA } from './actions/app_actions';
 import fetch from 'isomorphic-fetch';
 
-const baseAPIUrl = 'http://staging.elephantdatabase.org/api';
+const baseAPIUrl = 'http://dev.elephantdatabase.org/api';
 
 /*
 *   Fetches geography data from the API and fires actions signaling the start

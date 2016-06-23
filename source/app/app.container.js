@@ -49,6 +49,7 @@ class App extends Component {
           dispatch={dispatch}
           countType={location.query.count_type}
           year={parseInt(params.year, 10) || 2013}
+          params={params}
           currentGeography={currentGeography}
         />
         {totalEstimate &&
