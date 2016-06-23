@@ -39,7 +39,7 @@ class App extends Component {
             onHandleClick={this.onHandleClick}
             showSidebar={this.state.showSidebar}
           />
-          {children}
+          {React.cloneElement(children, { currentGeography: currentGeography })}
         </main>
         <Sidebar
           location={location}

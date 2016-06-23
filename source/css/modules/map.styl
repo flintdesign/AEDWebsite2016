@@ -36,8 +36,15 @@ $southern = #75e7d0
     stroke-opacity 1
     stroke-width 2
 
+/* hide norhern africa's label */
+h1.region-4
+  display none
+
 path
   transition fill-opacity 200ms ease-in-out, stroke-width 200ms ease-in-out
+  &.northern-africa
+    stroke-opacity 0
+    fill-opacity 0
   &.eastern-africa
     stroke $eastern
     fill $eastern

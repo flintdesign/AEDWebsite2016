@@ -1,7 +1,6 @@
 import { FETCH_GEOGRAPHY_DATA, RECEIVE_GEOGRAPHY_DATA } from './actions/app_actions';
 import fetch from 'isomorphic-fetch';
-
-const baseAPIUrl = 'http://dev.elephantdatabase.org/api';
+import config from './config';
 
 /*
 *   Fetches geography data from the API and fires actions signaling the start
@@ -24,7 +23,7 @@ export function fetchGeography(dispatch, geoType, geoId, geoYear, geoCount) {
   dispatch({ type: FETCH_GEOGRAPHY_DATA, data: { countType: count } });
 
   // Dispatch async call to the API and dispatch "receive" action with response
-  fetch(`${baseAPIUrl}/${type}/${id}/${year}/${count}`)
+  fetch(`${config.apiBaseURL}/${type}/${id}/${year}/${count}`)
     .then(r => r.json())
     .then(d => {
       const data = { ...d, type: type, countType: count };

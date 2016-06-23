@@ -3,18 +3,17 @@ import { withRouter } from 'react-router';
 import { Map, TileLayer, Marker, GeoJson } from 'react-leaflet';
 import { divIcon, getZoom } from 'leaflet';
 import flattenDeep from 'lodash.flattendeep';
+import config from '../config';
+import { pluralize, getCenter, getNextGeography, flatten } from '../utils/convenience_funcs';
+import geoMeta from '../geometa';
 
 class MapContainer extends Component {
   constructor(props, context) {
     super(props, context);
     this.handleClick = this.handleClick.bind(this);
-    this.getCenter = this.getCenter.bind(this);
     this.onZoomEnd = this.onZoomEnd.bind(this);
     this.africaMaxBounds = this.africaMaxBounds.bind(this);
-    this.getMidpoint = this.getMidpoint.bind(this);
     this.getLabelFontSize = this.getLabelFontSize.bind(this);
-    this.mapboxURL = this.mapboxURL.bind(this);
-    this.mapboxAccessToken = this.mapboxAccessToken.bind(this);
     this.state = {
       markerPosition: [0, 0],
       scrolled: 0,
@@ -25,10 +24,15 @@ class MapContainer extends Component {
 
   componentWillMount() {
     const self = this;
-    const regionIds = [2, 3, 5, 6];
-    regionIds.map(id => fetch(`http://dev.elephantdatabase.org/api/region/${id}/geojson_map`)
+    const nextGeo = getNextGeography(this.props.currentGeography);
+    fetch(`${config.apiBaseURL}/${this.props.currentGeography}/2/${pluralize(nextGeo)}`)
       .then(r => r.json())
-      .then(d => self.setGeoJSON(d, id)));
+      .then(d => d.map(c => c.id))
+      .then(ids => {
+        ids.map(id => fetch(`${config.apiBaseURL}/${nextGeo}/${id}/geojson_map`)
+          .then(r => r.json())
+          .then(d => self.setGeoJSON(d, id)));
+      });
   }
 
   onZoomEnd(e) {
@@ -41,76 +45,23 @@ class MapContainer extends Component {
     let obj = {};
     if (data.coordinates.length > 1) {
       obj = {
-        id,
+        id: id,
         type: data.type,
-        coordinates: data.coordinates.map(self.flatten)
+        coordinates: data.coordinates.map(flatten)
       };
     } else {
-      obj = Object.assign(data, { id });
+      obj = { ...data, id: id };
     }
     const dataObjs = self.state.geoJSONData;
     dataObjs.push(obj);
     return self.setState({ geoJSONData: dataObjs });
   }
 
-  getCenter(coords) {
-    const lats = [];
-    const longs = [];
-    let maxVariance = 0;
-    let indexOfMaxVariance = 0;
-    // Iterate through the coords property of the geoJSON to find
-    // the structure with the greatest East-West variance.
-    // Some geoJSON objs can contain a deeply nested array of coordinates
-    // if, for example, it's a country that contains several islands off its coast.
-    // The structure with the greatest E-W variance is most likely to be the one
-    // on the mainland (i.e., the one we want to label). Previously, we just used
-    // the structure with the most points, but this resulted in at least
-    // one false positive where a small coastal island had more points than
-    // the large continental region.
-    for (let i = 0; i < coords.length; i++) {
-      const localLats = [];
-      const points = flattenDeep(coords[i]);
-      // Once we've completely flattened the nested array,
-      // the latitudes are all the even indices in the
-      // resulting array.
-      for (let j = 0; j < points.length; j++) {
-        if (j % 2 === 0) { localLats.push(points[j]); }
-      }
-      const max = Math.max.apply(Math, localLats);
-      const min = Math.min.apply(Math, localLats);
-      const localVariance = Math.abs(max - min);
-      if (localVariance > maxVariance) {
-        maxVariance = localVariance;
-        indexOfMaxVariance = i;
-      }
-    }
-    const iterable = coords[indexOfMaxVariance][0];
-    for (let k = 0; k < iterable.length; k++) {
-      lats.push(iterable[k][1]); longs.push(iterable[k][0]);
-    }
-    return [this.getMidpoint(lats), this.getMidpoint(longs)];
-  }
-
-  getMidpoint(ary) {
-    const max = Math.max.apply(Math, ary);
-    const min = Math.min.apply(Math, ary);
-    const difference = (max - min) / 2;
-    return min + difference;
-  }
 
   getLabelFontSize() {
     // 16px is base font size, and it should gradually increase
     // as the map zooms in.
     return 16 + (2 * Math.abs(4 - this.state.zoomLevel));
-  }
-
-  mapboxAccessToken() {
-    /* eslint max-len: [0] */
-    return 'pk.eyJ1Ijoic2ltbW9uc2plbm5hIiwiYSI6ImNpb3lqcTR5OTAxdXZ1b204YTJ2NDU1YnkifQ.bkB3-GvA42q9QdG4n_7Onw';
-  }
-
-  mapboxURL() {
-    return 'https://api.mapbox.com/styles/v1/simmonsjenna/cioyjrwve0022bfnjvnq4syt9';
   }
 
   africaMaxBounds() {
@@ -120,42 +71,8 @@ class MapContainer extends Component {
     ];
   }
 
-  flatten(ary) {
-    ary.reduce((a, b) => a.concat(b));
-    return ary;
-  }
-
   handleClick(e) {
     this.props.router.push(e.target.options.href);
-  }
-
-  regionMeta() {
-    return {
-      2: {
-        className: 'central-africa',
-        title: 'Central Africa',
-        color: '#60D085',
-        href: '/2013/central-africa'
-      },
-      3: {
-        className: 'eastern-africa',
-        title: 'Eastern Africa',
-        color: '#6FD4F2',
-        href: '/2013/eastern-africa'
-      },
-      5: {
-        className: 'west-africa',
-        title: 'West Africa',
-        color: '#9DDC52',
-        href: '/2013/west-africa'
-      },
-      6: {
-        className: 'southern-africa',
-        title: 'Southern Africa',
-        color: '#75E7D1',
-        href: '/2013/southern-africa'
-      }
-    };
   }
 
   render() {
@@ -164,23 +81,27 @@ class MapContainer extends Component {
     const labels = [];
     if (this.state.geoJSONData) {
       const self = this;
+      const nextGeo = getNextGeography(this.props.currentGeography);
+      const gMeta = geoMeta[pluralize(nextGeo)];
       this.state.geoJSONData.map((d) => {
         geoJSONObjs.push(
           <GeoJson
             key={d.id}
-            href={self.regionMeta()[d.id].href}
+            href={gMeta[d.id].href}
             data={d}
-            className={self.regionMeta()[d.id].className}
+            className={gMeta[d.id].className}
             onClick={self.handleClick}
           />
         );
         if (d.coordinates) {
-          const coords = self.flatten(d.coordinates);
-          const center = self.getCenter(coords);
+          const coords = flatten(d.coordinates);
+          const center = getCenter(coords);
           const icon = divIcon({
             className: 'leaflet-marker-icon',
             html: `<h1 style="font-size:${self.getLabelFontSize()}px"
-                  class="leaflet-marker-icon__label">${self.regionMeta()[d.id].title}</h1>`
+                  class="leaflet-marker-icon__label
+                  ${getNextGeography(self.props.currentGeography)}-${d.id}">
+                  ${gMeta[d.id].title}</h1>`
           });
           labels.push(
             <Marker
@@ -204,7 +125,7 @@ class MapContainer extends Component {
         onZoomEnd={this.onZoomEnd}
       >
         <TileLayer
-          url={`${this.mapboxURL()}/tiles/256/{z}/{x}/{y}?access_token=${this.mapboxAccessToken()}`}
+          url={`${config.mapboxURL}/tiles/256/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`}
         />
         {geoJSONObjs}
         {labels}
@@ -214,6 +135,7 @@ class MapContainer extends Component {
 }
 
 MapContainer.propTypes = {
+  currentGeography: React.PropTypes.string.isRequired,
   router: React.PropTypes.shape({
     push: React.PropTypes.func.isRequired
   }).isRequired
