@@ -3,7 +3,8 @@ import { withRouter } from 'react-router';
 import { Map, TileLayer, Marker, GeoJson } from 'react-leaflet';
 import { divIcon } from 'leaflet';
 import config from '../config';
-import { pluralize, getCenter, getNextGeography, flatten } from '../utils/convenience_funcs';
+import { pluralize, getNextGeography, flatten } from '../utils/convenience_funcs';
+import { getCoordData } from '../utils/geo_funcs';
 import geoMeta from '../geometa';
 
 class MapContainer extends Component {
@@ -13,7 +14,8 @@ class MapContainer extends Component {
     this.onZoomEnd = this.onZoomEnd.bind(this);
     this.getLabelFontSize = this.getLabelFontSize.bind(this);
     this.state = {
-      markerPosition: [0, 0],
+      bounds: config.maxMapBounds,
+      mapCenter: [0, 0],
       scrolled: 0,
       geoJSONData: [],
       zoomLevel: 4
@@ -42,14 +44,30 @@ class MapContainer extends Component {
   setGeoJSON(data, id) {
     const self = this;
     let obj = {};
-    if (data.coordinates.length > 1) {
+    const coords = data.coordinates.map(flatten);
+    const coordData = getCoordData(coords);
+    const bounds = [[
+      coordData.minLat,
+      coordData.minLong,
+    ], [
+      coordData.maxLat,
+      coordData.maxLong,
+    ]];
+
+    if (coords.length > 1) {
       obj = {
         id: id,
         type: data.type,
-        coordinates: data.coordinates.map(flatten)
+        coordinates: coords,
+        center: coordData.center,
+        bounds: bounds
       };
     } else {
-      obj = { ...data, id: id };
+      obj = { ...data,
+        id: id,
+        center: coordData.center,
+        bounds: bounds
+      };
     }
     const dataObjs = self.state.geoJSONData;
     dataObjs.push(obj);
@@ -64,6 +82,7 @@ class MapContainer extends Component {
   }
 
   handleClick(e) {
+    this.setState({ bounds: e.target.options.bounds });
     this.props.router.push(e.target.options.href);
   }
 
@@ -82,11 +101,11 @@ class MapContainer extends Component {
             data={datum}
             className={gMeta[datum.id].className}
             onClick={self.handleClick}
+            center={datum.center}
+            bounds={datum.bounds}
           />
         );
         if (datum.coordinates) {
-          const coords = flatten(datum.coordinates);
-          const center = getCenter(coords);
           const icon = divIcon({
             className: 'leaflet-marker-icon',
             html: `<h1 style="font-size:${self.getLabelFontSize()}px"
@@ -97,7 +116,7 @@ class MapContainer extends Component {
           labels.push(
             <Marker
               key={datum.id}
-              position={center}
+              position={datum.center}
               icon={icon}
             />
           );
@@ -108,7 +127,7 @@ class MapContainer extends Component {
 
     return (
       <Map
-        center={this.state.markerPosition}
+        bounds={this.state.bounds}
         zoom={this.state.zoomLevel}
         minZoom={3}
         maxBounds={config.maxMapBounds}
