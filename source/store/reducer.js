@@ -7,7 +7,7 @@ const initialState = {
   geographies: {},
   totalEstimate: '426032',
   currentGeography: 'continent',
-  currentGeographyId: 2
+  currentGeographyId: '2'
 };
 
 function geographies(state = initialState, action) {

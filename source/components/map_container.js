@@ -127,7 +127,7 @@ class MapContainer extends Component {
 
 MapContainer.propTypes = {
   currentGeography: PropTypes.string.isRequired,
-  currentGeographyId: PropTypes.number,
+  currentGeographyId: PropTypes.string,
   router: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired

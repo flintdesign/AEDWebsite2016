@@ -71,7 +71,7 @@ App.propTypes = {
   location: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
   currentGeography: PropTypes.string,
-  currentGeographyId: PropTypes.number,
+  currentGeographyId: PropTypes.string,
   geographies: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
