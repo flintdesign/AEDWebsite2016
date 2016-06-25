@@ -1,19 +1,28 @@
+import fetch from 'isomorphic-fetch';
+import config from './config';
+import { pluralize, getNextGeography } from './utils/convenience_funcs';
+
 import {
   FETCH_GEOGRAPHY_DATA,
   RECEIVE_GEOGRAPHY_DATA,
   FETCH_SUBGEOGRAPHY_DATA,
   RECEIVE_SUBGEOGRAPHY_DATA
 } from './actions/app_actions';
-import fetch from 'isomorphic-fetch';
-import config from './config';
-import { pluralize, getNextGeography } from './utils/convenience_funcs';
 
-
+/*
+*   Fetches geoJSON data from the API for a single geography
+*
+*   geoType: One of ['region', 'country', 'inputZone', 'stratum']
+*   geoItem: The object for which we're fetching geoJSON data
+*/
 export function fetchGeoJSON(geoType, geoItem) {
+  // Get the ID or (if the item is a country) ISO code
   let geoId = geoItem.id;
   if (geoItem.iso_code) {
     geoId = geoItem.iso_code;
   }
+
+  // Fetch the geoJSON data
   return fetch(`${config.apiBaseURL}/${geoType}/${geoId}/geojson_map`)
   .then(r => r.json())
   .then(d => Object.assign(d, geoItem));
@@ -32,14 +41,16 @@ export function fetchSubGeography(dispatch, geoType, geoId, subGeoType) {
   // Dispatch the "loading" action
   dispatch({ type: FETCH_SUBGEOGRAPHY_DATA });
 
+  // Fetch a list of subGeographies
   fetch(`${config.apiBaseURL}/${geoType}/${geoId}/${pluralize(subGeoType)}`)
   .then(r => r.json())
-  // .then(d => d.map(c => c.id))
   .then(d => {
     let array = d;
+    // Regions come back as an array, countries as { countries: [...] }
     if (!(d instanceof Array)) {
       array = d[pluralize(subGeoType)];
     }
+    // Return all geoJSON objects at the same time
     return Promise.all(array.map(c => fetchGeoJSON(subGeoType, c)));
   })
   .then(data => {
