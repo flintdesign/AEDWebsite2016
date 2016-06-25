@@ -16,6 +16,7 @@ export const pluralize = word => {
 
 export const capitalize = word => `${word[0].toUpperCase()}${word.split('').splice(1).join('')}`;
 export const titleize = str => str.split('-').map(word => capitalize(word)).join(' ');
+export const slugify = str => str.toLowerCase().split(' ').join('-');
 
 export const flatten = ary => {
   ary.reduce((a, b) => a.concat(b));

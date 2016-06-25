@@ -5,6 +5,7 @@ import Sidebar from '../components/sidebar';
 import TotalCount from '../components/total_count';
 import HelpNav from '../components/help_nav';
 import { formatNumber } from '../utils/format_utils';
+import { fetchGeography } from '../api';
 
 class App extends Component {
   constructor(props, context) {
@@ -13,12 +14,32 @@ class App extends Component {
     this.state = {
       showSidebar: false
     };
+    this.fetchData(props, true);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.fetchData(nextProps);
   }
 
   onHandleClick() {
     this.setState({
       showSidebar: !this.state.showSidebar
     });
+  }
+
+  fetchData(props, force = false) {
+    const {
+      routeGeography,
+      routeGeographyId,
+      currentGeography,
+      routeYear,
+      loading,
+      dispatch
+    } = props;
+
+    if (force || (routeGeography !== currentGeography && !loading)) {
+      fetchGeography(dispatch, routeGeography, routeGeographyId, routeYear, null);
+    }
   }
 
   render() {
@@ -32,6 +53,7 @@ class App extends Component {
       params,
       currentGeography,
       currentGeographyId,
+      subGeographyData,
     } = this.props;
     return (
       <div className="container main__container">
@@ -42,7 +64,8 @@ class App extends Component {
           />
           {React.cloneElement(children, {
             currentGeography: currentGeography,
-            currentGeographyId: currentGeographyId
+            currentGeographyId: currentGeographyId,
+            subGeographyData: subGeographyData
           })}
         </main>
         <Sidebar
@@ -75,16 +98,32 @@ App.propTypes = {
   geographies: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
-  totalEstimate: PropTypes.string.isRequired
+  totalEstimate: PropTypes.string.isRequired,
+  routeGeography: PropTypes.string,
+  routeGeographyId: PropTypes.string,
+  routeYear: PropTypes.string,
+  subGeographyData: PropTypes.array
 };
 
-const mapStateToProps = (state) => ({
-  totalEstimate: state.geographyData.totalEstimate,
-  geographies: state.geographyData.geographies,
-  loading: state.geographyData.loading,
-  currentGeography: state.geographyData.currentGeography,
-  currentGeographyId: state.geographyData.currentGeographyId
-});
+const mapStateToProps = (state, props) => {
+  let routeGeography = 'continent';
+  if (props.params.country) {
+    routeGeography = 'country';
+  } else if (props.params.region) {
+    routeGeography = 'region';
+  }
+  return {
+    totalEstimate: state.geographyData.totalEstimate,
+    geographies: state.geographyData.geographies,
+    loading: state.geographyData.loading,
+    currentGeography: state.geographyData.currentGeography,
+    currentGeographyId: state.geographyData.currentGeographyId,
+    routeGeography: routeGeography,
+    routeGeographyId: props.params[routeGeography] || '2',
+    routeYear: props.params.year || '2013',
+    subGeographyData: state.geographyData.subGeographies
+  };
+};
 
 const mapDispatchToProps = (dispatch) => ({ dispatch: dispatch });
 
