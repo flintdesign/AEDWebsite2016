@@ -10,6 +10,8 @@ import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './store/reducer';
 import thunk from 'redux-thunk';
 
+require('./css/main.styl');
+
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 render((
