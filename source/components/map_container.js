@@ -3,9 +3,8 @@ import { withRouter } from 'react-router';
 import { Map, TileLayer, Marker, GeoJson } from 'react-leaflet';
 import { divIcon } from 'leaflet';
 import config from '../config';
-import { pluralize, getNextGeography, flatten } from '../utils/convenience_funcs';
+import { getNextGeography, flatten, slugify } from '../utils/convenience_funcs';
 import { getCoordData } from '../utils/geo_funcs';
-import geoMeta from '../geometa';
 
 class MapContainer extends Component {
   constructor(props, context) {
@@ -22,18 +21,8 @@ class MapContainer extends Component {
     };
   }
 
-  componentWillMount() {
-    const self = this;
-    const { currentGeography, currentGeographyId } = this.props;
-    const nextGeo = getNextGeography(this.props.currentGeography);
-    fetch(`${config.apiBaseURL}/${currentGeography}/${currentGeographyId}/${pluralize(nextGeo)}`)
-      .then(r => r.json())
-      .then(d => d.map(c => c.id))
-      .then(ids => {
-        ids.map(id => fetch(`${config.apiBaseURL}/${nextGeo}/${id}/geojson_map`)
-          .then(r => r.json())
-          .then(d => self.setGeoJSON(d, id)));
-      });
+  componentWillReceiveProps(nextProps) {
+    this.setState({ geoJSONData: nextProps.subGeographyData.map(this.setGeoJSON) });
   }
 
   onZoomEnd(e) {
@@ -41,8 +30,7 @@ class MapContainer extends Component {
     this.setState({ zoomLevel: e.target._zoom });
   }
 
-  setGeoJSON(data, id) {
-    const self = this;
+  setGeoJSON(data) {
     let obj = {};
     const coords = data.coordinates.map(flatten);
     const coordData = getCoordData(coords);
@@ -56,7 +44,8 @@ class MapContainer extends Component {
 
     if (coords.length > 1) {
       obj = {
-        id: id,
+        id: data.id,
+        name: data.name,
         type: data.type,
         coordinates: coords,
         center: coordData.center,
@@ -64,14 +53,12 @@ class MapContainer extends Component {
       };
     } else {
       obj = { ...data,
-        id: id,
+        id: data.id,
         center: coordData.center,
-        bounds: bounds
+        bounds: bounds,
       };
     }
-    const dataObjs = self.state.geoJSONData;
-    dataObjs.push(obj);
-    return self.setState({ geoJSONData: dataObjs });
+    return obj;
   }
 
 
@@ -91,15 +78,13 @@ class MapContainer extends Component {
     const labels = [];
     if (this.state.geoJSONData) {
       const self = this;
-      const nextGeo = getNextGeography(this.props.currentGeography);
-      const gMeta = geoMeta[pluralize(nextGeo)];
       this.state.geoJSONData.map(datum => {
         geoJSONObjs.push(
           <GeoJson
-            key={datum.id}
-            href={gMeta[datum.id].href}
+            key={`${datum.id}_${slugify(datum.name)}`}
+            href={`2013/${datum.id}`}
             data={datum}
-            className={gMeta[datum.id].className}
+            className={slugify(datum.name || '')}
             onClick={self.handleClick}
             center={datum.center}
             bounds={datum.bounds}
@@ -111,7 +96,7 @@ class MapContainer extends Component {
             html: `<h1 style="font-size:${self.getLabelFontSize()}px"
                   class="leaflet-marker-icon__label
                   ${getNextGeography(self.props.currentGeography)}-${datum.id}">
-                  ${gMeta[datum.id].title}</h1>`
+                  ${datum.name}</h1>`
           });
           labels.push(
             <Marker
@@ -147,6 +132,7 @@ class MapContainer extends Component {
 MapContainer.propTypes = {
   currentGeography: PropTypes.string.isRequired,
   currentGeographyId: PropTypes.string,
+  subGeographyData: PropTypes.array,
   router: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired

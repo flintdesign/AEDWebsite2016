@@ -1,10 +1,16 @@
 import { combineReducers } from 'redux';
-import { FETCH_GEOGRAPHY_DATA, RECEIVE_GEOGRAPHY_DATA } from '../actions/app_actions';
+import {
+  FETCH_GEOGRAPHY_DATA,
+  RECEIVE_GEOGRAPHY_DATA,
+  FETCH_SUBGEOGRAPHY_DATA,
+  RECEIVE_SUBGEOGRAPHY_DATA
+} from '../actions/app_actions';
 import { pluralize, getNextGeography } from '../utils/convenience_funcs';
 
 const initialState = {
   loading: false,
   geographies: {},
+  subGeographies: [],
   totalEstimate: '426032',
   currentGeography: 'continent',
   currentGeographyId: '2'
@@ -26,7 +32,13 @@ function geographies(state = initialState, action) {
         currentGeography: action.data.type,
         currentGeographyId: action.data.id
       };
+    case RECEIVE_SUBGEOGRAPHY_DATA:
+      return { ...state,
+        loading: false,
+        subGeographies: action.data
+      };
     case FETCH_GEOGRAPHY_DATA:
+    case FETCH_SUBGEOGRAPHY_DATA:
       return { ...state, loading: true };
     default:
       return state;
