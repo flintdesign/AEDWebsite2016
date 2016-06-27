@@ -1,43 +1,43 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { toggleSearch } from '../actions';
+import { connect } from 'react-redux';
+import { SEARCH_PLACEHOLDER } from '../constants';
 
 class Search extends Component {
-  constructor(props, context) {
-    super(props, context);
-    this.setFocus = this.setFocus.bind(this);
-    this.setBlur = this.setBlur.bind(this);
-    this.state = {
-      focused: false
-    };
-  }
-
-  setFocus() {
-    this.setState({ focused: true });
-    this.refs.searchInput.focus();
-  }
-
-  setBlur() {
-    this.setState({ focused: false });
-  }
-
-  render() {
-    const state = this.state;
-    const focusedName = this.state.focused ? 'focused' : 'blurred';
-    const inputClassName = `${focusedName} search__input`;
-    const placeholder = state.focused ? 'Search populations by region, country, input zone' : '';
-    return (
-      <div>
+  input() {
+    let input = null;
+    const placeholder = this.props.search ? SEARCH_PLACEHOLDER : '';
+    if (this.props.search) {
+      input = (
         <input
           type="text"
           ref="searchInput"
-          className={inputClassName}
           placeholder={placeholder}
-          onFocus={this.setFocus}
-          onBlur={this.setBlur}
         />
-        <span onClick={this.setFocus} className="icon__magnifying-glass"></span>
+      );
+    }
+    return input;
+  }
+  render() {
+    const focusedName = this.props.search ? 'focused' : 'blurred';
+    const inputClassName = `${focusedName} search__input`;
+    return (
+      <div className={inputClassName}>
+      {this.input()}
+      <span
+        onClick={() => {
+          this.props.dispatch(toggleSearch());
+        }}
+        className="icon__magnifying-glass"
+      />
       </div>
     );
   }
 }
 
-export default Search;
+Search.propTypes = {
+  search: PropTypes.bool.isRequired,
+  dispatch: PropTypes.func.isRequired
+};
+
+export default connect(state => state.navigation)(Search);
