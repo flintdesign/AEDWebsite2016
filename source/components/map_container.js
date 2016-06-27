@@ -82,7 +82,7 @@ class MapContainer extends Component {
         geoJSONObjs.push(
           <GeoJson
             key={`${datum.id}_${slugify(datum.name)}`}
-            href={`2013/${datum.id}`}
+            href={`/2013/${datum.id}`}
             data={datum}
             className={slugify(datum.name || '')}
             onClick={self.handleClick}
