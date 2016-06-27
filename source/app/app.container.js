@@ -7,7 +7,7 @@ import HelpNav from '../components/help_nav';
 import { getEntityName } from '../utils/convenience_funcs';
 import { formatNumber } from '../utils/format_utils';
 import { fetchGeography } from '../api';
-import { expandSidebar, contractSidebar } from '../actions';
+import { toggleSearch, expandSidebar, contractSidebar } from '../actions';
 
 class App extends Component {
   constructor(props, context) {
@@ -20,12 +20,15 @@ class App extends Component {
   componentWillReceiveProps(nextProps) {
     this.fetchData(nextProps);
   }
-
   expandSidebar() {
     this.props.dispatch(expandSidebar());
   }
   contractSidebar() {
     this.props.dispatch(contractSidebar());
+  }
+
+  cancelSearch() {
+    this.props.dispatch(toggleSearch(false));
   }
 
   fetchData(props, force = false) {
@@ -68,6 +71,8 @@ class App extends Component {
             expandSidebar={this.expandSidebar}
             contractSidebar={this.contractSidebar}
             sidebarState={sidebarState}
+            onHandleClick={this.toggleSidebar}
+            showSidebar={this.state.showSidebar}
           />
           {React.cloneElement(children, {
             currentGeography: currentGeography,
@@ -75,6 +80,7 @@ class App extends Component {
             subGeographyData: subGeographyData,
             year: routeYear,
             openSidebar: this.expandSidebar
+            cancelSearch: this.cancelSearch.bind(this)
           })}
         </main>
         <Sidebar
