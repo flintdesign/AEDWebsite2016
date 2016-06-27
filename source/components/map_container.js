@@ -206,6 +206,7 @@ class MapContainer extends Component {
         maxBounds={config.maxMapBounds}
         maxZoom={12}
         onZoomEnd={this.onZoomEnd}
+        onClick={this.props.cancelSearch}
       >
         <TileLayer
           url={`${config.mapboxURL}/tiles/256/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`}
@@ -222,6 +223,7 @@ MapContainer.propTypes = {
   currentGeographyId: PropTypes.string,
   subGeographyData: PropTypes.array,
   year: PropTypes.string.isRequired,
+  cancelSearch: PropTypes.func,
   router: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired,
