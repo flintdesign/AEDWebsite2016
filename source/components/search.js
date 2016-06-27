@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { withRouter } from 'react-router';
 import { toggleSearch } from '../actions';
 import { connect } from 'react-redux';
 import { SEARCH_PLACEHOLDER } from '../constants';
@@ -13,14 +14,24 @@ const searchEngine = new Bloodhound({
   datumTokenizer: Bloodhound.tokenizers.whitespace
 });
 
-const Results = ({ results }) => (
+const Results = withRouter(({ results, router, endSearch }) => (
   <div className="search__results">{results.map(r => (
-      <div className="search__result-item" key={`result-${r.name}`}>{r.name}</div>
+      <div
+        className="search__result-item"
+        key={`result-${r.name}`}
+        onClick={() => {
+          router.push(`/2013/${r.id}`);
+          endSearch();
+        }}
+      >
+           {r.name}
+      </div>
   ))}</div>
-);
+));
 
 Results.propTypes = {
-  results: PropTypes.array.isRequired
+  results: PropTypes.array.isRequired,
+  endSearch: PropTypes.func.isRequired,
 };
 
 class Search extends Component {
@@ -43,7 +54,9 @@ class Search extends Component {
         <input
           type="text"
           ref="searchInput"
+          autoFocus
           placeholder={placeholder}
+          onChange={this.handleQueryChange}
         />
       );
     }
@@ -65,7 +78,6 @@ class Search extends Component {
   }
 
   handleQueryChange({ target }) {
-    if (!!this.searchAction) { this.searchAction.cancel(); }
     this.setState({ query: target.value }, () => {
       this.search(this.state.query);
     });
@@ -75,24 +87,29 @@ class Search extends Component {
     const { results, searching } = this.state;
     const className = searching ? 'searching' : null;
     return (
-      results.length && this.state.focused ?
-      <Results results={results} className={className} /> :
-      null);
+      results.length && this.props.search ?
+      <Results
+        results={results}
+        className={className}
+        endSearch={() => this.props.dispatch(toggleSearch(false))}
+      /> : null);
   }
 
   render() {
     const focusedName = this.props.search ? 'focused' : 'blurred';
     const inputClassName = `${focusedName} search__input`;
     return (
-      <div className={inputClassName}>
-        {this.input()}
-        <span
-          onClick={() => {
-            this.props.dispatch(toggleSearch());
-          }}
-          className="icon__magnifying-glass"
-        />
-        {this.results()}
+      <div className="search__container">
+        <div className={inputClassName}>
+          {this.input()}
+          <span
+            onClick={() => {
+              this.props.dispatch(toggleSearch());
+            }}
+            className="icon__magnifying-glass"
+          />
+          {this.results()}
+        </div>
       </div>
     );
   }
