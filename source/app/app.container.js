@@ -83,7 +83,10 @@ class App extends Component {
           currentGeographyId={currentGeographyId}
         />
         {totalEstimate &&
-          <TotalCount count={formatNumber(totalEstimate)} />
+          <TotalCount
+            currentGeographyId={currentGeographyId}
+            count={formatNumber(totalEstimate)}
+          />
         }
         <HelpNav location={location} />
       </div>
