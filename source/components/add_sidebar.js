@@ -16,7 +16,7 @@ export default function ADDSidebar(props) {
       {!isEmpty(geographies) && currentTitle === 'summary' &&
         <div>
           <ParentADD
-            data={geographies.regions_sums[0]}
+            data={geographies[`${pluralize(subGeography)}_sums`][0]}
             year={year}
           />
           <CountsBySurveyCategory

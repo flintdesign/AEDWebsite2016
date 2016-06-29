@@ -12,7 +12,7 @@ const initialState = {
   subGeographies: [],
   totalEstimate: '426032',
   currentGeography: 'continent',
-  currentGeographyId: '2'
+  currentGeographyId: 'africa'
 };
 
 export function geographies(state = initialState, action) {
