@@ -39,5 +39,5 @@ export default function ParentADD(props) {
 
 ParentADD.propTypes = {
   data: PropTypes.object.isRequired,
-  year: PropTypes.number.isRequired
+  year: PropTypes.string.isRequired
 };
