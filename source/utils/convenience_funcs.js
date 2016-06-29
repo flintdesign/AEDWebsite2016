@@ -1,5 +1,5 @@
 export const getNextGeography = currentGeography => {
-  const geographies = ['continent', 'region', 'country', 'inputZone', 'stratum'];
+  const geographies = ['continent', 'region', 'country', 'stratum'];
   return geographies[geographies.indexOf(currentGeography) + 1];
 };
 
@@ -8,7 +8,6 @@ export const pluralize = word => {
     contient: 'continents',
     region: 'regions',
     country: 'countries',
-    inputZone: 'inputZones',
     stratum: 'strata'
   };
   return wordMapping[word];

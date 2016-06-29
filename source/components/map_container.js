@@ -70,7 +70,8 @@ class MapContainer extends Component {
 
   handleClick(e) {
     this.setState({ bounds: e.target.options.bounds });
-    this.props.router.push(e.target.options.href);
+    // Add `this.props.location.pathname` for relative navigation
+    this.props.router.push(this.props.location.pathname + e.target.options.href);
   }
 
   render() {
@@ -81,8 +82,8 @@ class MapContainer extends Component {
       this.state.geoJSONData.map(datum => {
         geoJSONObjs.push(
           <GeoJson
-            key={`${datum.id}_${slugify(datum.name)}`}
-            href={`/2013/${datum.id}`}
+            key={`${datum.id}_${slugify(datum.name || '')}`}
+            href={`/${datum.iso_code ? datum.iso_code : datum.id}`}
             data={datum}
             className={slugify(datum.name || '')}
             onClick={self.handleClick}
@@ -135,7 +136,8 @@ MapContainer.propTypes = {
   subGeographyData: PropTypes.array,
   router: PropTypes.shape({
     push: PropTypes.func.isRequired
-  }).isRequired
+  }).isRequired,
+  location: PropTypes.object.isRequired
 };
 
 export default withRouter(MapContainer);

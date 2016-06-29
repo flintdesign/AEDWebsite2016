@@ -12,7 +12,7 @@ import {
 /*
 *   Fetches geoJSON data from the API for a single geography
 *
-*   geoType: One of ['region', 'country', 'inputZone', 'stratum']
+*   geoType: One of ['region', 'country', 'stratum']
 *   geoItem: The object for which we're fetching geoJSON data
 */
 export function fetchGeoJSON(geoType, geoItem) {
@@ -20,22 +20,54 @@ export function fetchGeoJSON(geoType, geoItem) {
   let geoId = geoItem.id;
   if (geoItem.iso_code) {
     geoId = geoItem.iso_code;
+  } else if (geoItem.strcode) {
+    geoId = geoItem.strcode;
   }
 
   // Fetch the geoJSON data
   return fetch(`${config.apiBaseURL}/${geoType}/${geoId}/geojson_map`)
   .then(r => r.json())
-  .then(d => Object.assign(d, geoItem));
+  .then(d => Object.assign(d, {
+    name: geoItem[geoType],
+    id: geoItem.id || geoItem.iso_code || geoItem.strcode
+  }, geoItem));
 }
 
 /*
-*   Fetches geoJSON data from the API and fires actions signaling the start
-*   of the request and the reception of data from the API
+*   Fetches and loads geoJSON data into the store. This is a separate method
+*   because the subGeography list may be sourced either from previously-fetched
+*   data or from an API call to an endpoint like `/regions/3/countries`
 *
 *   dispatch: Must be passed in from the component
-*   geoType: One of ['continent', 'region', 'country', 'inputZone', 'stratum']
+*   data: An array of region, country, or strata entries
+*   subGeoType: One of ['region', 'country', 'stratum']
+*/
+export function loadSubGeography(dispatch, data, subGeoType) {
+  let array = data;
+  // Regions come back as an array, countries as { countries: [...] }
+  if (!(data instanceof Array)) {
+    array = data[pluralize(subGeoType)];
+  }
+
+  // Fetch geoJSON data for each of the subGeographies
+  return Promise.all(array.map(c => fetchGeoJSON(subGeoType, c)))
+  .then(geoData => {
+    // dispatch "receive" action with response data
+    dispatch({
+      type: RECEIVE_SUBGEOGRAPHY_DATA,
+      data: geoData
+    });
+  });
+}
+
+/*
+*   Fetches a list of subGeographies from the API and sends that data to the
+*   `loadSubGeography` for processing into the store
+*
+*   dispatch: Must be passed in from the component
+*   geoType: One of ['continent', 'region', 'country', 'stratum']
 *   geoId: An ID matching the `geographyType` (either a number or string)
-*   subGeoType: One of ['continent', 'region', 'country', 'inputZone', 'stratum']
+*   subGeoType: One of ['region', 'country', 'stratum']
 */
 export function fetchSubGeography(dispatch, geoType, geoId, subGeoType) {
   // Dispatch the "loading" action
@@ -44,22 +76,7 @@ export function fetchSubGeography(dispatch, geoType, geoId, subGeoType) {
   // Fetch a list of subGeographies
   fetch(`${config.apiBaseURL}/${geoType}/${geoId}/${pluralize(subGeoType)}`)
   .then(r => r.json())
-  .then(d => {
-    let array = d;
-    // Regions come back as an array, countries as { countries: [...] }
-    if (!(d instanceof Array)) {
-      array = d[pluralize(subGeoType)];
-    }
-    // Return all geoJSON objects at the same time
-    return Promise.all(array.map(c => fetchGeoJSON(subGeoType, c)));
-  })
-  .then(data => {
-    // dispatch "receive" action with response data
-    dispatch({
-      type: RECEIVE_SUBGEOGRAPHY_DATA,
-      data: data
-    });
-  });
+  .then(d => loadSubGeography(dispatch, d, subGeoType));
 }
 
 /*
@@ -67,7 +84,7 @@ export function fetchSubGeography(dispatch, geoType, geoId, subGeoType) {
 *   of the request and the reception of data from the API
 *
 *   dispatch: Must be passed in from the component
-*   geoType: One of ['continent', 'region', 'country', 'inputZone', 'stratum']
+*   geoType: One of ['continent', 'region', 'country', 'stratum']
 *   geoId: An ID matching the `geographyType` (either a number or string)
 *   geoYear: A valid survey year
 *   geoCount: One of ['add', 'dps']
@@ -94,6 +111,12 @@ export function fetchGeography(dispatch, geoType, geoId, geoYear, geoCount) {
       });
 
       const subGeoType = getNextGeography(geoType);
-      fetchSubGeography(dispatch, geoType, geoId, subGeoType);
+
+      if (d[pluralize(subGeoType)]) {
+        dispatch({ type: FETCH_SUBGEOGRAPHY_DATA });
+        loadSubGeography(dispatch, d[pluralize(subGeoType)], subGeoType);
+      } else {
+        fetchSubGeography(dispatch, geoType, geoId, subGeoType);
+      }
     });
 }

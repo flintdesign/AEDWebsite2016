@@ -18,6 +18,10 @@ const initialState = {
 export function geographies(state = initialState, action) {
   const totalEstimate = (data) => {
     if (data.countType === 'add') {
+      // It appears that the API is returning inconsistent structures
+      if (data.summary_sums === undefined) {
+        return data.data.summary_sums[0].ESTIMATE;
+      }
       return data.summary_sums[0].ESTIMATE;
     }
     return data[`${pluralize(getNextGeography(data.type))}_sum`][0].DEFINITE;
