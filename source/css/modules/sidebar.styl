@@ -1,3 +1,4 @@
+@import '_variables'
 @import 'typography'
 
 aside
@@ -40,7 +41,7 @@ aside
 .sidebar__year-nav
   border 1px solid #fff
   border-width 0 0 1px 0
-  background $brand-dark
+  background transparent
   -webkit-appearance: none
   padding 3px 16px 3px 0
   color #fff
@@ -190,3 +191,51 @@ aside
 
 .heading__small
   @extend .small-heading
+
+.sidebar__inner.region-southern-africa
+  background $southern-africa
+  .count-type-toggle
+    li.active a
+      background darken($southern-africa, 70%)
+      color #bbb
+      border 1px solid darken($southern-africa, 55%)
+    li:not(.active) a
+      background darken($southern-africa, 30%)
+      color #fff
+      border 1px solid darken($southern-africa, 45%)
+
+.sidebar__inner.region-eastern-africa
+  background $eastern-africa
+  .count-type-toggle
+    li.active a
+      background darken($eastern-africa, 70%)
+      color #bbb
+      border 1px solid darken($eastern-africa, 55%)
+    li:not(.active) a
+      background darken($eastern-africa, 30%)
+      color #fff
+      border 1px solid darken($eastern-africa, 45%)
+
+.sidebar__inner.region-central-africa
+  background $central-africa
+  .count-type-toggle
+    li.active a
+      background darken($central-africa, 70%)
+      color #bbb
+      border 1px solid darken($central-africa, 55%)
+    li:not(.active) a
+      background darken($central-africa, 30%)
+      color #fff
+      border 1px solid darken($central-africa, 45%)
+
+.sidebar__inner.region-west-africa
+  background $west-africa
+  .count-type-toggle
+    li.active a
+      background darken($west-africa, 70%)
+      color #bbb
+      border 1px solid darken($west-africa, 55%)
+    li:not(.active) a
+      background darken($west-africa, 30%)
+      color #fff
+      border 1px solid darken($west-africa, 45%)

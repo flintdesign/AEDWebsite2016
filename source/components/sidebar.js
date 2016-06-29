@@ -68,7 +68,8 @@ class Sidebar extends Component {
       geographies,
       loading,
       year,
-      currentGeography
+      currentGeography,
+      currentGeographyId,
     } = this.props;
 
     const years = ['2013', '2006', '2002', '1998', '1995'];
@@ -86,9 +87,11 @@ class Sidebar extends Component {
       );
     });
 
+    const sidebarInnerClassName = `sidebar__inner ${currentGeography}-${currentGeographyId}`;
+
     return (
       <aside className={showSidebar ? 'open' : 'closed'}>
-        <section className="sidebar__inner">
+        <section className={sidebarInnerClassName}>
           <div className="sidebar__year-nav__container">
             <ul className="sidebar__year-nav">
               {yearLinks}
@@ -158,7 +161,8 @@ Sidebar.propTypes = {
   dispatch: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   year: PropTypes.string.isRequired,
-  currentGeography: PropTypes.string.isRequired
+  currentGeography: PropTypes.string.isRequired,
+  currentGeographyId: PropTypes.string.isRequired
 };
 
 export default Sidebar;
