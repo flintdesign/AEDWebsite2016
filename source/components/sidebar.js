@@ -75,8 +75,8 @@ class Sidebar extends Component {
     const yearLinks = years.map(y => {
       const toVal = compact(window.location.pathname.split('/'));
       const linkVal = toVal.length ? [y, toVal.splice(1)].join('/') : y;
-      const className = (y === this.props.params.year) ||
-        (!this.props.params.year && y === '2013') ? 'current' : null;
+      const className = (y === this.props.year) ||
+        (!this.props.year && y === '2013') ? 'current' : null;
       return (
         <li
           key={y} className={className}
@@ -157,7 +157,7 @@ Sidebar.propTypes = {
   geographies: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
-  year: PropTypes.number.isRequired,
+  year: PropTypes.string.isRequired,
   currentGeography: PropTypes.string.isRequired
 };
 

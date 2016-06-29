@@ -1,3 +1,5 @@
+import map from './slug_map';
+
 export const getNextGeography = currentGeography => {
   const geographies = ['continent', 'region', 'country', 'inputZone', 'stratum'];
   return geographies[geographies.indexOf(currentGeography) + 1];
@@ -23,3 +25,4 @@ export const flatten = ary => {
   return ary;
 };
 
+export const mapSlugToId = (slug) => map[slug];

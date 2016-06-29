@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import config from './config';
-import { pluralize, getNextGeography } from './utils/convenience_funcs';
+import { pluralize, getNextGeography, mapSlugToId } from './utils/convenience_funcs';
 
 import {
   FETCH_GEOGRAPHY_DATA,
@@ -72,18 +72,20 @@ export function fetchSubGeography(dispatch, geoType, geoId, subGeoType) {
 *   geoYear: A valid survey year
 *   geoCount: One of ['add', 'dps']
 */
-export function fetchGeography(dispatch, geoType, geoId, geoYear, geoCount) {
+export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
   // Formatting and validation
   const type = geoType.toLowerCase();
-  const id = geoId.toLowerCase();
+  const id = slug.toLowerCase();
   const year = geoYear;
   const count = geoCount ? geoCount.toLowerCase() : 'add';
 
   // Dispatch the "loading" action
   dispatch({ type: FETCH_GEOGRAPHY_DATA, data: { countType: count } });
 
+  const mappedId = mapSlugToId(slug);
+
   // Dispatch async call to the API
-  fetch(`${config.apiBaseURL}/${type}/${id}/${year}/${count}`)
+  fetch(`${config.apiBaseURL}/${type}/${mappedId}/${year}/${count}`)
     .then(r => r.json())
     .then(d => {
       const data = { ...d, type: type, countType: count, id: id };
@@ -94,6 +96,6 @@ export function fetchGeography(dispatch, geoType, geoId, geoYear, geoCount) {
       });
 
       const subGeoType = getNextGeography(geoType);
-      fetchSubGeography(dispatch, geoType, geoId, subGeoType);
+      fetchSubGeography(dispatch, geoType, mappedId, subGeoType);
     });
 }

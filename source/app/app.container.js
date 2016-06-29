@@ -54,6 +54,7 @@ class App extends Component {
       currentGeography,
       currentGeographyId,
       subGeographyData,
+      routeYear
     } = this.props;
     return (
       <div className="container main__container">
@@ -65,7 +66,8 @@ class App extends Component {
           {React.cloneElement(children, {
             currentGeography: currentGeography,
             currentGeographyId: currentGeographyId,
-            subGeographyData: subGeographyData
+            subGeographyData: subGeographyData,
+            year: routeYear
           })}
         </main>
         <Sidebar
@@ -75,7 +77,7 @@ class App extends Component {
           loading={loading}
           dispatch={dispatch}
           countType={location.query.count_type}
-          year={parseInt(params.year, 10) || 2013}
+          year={routeYear}
           params={params}
           currentGeography={currentGeography}
           currentGeographyId={currentGeographyId}
@@ -119,7 +121,7 @@ const mapStateToProps = (state, props) => {
     currentGeography: state.geographyData.currentGeography,
     currentGeographyId: state.geographyData.currentGeographyId,
     routeGeography: routeGeography,
-    routeGeographyId: props.params[routeGeography] || '2',
+    routeGeographyId: props.params[routeGeography] || 'africa',
     routeYear: props.params.year || '2013',
     subGeographyData: state.geographyData.subGeographies
   };

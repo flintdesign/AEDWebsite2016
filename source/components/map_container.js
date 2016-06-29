@@ -82,7 +82,7 @@ class MapContainer extends Component {
         geoJSONObjs.push(
           <GeoJson
             key={`${datum.id}_${slugify(datum.name)}`}
-            href={`/2013/${datum.id}`}
+            href={`/${self.props.year}/${slugify(datum.name)}`}
             data={datum}
             className={slugify(datum.name || '')}
             onClick={self.handleClick}
@@ -114,7 +114,7 @@ class MapContainer extends Component {
       <Map
         bounds={this.state.bounds}
         zoom={this.state.zoomLevel}
-        minZoom={3}
+        minZoom={4}
         maxBounds={config.maxMapBounds}
         maxZoom={12}
         onZoomEnd={this.onZoomEnd}
@@ -133,6 +133,7 @@ MapContainer.propTypes = {
   currentGeography: PropTypes.string.isRequired,
   currentGeographyId: PropTypes.string,
   subGeographyData: PropTypes.array,
+  year: PropTypes.string.isRequired,
   router: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired
