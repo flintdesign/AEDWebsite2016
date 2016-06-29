@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { Router, Route, IndexRedirect, browserHistory } from 'react-router';
 import App from './app/app.container';
 import MapContainer from './components/map_container';
 import Resources from './components/resources';
@@ -18,11 +18,10 @@ render((
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path={'/'} component={App}>
-        <IndexRoute component={MapContainer} />
+        <IndexRedirect to="/2013" />
         <Route path={'/about'} component={About} />
         <Route path={'/resources'} component={Resources} />
-        <Route path={'/:year'} component={MapContainer} />
-        <Route path={'/:year/:region'} component={MapContainer} />
+        <Route path={'/:year(/:region)(/:country)'} component={MapContainer} />
       </Route>
     </Router>
   </Provider>

@@ -56,5 +56,5 @@ ADDSidebar.propTypes = {
   geographies: PropTypes.object.isRequired,
   currentTitle: PropTypes.string.isRequired,
   currentGeography: PropTypes.string.isRequired,
-  year: PropTypes.number.isRequired
+  year: PropTypes.string.isRequired
 };

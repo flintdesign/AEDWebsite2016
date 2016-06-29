@@ -31,8 +31,8 @@ class Sidebar extends Component {
   }
 
   fetchAPIData() {
-    const { dispatch, year, countType } = this.props;
-    fetchGeography(dispatch, 'continent', '2', year, countType);
+    const { dispatch, year, countType, currentGeography, currentGeographyId } = this.props;
+    fetchGeography(dispatch, currentGeography, currentGeographyId, year, countType);
   }
 
   handleClick(e) {
@@ -68,15 +68,16 @@ class Sidebar extends Component {
       geographies,
       loading,
       year,
-      currentGeography
+      currentGeography,
+      currentGeographyId,
     } = this.props;
 
     const years = ['2013', '2006', '2002', '1998', '1995'];
     const yearLinks = years.map(y => {
       const toVal = compact(window.location.pathname.split('/'));
       const linkVal = toVal.length ? [y, toVal.splice(1)].join('/') : y;
-      const className = (y === this.props.params.year) ||
-        (!this.props.params.year && y === '2013') ? 'current' : null;
+      const className = (y === this.props.year) ||
+        (!this.props.year && y === '2013') ? 'current' : null;
       return (
         <li
           key={y} className={className}
@@ -86,9 +87,11 @@ class Sidebar extends Component {
       );
     });
 
+    const sidebarInnerClassName = `sidebar__inner ${currentGeography}-${currentGeographyId}`;
+
     return (
       <aside className={showSidebar ? 'open' : 'closed'}>
-        <section className="sidebar__inner">
+        <section className={sidebarInnerClassName}>
           <div className="sidebar__year-nav__container">
             <ul className="sidebar__year-nav">
               {yearLinks}
@@ -101,7 +104,9 @@ class Sidebar extends Component {
                 <Link
                   className={this.getCurrentTitle('summary')}
                   data-title={'summary'}
-                  to={{ query: { ...location.query, viz_type: 'summary_area' } }}
+                  to={{
+                    pathname: location.pathname,
+                    query: { ...location.query, viz_type: 'summary_area' } }}
                 >
                   Summary totals &amp; Area of range covered
                 </Link>
@@ -110,7 +115,8 @@ class Sidebar extends Component {
                 <Link
                   className={this.getCurrentTitle('totals')}
                   data-title={'totals'}
-                  to={{ query: { ...location.query, viz_type: 'continental_regional' } }}
+                  to={{ pathname: location.pathname,
+                    query: { ...location.query, viz_type: 'continental_regional' } }}
                 >
                   Continental &amp; regional totals
                 </Link>
@@ -157,8 +163,9 @@ Sidebar.propTypes = {
   geographies: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
-  year: PropTypes.number.isRequired,
-  currentGeography: PropTypes.string.isRequired
+  year: PropTypes.string.isRequired,
+  currentGeography: PropTypes.string.isRequired,
+  currentGeographyId: PropTypes.string.isRequired
 };
 
 export default Sidebar;
