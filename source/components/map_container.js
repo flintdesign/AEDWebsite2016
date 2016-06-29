@@ -80,18 +80,24 @@ class MapContainer extends Component {
     if (this.state.geoJSONData) {
       const self = this;
       this.state.geoJSONData.map(datum => {
+        let geoJSONClassName = slugify(datum.name || '');
+        if (self.props.currentGeography === 'region') {
+          geoJSONClassName =
+            `${self.props.currentGeography}-${self.props.currentGeographyId}-country`;
+        }
         geoJSONObjs.push(
           <GeoJson
             key={`${datum.id}_${slugify(datum.name || '')}`}
-            href={`/${datum.iso_code ? datum.iso_code : datum.id}`}
+            href={`/${slugify(datum.name)}`}
+            // href={`/${self.props.year}/${slugify(datum.name)}`}
             data={datum}
-            className={slugify(datum.name || '')}
+            className={geoJSONClassName}
             onClick={self.handleClick}
             center={datum.center}
             bounds={datum.bounds}
           />
         );
-        if (datum.coordinates) {
+        if (datum.coordinates && self.props.currentGeography === 'continent') {
           const icon = divIcon({
             className: 'leaflet-marker-icon',
             html: `<h1 style="font-size:${self.getLabelFontSize()}px"
@@ -115,7 +121,7 @@ class MapContainer extends Component {
       <Map
         bounds={this.state.bounds}
         zoom={this.state.zoomLevel}
-        minZoom={3}
+        minZoom={4}
         maxBounds={config.maxMapBounds}
         maxZoom={12}
         onZoomEnd={this.onZoomEnd}
@@ -134,10 +140,11 @@ MapContainer.propTypes = {
   currentGeography: PropTypes.string.isRequired,
   currentGeographyId: PropTypes.string,
   subGeographyData: PropTypes.array,
+  year: PropTypes.string.isRequired,
   router: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired,
-  location: PropTypes.object.isRequired
+  location: PropTypes.object.isRequired,
 };
 
 export default withRouter(MapContainer);

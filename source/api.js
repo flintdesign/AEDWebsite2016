@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import config from './config';
-import { pluralize, getNextGeography } from './utils/convenience_funcs';
+import { pluralize, getNextGeography, mapSlugToId } from './utils/convenience_funcs';
 
 import {
   FETCH_GEOGRAPHY_DATA,
@@ -17,12 +17,7 @@ import {
 */
 export function fetchGeoJSON(geoType, geoItem) {
   // Get the ID or (if the item is a country) ISO code
-  let geoId = geoItem.id;
-  if (geoItem.iso_code) {
-    geoId = geoItem.iso_code;
-  } else if (geoItem.strcode) {
-    geoId = geoItem.strcode;
-  }
+  const geoId = geoItem.iso_code || geoItem.id || geoItem.strcode;
 
   // Fetch the geoJSON data
   return fetch(`${config.apiBaseURL}/${geoType}/${geoId}/geojson_map`)
@@ -89,18 +84,20 @@ export function fetchSubGeography(dispatch, geoType, geoId, subGeoType) {
 *   geoYear: A valid survey year
 *   geoCount: One of ['add', 'dps']
 */
-export function fetchGeography(dispatch, geoType, geoId, geoYear, geoCount) {
+export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
   // Formatting and validation
   const type = geoType.toLowerCase();
-  const id = geoId.toLowerCase();
+  const id = slug.toLowerCase();
   const year = geoYear;
   const count = geoCount ? geoCount.toLowerCase() : 'add';
 
   // Dispatch the "loading" action
   dispatch({ type: FETCH_GEOGRAPHY_DATA, data: { countType: count } });
 
+  const mappedId = mapSlugToId(slug);
+
   // Dispatch async call to the API
-  fetch(`${config.apiBaseURL}/${type}/${id}/${year}/${count}`)
+  fetch(`${config.apiBaseURL}/${type}/${mappedId}/${year}/${count}`)
     .then(r => r.json())
     .then(d => {
       const data = { ...d, type: type, countType: count, id: id };
@@ -116,7 +113,7 @@ export function fetchGeography(dispatch, geoType, geoId, geoYear, geoCount) {
         dispatch({ type: FETCH_SUBGEOGRAPHY_DATA });
         loadSubGeography(dispatch, d[pluralize(subGeoType)], subGeoType);
       } else {
-        fetchSubGeography(dispatch, geoType, geoId, subGeoType);
+        fetchSubGeography(dispatch, geoType, mappedId, subGeoType);
       }
     });
 }
