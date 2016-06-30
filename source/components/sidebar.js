@@ -31,8 +31,8 @@ class Sidebar extends Component {
   }
 
   fetchAPIData() {
-    const { dispatch, year, countType } = this.props;
-    fetchGeography(dispatch, 'continent', '2', year, countType);
+    const { dispatch, year, countType, currentGeography, currentGeographyId } = this.props;
+    fetchGeography(dispatch, currentGeography, currentGeographyId, year, countType);
   }
 
   handleClick(e) {
@@ -105,7 +105,9 @@ class Sidebar extends Component {
                 <Link
                   className={this.getCurrentTitle('summary')}
                   data-title={'summary'}
-                  to={{ query: { ...location.query, viz_type: 'summary_area' } }}
+                  to={{
+                    pathname: location.pathname,
+                    query: { ...location.query, viz_type: 'summary_area' } }}
                 >
                   Summary totals &amp; Area of range covered
                 </Link>
@@ -114,7 +116,8 @@ class Sidebar extends Component {
                 <Link
                   className={this.getCurrentTitle('totals')}
                   data-title={'totals'}
-                  to={{ query: { ...location.query, viz_type: 'continental_regional' } }}
+                  to={{ pathname: location.pathname,
+                    query: { ...location.query, viz_type: 'continental_regional' } }}
                 >
                   Continental &amp; regional totals
                 </Link>
