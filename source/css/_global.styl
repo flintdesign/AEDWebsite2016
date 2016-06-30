@@ -8,6 +8,9 @@ main
   position relative
   &.main--full
     width 100%
+  &.main--half
+    @media (max-width $mobile-max)
+      width 0
   &.main--closed
     width 0
 

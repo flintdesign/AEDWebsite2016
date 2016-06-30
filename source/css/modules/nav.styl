@@ -39,5 +39,8 @@
     background none
 .sidebar__toggle--expand
   right 40px
+  &.open
+    @media (max-width $mobile-max)
+      display: none
   &.closed
     right 0

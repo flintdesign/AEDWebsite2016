@@ -58,7 +58,7 @@ class App extends Component {
       sidebarState,
     } = this.props;
 
-    const mainClasses = ['main--full', '', 'main--closed'];
+    const mainClasses = ['main--full', 'main--half', 'main--closed'];
 
     return (
       <div className="container main__container">
