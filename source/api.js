@@ -24,6 +24,7 @@ export function fetchGeoJSON(geoType, geoItem) {
   .then(r => r.json())
   .then(d => Object.assign(d, {
     name: geoItem[geoType],
+    geoType: geoType,
     id: geoItem.id || geoItem.iso_code || geoItem.strcode
   }, geoItem));
 }

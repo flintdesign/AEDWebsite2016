@@ -11,6 +11,7 @@ class App extends Component {
   constructor(props, context) {
     super(props, context);
     this.onHandleClick = this.onHandleClick.bind(this);
+    this.openSidebar = this.openSidebar.bind(this);
     this.state = {
       showSidebar: false
     };
@@ -22,9 +23,11 @@ class App extends Component {
   }
 
   onHandleClick() {
-    this.setState({
-      showSidebar: !this.state.showSidebar
-    });
+    this.setState({ showSidebar: !this.state.showSidebar });
+  }
+
+  openSidebar() {
+    this.setState({ showSidebar: true });
   }
 
   fetchData(props, force = false) {
@@ -68,6 +71,7 @@ class App extends Component {
             currentGeographyId: currentGeographyId,
             subGeographyData: subGeographyData,
             year: routeYear,
+            openSidebar: this.openSidebar
           })}
         </main>
         <Sidebar
