@@ -6,15 +6,13 @@ import TotalCount from '../components/total_count';
 import HelpNav from '../components/help_nav';
 import { formatNumber } from '../utils/format_utils';
 import { fetchGeography } from '../api';
+import { expandSidebar, contractSidebar } from '../actions';
 
 class App extends Component {
   constructor(props, context) {
     super(props, context);
-    this.onHandleClick = this.onHandleClick.bind(this);
-    this.openSidebar = this.openSidebar.bind(this);
-    this.state = {
-      showSidebar: false
-    };
+    this.expandSidebar = this.expandSidebar.bind(this);
+    this.contractSidebar = this.contractSidebar.bind(this);
     this.fetchData(props, true);
   }
 
@@ -22,12 +20,11 @@ class App extends Component {
     this.fetchData(nextProps);
   }
 
-  onHandleClick() {
-    this.setState({ showSidebar: !this.state.showSidebar });
+  expandSidebar() {
+    this.props.dispatch(expandSidebar());
   }
-
-  openSidebar() {
-    this.setState({ showSidebar: true });
+  contractSidebar() {
+    this.props.dispatch(contractSidebar());
   }
 
   fetchData(props, force = false) {
@@ -58,13 +55,18 @@ class App extends Component {
       currentGeographyId,
       subGeographyData,
       routeYear,
+      sidebarState,
     } = this.props;
+
+    const mainClasses = ['main--full', 'main--half', 'main--closed'];
+
     return (
       <div className="container main__container">
-        <main className={this.state.showSidebar ? null : 'full-width'}>
+        <main className={mainClasses[sidebarState]}>
           <Nav
-            onHandleClick={this.onHandleClick}
-            showSidebar={this.state.showSidebar}
+            expandSidebar={this.expandSidebar}
+            contractSidebar={this.contractSidebar}
+            sidebarState={sidebarState}
           />
           {React.cloneElement(children, {
             currentGeography: currentGeography,
@@ -76,7 +78,7 @@ class App extends Component {
         </main>
         <Sidebar
           location={location}
-          showSidebar={this.state.showSidebar}
+          sidebarState={sidebarState}
           geographies={geographies}
           loading={loading}
           dispatch={dispatch}
@@ -111,7 +113,8 @@ App.propTypes = {
   routeGeography: PropTypes.string,
   routeGeographyId: PropTypes.string,
   routeYear: PropTypes.string,
-  subGeographyData: PropTypes.array
+  subGeographyData: PropTypes.array,
+  sidebarState: PropTypes.number,
 };
 
 const mapStateToProps = (state, props) => {
@@ -131,6 +134,7 @@ const mapStateToProps = (state, props) => {
     routeGeographyId: props.params[routeGeography] || 'africa',
     routeYear: props.params.year || '2013',
     subGeographyData: state.geographyData.subGeographies,
+    sidebarState: state.navigation.sidebarState,
   };
 };
 

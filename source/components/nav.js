@@ -1,25 +1,43 @@
 import React, { PropTypes } from 'react';
-// import { Link } from 'react-router';
+import {
+  SIDEBAR_CLOSED,
+  SIDEBAR_FULL,
+} from '../constants';
 import Search from './search';
 
 export default function Nav(props) {
-  const symbol = props.showSidebar ? { __html: '&rarr;&nbsp;|' } : { __html: '&larr;' };
-  const toggleClassName = props.showSidebar ? 'sidebar__toggle open' : 'sidebar__toggle closed';
+  const { sidebarState, expandSidebar, contractSidebar } = props;
+
+  const expandClass = sidebarState === SIDEBAR_CLOSED ? 'closed' : 'open';
+  const expand = sidebarState < SIDEBAR_FULL && (
+    <div
+      className={`sidebar__toggle sidebar__toggle--expand ${expandClass}`}
+      onClick={expandSidebar}
+      dangerouslySetInnerHTML={{ __html: '&larr;' }}
+    />
+  );
+
+  const contract = sidebarState > SIDEBAR_CLOSED && (
+    <div
+      className="sidebar__toggle sidebar__toggle--contract open"
+      onClick={contractSidebar}
+      dangerouslySetInnerHTML={{ __html: '&rarr;&nbsp;|' }}
+    />
+  );
+
   return (
     <nav className="site-nav">
       <div className="search__container">
         <Search />
       </div>
-      <div
-        className={toggleClassName}
-        onClick={props.onHandleClick}
-        dangerouslySetInnerHTML={symbol}
-      />
+      {expand}
+      {contract}
     </nav>
   );
 }
 
 Nav.propTypes = {
-  onHandleClick: PropTypes.func.isRequired,
-  showSidebar: PropTypes.bool.isRequired
+  expandSidebar: PropTypes.func.isRequired,
+  contractSidebar: PropTypes.func.isRequired,
+  sidebarState: PropTypes.number.isRequired,
 };
