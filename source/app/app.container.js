@@ -73,7 +73,7 @@ class App extends Component {
             currentGeographyId: currentGeographyId,
             subGeographyData: subGeographyData,
             year: routeYear,
-            openSidebar: this.openSidebar
+            openSidebar: this.expandSidebar
           })}
         </main>
         <Sidebar
