@@ -2,10 +2,12 @@ import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import ADDSidebar from './add_sidebar';
 import DPPSSidebar from './dpps_sidebar';
+import StratumSidebar from './stratum_sidebar';
 import CountTypeToggle from './count_type_toggle';
 import { fetchGeography } from '../api';
-import { titleize, pluralize, getNextGeography } from '../utils/convenience_funcs';
+import { pluralize, getNextGeography, getEntityName, titleize } from '../utils/convenience_funcs';
 import compact from 'lodash.compact';
+import find from 'lodash.find';
 
 class Sidebar extends Component {
   constructor(props, context) {
@@ -15,19 +17,24 @@ class Sidebar extends Component {
     this.fetchAPIData = this.fetchAPIData.bind(this);
     this.subGeographyHasCorrectKeys = this.subGeographyHasCorrectKeys.bind(this);
     this.shouldRenderSidebar = this.shouldRenderSidebar.bind(this);
-    this.getEntityName = this.getEntityName.bind(this);
+    this.onAStratum = this.onAStratum.bind(this);
     this.state = {
       currentTitle: 'summary_area'
     };
+  }
+
+  onAStratum() {
+    return compact(this.props.location.pathname.split('/')).length === 4;
   }
 
   getCurrentTitle(title) {
     return this.state.currentTitle === title ? 'active' : null;
   }
 
-  getEntityName() {
-    const parts = compact(this.props.location.pathname.split('/'));
-    return parts.length > 1 ? titleize(parts[parts.length - 1]) : 'Africa';
+  getStratumFromHref() {
+    const parts = this.props.location.pathname.split('/');
+    const stratumName = parts[parts.length - 1];
+    return find(this.props.geographies.strata, s => s.stratum === titleize(stratumName));
   }
 
   fetchAPIData() {
@@ -98,35 +105,39 @@ class Sidebar extends Component {
               {yearLinks}
             </ul>
           </div>
-          <h1 className="sidebar__entity-name">{this.getEntityName()}</h1>
-          <nav className="sidebar__viz-type">
-            <ul>
-              <li onClick={this.handleClick}>
-                <Link
-                  className={this.getCurrentTitle('summary')}
-                  data-title={'summary'}
-                  to={{
-                    pathname: location.pathname,
-                    query: { ...location.query, viz_type: 'summary_area' } }}
-                >
-                  Summary totals &amp; Area of range covered
-                </Link>
-              </li>
-              <li onClick={this.handleClick}>
-                <Link
-                  className={this.getCurrentTitle('totals')}
-                  data-title={'totals'}
-                  to={{ pathname: location.pathname,
-                    query: { ...location.query, viz_type: 'continental_regional' } }}
-                >
-                  Continental &amp; regional totals
-                </Link>
-              </li>
-            </ul>
-          </nav>
-          <CountTypeToggle
-            location={location}
-          />
+          <h1 className="sidebar__entity-name">{getEntityName(this.props.location)}</h1>
+          {!geographies.strata &&
+            <div>
+              <nav className="sidebar__viz-type">
+                <ul>
+                  <li onClick={this.handleClick}>
+                    <Link
+                      className={this.getCurrentTitle('summary')}
+                      data-title={'summary'}
+                      to={{
+                        pathname: location.pathname,
+                        query: { ...location.query, viz_type: 'summary_area' } }}
+                    >
+                      Summary totals &amp; Area of range covered
+                    </Link>
+                  </li>
+                  <li onClick={this.handleClick}>
+                    <Link
+                      className={this.getCurrentTitle('totals')}
+                      data-title={'totals'}
+                      to={{ pathname: location.pathname,
+                        query: { ...location.query, viz_type: 'continental_regional' } }}
+                    >
+                      Continental &amp; regional totals
+                    </Link>
+                  </li>
+                </ul>
+              </nav>
+              <CountTypeToggle
+                location={location}
+              />
+            </div>
+          }
         </section>
 
         <section className="sidebar__inner">
@@ -148,6 +159,12 @@ class Sidebar extends Component {
               geographies={geographies}
               currentTitle={this.state.currentTitle}
               currentGeography={currentGeography}
+            />
+          }
+
+          {this.onAStratum() &&
+            <StratumSidebar
+              stratum={this.getStratumFromHref()}
             />
           }
         </section>

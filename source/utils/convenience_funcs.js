@@ -67,3 +67,8 @@ export const geoTypeFromHref = event => {
   }
   return geoType;
 };
+
+export const getEntityName = (location) => {
+  const parts = compact(location.pathname.split('/'));
+  return parts.length > 1 ? titleize(parts[parts.length - 1]) : 'Africa';
+};

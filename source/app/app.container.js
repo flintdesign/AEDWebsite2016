@@ -4,6 +4,7 @@ import Nav from '../components/nav';
 import Sidebar from '../components/sidebar';
 import TotalCount from '../components/total_count';
 import HelpNav from '../components/help_nav';
+import { getEntityName } from '../utils/convenience_funcs';
 import { formatNumber } from '../utils/format_utils';
 import { fetchGeography } from '../api';
 import { expandSidebar, contractSidebar } from '../actions';
@@ -90,7 +91,7 @@ class App extends Component {
         />
         {totalEstimate &&
           <TotalCount
-            currentGeographyId={currentGeographyId}
+            entity={getEntityName(this.props.location)}
             count={formatNumber(totalEstimate)}
           />
         }
