@@ -63,7 +63,7 @@ class Sidebar extends Component {
 
   render() {
     const {
-      showSidebar,
+      sidebarState,
       location,
       geographies,
       loading,
@@ -88,9 +88,10 @@ class Sidebar extends Component {
     });
 
     const sidebarInnerClassName = `sidebar__inner ${currentGeography}-${currentGeographyId}`;
+    const sidebarClasses = ['closed', 'open', 'full'];
 
     return (
-      <aside className={showSidebar ? 'open' : 'closed'}>
+      <aside className={sidebarClasses[sidebarState]}>
         <section className={sidebarInnerClassName}>
           <div className="sidebar__year-nav__container">
             <ul className="sidebar__year-nav">
@@ -153,7 +154,7 @@ class Sidebar extends Component {
 }
 
 Sidebar.propTypes = {
-  showSidebar: PropTypes.bool.isRequired,
+  sidebarState: PropTypes.number.isRequired,
   location: PropTypes.object,
   params: PropTypes.object,
   countType: PropTypes.string,
