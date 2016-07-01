@@ -27,5 +27,5 @@ module.exports = {
     loaders: Common.loaders
   },
   resolve: Common.resolve,
-  devtool: '#inline-source-map'
+  devtool: 'inline-source-map'
 };
