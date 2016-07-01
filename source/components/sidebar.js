@@ -150,6 +150,7 @@ class Sidebar extends Component {
               geographies={geographies}
               currentTitle={this.state.currentTitle}
               currentGeography={currentGeography}
+              sidebarState={sidebarState}
               year={year}
             />
           }
@@ -159,6 +160,7 @@ class Sidebar extends Component {
               geographies={geographies}
               currentTitle={this.state.currentTitle}
               currentGeography={currentGeography}
+              sidebarState={sidebarState}
             />
           }
 
@@ -183,7 +185,7 @@ Sidebar.propTypes = {
   loading: PropTypes.bool.isRequired,
   year: PropTypes.string.isRequired,
   currentGeography: PropTypes.string.isRequired,
-  currentGeographyId: PropTypes.string.isRequired
+  currentGeographyId: PropTypes.string.isRequired,
 };
 
 export default Sidebar;

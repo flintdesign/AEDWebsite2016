@@ -21,6 +21,12 @@ aside
     width: 100%
     display block
 
+aside table
+  width 100%
+
+  thead
+    text-align left
+
 .sidebar__inner
   padding 20px 40px
   background #fff
@@ -117,7 +123,8 @@ aside
     border-bottom 1px solid
     td:last-child
       text-align right
-  tbody td
+  tbody td,
+  thead th
     padding 6px 0
     span
       color $text-light
