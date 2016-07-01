@@ -86,7 +86,7 @@ class MapContainer extends Component {
   }
 
   handleClick(e) {
-    this.props.openSidebar();
+    //this.props.openSidebar();
     this.setState({ bounds: e.target.options.bounds });
     this.props.router.push(e.target.options.href);
     // TODO: If a region was clicked, clear all countries and strata and redraw.
