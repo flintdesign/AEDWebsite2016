@@ -22,11 +22,13 @@ export function fetchGeoJSON(geoType, geoItem) {
   // Fetch the geoJSON data
   return fetch(`${config.apiBaseURL}/${geoType}/${geoId}/geojson_map`)
   .then(r => r.json())
-  .then(d => Object.assign(d, {
+  .then(d => ({
+    ...d,
     name: geoItem[geoType],
     geoType: geoType,
-    id: geoItem.id || geoItem.iso_code || geoItem.strcode
-  }, geoItem));
+    id: geoItem.id || geoItem.iso_code || geoItem.strcode,
+    ...geoItem })
+  );
 }
 
 /*
