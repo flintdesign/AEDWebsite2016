@@ -72,14 +72,13 @@ class App extends Component {
             contractSidebar={this.contractSidebar}
             sidebarState={sidebarState}
             onHandleClick={this.toggleSidebar}
-            showSidebar={this.state.showSidebar}
           />
           {React.cloneElement(children, {
             currentGeography: currentGeography,
             currentGeographyId: currentGeographyId,
             subGeographyData: subGeographyData,
             year: routeYear,
-            openSidebar: this.expandSidebar
+            openSidebar: this.expandSidebar,
             cancelSearch: this.cancelSearch.bind(this)
           })}
         </main>
