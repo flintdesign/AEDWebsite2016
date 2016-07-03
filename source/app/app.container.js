@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Nav from '../components/nav';
+import BreadCrumbNav from '../components/breadcrumb_nav';
 import Sidebar from '../components/sidebar';
 import TotalCount from '../components/total_count';
 import HelpNav from '../components/help_nav';
@@ -67,6 +68,7 @@ class App extends Component {
     return (
       <div className="container main__container">
         <main className={mainClasses[sidebarState]}>
+          <BreadCrumbNav params={this.props.params} />
           <Nav
             expandSidebar={this.expandSidebar}
             contractSidebar={this.contractSidebar}
