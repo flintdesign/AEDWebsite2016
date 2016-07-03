@@ -66,7 +66,11 @@ class App extends Component {
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
 
     return (
-      <div className="container main__container">
+      <div className={
+        `container main__container
+        sidebar--${(sidebarState > 0 ? 'open' : 'closed')}
+        ${(!params.region ? '' : 'breadcrumbs-active')}`}
+      >
         <main className={mainClasses[sidebarState]}>
           <BreadCrumbNav params={this.props.params} />
           <Nav
