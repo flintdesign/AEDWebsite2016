@@ -1,13 +1,19 @@
 .site-nav
   display flex
   justify-content space-between
-  padding 15px $nav-margin
+  padding 15px $nav-margin * 1.25 15px $nav-margin
   align-items center
   position absolute
   top -2px
   right 10px
   z-index 3
   width 700px
+
+.sidebar--open .site-nav
+  padding-right 0
+
+.breadcrumbs-active .site-nav
+  top 50px
 
 .links__left
   display flex
@@ -37,6 +43,10 @@
     border-radius 6px 0 0 6px
   &.open
     background none
+
+.breadcrumbs-active .sidebar__toggle
+  top 62.5px
+
 .sidebar__toggle--expand
   right 40px
   &.open
