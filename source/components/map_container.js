@@ -8,7 +8,6 @@ import find from 'lodash.find';
 import keys from 'lodash.keys';
 import filter from 'lodash.filter';
 import flattenDeep from 'lodash.flattendeep';
-import compact from 'lodash.compact';
 import {
   getNextGeography,
   flatten,
@@ -25,8 +24,6 @@ class MapContainer extends Component {
     this.onZoomEnd = this.onZoomEnd.bind(this);
     this.getLabelFontSize = this.getLabelFontSize.bind(this);
     this.keyify = this.keyify.bind(this);
-    this.geoJSONClassName = this.geoJSONClassName.bind(this);
-    this.geoJSONActiveClassName = this.geoJSONActiveClassName.bind(this);
     this.state = {
       bounds: config.maxMapBounds,
       mapCenter: [0, 0],
@@ -63,7 +60,7 @@ class MapContainer extends Component {
     ]];
 
     if (coords.length > 1) {
-      obj = { ...data,
+      obj = {
         id: data.id,
         name: data.name,
         type: data.type,
@@ -114,8 +111,9 @@ class MapContainer extends Component {
     });
   }
 
-  objInStateGeoJSONs(obj, key) {
+  objInStateGeoJSONs(obj) {
     const arrays = flattenDeep(keys(this.state.geoJSONObjs).map(k => this.state.geoJSONObjs[k]));
+    const key = this.keyify(obj);
     const found = find(arrays.map(val => val.key === key));
     return typeof found !== 'undefined';
   }
@@ -125,42 +123,15 @@ class MapContainer extends Component {
     return `${datum.id}_${slugify(datum.name || '')}`;
   }
 
-  geoJSONClassName(datum) {
-    const urlParts = compact(this.props.location.pathname.split('/'));
-    const parentRegion = urlParts[1];
-    const slug = slugify(datum.name);
-    let className = `geojson__region__${slug}`;
-    if (datum.geoType !== 'region') {
-      className = `region__${parentRegion} ${datum.geoType}`;
-    }
-    return className;
-  }
-
-  geoJSONActiveClassName(datum) {
-    const urlParts = compact(this.props.location.pathname.split('/'));
-    let className;
-    if (urlParts.length <= 1) return ' geography__inactive';
-    const activeGeo = urlParts[urlParts.length - 1];
-    className = ' geography__';
-    className += activeGeo === slugify(datum.name) ? 'active' : 'inactive';
-    //if (urlParts.length === 4 && slugify(datum.name) === urlParts[urlParts.length - 2]) {
-    //}
-    return className;
-  }
-
   render() {
     const labels = [];
     if (this.state.geoJSONData) {
       const self = this;
       this.state.geoJSONData.map(datum => {
-        let geoJSONClassName = self.geoJSONClassName(datum);
-        geoJSONClassName += self.geoJSONActiveClassName(datum);
-        let key = self.keyify(datum);
-        key += ` ${geoJSONClassName}`;
+        let geoJSONClassName = slugify(datum.name || '');
+        const key = self.keyify(datum);
         const href = replaceURLPart(self.props.location.pathname, slugify(datum.name));
-        if (!self.objInStateGeoJSONs(datum, key)) {
-          // TODO: the key has updated bceause geoJSONClassName has changed,
-          // but we append rather than replacing. Clean up the old object.
+        if (!self.objInStateGeoJSONs(datum)) {
           self.state.geoJSONObjs[pluralize(getNextGeography(self.props.currentGeography))].push(
             <GeoJson
               key={key}
