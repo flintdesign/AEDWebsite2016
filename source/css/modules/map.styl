@@ -1,10 +1,18 @@
 $stroke-opacity = 0
 $fill-opacity = 0.75
 $hover-fill-opacity = 0.85
-$eastern = #6fd4f2
-$central = #60d085
-$west = #9DDC52
-$southern = #75e7d0
+
+west(alpha = 1)
+  rgb(113,99,240, alpha)
+
+eastern($alpha = 1)
+  rgb(237,112,113, alpha)
+
+central($alpha = 1)
+  rgb(37,110,228, alpha)
+
+southern($alpha = 1)
+  rgb(99,203,192, alpha)
 
 .leaflet-container
   width 100%
@@ -42,33 +50,6 @@ h1.region-4
 
 path
   transition fill-opacity 200ms ease-in-out, stroke-width 200ms ease-in-out
-  &.north-africa
-    stroke-opacity 0
-    fill-opacity 0
-  &.eastern-africa
-    stroke $eastern
-    fill $eastern
-    @extend .mapsvg
-    &:hover
-      stroke darken($eastern, 20%)
-  &.central-africa
-    stroke #60d085
-    fill #60d085
-    @extend .mapsvg
-    &:hover
-      stroke darken($central, 20%)
-  &.west-africa
-    stroke #9DDC52
-    fill #9DDC52
-    @extend .mapsvg
-    &:hover
-      stroke darken($west, 20%)
-  &.southern-africa
-    stroke #75e7d0
-    fill #75e7d0
-    @extend .mapsvg
-    &:hover
-      stroke darken($southern, 20%)
 
 .region-west-africa-country
   stroke #BFE78B
@@ -90,3 +71,18 @@ path
   stroke-opacity 1
   fill-opacity 0.1
   stroke-width 1.5
+
+path[class^=geojson__region__].geography__inactive
+  fill #ddd
+  fill-opacity 0.3
+  stroke #b3b3b3
+  stroke-opacity 1
+  stroke-width 1
+
+path.geojson__region__southern-africa.geography__active
+  fill southern()
+  stroke southern()
+  fill-opacity 0.08
+  stroke-opacity 1
+  stroke-width 4
+

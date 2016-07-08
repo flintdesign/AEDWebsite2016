@@ -129,7 +129,7 @@ class MapContainer extends Component {
     const urlParts = compact(this.props.location.pathname.split('/'));
     const parentRegion = urlParts[1];
     const slug = slugify(datum.name);
-    let className = `region__${slug}`;
+    let className = `geojson__region__${slug}`;
     if (datum.geoType !== 'region') {
       className = `region__${parentRegion} ${datum.geoType}`;
     }
@@ -143,10 +143,8 @@ class MapContainer extends Component {
     const activeGeo = urlParts[urlParts.length - 1];
     className = ' geography__';
     className += activeGeo === slugify(datum.name) ? 'active' : 'inactive';
-    /* Keep country active if we're in a stratum within it */
-    if (urlParts.length === 4 && slugify(datum.name) === urlParts[urlParts.length - 2]) {
-      className += 'active';
-    }
+    //if (urlParts.length === 4 && slugify(datum.name) === urlParts[urlParts.length - 2]) {
+    //}
     return className;
   }
 
