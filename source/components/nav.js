@@ -27,9 +27,7 @@ export default function Nav(props) {
 
   return (
     <nav className="site-nav">
-      <div className="search__container">
-        <Search />
-      </div>
+      <Search />
       {expand}
       {contract}
     </nav>
