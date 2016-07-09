@@ -4,10 +4,16 @@ import ADDSidebar from './add_sidebar';
 import DPPSSidebar from './dpps_sidebar';
 import StratumSidebar from './stratum_sidebar';
 import CountTypeToggle from './count_type_toggle';
-import { pluralize, getNextGeography, getEntityName, titleize } from '../utils/convenience_funcs';
 import compact from 'lodash.compact';
 import find from 'lodash.find';
 import isArray from 'lodash.isarray';
+import {
+  pluralize,
+  getNextGeography,
+  getEntityName,
+  titleize,
+  getParentRegionFromURL
+} from '../utils/convenience_funcs';
 
 class Sidebar extends Component {
   constructor(props, context) {
@@ -88,7 +94,8 @@ class Sidebar extends Component {
       );
     });
 
-    const sidebarInnerClassName = `sidebar__inner ${currentGeography}-${currentGeographyId}`;
+    let sidebarInnerClassName = `sidebar__inner ${currentGeography}__${currentGeographyId}`;
+    sidebarInnerClassName += ` region__${getParentRegionFromURL(location)}`;
     const sidebarClasses = ['closed', 'open', 'full'];
 
     const self = this;

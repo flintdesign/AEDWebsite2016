@@ -21,7 +21,7 @@ render((
         <IndexRedirect to="/2013" />
         <Route path={'/about'} component={About} />
         <Route path={'/resources'} component={Resources} />
-        <Route path={'/:year(/:region)(/:country)'} component={MapContainer} />
+        <Route path={'/:year(/:region)(/:country)(/:stratum)'} component={MapContainer} />
       </Route>
     </Router>
   </Provider>

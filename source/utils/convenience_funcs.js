@@ -19,7 +19,8 @@ export const pluralize = word => {
 };
 
 export const capitalize = word => `${word[0].toUpperCase()}${word.split('').splice(1).join('')}`;
-export const titleize = str => str.split('-').map(word => capitalize(word)).join(' ');
+// Have to call compact because the slug of some regions has two hyphens (parc-national--du-faro)
+export const titleize = str => compact(str.split('-')).map(word => capitalize(word)).join(' ');
 export const slugify = str => str.toLowerCase().split(' ').join('-');
 
 export const flatten = ary => {
@@ -75,4 +76,9 @@ export const geoTypeFromHref = event => {
 export const getEntityName = (location) => {
   const parts = compact(location.pathname.split('/'));
   return parts.length > 1 ? titleize(parts[parts.length - 1]) : 'Africa';
+};
+
+export const getParentRegionFromURL = (location) => {
+  const parts = compact(location.pathname.split('/'));
+  return parts.length === 1 ? '' : parts[1];
 };
