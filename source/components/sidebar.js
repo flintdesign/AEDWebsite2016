@@ -4,7 +4,6 @@ import ADDSidebar from './add_sidebar';
 import DPPSSidebar from './dpps_sidebar';
 import StratumSidebar from './stratum_sidebar';
 import CountTypeToggle from './count_type_toggle';
-import { fetchGeography } from '../api';
 import { pluralize, getNextGeography, getEntityName, titleize } from '../utils/convenience_funcs';
 import compact from 'lodash.compact';
 import find from 'lodash.find';
@@ -13,10 +12,8 @@ import isArray from 'lodash.isarray';
 class Sidebar extends Component {
   constructor(props, context) {
     super(props, context);
-    this.handleLinkClick = this.handleLinkClick.bind(this);
     this.handleSpanClick = this.handleSpanClick.bind(this);
     this.getCurrentTitle = this.getCurrentTitle.bind(this);
-    this.fetchAPIData = this.fetchAPIData.bind(this);
     this.subGeographyHasCorrectKeys = this.subGeographyHasCorrectKeys.bind(this);
     this.shouldRenderSidebar = this.shouldRenderSidebar.bind(this);
     this.onAStratum = this.onAStratum.bind(this);
@@ -39,15 +36,6 @@ class Sidebar extends Component {
     const parts = this.props.location.pathname.split('/');
     const stratumName = parts[parts.length - 1];
     return find(this.props.geographies.strata, s => s.stratum === titleize(stratumName));
-  }
-
-  fetchAPIData() {
-    const { dispatch, year, countType, currentGeography, currentGeographyId } = this.props;
-    fetchGeography(dispatch, currentGeography, currentGeographyId, year, countType);
-  }
-
-  handleLinkClick() {
-    this.fetchAPIData();
   }
 
   handleSpanClick(e) {
@@ -95,7 +83,7 @@ class Sidebar extends Component {
         <li
           key={y} className={className}
         >
-          <Link onClick={this.handleLinkClick} to={`/${linkVal}`}>{y}</Link>
+          <Link to={`/${linkVal}`}>{y}</Link>
         </li>
       );
     });
@@ -104,8 +92,6 @@ class Sidebar extends Component {
     const sidebarClasses = ['closed', 'open', 'full'];
 
     const self = this;
-
-    console.log(this.shouldRenderSidebar('add'));
 
     return (
       <aside className={sidebarClasses[sidebarState]}>
