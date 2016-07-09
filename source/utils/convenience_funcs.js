@@ -1,6 +1,9 @@
 import map from './slug_map';
+<<<<<<< HEAD
 import compact from 'lodash.compact';
 import uniq from 'lodash.uniq';
+=======
+>>>>>>> parent of c2a4c43... support clicking from within a country to another region WIP
 
 export const getNextGeography = currentGeography => {
   const geographies = ['continent', 'region', 'country', 'stratum'];
@@ -9,7 +12,7 @@ export const getNextGeography = currentGeography => {
 
 export const pluralize = word => {
   const wordMapping = {
-    continent: 'continents',
+    contient: 'continents',
     region: 'regions',
     country: 'countries',
     stratum: 'strata'
@@ -27,6 +30,7 @@ export const flatten = ary => {
 };
 
 export const mapSlugToId = (slug) => map[slug];
+<<<<<<< HEAD
 
 export const replaceURLPart = (pathname, slug) => {
   const urlParts = uniq(compact(pathname.split('/')));
@@ -73,3 +77,5 @@ export const getEntityName = (location) => {
   const parts = compact(location.pathname.split('/'));
   return parts.length > 1 ? titleize(parts[parts.length - 1]) : 'Africa';
 };
+=======
+>>>>>>> parent of c2a4c43... support clicking from within a country to another region WIP

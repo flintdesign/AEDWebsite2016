@@ -15,15 +15,27 @@ class App extends Component {
     super(props, context);
     this.expandSidebar = this.expandSidebar.bind(this);
     this.contractSidebar = this.contractSidebar.bind(this);
+    this.onHandleClick = this.onHandleClick.bind(this);
+    this.state = {
+      showSidebar: false
+    };
     this.fetchData(props, true);
   }
 
   componentWillReceiveProps(nextProps) {
     this.fetchData(nextProps);
   }
+
+  onHandleClick() {
+    this.setState({
+      showSidebar: !this.state.showSidebar
+    });
+  }
+
   expandSidebar() {
     this.props.dispatch(expandSidebar());
   }
+
   contractSidebar() {
     this.props.dispatch(contractSidebar());
   }
