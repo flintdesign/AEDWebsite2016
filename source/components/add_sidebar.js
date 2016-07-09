@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import isEmpty from 'lodash.isempty';
-import ParentADD from './parent_add';
 import CountsBySubGeography from './counts_by_subgeography';
 import CountsBySurveyCategory from './counts_by_survey_category';
 import { pluralize, getNextGeography } from '../utils/convenience_funcs';
@@ -14,13 +13,12 @@ export default function ADDSidebar(props) {
     <div>
       {!isEmpty(geographies) && currentTitle === 'summary' &&
         <div>
-          <ParentADD
-            data={geographies[`${pluralize(subGeography)}_sums`][0]}
-            year={year}
-          />
           <CountsBySurveyCategory
             summary_totals={geographies.summary_totals}
             areas={geographies.areas}
+            sidebarState={sidebarState}
+            totals={geographies[`${pluralize(subGeography)}_sums`][0]}
+            year={year}
           />
         </div>
       }
