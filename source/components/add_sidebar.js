@@ -16,7 +16,7 @@ export default function ADDSidebar(props) {
 
   return (
     <div>
-      {!isEmpty(geographies) && currentTitle === 'summary' &&
+      {!isEmpty(geographies) && currentTitle === 'summary_area' &&
         <div>
           <ParentADD
             data={addData}
