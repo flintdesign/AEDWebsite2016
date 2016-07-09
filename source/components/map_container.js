@@ -3,8 +3,13 @@ import { withRouter } from 'react-router';
 import { Map, TileLayer, Marker, GeoJson } from 'react-leaflet';
 import { divIcon } from 'leaflet';
 import config from '../config';
-import { getNextGeography, flatten, slugify } from '../utils/convenience_funcs';
 import { getCoordData } from '../utils/geo_funcs';
+import {
+  getNextGeography,
+  flatten,
+  slugify,
+  replaceURLPart,
+} from '../utils/convenience_funcs';
 
 class MapContainer extends Component {
   constructor(props, context) {
@@ -17,6 +22,7 @@ class MapContainer extends Component {
       mapCenter: [0, 0],
       scrolled: 0,
       geoJSONData: [],
+      geoJSONObjs: [],
       zoomLevel: 4
     };
   }
@@ -81,26 +87,24 @@ class MapContainer extends Component {
       const self = this;
       this.state.geoJSONData.map(datum => {
         let geoJSONClassName = slugify(datum.name || '');
-        const key = self.keyify(datum);
         const href = replaceURLPart(self.props.location.pathname, slugify(datum.name));
-        if (!self.objInStateGeoJSONs(datum)) {
-          self.state.geoJSONObjs[pluralize(getNextGeography(self.props.currentGeography))].push(
-            <GeoJson
-              key={key}
-              href={href}
-              data={datum}
-              className={geoJSONClassName}
-              onClick={self.handleClick}
-              center={datum.center}
-              bounds={datum.bounds}
-            />
-          );
-        }
-=======
+        self.state.geoJSONObjs.push(
+          <GeoJson
+            key={geoJSONClassName}
+            href={href}
+            data={datum}
+            className={geoJSONClassName}
+            onClick={self.handleClick}
+            center={datum.center}
+            bounds={datum.bounds}
+          />
+        );
+
         if (self.props.currentGeography === 'region') {
           geoJSONClassName =
             `${self.props.currentGeography}-${self.props.currentGeographyId}-country`;
         }
+
         geoJSONObjs.push(
           <GeoJson
             key={`${datum.id}_${slugify(datum.name || '')}`}
