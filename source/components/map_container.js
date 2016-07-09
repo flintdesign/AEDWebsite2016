@@ -50,6 +50,7 @@ class MapContainer extends Component {
 
     if (coords.length > 1) {
       obj = {
+        ...data,
         id: data.id,
         name: data.name,
         type: data.type,
@@ -102,7 +103,11 @@ class MapContainer extends Component {
 
         if (self.props.currentGeography === 'region') {
           geoJSONClassName =
-            `${self.props.currentGeography}-${self.props.currentGeographyId}-country`;
+            `${self.props.currentGeography}-${self.props.currentGeographyId}__country`;
+        }
+
+        if (self.props.currentGeography === 'country' && datum.region) {
+          geoJSONClassName = `region-${slugify(datum.region)}__stratum`;
         }
 
         geoJSONObjs.push(
