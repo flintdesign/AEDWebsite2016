@@ -4,18 +4,11 @@ import { Map, TileLayer, Marker, GeoJson } from 'react-leaflet';
 import { divIcon } from 'leaflet';
 import config from '../config';
 import { getCoordData } from '../utils/geo_funcs';
-import find from 'lodash.find';
-import keys from 'lodash.keys';
-import filter from 'lodash.filter';
-import flattenDeep from 'lodash.flattendeep';
-import compact from 'lodash.compact';
 import {
   getNextGeography,
   flatten,
   slugify,
   replaceURLPart,
-  pluralize,
-  //geoTypeFromHref
 } from '../utils/convenience_funcs';
 
 class MapContainer extends Component {
@@ -24,20 +17,13 @@ class MapContainer extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.onZoomEnd = this.onZoomEnd.bind(this);
     this.getLabelFontSize = this.getLabelFontSize.bind(this);
-    this.keyify = this.keyify.bind(this);
-    this.geoJSONClassName = this.geoJSONClassName.bind(this);
-    this.geoJSONActiveClassName = this.geoJSONActiveClassName.bind(this);
     this.state = {
       bounds: config.maxMapBounds,
       mapCenter: [0, 0],
       scrolled: 0,
       geoJSONData: [],
-      zoomLevel: 4,
-      geoJSONObjs: {
-        regions: [],
-        countries: [],
-        strata: []
-      }
+      geoJSONObjs: [],
+      zoomLevel: 4
     };
   }
 
@@ -63,7 +49,7 @@ class MapContainer extends Component {
     ]];
 
     if (coords.length > 1) {
-      obj = { ...data,
+      obj = {
         id: data.id,
         name: data.name,
         type: data.type,
@@ -89,92 +75,48 @@ class MapContainer extends Component {
   }
 
   handleClick(e) {
-    //this.props.openSidebar();
     this.setState({ bounds: e.target.options.bounds });
-    this.props.router.push(e.target.options.href);
-    // TODO: If a region was clicked, clear all countries and strata and redraw.
-    // The clearSubGeoData() call below isn't working because it treats strata
-    // in one region as countries of another region if you click on another
-    // region. (╯°□°）╯︵ ┻━┻)
-    //if (geoTypeFromHref(e) === 'region') {
-      //this.clearSubGeoData();
-    //}
-  }
-
-  clearSubGeoData() {
-    const self = this;
-    const regionsOnly = filter(self.state.geoJSONData, datum => datum.geoType === 'region');
-    self.setState({
-      geoJSONData: regionsOnly,
-      geoJSONObjs: {
-        regions: self.state.geoJSONObjs.regions,
-        countries: [],
-        strata: []
-      }
-    });
-  }
-
-  objInStateGeoJSONs(obj, key) {
-    const arrays = flattenDeep(keys(this.state.geoJSONObjs).map(k => this.state.geoJSONObjs[k]));
-    const found = find(arrays.map(val => val.key === key));
-    return typeof found !== 'undefined';
-  }
-
-
-  keyify(datum) {
-    return `${datum.id}_${slugify(datum.name || '')}`;
-  }
-
-  geoJSONClassName(datum) {
-    const urlParts = compact(this.props.location.pathname.split('/'));
-    const parentRegion = urlParts[1];
-    const slug = slugify(datum.name);
-    let className = `region__${slug}`;
-    if (datum.geoType !== 'region') {
-      className = `region__${parentRegion} ${datum.geoType}`;
-    }
-    return className;
-  }
-
-  geoJSONActiveClassName(datum) {
-    const urlParts = compact(this.props.location.pathname.split('/'));
-    let className;
-    if (urlParts.length <= 1) return ' geography__inactive';
-    const activeGeo = urlParts[urlParts.length - 1];
-    className = ' geography__';
-    className += activeGeo === slugify(datum.name) ? 'active' : 'inactive';
-    /* Keep country active if we're in a stratum within it */
-    if (urlParts.length === 4 && slugify(datum.name) === urlParts[urlParts.length - 2]) {
-      className += 'active';
-    }
-    return className;
+    // Add `this.props.location.pathname` for relative navigation
+    this.props.router.push(this.props.location.pathname + e.target.options.href);
   }
 
   render() {
+    const geoJSONObjs = [];
     const labels = [];
     if (this.state.geoJSONData) {
       const self = this;
       this.state.geoJSONData.map(datum => {
-        let geoJSONClassName = self.geoJSONClassName(datum);
-        geoJSONClassName += self.geoJSONActiveClassName(datum);
-        let key = self.keyify(datum);
-        key += ` ${geoJSONClassName}`;
+        let geoJSONClassName = slugify(datum.name || '');
         const href = replaceURLPart(self.props.location.pathname, slugify(datum.name));
-        if (!self.objInStateGeoJSONs(datum, key)) {
-          // TODO: the key has updated bceause geoJSONClassName has changed,
-          // but we append rather than replacing. Clean up the old object.
-          self.state.geoJSONObjs[pluralize(getNextGeography(self.props.currentGeography))].push(
-            <GeoJson
-              key={key}
-              href={href}
-              data={datum}
-              className={geoJSONClassName}
-              onClick={self.handleClick}
-              center={datum.center}
-              bounds={datum.bounds}
-            />
-          );
+        self.state.geoJSONObjs.push(
+          <GeoJson
+            key={geoJSONClassName}
+            href={href}
+            data={datum}
+            className={geoJSONClassName}
+            onClick={self.handleClick}
+            center={datum.center}
+            bounds={datum.bounds}
+          />
+        );
+
+        if (self.props.currentGeography === 'region') {
+          geoJSONClassName =
+            `${self.props.currentGeography}-${self.props.currentGeographyId}-country`;
         }
+
+        geoJSONObjs.push(
+          <GeoJson
+            key={`${datum.id}_${slugify(datum.name || '')}`}
+            href={`/${slugify(datum.name)}`}
+            // href={`/${self.props.year}/${slugify(datum.name)}`}
+            data={datum}
+            className={geoJSONClassName}
+            onClick={self.handleClick}
+            center={datum.center}
+            bounds={datum.bounds}
+          />
+        );
         if (datum.coordinates && self.props.currentGeography === 'continent') {
           const icon = divIcon({
             className: 'leaflet-marker-icon',
@@ -195,9 +137,6 @@ class MapContainer extends Component {
       });
     }
 
-    const geoJSONObjsForRender = flattenDeep(keys(this.state.geoJSONObjs)
-      .map(k => this.state.geoJSONObjs[k]));
-
     return (
       <Map
         bounds={this.state.bounds}
@@ -211,7 +150,7 @@ class MapContainer extends Component {
         <TileLayer
           url={`${config.mapboxURL}/tiles/256/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`}
         />
-        {geoJSONObjsForRender}
+        {geoJSONObjs}
         {labels}
       </Map>
     );
@@ -228,7 +167,6 @@ MapContainer.propTypes = {
     push: PropTypes.func.isRequired
   }).isRequired,
   location: PropTypes.object.isRequired,
-  openSidebar: PropTypes.func.isRequired
 };
 
 export default withRouter(MapContainer);

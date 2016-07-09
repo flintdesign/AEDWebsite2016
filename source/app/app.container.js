@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Nav from '../components/nav';
+import BreadCrumbNav from '../components/breadcrumb_nav';
 import Sidebar from '../components/sidebar';
 import TotalCount from '../components/total_count';
 import HelpNav from '../components/help_nav';
@@ -14,15 +15,27 @@ class App extends Component {
     super(props, context);
     this.expandSidebar = this.expandSidebar.bind(this);
     this.contractSidebar = this.contractSidebar.bind(this);
+    this.onHandleClick = this.onHandleClick.bind(this);
+    this.state = {
+      showSidebar: false
+    };
     this.fetchData(props, true);
   }
 
   componentWillReceiveProps(nextProps) {
     this.fetchData(nextProps);
   }
+
+  onHandleClick() {
+    this.setState({
+      showSidebar: !this.state.showSidebar
+    });
+  }
+
   expandSidebar() {
     this.props.dispatch(expandSidebar());
   }
+
   contractSidebar() {
     this.props.dispatch(contractSidebar());
   }
@@ -65,8 +78,14 @@ class App extends Component {
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
 
     return (
-      <div className="container main__container">
+      <div
+        className={
+          `container main__container
+          sidebar--${(sidebarState > 0 ? 'open' : 'closed')}
+          ${(!params.region ? '' : 'breadcrumbs-active')}`}
+      >
         <main className={mainClasses[sidebarState]}>
+          <BreadCrumbNav params={this.props.params} />
           <Nav
             expandSidebar={this.expandSidebar}
             contractSidebar={this.contractSidebar}

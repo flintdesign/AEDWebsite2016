@@ -9,15 +9,19 @@ export default function ADDSidebar(props) {
   const subGeography = getNextGeography(currentGeography);
   const data = type => geographies[`${type}_sums`][0];
 
+  // TODO The API is broken on this at the country level
+  const addData = geographies[`${pluralize(subGeography)}_sums`][0];
+
+
   return (
     <div>
-      {!isEmpty(geographies) && currentTitle === 'summary' &&
+      {!isEmpty(geographies) && currentTitle === 'summary_area' &&
         <div>
           <CountsBySurveyCategory
             summary_totals={geographies.summary_totals}
             areas={geographies.areas}
             sidebarState={sidebarState}
-            totals={geographies[`${pluralize(subGeography)}_sums`][0]}
+            totals={addData}
             year={year}
           />
         </div>
