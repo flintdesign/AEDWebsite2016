@@ -22,11 +22,12 @@ export function fetchGeoJSON(geoType, geoItem) {
   // Fetch the geoJSON data
   return fetch(`${config.apiBaseURL}/${geoType}/${geoId}/geojson_map`)
   .then(r => r.json())
-  .then(d => Object.assign(d, {
-    name: geoItem[geoType],
-    geoType: geoType,
+  .then(d => ({
+    ...d,
+    ...geoItem,
+    name: geoItem[geoType] || geoItem[geoType.toUpperCase()],
     id: geoItem.id || geoItem.iso_code || geoItem.strcode
-  }, geoItem));
+  }));
 }
 
 /*
@@ -90,6 +91,7 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
   const type = geoType.toLowerCase();
   const id = slug.toLowerCase();
   const year = geoYear;
+
   const count = geoCount ? geoCount.toLowerCase() : 'add';
 
   // Dispatch the "loading" action
@@ -97,12 +99,20 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
 
   const mappedId = mapSlugToId(slug);
 
-  // Dispatch async call to the API
-  fetch(`${config.apiBaseURL}/${type}/${mappedId}/${year}/${count}`)
+  const fetchURL = `${config.apiBaseURL}/${type}/${mappedId}/${year}/${count}`;
+  // Dispatch async call to the APIk
+  fetch(fetchURL)
     .then(r => r.json())
     .then(d => {
-      const data = { ...d, type: type, countType: count, id: id };
+      const data = {
+        ...d,
+        type: type,
+        countType: count,
+        name: d.name,
+        id: id
+      };
       // dispatch "receive" action with response data
+
       dispatch({
         type: RECEIVE_GEOGRAPHY_DATA,
         data: data

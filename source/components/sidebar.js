@@ -4,17 +4,16 @@ import ADDSidebar from './add_sidebar';
 import DPPSSidebar from './dpps_sidebar';
 import StratumSidebar from './stratum_sidebar';
 import CountTypeToggle from './count_type_toggle';
-import { fetchGeography } from '../api';
 import { pluralize, getNextGeography, getEntityName, titleize } from '../utils/convenience_funcs';
 import compact from 'lodash.compact';
 import find from 'lodash.find';
+import isArray from 'lodash.isarray';
 
 class Sidebar extends Component {
   constructor(props, context) {
     super(props, context);
-    this.handleClick = this.handleClick.bind(this);
+    this.handleSpanClick = this.handleSpanClick.bind(this);
     this.getCurrentTitle = this.getCurrentTitle.bind(this);
-    this.fetchAPIData = this.fetchAPIData.bind(this);
     this.subGeographyHasCorrectKeys = this.subGeographyHasCorrectKeys.bind(this);
     this.shouldRenderSidebar = this.shouldRenderSidebar.bind(this);
     this.onAStratum = this.onAStratum.bind(this);
@@ -28,7 +27,9 @@ class Sidebar extends Component {
   }
 
   getCurrentTitle(title) {
-    return this.state.currentTitle === title ? 'active' : null;
+    let currentClass = 'sidebar__viz-toggle';
+    if (this.state.currentTitle === title) currentClass += ' active';
+    return currentClass;
   }
 
   getStratumFromHref() {
@@ -37,25 +38,18 @@ class Sidebar extends Component {
     return find(this.props.geographies.strata, s => s.stratum === titleize(stratumName));
   }
 
-  fetchAPIData() {
-    const { dispatch, year, countType, currentGeography, currentGeographyId } = this.props;
-    fetchGeography(dispatch, currentGeography, currentGeographyId, year, countType);
-  }
-
-  handleClick(e) {
-    if (e.target.dataset.title) {
-      this.setState({
-        currentTitle: e.target.dataset.title
-      });
-    }
-    this.fetchAPIData();
+  handleSpanClick(e) {
+    this.setState({ currentTitle: e.target.dataset.title });
   }
 
   subGeographyHasCorrectKeys(vizType) {
     const { geographies, currentGeography } = this.props;
     const subGeography = getNextGeography(currentGeography);
-    return (vizType === 'add' && geographies[`${pluralize(subGeography)}_sums`]) ||
-    (vizType === 'dpps' && geographies[`${pluralize(subGeography)}_sum`]);
+    return (
+      (vizType === 'add' && isArray(geographies[`${pluralize(subGeography)}_sums`]))
+      ||
+      (vizType === 'dpps' && isArray(geographies[`${pluralize(subGeography)}_sum`]))
+    );
   }
 
   shouldRenderSidebar(sidebar) {
@@ -89,13 +83,15 @@ class Sidebar extends Component {
         <li
           key={y} className={className}
         >
-          <Link onClick={this.handleClick} to={`/${linkVal}`}>{y}</Link>
+          <Link to={`/${linkVal}`}>{y}</Link>
         </li>
       );
     });
 
     const sidebarInnerClassName = `sidebar__inner ${currentGeography}-${currentGeographyId}`;
     const sidebarClasses = ['closed', 'open', 'full'];
+
+    const self = this;
 
     return (
       <aside className={sidebarClasses[sidebarState]}>
@@ -110,26 +106,21 @@ class Sidebar extends Component {
             <div>
               <nav className="sidebar__viz-type">
                 <ul>
-                  <li onClick={this.handleClick}>
-                    <Link
-                      className={this.getCurrentTitle('summary')}
-                      data-title={'summary'}
-                      to={{
-                        pathname: location.pathname,
-                        query: { ...location.query, viz_type: 'summary_area' } }}
+                  <li onClick={self.handleSpanClick}>
+                    <span
+                      className={this.getCurrentTitle('summary_area')}
+                      data-title={'summary_area'}
                     >
                       Summary totals &amp; Area of range covered
-                    </Link>
+                    </span>
                   </li>
-                  <li onClick={this.handleClick}>
-                    <Link
+                  <li onClick={self.handleSpanClick}>
+                    <span
                       className={this.getCurrentTitle('totals')}
                       data-title={'totals'}
-                      to={{ pathname: location.pathname,
-                        query: { ...location.query, viz_type: 'continental_regional' } }}
                     >
                       Continental &amp; regional totals
-                    </Link>
+                    </span>
                   </li>
                 </ul>
               </nav>

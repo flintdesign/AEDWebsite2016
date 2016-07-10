@@ -6,16 +6,31 @@ export default function CountTypeToggle(props) {
   const countType = location.query.count_type;
   return (
     <ul className="count-type-toggle">
-      <li className={countType === 'ADD' || countType === undefined ? 'active' : null}>
-        <Link to={{ query: { ...location.query, count_type: 'ADD' } }}>ADD</Link>
+      <li
+        className={countType === 'ADD' || countType === undefined ? 'active' : null}
+      >
+        <Link
+          to={{
+            pathname: location.pathname,
+            query: { ...location.query, count_type: 'ADD' }
+          }}
+        >ADD</Link>
       </li>
-      <li className={countType === 'DPPS' ? 'active' : null}>
-        <Link to={{ query: { ...location.query, count_type: 'DPPS' } }}>DPPS</Link>
+
+      <li
+        className={countType === 'DPPS' ? 'active' : null}
+      >
+        <Link
+          to={{
+            pathname: location.pathname,
+            query: { ...location.query, count_type: 'DPPS' }
+          }}
+        >DPPS</Link>
       </li>
     </ul>
   );
 }
 
 CountTypeToggle.propTypes = {
-  location: PropTypes.object
+  location: PropTypes.object,
 };

@@ -10,7 +10,7 @@ export const getNextGeography = currentGeography => {
 
 export const pluralize = word => {
   const wordMapping = {
-    continent: 'continents',
+    contient: 'continents',
     region: 'regions',
     country: 'countries',
     stratum: 'strata'

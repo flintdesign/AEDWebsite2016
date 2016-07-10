@@ -15,15 +15,30 @@ class App extends Component {
     super(props, context);
     this.expandSidebar = this.expandSidebar.bind(this);
     this.contractSidebar = this.contractSidebar.bind(this);
+    this.onHandleClick = this.onHandleClick.bind(this);
+    this.fetchData = this.fetchData.bind(this);
+    this.state = {
+      showSidebar: false
+    };
     this.fetchData(props, true);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.fetchData(nextProps);
+  componentWillReceiveProps(newProps) {
+    if (newProps.location.query !== this.props.location.query) {
+      this.fetchData(newProps, true);
+    }
   }
+
+  onHandleClick() {
+    this.setState({
+      showSidebar: !this.state.showSidebar
+    });
+  }
+
   expandSidebar() {
     this.props.dispatch(expandSidebar());
   }
+
   contractSidebar() {
     this.props.dispatch(contractSidebar());
   }
@@ -39,11 +54,18 @@ class App extends Component {
       currentGeography,
       routeYear,
       loading,
-      dispatch
+      dispatch,
+      location
     } = props;
 
     if (force || (routeGeography !== currentGeography && !loading)) {
-      fetchGeography(dispatch, routeGeography, routeGeographyId, routeYear, null);
+      fetchGeography(
+        dispatch,
+        routeGeography,
+        routeGeographyId,
+        routeYear,
+        location.query.count_type
+      );
     }
   }
 
@@ -66,10 +88,11 @@ class App extends Component {
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
 
     return (
-      <div className={
-        `container main__container
-        sidebar--${(sidebarState > 0 ? 'open' : 'closed')}
-        ${(!params.region ? '' : 'breadcrumbs-active')}`}
+      <div
+        className={
+          `container main__container
+          sidebar--${(sidebarState > 0 ? 'open' : 'closed')}
+          ${(!params.region ? '' : 'breadcrumbs-active')}`}
       >
         <main className={mainClasses[sidebarState]}>
           <BreadCrumbNav params={this.props.params} />
@@ -123,7 +146,7 @@ App.propTypes = {
   loading: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
   totalEstimate: PropTypes.string.isRequired,
-  routeGeography: PropTypes.string,
+  routeGeography: PropTypes.string.isRequired,
   routeGeographyId: PropTypes.string,
   routeYear: PropTypes.string,
   subGeographyData: PropTypes.array,
