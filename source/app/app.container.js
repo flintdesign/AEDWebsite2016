@@ -78,6 +78,7 @@ class App extends Component {
             contractSidebar={this.contractSidebar}
             sidebarState={sidebarState}
             onHandleClick={this.toggleSidebar}
+            params={this.props.params}
           />
           {React.cloneElement(children, {
             currentGeography: currentGeography,

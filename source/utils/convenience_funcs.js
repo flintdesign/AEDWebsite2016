@@ -1,6 +1,7 @@
 import map from './slug_map';
 import compact from 'lodash.compact';
 import uniq from 'lodash.uniq';
+import geometa from '../geometa';
 
 export const getNextGeography = currentGeography => {
   const geographies = ['continent', 'region', 'country', 'stratum'];
@@ -27,6 +28,8 @@ export const flatten = ary => {
 };
 
 export const mapSlugToId = (slug) => map[slug];
+
+export const regionById = (id) => geometa.regions[id];
 
 export const replaceURLPart = (pathname, slug) => {
   const urlParts = uniq(compact(pathname.split('/')));

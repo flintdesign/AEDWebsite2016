@@ -3,6 +3,7 @@ import { withRouter } from 'react-router';
 import { toggleSearch } from '../actions';
 import { connect } from 'react-redux';
 import { SEARCH_PLACEHOLDER } from '../constants';
+import { slugify, regionById } from '../utils/convenience_funcs';
 import filter from 'lodash.filter';
 import Bloodhound from 'bloodhound-js';
 const searchData = require('json!../data/search-data.json');
@@ -14,20 +15,38 @@ const searchEngine = new Bloodhound({
   datumTokenizer: Bloodhound.tokenizers.whitespace
 });
 
-const Results = withRouter(({ results, router, endSearch }) => (
-  <div className="search__results">{results.map(r => (
+const getPathForResult = ({ result, year }) => {
+  let path = `${year}/`;
+  const slug = slugify(result.name);
+  if (!!result.continent_id) {
+    // region result
+    path += slug;
+  } else if (!!result.region_id) {
+    // country result
+    path += `${regionById(result.region_id).className}/${slug}`;
+  }
+  return path;
+};
+
+const Results = withRouter((props) => {
+  const { results, router, endSearch, year } = props;
+  return (
+    <div className="search__results">{results.map(r => (
       <div
         className="search__result-item"
         key={`result-${r.name}`}
         onClick={() => {
-          router.push(`/2013/${r.id}`);
+          router.push(getPathForResult({
+            result: r,
+            year
+          }));
           endSearch();
         }}
       >
-           {r.name}
+      {r.name}
       </div>
-  ))}</div>
-));
+  ))}</div>);
+});
 
 Results.propTypes = {
   results: PropTypes.array.isRequired,
@@ -89,6 +108,7 @@ class Search extends Component {
     return (
       results.length && this.props.search ?
       <Results
+        {...this.props}
         results={results}
         className={className}
         endSearch={() => this.props.dispatch(toggleSearch(false))}
@@ -117,7 +137,8 @@ class Search extends Component {
 
 Search.propTypes = {
   search: PropTypes.bool.isRequired,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  params: PropTypes.object
 };
 
 export default connect(state => state.navigation)(Search);
