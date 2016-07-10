@@ -83,6 +83,7 @@ class App extends Component {
       subGeographyData,
       routeYear,
       sidebarState,
+      error
     } = this.props;
 
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
@@ -113,6 +114,7 @@ class App extends Component {
           })}
         </main>
         <Sidebar
+          error={error}
           location={location}
           sidebarState={sidebarState}
           geographies={geographies}
@@ -142,15 +144,16 @@ App.propTypes = {
   params: PropTypes.object.isRequired,
   currentGeography: PropTypes.string,
   currentGeographyId: PropTypes.string,
-  geographies: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired,
+  geographies: PropTypes.object,
+  loading: PropTypes.bool,
   dispatch: PropTypes.func.isRequired,
-  totalEstimate: PropTypes.string.isRequired,
-  routeGeography: PropTypes.string.isRequired,
+  totalEstimate: PropTypes.string,
+  routeGeography: PropTypes.string,
   routeGeographyId: PropTypes.string,
   routeYear: PropTypes.string,
   subGeographyData: PropTypes.array,
   sidebarState: PropTypes.number,
+  error: PropTypes.string
 };
 
 const mapStateToProps = (state, props) => {
@@ -161,6 +164,7 @@ const mapStateToProps = (state, props) => {
     routeGeography = 'region';
   }
   return {
+    error: state.geographyData.error,
     totalEstimate: state.geographyData.totalEstimate,
     geographies: state.geographyData.geographies,
     loading: state.geographyData.loading,

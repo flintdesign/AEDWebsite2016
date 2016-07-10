@@ -77,6 +77,7 @@ class Sidebar extends Component {
       year,
       currentGeography,
       currentGeographyId,
+      error
     } = this.props;
 
     const years = ['2013', '2006', '2002', '1998', '1995'];
@@ -109,7 +110,7 @@ class Sidebar extends Component {
             </ul>
           </div>
           <h1 className="sidebar__entity-name">{getEntityName(this.props.location)}</h1>
-          {!geographies.strata &&
+          {geographies && !geographies.strata &&
             <div>
               <nav className="sidebar__viz-type">
                 <ul>
@@ -143,7 +144,17 @@ class Sidebar extends Component {
             <h1>Loading <span className="loading-spinner"></span></h1>
           }
 
-          {this.shouldRenderSidebar('add') &&
+          {!loading && error &&
+            <div>
+              <h1>There was an error loading data.</h1>
+              <p>
+                We're sorry, there's no data for this combination of year and geographic location.
+                Please try another area or date.
+              </p>
+            </div>
+          }
+
+          {geographies && this.shouldRenderSidebar('add') &&
             <ADDSidebar
               geographies={geographies}
               currentTitle={this.state.currentTitle}
@@ -153,7 +164,7 @@ class Sidebar extends Component {
             />
           }
 
-          {this.shouldRenderSidebar('dpps') &&
+          {geographies && this.shouldRenderSidebar('dpps') &&
             <DPPSSidebar
               geographies={geographies}
               currentTitle={this.state.currentTitle}
@@ -174,16 +185,17 @@ class Sidebar extends Component {
 }
 
 Sidebar.propTypes = {
+  error: PropTypes.string,
   sidebarState: PropTypes.number.isRequired,
   location: PropTypes.object,
   params: PropTypes.object,
   countType: PropTypes.string,
   geographies: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
+  loading: PropTypes.bool,
   year: PropTypes.string.isRequired,
-  currentGeography: PropTypes.string.isRequired,
-  currentGeographyId: PropTypes.string.isRequired,
+  currentGeography: PropTypes.string,
+  currentGeographyId: PropTypes.string,
 };
 
 export default Sidebar;

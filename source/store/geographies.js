@@ -1,12 +1,14 @@
 import {
   FETCH_GEOGRAPHY_DATA,
   RECEIVE_GEOGRAPHY_DATA,
+  RECEIVE_GEOGRAPHY_ERROR,
   FETCH_SUBGEOGRAPHY_DATA,
   RECEIVE_SUBGEOGRAPHY_DATA
 } from '../actions/app_actions';
 import { pluralize, getNextGeography } from '../utils/convenience_funcs';
 
 const initialState = {
+  error: null,
   loading: false,
   geographies: {},
   subGeographies: [],
@@ -29,11 +31,18 @@ export function geographies(state = initialState, action) {
   switch (action.type) {
     case RECEIVE_GEOGRAPHY_DATA:
       return { ...state,
+        // having null for the error value caused it
+        // to not update
+        error: '',
         loading: false,
         geographies: action.data,
         totalEstimate: totalEstimate(action.data),
         currentGeography: action.data.type,
         currentGeographyId: action.data.id
+      };
+    case RECEIVE_GEOGRAPHY_ERROR:
+      return {
+        error: action.data
       };
     case RECEIVE_SUBGEOGRAPHY_DATA:
       return { ...state,

@@ -28,6 +28,7 @@ class MapContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (!nextProps.subGeographyData) return;
     this.setState({ geoJSONData: nextProps.subGeographyData.map(this.setGeoJSON) });
   }
 
@@ -163,7 +164,7 @@ class MapContainer extends Component {
 }
 
 MapContainer.propTypes = {
-  currentGeography: PropTypes.string.isRequired,
+  currentGeography: PropTypes.string,
   currentGeographyId: PropTypes.string,
   subGeographyData: PropTypes.array,
   year: PropTypes.string.isRequired,

@@ -5,6 +5,7 @@ import { pluralize, getNextGeography, mapSlugToId } from './utils/convenience_fu
 import {
   FETCH_GEOGRAPHY_DATA,
   RECEIVE_GEOGRAPHY_DATA,
+  RECEIVE_GEOGRAPHY_ERROR,
   FETCH_SUBGEOGRAPHY_DATA,
   RECEIVE_SUBGEOGRAPHY_DATA
 } from './actions/app_actions';
@@ -126,5 +127,11 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
       } else {
         fetchSubGeography(dispatch, geoType, mappedId, subGeoType);
       }
+    })
+    .catch(() => {
+      dispatch({
+        type: RECEIVE_GEOGRAPHY_ERROR,
+        data: 'No data available'
+      });
     });
 }
