@@ -1,13 +1,15 @@
 import fetch from 'isomorphic-fetch';
 import config from './config';
-import { pluralize, getNextGeography, mapSlugToId } from './utils/convenience_funcs';
+import { pluralize, getNextGeography, mapSlugToId, flatten } from './utils/convenience_funcs';
+import { getCoordData } from './utils/geo_funcs';
 
 import {
   FETCH_GEOGRAPHY_DATA,
   RECEIVE_GEOGRAPHY_DATA,
   RECEIVE_GEOGRAPHY_ERROR,
   FETCH_SUBGEOGRAPHY_DATA,
-  RECEIVE_SUBGEOGRAPHY_DATA
+  RECEIVE_SUBGEOGRAPHY_DATA,
+  RECEIVE_BOUNDS
 } from './actions/app_actions';
 
 /*
@@ -57,6 +59,20 @@ export function loadSubGeography(dispatch, data, subGeoType) {
     });
   });
 }
+
+function fetchBounds(dispatch, geoType, mappedId) {
+  return fetch(`${config.apiBaseURL}/${geoType}/${mappedId}/geojson_map`)
+    .then(r => r.json())
+    .then(d => {
+      const coords = d.coordinates.map(flatten);
+      const bounds = getCoordData(coords).bounds;
+      dispatch({
+        type: RECEIVE_BOUNDS,
+        data: bounds
+      });
+    });
+}
+
 
 /*
 *   Fetches a list of subGeographies from the API and sends that data to the
@@ -119,8 +135,12 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
         data: data
       });
 
+      fetchBounds(dispatch, geoType, mappedId);
+
       const subGeoType = getNextGeography(geoType);
 
+      // if the returned data (d) of, say, a continent
+      // contains a `regions` (pluralized subGeoType) key
       if (d[pluralize(subGeoType)]) {
         dispatch({ type: FETCH_SUBGEOGRAPHY_DATA });
         loadSubGeography(dispatch, d[pluralize(subGeoType)], subGeoType);

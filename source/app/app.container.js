@@ -83,7 +83,8 @@ class App extends Component {
       subGeographyData,
       routeYear,
       sidebarState,
-      error
+      error,
+      bounds
     } = this.props;
 
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
@@ -110,7 +111,8 @@ class App extends Component {
             subGeographyData: subGeographyData,
             year: routeYear,
             openSidebar: this.expandSidebar,
-            cancelSearch: this.cancelSearch.bind(this)
+            cancelSearch: this.cancelSearch.bind(this),
+            bounds: bounds
           })}
         </main>
         <Sidebar
@@ -153,7 +155,8 @@ App.propTypes = {
   routeYear: PropTypes.string,
   subGeographyData: PropTypes.array,
   sidebarState: PropTypes.number,
-  error: PropTypes.string
+  error: PropTypes.string,
+  bounds: PropTypes.array
 };
 
 const mapStateToProps = (state, props) => {
@@ -175,6 +178,7 @@ const mapStateToProps = (state, props) => {
     routeYear: props.params.year || '2013',
     subGeographyData: state.geographyData.subGeographies,
     sidebarState: state.navigation.sidebarState,
+    bounds: state.geographyData.bounds
   };
 };
 

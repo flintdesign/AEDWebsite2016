@@ -173,7 +173,7 @@ class Sidebar extends Component {
             />
           }
 
-          {this.onAStratum() &&
+          {this.onAStratum() && this.getStratumFromHref() &&
             <StratumSidebar
               stratum={this.getStratumFromHref()}
             />

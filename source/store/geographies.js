@@ -3,7 +3,8 @@ import {
   RECEIVE_GEOGRAPHY_DATA,
   RECEIVE_GEOGRAPHY_ERROR,
   FETCH_SUBGEOGRAPHY_DATA,
-  RECEIVE_SUBGEOGRAPHY_DATA
+  RECEIVE_SUBGEOGRAPHY_DATA,
+  RECEIVE_BOUNDS
 } from '../actions/app_actions';
 import { pluralize, getNextGeography } from '../utils/convenience_funcs';
 
@@ -42,12 +43,16 @@ export function geographies(state = initialState, action) {
       };
     case RECEIVE_GEOGRAPHY_ERROR:
       return {
-        error: action.data
+        ...state, error: action.data
       };
     case RECEIVE_SUBGEOGRAPHY_DATA:
       return { ...state,
         loading: false,
         subGeographies: action.data
+      };
+    case RECEIVE_BOUNDS:
+      return {
+        ...state, bounds: action.data
       };
     case FETCH_GEOGRAPHY_DATA:
     case FETCH_SUBGEOGRAPHY_DATA:
