@@ -83,7 +83,7 @@ class Sidebar extends Component {
     const years = ['2013', '2006', '2002', '1998', '1995'];
     const yearLinks = years.map(y => {
       const toVal = compact(window.location.pathname.split('/'));
-      const linkVal = toVal.length ? [y, toVal.splice(1)].join('/') : y;
+      const linkVal = toVal.length ? `${y}/${toVal.splice(1).join('/')}` : y;
       const className = (y === this.props.year) ||
         (!this.props.year && y === '2013') ? 'current' : null;
       return (
