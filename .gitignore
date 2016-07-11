@@ -1,5 +1,7 @@
 node_modules
 public/assets
+public/css
+public/fonts
 npm-debug.log
 .*.sw?
 .*.*.sw?

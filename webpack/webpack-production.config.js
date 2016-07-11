@@ -16,13 +16,13 @@ module.exports = {
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
       __DEV: false,
-      'process.env':{
-        'NODE_ENV': JSON.stringify('production')
+      'process.env': {
+        NODE_ENV: JSON.stringify('production')
       }
     }),
     new ExtractTextPlugin('css/main.css', { allChunks: true }),
     new webpack.optimize.UglifyJsPlugin({
-      compress:{
+      compress: {
         warnings: false
       }
     })
@@ -37,7 +37,11 @@ module.exports = {
         include: path.join(__dirname, '../source')
       },
       {
-        test: /\.(png|jpg|jpeg|svg|woff|otf|ttf|eot)$/, loader: 'url-loader?limit=8192'
+        test: /\.(png|jpg|jpeg|svg)$/, loader: 'url-loader?limit=8192'
+      },
+      {
+        test: /\.(woff|otf|ttf|eot)$/,
+        loader: 'url-loader?limit=100000&name=../fonts/[hash].[ext]'
       },
       {
         test: /\.styl$/,
