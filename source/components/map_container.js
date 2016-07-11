@@ -117,6 +117,9 @@ class MapContainer extends Component {
       });
     }
 
+    /* eslint max-len: [0] */
+    const tileURL = `${config.mapboxURL}/tiles/256/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`;
+
     return (
       <Map
         bounds={this.props.bounds}
@@ -127,7 +130,8 @@ class MapContainer extends Component {
         onClick={this.props.cancelSearch}
       >
         <TileLayer
-          url={`${config.mapboxURL}/tiles/256/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`}
+          detectRetina
+          url={tileURL}
         />
         {geoJSONObjs}
         {labels}
