@@ -65,8 +65,11 @@ class MapContainer extends Component {
   }
 
   handleClick(e) {
-    // Add `this.props.location.pathname` for relative navigation
-    this.props.router.push(this.props.location.pathname + e.target.options.href);
+    const href = e.target.options.href;
+    if (location.pathname.indexOf(href) > -1) { return; }
+    const path = this.props.location.pathname + href;
+    this.setState({ bounds: e.target.options.bounds });    // Add `this.props.location.pathname` for relative navigation
+    this.props.router.push(path);
   }
 
   render() {
