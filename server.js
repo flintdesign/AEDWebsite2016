@@ -1,10 +1,7 @@
-const webpack = require('webpack');
-const WebpackDevServer = require('webpack-dev-server');
-const config = require('./webpack/webpack.config');
-const express = require('express');
-const app = express();
-
 function devServer() {
+  const webpack = require('webpack');
+  const WebpackDevServer = require('webpack-dev-server');
+  const config = require('./webpack/webpack.config');
   new WebpackDevServer(webpack(config), {
     publicPath: config.output.publicPath,
     contentBase: 'public/',
@@ -28,6 +25,8 @@ function devServer() {
 }
 
 function server() {
+  const express = require('express');
+  const app = express();
   app.use(express.static('public'));
   app.listen(8080, () => console.log('Express server running at http://localhost:8080'));
 }
