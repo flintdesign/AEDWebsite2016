@@ -1,4 +1,9 @@
-function devServer() {
+if (process.ENV === 'production') {
+  const express = require('express');
+  const app = express();
+  app.use(express.static('public'));
+  app.listen(8080, () => console.log('Express server running at http://localhost:8080'));
+} else {
   const webpack = require('webpack');
   const WebpackDevServer = require('webpack-dev-server');
   const config = require('./webpack/webpack.config');
@@ -22,17 +27,4 @@ function devServer() {
     }
     console.log('Listening at localhost:3000');
   });
-}
-
-function server() {
-  const express = require('express');
-  const app = express();
-  app.use(express.static('public'));
-  app.listen(8080, () => console.log('Express server running at http://localhost:8080'));
-}
-
-if (process.ENV === 'production') {
-  server();
-} else {
-  devServer();
 }
