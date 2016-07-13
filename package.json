@@ -1,6 +1,10 @@
 {
   "name": "scaffold",
   "version": "0.1.0",
+  "engines": {
+      "npm": "3.8.9",
+      "node": "6.2.0"
+    }
   "description": "A scaffold for creative front end web development",
   "main": "index.js",
   "scripts": {
