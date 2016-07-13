@@ -32,7 +32,7 @@ function server() {
   app.listen(8080, () => console.log('Express server running at http://localhost:8080'));
 }
 
-if (!!process.argv[2] && process.argv[2] === 'production') {
+if (process.ENV === 'production') {
   server();
 } else {
   devServer();
