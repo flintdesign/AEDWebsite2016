@@ -1,8 +1,9 @@
-if (process.ENV.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
   const express = require('express');
   const app = express();
   app.use(express.static('public'));
-  app.listen(8080, () => console.log('Express server running at http://localhost:8080'));
+  const port = process.env.PORT || 8080;
+  app.listen(port, () => console.log('Express server running at http://localhost:8080'));
 } else {
   const webpack = require('webpack');
   const WebpackDevServer = require('webpack-dev-server');
