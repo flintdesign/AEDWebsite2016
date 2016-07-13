@@ -4,7 +4,7 @@
   "engines": {
       "npm": "3.8.9",
       "node": "6.2.0"
-    }
+  },
   "description": "A scaffold for creative front end web development",
   "main": "index.js",
   "scripts": {
