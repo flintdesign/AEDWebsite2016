@@ -1,4 +1,4 @@
-if (process.ENV === 'production') {
+if (process.ENV.NODE_ENV === 'production') {
   const express = require('express');
   const app = express();
   app.use(express.static('public'));
