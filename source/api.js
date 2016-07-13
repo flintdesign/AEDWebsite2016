@@ -155,3 +155,11 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
       });
     });
 }
+
+export function fetchSearchData(successCallback, errorCallback = (err) => console.log(err)) {
+  const url = `${config.apiBaseURL}/autocomplete`;
+  fetch(url)
+  .then(r => r.json())
+  .then(successCallback)
+  .catch(errorCallback);
+}

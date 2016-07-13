@@ -4,6 +4,10 @@ import {
   CONTRACT_SIDEBAR,
 } from './app_actions';
 
+import {
+  RECEIVE_AUTOCOMPLETE
+} from '../constants';
+
 export function toggleSearch(bool = null) {
   return ({
     type: TOGGLE_SEARCH,
@@ -17,4 +21,8 @@ export function expandSidebar() {
 
 export function contractSidebar() {
   return ({ type: CONTRACT_SIDEBAR });
+}
+
+export function receiveAutocompleteData(data) {
+  return ({ type: RECEIVE_AUTOCOMPLETE, data });
 }

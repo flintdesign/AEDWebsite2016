@@ -1,11 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { withRouter } from 'react-router';
-import { toggleSearch } from '../actions';
+import { toggleSearch, receiveAutocompleteData } from '../actions';
 import { connect } from 'react-redux';
 import { SEARCH_PLACEHOLDER } from '../constants';
 import { slugify, regionById } from '../utils/convenience_funcs';
 import filter from 'lodash.filter';
 import Bloodhound from 'bloodhound-js';
+import { fetchSearchData } from '../api';
 const searchData = require('json!../data/search-data.json');
 const data = searchData.countries.concat(searchData.regions);
 const searchTokens = data.map(d => d.name);
@@ -54,7 +55,7 @@ Results.propTypes = {
 };
 
 class Search extends Component {
-  constructor() {
+  constructor(props) {
     super();
     this.handleQueryChange = this.handleQueryChange.bind(this);
     this.search = this.search.bind(this);
@@ -64,6 +65,9 @@ class Search extends Component {
       searchReady: false,
       results: []
     };
+    fetchSearchData((d) => {
+      props.dispatch(receiveAutocompleteData(d));
+    });
   }
   input() {
     let input = null;
@@ -106,7 +110,7 @@ class Search extends Component {
     const { results, searching } = this.state;
     const className = searching ? 'searching' : null;
     return (
-      results.length && this.props.search ?
+      results.length && this.props.navigation.search ?
       <Results
         {...this.props}
         results={results}
@@ -116,7 +120,7 @@ class Search extends Component {
   }
 
   render() {
-    const focusedName = this.props.search ? 'focused' : 'blurred';
+    const focusedName = this.props.navigation.search ? 'focused' : 'blurred';
     const inputClassName = `${focusedName} search__input`;
     return (
       <div className="search__container">
@@ -138,7 +142,8 @@ class Search extends Component {
 Search.propTypes = {
   search: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
-  params: PropTypes.object
+  params: PropTypes.object,
+  navigation: PropTypes.object
 };
 
-export default connect(state => state.navigation)(Search);
+export default connect(state => state)(Search);
