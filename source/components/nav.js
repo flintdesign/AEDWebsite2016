@@ -6,7 +6,7 @@ import {
 import Search from './search';
 
 export default function Nav(props) {
-  const { sidebarState, expandSidebar, contractSidebar } = props;
+  const { sidebarState, expandSidebar, contractSidebar, loading } = props;
 
   const expandClass = sidebarState === SIDEBAR_CLOSED ? 'closed' : 'open';
   const expand = sidebarState < SIDEBAR_FULL && (
@@ -28,8 +28,8 @@ export default function Nav(props) {
   return (
     <nav className="site-nav">
       <Search {...props.params} />
-      {expand}
-      {contract}
+      {!loading && expand}
+      {!loading && contract}
     </nav>
   );
 }
@@ -38,5 +38,6 @@ Nav.propTypes = {
   expandSidebar: PropTypes.func.isRequired,
   contractSidebar: PropTypes.func.isRequired,
   sidebarState: PropTypes.number.isRequired,
-  params: PropTypes.object.isRequired
+  params: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
 };

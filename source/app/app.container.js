@@ -105,6 +105,7 @@ class App extends Component {
             sidebarState={sidebarState}
             onHandleClick={this.toggleSidebar}
             params={this.props.params}
+            loading={loading}
           />
           {React.cloneElement(children, {
             currentGeography: currentGeography,

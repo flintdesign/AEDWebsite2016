@@ -103,10 +103,20 @@ class Sidebar extends Component {
     });
 
     let sidebarInnerClassName = `sidebar__inner ${currentGeography}__${currentGeographyId}`;
-    sidebarInnerClassName += ` region__${getParentRegionFromURL(location)}`;
+    sidebarInnerClassName += ` region-${getParentRegionFromURL(location)}`;
     const sidebarClasses = ['closed', 'open', 'full'];
 
     const self = this;
+
+    if (loading) {
+      return (
+        <aside className={`${sidebarClasses[sidebarState]} sidebar__loader`}>
+          <section className={sidebarInnerClassName}>
+            <h1 className="sidebar__entity-name">{getEntityName(this.props.location)}</h1>
+          </section>
+        </aside>
+      );
+    }
 
     return (
       <aside className={sidebarClasses[sidebarState]}>
