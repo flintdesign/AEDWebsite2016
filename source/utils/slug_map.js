@@ -31,7 +31,7 @@ export default {
   'somalia': 'SO',
 
   /* countries: west-africa */
-  'burkina-easo': 'BF',
+  'burkina-faso': 'BF',
   'benin': 'BJ',
   'cote-divoire': 'CI',
   'ghana': 'GH',

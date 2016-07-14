@@ -16,14 +16,17 @@ class App extends Component {
     this.expandSidebar = this.expandSidebar.bind(this);
     this.contractSidebar = this.contractSidebar.bind(this);
     this.onHandleClick = this.onHandleClick.bind(this);
+    this.fetchData = this.fetchData.bind(this);
     this.state = {
       showSidebar: false
     };
     this.fetchData(props, true);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.fetchData(nextProps);
+  componentWillReceiveProps(newProps) {
+    if (newProps.location.query !== this.props.location.query) {
+      this.fetchData(newProps, true);
+    }
   }
 
   onHandleClick() {
@@ -51,11 +54,18 @@ class App extends Component {
       currentGeography,
       routeYear,
       loading,
-      dispatch
+      dispatch,
+      location
     } = props;
 
     if (force || (routeGeography !== currentGeography && !loading)) {
-      fetchGeography(dispatch, routeGeography, routeGeographyId, routeYear, null);
+      fetchGeography(
+        dispatch,
+        routeGeography,
+        routeGeographyId,
+        routeYear,
+        location.query.count_type
+      );
     }
   }
 
@@ -74,6 +84,8 @@ class App extends Component {
       subGeographyData,
       routeYear,
       sidebarState,
+      error,
+      bounds
     } = this.props;
 
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
@@ -92,6 +104,7 @@ class App extends Component {
             contractSidebar={this.contractSidebar}
             sidebarState={sidebarState}
             onHandleClick={this.toggleSidebar}
+            params={this.props.params}
           />
           {React.cloneElement(children, {
             currentGeography: currentGeography,
@@ -99,10 +112,12 @@ class App extends Component {
             subGeographyData: subGeographyData,
             year: routeYear,
             openSidebar: this.expandSidebar,
-            cancelSearch: this.cancelSearch.bind(this)
+            cancelSearch: this.cancelSearch.bind(this),
+            bounds: bounds
           })}
         </main>
         <Sidebar
+          error={error}
           location={location}
           sidebarState={sidebarState}
           geographies={geographies}
@@ -134,15 +149,17 @@ App.propTypes = {
   currentGeography: PropTypes.string,
   currentGeographyId: PropTypes.string,
   currentNarrative: PropTypes.string,
-  geographies: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired,
+  geographies: PropTypes.object,
+  loading: PropTypes.bool,
   dispatch: PropTypes.func.isRequired,
-  totalEstimate: PropTypes.string.isRequired,
+  totalEstimate: PropTypes.string,
   routeGeography: PropTypes.string,
   routeGeographyId: PropTypes.string,
   routeYear: PropTypes.string,
   subGeographyData: PropTypes.array,
   sidebarState: PropTypes.number,
+  error: PropTypes.string,
+  bounds: PropTypes.array
 };
 
 const mapStateToProps = (state, props) => {
@@ -153,6 +170,7 @@ const mapStateToProps = (state, props) => {
     routeGeography = 'region';
   }
   return {
+    error: state.geographyData.error,
     totalEstimate: state.geographyData.totalEstimate,
     geographies: state.geographyData.geographies,
     loading: state.geographyData.loading,
@@ -164,6 +182,7 @@ const mapStateToProps = (state, props) => {
     routeYear: props.params.year || '2013',
     subGeographyData: state.geographyData.subGeographies,
     sidebarState: state.navigation.sidebarState,
+    bounds: state.geographyData.bounds
   };
 };
 

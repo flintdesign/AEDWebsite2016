@@ -1,12 +1,15 @@
 import fetch from 'isomorphic-fetch';
 import config from './config';
-import { pluralize, getNextGeography, mapSlugToId } from './utils/convenience_funcs';
+import { pluralize, getNextGeography, mapSlugToId, flatten } from './utils/convenience_funcs';
+import { getCoordData } from './utils/geo_funcs';
 
 import {
   FETCH_GEOGRAPHY_DATA,
   RECEIVE_GEOGRAPHY_DATA,
+  RECEIVE_GEOGRAPHY_ERROR,
   FETCH_SUBGEOGRAPHY_DATA,
   RECEIVE_SUBGEOGRAPHY_DATA,
+  RECEIVE_BOUNDS,
 } from './actions/app_actions';
 
 /*
@@ -22,10 +25,12 @@ export function fetchGeoJSON(geoType, geoItem) {
   // Fetch the geoJSON data
   return fetch(`${config.apiBaseURL}/${geoType}/${geoId}/geojson_map`)
   .then(r => r.json())
-  .then(d => Object.assign(d, {
-    name: geoItem[geoType],
+  .then(d => ({
+    ...d,
+    ...geoItem,
+    name: geoItem[geoType] || geoItem[geoType.toUpperCase()],
     id: geoItem.id || geoItem.iso_code || geoItem.strcode
-  }, geoItem));
+  }));
 }
 
 /*
@@ -54,6 +59,20 @@ export function loadSubGeography(dispatch, data, subGeoType) {
     });
   });
 }
+
+function fetchBounds(dispatch, geoType, mappedId) {
+  return fetch(`${config.apiBaseURL}/${geoType}/${mappedId}/geojson_map`)
+    .then(r => r.json())
+    .then(d => {
+      const coords = d.coordinates.map(flatten);
+      const bounds = getCoordData(coords).bounds;
+      dispatch({
+        type: RECEIVE_BOUNDS,
+        data: bounds
+      });
+    });
+}
+
 
 /*
 *   Fetches a list of subGeographies from the API and sends that data to the
@@ -89,6 +108,7 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
   const type = geoType.toLowerCase();
   const id = slug.toLowerCase();
   const year = geoYear;
+
   const count = geoCount ? geoCount.toLowerCase() : 'add';
 
   // Dispatch the "loading" action
@@ -96,11 +116,18 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
 
   const mappedId = mapSlugToId(slug);
 
-  // Dispatch async call to the API
-  fetch(`${config.apiBaseURL}/${type}/${mappedId}/${year}/${count}`)
+  const fetchURL = `${config.apiBaseURL}/${type}/${mappedId}/${year}/${count}`;
+  // Dispatch async call to the APIk
+  fetch(fetchURL)
     .then(r => r.json())
     .then(d => {
-      const data = { ...d, type: type, countType: count, id: id };
+      const data = {
+        ...d,
+        type: type,
+        countType: count,
+        name: d.name,
+        id: id
+      };
 
       // fetch the narrative data
       fetch(`${config.apiBaseURL}/${type}/${mappedId}/narrative`)
@@ -113,13 +140,33 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
         });
       });
 
+      // fetch bound
+      fetchBounds(dispatch, geoType, mappedId);
+
       // fetch subgeography data
       const subGeoType = getNextGeography(geoType);
+
+      // if the returned data (d) of, say, a continent
+      // contains a `regions` (pluralized subGeoType) key
       if (d[pluralize(subGeoType)]) {
         dispatch({ type: FETCH_SUBGEOGRAPHY_DATA });
         loadSubGeography(dispatch, d[pluralize(subGeoType)], subGeoType);
       } else {
         fetchSubGeography(dispatch, geoType, mappedId, subGeoType);
       }
+    })
+    .catch(() => {
+      dispatch({
+        type: RECEIVE_GEOGRAPHY_ERROR,
+        data: 'No data available'
+      });
     });
+}
+
+export function fetchSearchData(successCallback, errorCallback = (err) => console.log(err)) {
+  const url = `${config.apiBaseURL}/autocomplete`;
+  fetch(url)
+  .then(r => r.json())
+  .then(successCallback)
+  .catch(errorCallback);
 }

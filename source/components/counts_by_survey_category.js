@@ -73,11 +73,11 @@ export default function CountsBySurveyCategory(props) {
             ))}
             <tr className="subgeography-totals__totals" key="totals">
               <td className="subgeography-totals__subgeography-name">Totals</td>
-                <td>{formatNumber(totals.ESTIMATE)}</td>
-                <td>{formatNumber(totals.GUESS_MIN)}</td>
-                <td>{formatNumber(totals.GUESS_MAX)}</td>
-                <td>{formatNumber(totals.RANGE_AREA)}</td>
-                <td>{formatNumber(totals.PERCENT_OF_RANGE_ASSESSED)}</td>
+              <td>{formatNumber(totals.ESTIMATE)}</td>
+              <td>{formatNumber(totals.GUESS_MIN)}</td>
+              <td>{formatNumber(totals.GUESS_MAX)}</td>
+              <td>{formatNumber(totals.RANGE_AREA)}</td>
+              <td>{formatNumber(totals.PERCENT_OF_RANGE_ASSESSED)}</td>
             </tr>
           </tbody>
         </table>
@@ -93,5 +93,5 @@ CountsBySurveyCategory.propTypes = {
   areas: PropTypes.array.isRequired,
   sidebarState: PropTypes.number.isRequired,
   totals: PropTypes.object.isRequired,
-  year: PropTypes.number.isRequired,
+  year: PropTypes.string.isRequired,
 };

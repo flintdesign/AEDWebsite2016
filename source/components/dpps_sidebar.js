@@ -20,7 +20,7 @@ export default function DPPSSidebar(props) {
   const unassessedInKM = (unassessedPercent / 100) * totalRange;
   return (
     <div>
-      {!isEmpty(geographies) && currentTitle === 'summary' && data &&
+      {!isEmpty(geographies) && currentTitle === 'summary_area' && data &&
         <div>
           <ParentDPPS
             currentGeography={currentGeography}

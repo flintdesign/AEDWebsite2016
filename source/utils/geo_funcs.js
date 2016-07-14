@@ -53,7 +53,14 @@ export const getCoordData = (coords) => {
     center: [
       (minLat + ((maxLat - minLat) / 2)),
       (minLong + ((maxLong - minLong) / 2))
-    ]
+    ],
+    bounds: [[
+      minLat,
+      minLong,
+    ], [
+      maxLat,
+      maxLong,
+    ]]
   };
 };
 

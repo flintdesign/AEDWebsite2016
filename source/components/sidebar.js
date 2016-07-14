@@ -4,19 +4,22 @@ import ADDSidebar from './add_sidebar';
 import DPPSSidebar from './dpps_sidebar';
 import StratumSidebar from './stratum_sidebar';
 import CountTypeToggle from './count_type_toggle';
-import { fetchGeography } from '../api';
-import { pluralize, getNextGeography, getEntityName, titleize } from '../utils/convenience_funcs';
 import compact from 'lodash.compact';
 import find from 'lodash.find';
 import isArray from 'lodash.isarray';
+import {
+  pluralize,
+  getNextGeography,
+  getEntityName,
+  titleize,
+  getParentRegionFromURL
+} from '../utils/convenience_funcs';
 
 class Sidebar extends Component {
   constructor(props, context) {
     super(props, context);
-    this.handleLinkClick = this.handleLinkClick.bind(this);
     this.handleSpanClick = this.handleSpanClick.bind(this);
     this.getCurrentTitle = this.getCurrentTitle.bind(this);
-    this.fetchAPIData = this.fetchAPIData.bind(this);
     this.subGeographyHasCorrectKeys = this.subGeographyHasCorrectKeys.bind(this);
     this.shouldRenderSidebar = this.shouldRenderSidebar.bind(this);
     this.onAStratum = this.onAStratum.bind(this);
@@ -39,15 +42,6 @@ class Sidebar extends Component {
     const parts = this.props.location.pathname.split('/');
     const stratumName = parts[parts.length - 1];
     return find(this.props.geographies.strata, s => s.stratum === titleize(stratumName));
-  }
-
-  fetchAPIData() {
-    const { dispatch, year, countType, currentGeography, currentGeographyId } = this.props;
-    fetchGeography(dispatch, currentGeography, currentGeographyId, year, countType);
-  }
-
-  handleLinkClick() {
-    this.fetchAPIData();
   }
 
   handleSpanClick(e) {
@@ -84,29 +78,29 @@ class Sidebar extends Component {
       currentGeography,
       currentGeographyId,
       currentNarrative,
+      error,
     } = this.props;
 
     const years = ['2013', '2006', '2002', '1998', '1995'];
     const yearLinks = years.map(y => {
       const toVal = compact(window.location.pathname.split('/'));
-      const linkVal = toVal.length ? [y, toVal.splice(1)].join('/') : y;
+      const linkVal = toVal.length ? `${y}/${toVal.splice(1).join('/')}` : y;
       const className = (y === this.props.year) ||
         (!this.props.year && y === '2013') ? 'current' : null;
       return (
         <li
           key={y} className={className}
         >
-          <Link onClick={this.handleLinkClick} to={`/${linkVal}`}>{y}</Link>
+          <Link to={`/${linkVal}`}>{y}</Link>
         </li>
       );
     });
 
-    const sidebarInnerClassName = `sidebar__inner ${currentGeography}-${currentGeographyId}`;
+    let sidebarInnerClassName = `sidebar__inner ${currentGeography}__${currentGeographyId}`;
+    sidebarInnerClassName += ` region__${getParentRegionFromURL(location)}`;
     const sidebarClasses = ['closed', 'open', 'full'];
 
     const self = this;
-
-    console.log(this.shouldRenderSidebar('add'));
 
     return (
       <aside className={sidebarClasses[sidebarState]}>
@@ -117,7 +111,7 @@ class Sidebar extends Component {
             </ul>
           </div>
           <h1 className="sidebar__entity-name">{getEntityName(this.props.location)}</h1>
-          {!geographies.strata &&
+          {geographies && !geographies.strata &&
             <div>
               <nav className="sidebar__viz-type">
                 <ul>
@@ -151,12 +145,24 @@ class Sidebar extends Component {
             <h1>Loading <span className="loading-spinner"></span></h1>
           }
 
-          <div className="sidebar__narrative">
-            <h3 className="heading__small">{currentGeography} INFO</h3>
-            <div dangerouslySetInnerHTML={{ __html: currentNarrative }} />
-          </div>
+          {!loading &&
+            <div className="sidebar__narrative">
+              <h3 className="heading__small">{currentGeography} INFO</h3>
+              <div dangerouslySetInnerHTML={{ __html: currentNarrative }} />
+            </div>
+          }
 
-          {this.shouldRenderSidebar('add') &&
+          {!loading && error &&
+            <div>
+              <h1>There was an error loading data.</h1>
+              <p>
+                We're sorry, there's no data for this combination of year and geographic location.
+                Please try another area or date.
+              </p>
+            </div>
+          }
+
+          {geographies && this.shouldRenderSidebar('add') &&
             <ADDSidebar
               geographies={geographies}
               currentTitle={this.state.currentTitle}
@@ -166,7 +172,7 @@ class Sidebar extends Component {
             />
           }
 
-          {this.shouldRenderSidebar('dpps') &&
+          {geographies && this.shouldRenderSidebar('dpps') &&
             <DPPSSidebar
               geographies={geographies}
               currentTitle={this.state.currentTitle}
@@ -175,7 +181,7 @@ class Sidebar extends Component {
             />
           }
 
-          {this.onAStratum() &&
+          {this.onAStratum() && this.getStratumFromHref() &&
             <StratumSidebar
               stratum={this.getStratumFromHref()}
             />
@@ -187,16 +193,17 @@ class Sidebar extends Component {
 }
 
 Sidebar.propTypes = {
+  error: PropTypes.string,
   sidebarState: PropTypes.number.isRequired,
   location: PropTypes.object,
   params: PropTypes.object,
   countType: PropTypes.string,
   geographies: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
+  loading: PropTypes.bool,
   year: PropTypes.string.isRequired,
-  currentGeography: PropTypes.string.isRequired,
-  currentGeographyId: PropTypes.string.isRequired,
+  currentGeography: PropTypes.string,
+  currentGeographyId: PropTypes.string,
   currentNarrative: PropTypes.string,
 };
 

@@ -27,7 +27,7 @@ export default function Nav(props) {
 
   return (
     <nav className="site-nav">
-      <Search />
+      <Search {...props.params} />
       {expand}
       {contract}
     </nav>
@@ -38,4 +38,5 @@ Nav.propTypes = {
   expandSidebar: PropTypes.func.isRequired,
   contractSidebar: PropTypes.func.isRequired,
   sidebarState: PropTypes.number.isRequired,
+  params: PropTypes.object.isRequired
 };

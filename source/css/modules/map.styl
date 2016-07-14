@@ -1,10 +1,6 @@
 $stroke-opacity = 0
 $fill-opacity = 0.75
 $hover-fill-opacity = 0.85
-$eastern = #6fd4f2
-$central = #60d085
-$west = #9DDC52
-$southern = #75e7d0
 
 .leaflet-container
   width 100%
@@ -46,47 +42,58 @@ path
     stroke-opacity 0
     fill-opacity 0
   &.eastern-africa
-    stroke $eastern
-    fill $eastern
+    stroke $eastern-africa
+    fill $eastern-africa
     @extend .mapsvg
     &:hover
-      stroke darken($eastern, 20%)
+      stroke darken($eastern-africa, 20%)
   &.central-africa
-    stroke #60d085
-    fill #60d085
+    stroke $central-africa
+    fill $central-africa
     @extend .mapsvg
     &:hover
-      stroke darken($central, 20%)
+      stroke darken($central-africa, 20%)
   &.west-africa
-    stroke #9DDC52
-    fill #9DDC52
+    stroke $west-africa
+    fill $west-africa
     @extend .mapsvg
     &:hover
-      stroke darken($west, 20%)
+      stroke darken($west-africa, 20%)
   &.southern-africa
-    stroke #75e7d0
-    fill #75e7d0
+    stroke $southern-africa
+    fill $southern-africa
     @extend .mapsvg
     &:hover
-      stroke darken($southern, 20%)
+      stroke darken($southern-africa, 20%)
 
-.region-west-africa-country
-  stroke #BFE78B
-  fill #BFE78B
+.region-west-africa__country,
+.region-west-africa__stratum
+  stroke $west-africa
+  fill $west-africa
   stroke-opacity 1
   fill-opacity 0.1
   stroke-width 1.5
 
-.region-central-africa-country
-  stroke #70CD8A
-  fill #70CD8A
+.region-central-africa__country,
+.region-central-africa__stratum
+  stroke $central-africa
+  fill $central-africa
   stroke-opacity 1
   fill-opacity 0.1
   stroke-width 1.5
 
-.region-southern-africa-country
-  stroke #69DCC6
-  fill #69DCC6
+.region-southern-africa__country,
+.region-southern-africa__stratum
+  stroke $southern-africa
+  fill $southern-africa
+  stroke-opacity 1
+  fill-opacity 0.1
+  stroke-width 1.5
+
+.region-eastern-africa__country,
+.region-eastern-africa__stratum
+  stroke $eastern-africa
+  fill $eastern-africa
   stroke-opacity 1
   fill-opacity 0.1
   stroke-width 1.5

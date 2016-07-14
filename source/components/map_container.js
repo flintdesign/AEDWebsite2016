@@ -8,7 +8,6 @@ import {
   getNextGeography,
   flatten,
   slugify,
-  replaceURLPart,
 } from '../utils/convenience_funcs';
 
 class MapContainer extends Component {
@@ -18,16 +17,13 @@ class MapContainer extends Component {
     this.onZoomEnd = this.onZoomEnd.bind(this);
     this.getLabelFontSize = this.getLabelFontSize.bind(this);
     this.state = {
-      bounds: config.maxMapBounds,
-      mapCenter: [0, 0],
-      scrolled: 0,
       geoJSONData: [],
       geoJSONObjs: [],
-      zoomLevel: 4
     };
   }
 
   componentWillReceiveProps(nextProps) {
+    if (!nextProps.subGeographyData) return;
     this.setState({ geoJSONData: nextProps.subGeographyData.map(this.setGeoJSON) });
   }
 
@@ -40,28 +36,22 @@ class MapContainer extends Component {
     let obj = {};
     const coords = data.coordinates.map(flatten);
     const coordData = getCoordData(coords);
-    const bounds = [[
-      coordData.minLat,
-      coordData.minLong,
-    ], [
-      coordData.maxLat,
-      coordData.maxLong,
-    ]];
 
     if (coords.length > 1) {
       obj = {
+        ...data,
         id: data.id,
         name: data.name,
         type: data.type,
         coordinates: coords,
         center: coordData.center,
-        bounds: bounds
+        bounds: coordData.bounds
       };
     } else {
       obj = { ...data,
         id: data.id,
         center: coordData.center,
-        bounds: bounds,
+        bounds: coordData.bounds,
       };
     }
     return obj;
@@ -75,9 +65,11 @@ class MapContainer extends Component {
   }
 
   handleClick(e) {
-    this.setState({ bounds: e.target.options.bounds });
-    // Add `this.props.location.pathname` for relative navigation
-    this.props.router.push(this.props.location.pathname + e.target.options.href);
+    const href = e.target.options.href;
+    if (location.pathname.indexOf(href) > -1) { return; }
+    const path = this.props.location.pathname + href;
+    this.setState({ bounds: e.target.options.bounds });    // Add `this.props.location.pathname` for relative navigation
+    this.props.router.push(path);
   }
 
   render() {
@@ -87,29 +79,20 @@ class MapContainer extends Component {
       const self = this;
       this.state.geoJSONData.map(datum => {
         let geoJSONClassName = slugify(datum.name || '');
-        const href = replaceURLPart(self.props.location.pathname, slugify(datum.name));
-        self.state.geoJSONObjs.push(
-          <GeoJson
-            key={geoJSONClassName}
-            href={href}
-            data={datum}
-            className={geoJSONClassName}
-            onClick={self.handleClick}
-            center={datum.center}
-            bounds={datum.bounds}
-          />
-        );
 
         if (self.props.currentGeography === 'region') {
           geoJSONClassName =
-            `${self.props.currentGeography}-${self.props.currentGeographyId}-country`;
+            `${self.props.currentGeography}-${self.props.currentGeographyId}__country`;
+        }
+
+        if (self.props.currentGeography === 'country' && datum.region) {
+          geoJSONClassName = `region-${slugify(datum.region)}__stratum`;
         }
 
         geoJSONObjs.push(
           <GeoJson
             key={`${datum.id}_${slugify(datum.name || '')}`}
             href={`/${slugify(datum.name)}`}
-            // href={`/${self.props.year}/${slugify(datum.name)}`}
             data={datum}
             className={geoJSONClassName}
             onClick={self.handleClick}
@@ -137,10 +120,12 @@ class MapContainer extends Component {
       });
     }
 
+    /* eslint max-len: [0] */
+    const tileURL = `${config.mapboxURL}/tiles/256/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`;
+
     return (
       <Map
-        bounds={this.state.bounds}
-        zoom={this.state.zoomLevel}
+        bounds={this.props.bounds}
         minZoom={4}
         maxBounds={config.maxMapBounds}
         maxZoom={12}
@@ -148,7 +133,8 @@ class MapContainer extends Component {
         onClick={this.props.cancelSearch}
       >
         <TileLayer
-          url={`${config.mapboxURL}/tiles/256/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`}
+          detectRetina
+          url={tileURL}
         />
         {geoJSONObjs}
         {labels}
@@ -158,11 +144,12 @@ class MapContainer extends Component {
 }
 
 MapContainer.propTypes = {
-  currentGeography: PropTypes.string.isRequired,
+  currentGeography: PropTypes.string,
   currentGeographyId: PropTypes.string,
   subGeographyData: PropTypes.array,
   year: PropTypes.string.isRequired,
   cancelSearch: PropTypes.func,
+  bounds: PropTypes.array,
   router: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired,

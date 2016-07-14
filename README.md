@@ -12,3 +12,7 @@ Frontend scaffold: Webpack, Babel, Stylus (autoprefixer), React, Redux, ESLint
 ## Build
 * Set `['output']['publicPath']` to your deployment URL in `webpack-production.config.js`
 * npm run build
+
+## Build and Demo Production server
+
+`npm run production`
