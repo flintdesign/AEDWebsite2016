@@ -102,16 +102,17 @@ class Sidebar extends Component {
       );
     });
 
-    let sidebarInnerClassName = `sidebar__inner ${currentGeography}__${currentGeographyId}`;
+    let sidebarInnerClassName = `${currentGeography}__${currentGeographyId}`;
     sidebarInnerClassName += ` region-${getParentRegionFromURL(location)}`;
     const sidebarClasses = ['closed', 'open', 'full'];
 
     const self = this;
 
     if (loading) {
+      const loaderClass = `${sidebarInnerClassName} ${sidebarClasses[sidebarState]}`;
       return (
-        <aside className={`${sidebarClasses[sidebarState]} sidebar__loader`}>
-          <section className={sidebarInnerClassName}>
+        <aside className={`sidebar__loader ${loaderClass}`}>
+          <section className="sidebar__inner">
             <h1 className="sidebar__entity-name">{getEntityName(this.props.location)}</h1>
           </section>
         </aside>
@@ -120,7 +121,7 @@ class Sidebar extends Component {
 
     return (
       <aside className={sidebarClasses[sidebarState]}>
-        <section className={sidebarInnerClassName}>
+        <section className={`sidebar__inner ${sidebarInnerClassName}`}>
           <div className="sidebar__year-nav__container">
             <ul className="sidebar__year-nav">
               {yearLinks}

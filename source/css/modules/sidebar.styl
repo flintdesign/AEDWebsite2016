@@ -230,7 +230,14 @@ aside table
     height auto
 
 .sidebar__loader
+  background-color $brand-dark
   .sidebar__inner
+    background-color transparent
+    background-image url('/assets/elephant.svg')
+    background-size 20%
+    background-position center bottom
+    background-repeat no-repeat
+
     height 100%
     text-align center
     width 100%
@@ -244,7 +251,8 @@ aside table
 .heading__small
   @extend .small-heading
 
-.sidebar__inner.region-southern-africa
+.sidebar__inner.region-southern-africa,
+.sidebar__loader.region-southern-africa
   background $southern-africa
   .count-type-toggle
     li.active a
@@ -256,7 +264,8 @@ aside table
       color #fff
       border 1px solid darken($southern-africa, 45%)
 
-.sidebar__inner.region-eastern-africa
+.sidebar__inner.region-eastern-africa,
+.sidebar__loader.region-eastern-africa
   background $eastern-africa
   .count-type-toggle
     li.active a
@@ -268,7 +277,8 @@ aside table
       color #fff
       border 1px solid darken($eastern-africa, 45%)
 
-.sidebar__inner.region-central-africa
+.sidebar__inner.region-central-africa,
+.sidebar__loader.region-central-africa
   background $central-africa
   .count-type-toggle
     li.active a
@@ -280,7 +290,8 @@ aside table
       color #fff
       border 1px solid darken($central-africa, 45%)
 
-.sidebar__inner.region-west-africa
+.sidebar__inner.region-west-africa,
+.sidebar__loader.region-west-africa
   background $west-africa
   .count-type-toggle
     li.active a
