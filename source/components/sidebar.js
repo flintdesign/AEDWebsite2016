@@ -83,6 +83,7 @@ class Sidebar extends Component {
       year,
       currentGeography,
       currentGeographyId,
+      currentNarrative,
     } = this.props;
 
     const years = ['2013', '2006', '2002', '1998', '1995'];
@@ -150,6 +151,11 @@ class Sidebar extends Component {
             <h1>Loading <span className="loading-spinner"></span></h1>
           }
 
+          <div className="sidebar__narrative">
+            <h3 className="heading__small">{currentGeography} INFO</h3>
+            <div dangerouslySetInnerHTML={{ __html: currentNarrative }} />
+          </div>
+
           {this.shouldRenderSidebar('add') &&
             <ADDSidebar
               geographies={geographies}
@@ -191,6 +197,7 @@ Sidebar.propTypes = {
   year: PropTypes.string.isRequired,
   currentGeography: PropTypes.string.isRequired,
   currentGeographyId: PropTypes.string.isRequired,
+  currentNarrative: PropTypes.string,
 };
 
 export default Sidebar;

@@ -70,6 +70,7 @@ class App extends Component {
       params,
       currentGeography,
       currentGeographyId,
+      currentNarrative,
       subGeographyData,
       routeYear,
       sidebarState,
@@ -112,6 +113,7 @@ class App extends Component {
           params={params}
           currentGeography={currentGeography}
           currentGeographyId={currentGeographyId}
+          currentNarrative={currentNarrative}
         />
         {totalEstimate &&
           <TotalCount
@@ -131,6 +133,7 @@ App.propTypes = {
   params: PropTypes.object.isRequired,
   currentGeography: PropTypes.string,
   currentGeographyId: PropTypes.string,
+  currentNarrative: PropTypes.string,
   geographies: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
@@ -155,6 +158,7 @@ const mapStateToProps = (state, props) => {
     loading: state.geographyData.loading,
     currentGeography: state.geographyData.currentGeography,
     currentGeographyId: state.geographyData.currentGeographyId,
+    currentNarrative: state.geographyData.currentNarrative,
     routeGeography: routeGeography,
     routeGeographyId: props.params[routeGeography] || 'africa',
     routeYear: props.params.year || '2013',

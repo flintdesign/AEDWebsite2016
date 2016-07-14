@@ -6,7 +6,7 @@ import {
   FETCH_GEOGRAPHY_DATA,
   RECEIVE_GEOGRAPHY_DATA,
   FETCH_SUBGEOGRAPHY_DATA,
-  RECEIVE_SUBGEOGRAPHY_DATA
+  RECEIVE_SUBGEOGRAPHY_DATA,
 } from './actions/app_actions';
 
 /*
@@ -101,14 +101,20 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
     .then(r => r.json())
     .then(d => {
       const data = { ...d, type: type, countType: count, id: id };
-      // dispatch "receive" action with response data
-      dispatch({
-        type: RECEIVE_GEOGRAPHY_DATA,
-        data: data
+
+      // fetch the narrative data
+      fetch(`${config.apiBaseURL}/${type}/${mappedId}/narrative`)
+      .then(r => r.json())
+      .then(d2 => {
+        // dispatch "receive" action with response data
+        dispatch({
+          type: RECEIVE_GEOGRAPHY_DATA,
+          data: { ...data, narrative: d2.narrative }
+        });
       });
 
+      // fetch subgeography data
       const subGeoType = getNextGeography(geoType);
-
       if (d[pluralize(subGeoType)]) {
         dispatch({ type: FETCH_SUBGEOGRAPHY_DATA });
         loadSubGeography(dispatch, d[pluralize(subGeoType)], subGeoType);
