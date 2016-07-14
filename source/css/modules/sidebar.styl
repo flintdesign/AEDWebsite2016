@@ -18,7 +18,7 @@ aside
       width 100%
 
   &.full
-    width: 100%
+    width 100%
     display block
 
 aside table
@@ -55,7 +55,7 @@ aside table
   border 1px solid #fff
   border-width 0 0 1px 0
   background transparent
-  -webkit-appearance: none
+  -webkit-appearance none
   padding 3px 16px 3px 0
   color #fff
   border-radius 0
@@ -111,7 +111,6 @@ aside table
   font-style normal
   font-size 36px
   margin 55px 0 20px
-  line-height 1
   -webkit-font-smoothing auto
 
 .sidebar__stats-table
@@ -190,7 +189,7 @@ aside table
       position absolute
       right 10px
       color $text-light
-      top 40%
+      top 20%
   &.closed
     h3:after
       content '\276f'
@@ -206,12 +205,33 @@ aside table
       display table
 
 .sidebar__narrative
-  margin-bottom 30px
+  border-bottom 2px solid #dcdcdc
+  margin-bottom 10px
+  overflow hidden
+
+  h3
+    cursor pointer
+    margin-bottom 10px
+    position relative
+    &:after
+      color #848585
+      content '\276F'
+      display inline-block
+      position absolute
+      right 10px
+      top 5%
+      transform rotate(90deg)
+
+  &.closed div
+    height 0
+
+  &.open div
+    height auto
 
 .heading__small
   @extend .small-heading
 
-.sidebar__inner.region__southern-africa
+.sidebar__inner.region-southern-africa
   background $southern-africa
   .count-type-toggle
     li.active a
@@ -223,7 +243,7 @@ aside table
       color #fff
       border 1px solid darken($southern-africa, 45%)
 
-.sidebar__inner.region__eastern-africa
+.sidebar__inner.region-eastern-africa
   background $eastern-africa
   .count-type-toggle
     li.active a
@@ -235,7 +255,7 @@ aside table
       color #fff
       border 1px solid darken($eastern-africa, 45%)
 
-.sidebar__inner.region__central-africa
+.sidebar__inner.region-central-africa
   background $central-africa
   .count-type-toggle
     li.active a
@@ -247,7 +267,7 @@ aside table
       color #fff
       border 1px solid darken($central-africa, 45%)
 
-.sidebar__inner.region__west-africa
+.sidebar__inner.region-west-africa
   background $west-africa
   .count-type-toggle
     li.active a

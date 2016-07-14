@@ -19,12 +19,14 @@ class Sidebar extends Component {
   constructor(props, context) {
     super(props, context);
     this.handleSpanClick = this.handleSpanClick.bind(this);
+    this.handleNarrativeClick = this.handleNarrativeClick.bind(this);
     this.getCurrentTitle = this.getCurrentTitle.bind(this);
     this.subGeographyHasCorrectKeys = this.subGeographyHasCorrectKeys.bind(this);
     this.shouldRenderSidebar = this.shouldRenderSidebar.bind(this);
     this.onAStratum = this.onAStratum.bind(this);
     this.state = {
-      currentTitle: 'summary_area'
+      currentTitle: 'summary_area',
+      narrativeOpen: false,
     };
   }
 
@@ -46,6 +48,10 @@ class Sidebar extends Component {
 
   handleSpanClick(e) {
     this.setState({ currentTitle: e.target.dataset.title });
+  }
+
+  handleNarrativeClick(_e) {
+    this.setState({ narrativeOpen: !this.state.narrativeOpen });
   }
 
   subGeographyHasCorrectKeys(vizType) {
@@ -146,7 +152,10 @@ class Sidebar extends Component {
           }
 
           {!loading &&
-            <div className="sidebar__narrative">
+            <div
+              className={`${this.state.narrativeOpen ? 'open' : 'closed'} sidebar__narrative`}
+              onClick={this.handleNarrativeClick}
+            >
               <h3 className="heading__small">{currentGeography} INFO</h3>
               <div dangerouslySetInnerHTML={{ __html: currentNarrative }} />
             </div>
