@@ -3,3 +3,4 @@ export const SIDEBAR_CLOSED = 0;
 export const SIDEBAR_OPEN = 1;
 export const SIDEBAR_FULL = 2;
 export const RECEIVE_AUTOCOMPLETE = 'RECEIVE_AUTOCOMPLETE';
+export const TOGGLE_SEARCH = 'TOGGLE_SEARCH';

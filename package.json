@@ -2,7 +2,7 @@
   "name": "scaffold",
   "version": "0.1.0",
   "engines": {
-      "npm": "3.8.9"
+    "npm": "3.8.9"
   },
   "description": "A scaffold for creative front end web development",
   "main": "index.js",
@@ -87,7 +87,7 @@
     "stylus-loader": "^2.1.1",
     "tape": "^4.5.1",
     "url-loader": "^0.5.6",
-    "webpack-dev-server": "^1.10.1",
-    "webpack-notifier": "^1.2.1"
+    "webpack-notifier": "^1.2.1",
+    "lodash.assign": "^4.0.9"
   }
 }
