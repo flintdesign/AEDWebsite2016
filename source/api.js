@@ -18,12 +18,23 @@ import {
 *   geoType: One of ['region', 'country', 'stratum']
 *   geoItem: The object for which we're fetching geoJSON data
 */
+
+const getSimplifyParam = (geoType) => {
+  if (geoType === 'stratum') { return ''; }
+  const geoMap = {
+    continent: 3.0,
+    region: 1.5,
+    country: 0.05
+  };
+  return `?simplify=${geoMap[geoType]}`;
+};
+
 export function fetchGeoJSON(geoType, geoItem) {
   // Get the ID or (if the item is a country) ISO code
   const geoId = geoItem.iso_code || geoItem.id || geoItem.strcode;
 
   // Fetch the geoJSON data
-  return fetch(`${config.apiBaseURL}/${geoType}/${geoId}/geojson_map?simplify=0.5`)
+  return fetch(`${config.apiBaseURL}/${geoType}/${geoId}/geojson_map${getSimplifyParam(geoType)}`)
   .then(r => r.json())
   .then(d => ({
     ...d,
