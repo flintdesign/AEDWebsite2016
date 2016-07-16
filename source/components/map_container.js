@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import { Map, TileLayer, Marker, GeoJson } from 'react-leaflet';
 import { divIcon } from 'leaflet';
 import config from '../config';
-import { getCoordData } from '../utils/geo_funcs';
+import { getCoordData, getLabelPosition } from '../utils/geo_funcs';
 import {
   getNextGeography,
   flatten,
@@ -111,7 +111,8 @@ class MapContainer extends Component {
           labels.push(
             <Marker
               key={datum.id}
-              position={datum.center}
+              position={getLabelPosition(datum)}
+              name={datum.name}
               icon={icon}
             />
           );
