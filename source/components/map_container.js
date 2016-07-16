@@ -5,9 +5,9 @@ import { divIcon } from 'leaflet';
 import config from '../config';
 import { getCoordData, getLabelPosition } from '../utils/geo_funcs';
 import {
-  getNextGeography,
   flatten,
   slugify,
+  getNextGeography
 } from '../utils/convenience_funcs';
 
 class MapContainer extends Component {
@@ -18,13 +18,18 @@ class MapContainer extends Component {
     this.getLabelFontSize = this.getLabelFontSize.bind(this);
     this.state = {
       geoJSONData: [],
+      bounds: config.maxMapBounds,
+      interactionOccurred: false,
       geoJSONObjs: [],
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.subGeographyData) return;
-    this.setState({ geoJSONData: nextProps.subGeographyData.map(this.setGeoJSON) });
+    this.setState({
+      geoJSONData: nextProps.subGeographyData.map(this.setGeoJSON),
+      interactionOccurred: true
+    });
   }
 
   onZoomEnd(e) {
@@ -68,9 +73,13 @@ class MapContainer extends Component {
     const href = e.target.options.href;
     if (location.pathname.indexOf(href) > -1) { return; }
     const path = this.props.location.pathname + href;
-    this.setState({ bounds: e.target.options.bounds });    // Add `this.props.location.pathname` for relative navigation
+    this.setState({
+      bounds: e.target.options.bounds,
+      interactionOccurred: true
+    });
     this.props.router.push(path);
   }
+
 
   render() {
     const geoJSONObjs = [];
@@ -89,6 +98,25 @@ class MapContainer extends Component {
           geoJSONClassName = `region-${slugify(datum.region)}__stratum`;
         }
 
+        if (datum.coordinates && self.props.currentGeography === 'continent') {
+          const icon = divIcon({
+            className: 'leaflet-marker-icon',
+            html: `<h1 style="font-size:${self.getLabelFontSize()}px"
+                  class="leaflet-marker-icon__label
+                  ${getNextGeography(self.props.currentGeography)}-${datum.id}">
+                  ${datum.name}</h1>`
+          });
+
+          labels.push(
+            <Marker
+              key={datum.id}
+              position={getLabelPosition(datum)}
+              name={datum.name}
+              icon={icon}
+            />
+          );
+        }
+
         geoJSONObjs.push(
           <GeoJson
             key={`${datum.id}_${slugify(datum.name || '')}`}
@@ -100,23 +128,6 @@ class MapContainer extends Component {
             bounds={datum.bounds}
           />
         );
-        if (datum.coordinates && self.props.currentGeography === 'continent') {
-          const icon = divIcon({
-            className: 'leaflet-marker-icon',
-            html: `<h1 style="font-size:${self.getLabelFontSize()}px"
-                  class="leaflet-marker-icon__label
-                  ${getNextGeography(self.props.currentGeography)}-${datum.id}">
-                  ${datum.name}</h1>`
-          });
-          labels.push(
-            <Marker
-              key={datum.id}
-              position={getLabelPosition(datum)}
-              name={datum.name}
-              icon={icon}
-            />
-          );
-        }
         return datum;
       });
     }
@@ -126,7 +137,7 @@ class MapContainer extends Component {
 
     return (
       <Map
-        bounds={this.props.bounds}
+        bounds={this.state.interactionOccurred ? this.state.bounds : this.props.bounds}
         minZoom={4}
         maxBounds={config.maxMapBounds}
         maxZoom={12}
@@ -134,7 +145,6 @@ class MapContainer extends Component {
         onClick={this.props.cancelSearch}
       >
         <TileLayer
-          detectRetina
           url={tileURL}
         />
         {geoJSONObjs}

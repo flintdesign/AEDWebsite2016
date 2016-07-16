@@ -57,6 +57,6 @@ SurveyCategory.propTypes = {
   estimate: PropTypes.string.isRequired,
   guess_min: PropTypes.string.isRequired,
   guess_max: PropTypes.string.isRequired,
-  range_assessed: PropTypes.string.isRequired,
-  range_area: PropTypes.string.isRequired
+  range_assessed: PropTypes.string,
+  range_area: PropTypes.string
 };

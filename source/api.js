@@ -23,7 +23,7 @@ export function fetchGeoJSON(geoType, geoItem) {
   const geoId = geoItem.iso_code || geoItem.id || geoItem.strcode;
 
   // Fetch the geoJSON data
-  return fetch(`${config.apiBaseURL}/${geoType}/${geoId}/geojson_map`)
+  return fetch(`${config.apiBaseURL}/${geoType}/${geoId}/geojson_map?simplify=0.5`)
   .then(r => r.json())
   .then(d => ({
     ...d,
