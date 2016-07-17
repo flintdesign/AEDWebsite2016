@@ -28,7 +28,6 @@ class MapContainer extends Component {
     if (!nextProps.subGeographyData) return;
     this.setState({
       geoJSONData: nextProps.subGeographyData.map(this.setGeoJSON),
-      interactionOccurred: true
     });
   }
 
