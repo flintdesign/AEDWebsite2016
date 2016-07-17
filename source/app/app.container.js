@@ -7,7 +7,7 @@ import TotalCount from '../components/total_count';
 import HelpNav from '../components/help_nav';
 import { getEntityName } from '../utils/convenience_funcs';
 import { formatNumber } from '../utils/format_utils';
-import { fetchGeography } from '../api';
+import { fetchGeography, fetchKPDP } from '../api';
 import { toggleSearch, expandSidebar, contractSidebar } from '../actions';
 
 class App extends Component {
@@ -17,6 +17,7 @@ class App extends Component {
     this.contractSidebar = this.contractSidebar.bind(this);
     this.onHandleClick = this.onHandleClick.bind(this);
     this.fetchData = this.fetchData.bind(this);
+    this.handleClick = this.handleClick.bind(this);
     this.state = {
       showSidebar: false
     };
@@ -45,6 +46,10 @@ class App extends Component {
 
   cancelSearch() {
     this.props.dispatch(toggleSearch(false));
+  }
+
+  handleClick() {
+    fetchKPDP('known', this.props.dispatch);
   }
 
   fetchData(props, force = false) {
@@ -86,7 +91,8 @@ class App extends Component {
       sidebarState,
       error,
       bounds,
-      searchActive
+      searchActive,
+      known
     } = this.props;
 
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
@@ -101,6 +107,11 @@ class App extends Component {
         onClick={toggleSearch}
       >
         <main className={mainClasses[sidebarState]}>
+          <h1
+            onClick={this.handleClick}
+          >
+            Click for Known
+          </h1>
           <BreadCrumbNav params={this.props.params} />
           <Nav
             expandSidebar={this.expandSidebar}
@@ -117,7 +128,8 @@ class App extends Component {
             year: routeYear,
             openSidebar: this.expandSidebar,
             cancelSearch: this.cancelSearch.bind(this),
-            bounds: bounds
+            bounds: bounds,
+            known: known
           })}
         </main>
         <Sidebar
@@ -165,7 +177,8 @@ App.propTypes = {
   sidebarState: PropTypes.number,
   error: PropTypes.string,
   bounds: PropTypes.array,
-  searchActive: PropTypes.bool.isRequired
+  searchActive: PropTypes.bool.isRequired,
+  known: PropTypes.array
 };
 
 const mapStateToProps = (state, props) => {
@@ -189,7 +202,8 @@ const mapStateToProps = (state, props) => {
     subGeographyData: state.geographyData.subGeographies,
     sidebarState: state.navigation.sidebarState,
     bounds: state.geographyData.bounds,
-    searchActive: state.search.searchActive
+    searchActive: state.search.searchActive,
+    known: state.kpdp.known
   };
 };
 

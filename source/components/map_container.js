@@ -78,6 +78,18 @@ class MapContainer extends Component {
   render() {
     const geoJSONObjs = [];
     const labels = [];
+    let known;
+
+    if (this.props.known) {
+      known = this.props.known.map((k, i) =>
+        <GeoJson
+          key={`known-${i}`}
+          data={k}
+          className="known_geojson"
+        />
+      );
+    }
+
     if (this.state.geoJSONData) {
       const self = this;
       this.state.geoJSONData.map(datum => {
@@ -141,6 +153,7 @@ class MapContainer extends Component {
         <TileLayer
           url={tileURL}
         />
+        {known}
         {geoJSONObjs}
         {labels}
       </Map>
@@ -159,6 +172,7 @@ MapContainer.propTypes = {
     push: PropTypes.func.isRequired
   }).isRequired,
   location: PropTypes.object.isRequired,
+  known: PropTypes.array
 };
 
 export default withRouter(MapContainer);

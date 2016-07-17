@@ -148,10 +148,6 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
   // fetch bound
   fetchBounds(dispatch, geoType, mappedId);
 
-
-  // Dispatch the "loading" action
-  dispatch({ type: FETCH_GEOGRAPHY_DATA, data: { countType: count } });
-
   const fetchURL = `${config.apiBaseURL}/${type}/${mappedId}/${year}/${count}`;
   // Dispatch async call to the APIk
   fetch(fetchURL)
@@ -204,3 +200,19 @@ export function fetchSearchData(successCallback, errorCallback = (err) => consol
   .then(successCallback)
   .catch(errorCallback);
 }
+
+
+/* Known, possible, doubtful, protected */
+export const fetchKPDP = (type, dispatch) => {
+  const url = `${config.apiBaseURL}/${type}/geojson_map?simplify=1`;
+  dispatch({ type: `FETCH_${type.toUpperCase()}` });
+  console.log(`fetching from ${url}`);
+  fetch(url)
+  .then(r => r.json())
+  .then(d =>
+    dispatch({
+      type: `RECEIVE_${type.toUpperCase()}`,
+      data: d.geometries
+    }));
+};
+
