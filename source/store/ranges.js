@@ -16,10 +16,9 @@ const initialState = {
   protected: []
 };
 
-export const kpdp = (state = initialState, action) => {
+export const ranges = (state = initialState, action) => {
   switch (action.type) {
     case RECEIVE_KNOWN:
-      console.log(action.data);
       return { ...state,
         known: action.data
       };

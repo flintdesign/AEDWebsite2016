@@ -2,13 +2,13 @@ import { combineReducers } from 'redux';
 import { geographies } from './geographies';
 import { navigation } from './navigation';
 import { search } from './search';
-import { kpdp } from './kpdp';
+import { ranges } from './ranges';
 
 const rootReducer = combineReducers({
   geographyData: geographies,
   navigation,
   search,
-  kpdp
+  ranges
 });
 
 export default rootReducer;

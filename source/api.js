@@ -203,7 +203,7 @@ export function fetchSearchData(successCallback, errorCallback = (err) => consol
 
 
 /* Known, possible, doubtful, protected */
-export const fetchKPDP = (type, dispatch) => {
+export const fetchRanges = (type, dispatch) => {
   const url = `${config.apiBaseURL}/${type}/geojson_map?simplify=1`;
   dispatch({ type: `FETCH_${type.toUpperCase()}` });
   console.log(`fetching from ${url}`);

@@ -7,7 +7,7 @@ import TotalCount from '../components/total_count';
 import HelpNav from '../components/help_nav';
 import { getEntityName } from '../utils/convenience_funcs';
 import { formatNumber } from '../utils/format_utils';
-import { fetchGeography, fetchKPDP } from '../api';
+import { fetchGeography, fetchRanges } from '../api';
 import { toggleSearch, expandSidebar, contractSidebar } from '../actions';
 
 class App extends Component {
@@ -49,7 +49,7 @@ class App extends Component {
   }
 
   handleClick() {
-    fetchKPDP('known', this.props.dispatch);
+    fetchRanges('known', this.props.dispatch);
   }
 
   fetchData(props, force = false) {
@@ -203,7 +203,7 @@ const mapStateToProps = (state, props) => {
     sidebarState: state.navigation.sidebarState,
     bounds: state.geographyData.bounds,
     searchActive: state.search.searchActive,
-    known: state.kpdp.known
+    known: state.ranges.known
   };
 };
 
