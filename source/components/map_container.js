@@ -18,8 +18,6 @@ class MapContainer extends Component {
     this.getLabelFontSize = this.getLabelFontSize.bind(this);
     this.state = {
       geoJSONData: [],
-      bounds: config.maxMapBounds,
-      interactionOccurred: false,
       geoJSONObjs: [],
     };
   }
@@ -72,10 +70,6 @@ class MapContainer extends Component {
     const href = e.target.options.href;
     if (location.pathname.indexOf(href) > -1) { return; }
     const path = this.props.location.pathname + href;
-    this.setState({
-      bounds: e.target.options.bounds,
-      interactionOccurred: true
-    });
     this.props.router.push(path);
   }
 
@@ -136,7 +130,7 @@ class MapContainer extends Component {
 
     return (
       <Map
-        bounds={this.state.interactionOccurred ? this.state.bounds : this.props.bounds}
+        bounds={this.props.bounds}
         minZoom={4}
         maxBounds={config.maxMapBounds}
         maxZoom={12}

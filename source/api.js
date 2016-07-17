@@ -1,7 +1,12 @@
 import fetch from 'isomorphic-fetch';
 import config from './config';
-import { pluralize, getNextGeography, mapSlugToId, flatten } from './utils/convenience_funcs';
 import { getCoordData } from './utils/geo_funcs';
+import {
+  pluralize,
+  getNextGeography,
+  mapSlugToId,
+  flatten
+} from './utils/convenience_funcs';
 
 import {
   FETCH_GEOGRAPHY_DATA,
@@ -11,6 +16,8 @@ import {
   RECEIVE_SUBGEOGRAPHY_DATA,
   RECEIVE_BOUNDS,
 } from './actions/app_actions';
+
+import cache from 'memory-cache';
 
 /*
 *   Fetches geoJSON data from the API for a single geography
@@ -71,12 +78,24 @@ export function loadSubGeography(dispatch, data, subGeoType) {
   });
 }
 
+const fiveMinutes = 1000 * 60 * 5;
+const cacheDuration = fiveMinutes;
+
 function fetchBounds(dispatch, geoType, mappedId) {
+  // look up in cache first
+  const cacheKey = `${geoType}-${mappedId}`;
+  const cacheResponse = cache.get(cacheKey);
+  if (cacheResponse) {
+    return dispatch({ type: RECEIVE_BOUNDS, data: cacheResponse });
+  }
+
+  // value not cached; fetching
   return fetch(`${config.apiBaseURL}/${geoType}/${mappedId}/geojson_map`)
     .then(r => r.json())
     .then(d => {
       const coords = d.coordinates.map(flatten);
       const bounds = getCoordData(coords).bounds;
+      cache.put(cacheKey, bounds, cacheDuration);
       dispatch({
         type: RECEIVE_BOUNDS,
         data: bounds
@@ -119,13 +138,19 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
   const type = geoType.toLowerCase();
   const id = slug.toLowerCase();
   const year = geoYear;
-
   const count = geoCount ? geoCount.toLowerCase() : 'add';
 
   // Dispatch the "loading" action
   dispatch({ type: FETCH_GEOGRAPHY_DATA, data: { countType: count } });
 
   const mappedId = mapSlugToId(slug);
+
+  // fetch bound
+  fetchBounds(dispatch, geoType, mappedId);
+
+
+  // Dispatch the "loading" action
+  dispatch({ type: FETCH_GEOGRAPHY_DATA, data: { countType: count } });
 
   const fetchURL = `${config.apiBaseURL}/${type}/${mappedId}/${year}/${count}`;
   // Dispatch async call to the APIk
@@ -151,8 +176,6 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
         });
       });
 
-      // fetch bound
-      fetchBounds(dispatch, geoType, mappedId);
 
       // fetch subgeography data
       const subGeoType = getNextGeography(geoType);
