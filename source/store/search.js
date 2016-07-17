@@ -13,7 +13,7 @@ export const search = (state = initialState, action) => {
   switch (action.type) {
     case TOGGLE_SEARCH:
       return { ...state,
-        searchActive: !action.bool ? !state.search : action.bool
+        searchActive: action.bool === null ? !state.searchActive : action.bool
       };
     case RECEIVE_AUTOCOMPLETE:
       return { ...state,

@@ -71,6 +71,7 @@ class MapContainer extends Component {
     if (location.pathname.indexOf(href) > -1) { return; }
     const path = this.props.location.pathname + href;
     this.props.router.push(path);
+    this.props.cancelSearch();
   }
 
 
