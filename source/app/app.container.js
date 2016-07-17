@@ -96,6 +96,7 @@ class App extends Component {
           `container main__container
           sidebar--${(sidebarState > 0 ? 'open' : 'closed')}
           ${(!params.region ? '' : 'breadcrumbs-active')}`}
+        onClick={toggleSearch}
       >
         <main className={mainClasses[sidebarState]}>
           <BreadCrumbNav params={this.props.params} />

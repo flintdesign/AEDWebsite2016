@@ -39,7 +39,7 @@ const Results = (props) => {
         })}
       >
       {r.name}
-    </Link>
+      </Link>
   ))}</div>);
 };
 
@@ -130,13 +130,13 @@ class Search extends Component {
     const className = searching ? 'searching' : null;
     return (
       results.length && this.props.searchActive ?
-      <Results
-        {...this.props}
-        data={searchData}
-        results={results}
-        className={className}
-        endSearch={() => this.props.dispatch(toggleSearch(false))}
-      /> : null);
+        <Results
+          {...this.props}
+          data={searchData}
+          results={results}
+          className={className}
+          endSearch={() => this.props.dispatch(toggleSearch(false))}
+        /> : null);
   }
 
   render() {
