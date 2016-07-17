@@ -85,10 +85,12 @@ class App extends Component {
       routeYear,
       sidebarState,
       error,
-      bounds
+      bounds,
+      searchActive
     } = this.props;
 
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
+    const searchOverlay = searchActive ? <div className="search__overlay" /> : null;
 
     return (
       <div
@@ -139,6 +141,7 @@ class App extends Component {
           />
         }
         <HelpNav location={location} />
+        {searchOverlay}
       </div>
     );
   }
@@ -161,7 +164,8 @@ App.propTypes = {
   subGeographyData: PropTypes.array,
   sidebarState: PropTypes.number,
   error: PropTypes.string,
-  bounds: PropTypes.array
+  bounds: PropTypes.array,
+  searchActive: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = (state, props) => {
@@ -184,7 +188,8 @@ const mapStateToProps = (state, props) => {
     routeYear: props.params.year || '2013',
     subGeographyData: state.geographyData.subGeographies,
     sidebarState: state.navigation.sidebarState,
-    bounds: state.geographyData.bounds
+    bounds: state.geographyData.bounds,
+    searchActive: state.search.searchActive
   };
 };
 

@@ -3,51 +3,113 @@ import { Link } from 'react-router';
 import { toggleSearch, receiveAutocompleteData } from '../actions';
 import { connect } from 'react-redux';
 import { SEARCH_PLACEHOLDER } from '../constants';
-import { slugify } from '../utils/convenience_funcs';
+import { slugify, titleize } from '../utils/convenience_funcs';
 import Bloodhound from 'bloodhound-js';
 import { fetchSearchData } from '../api';
 import assign from 'lodash.assign';
 
 const getPathForResult = ({ result, year, data }) => {
-  let path;
-  const name = result.name;
-  if (result.geographicType === 'country') {
-    const slug = slugify(name);
-    path = `/${year}/${slugify(result.parent)}/${slug}`;
-  } else if (result.geographicType === 'stratum') {
-    const region = slugify(data[result.parent].parent);
-    const country = slugify(result.parent);
-    const stratumYear = name.substring(name.indexOf('(') + 1, name.indexOf(')'));
-    const slug = slugify(name.split('(')[0]).slice(0, -1);
-    path = `/${stratumYear}/${region}/${country}/${slug}`;
+  let path = '';
+  let slug;
+  const { name, geographicType } = result;
+  switch (geographicType) {
+    case 'continent':
+      path = `/${year}`;
+      break;
+    case 'region':
+      slug = slugify(name);
+      path = `/${year}/${slug}`;
+      break;
+    case 'country':
+      slug = slugify(name);
+      path = `/${year}/${slugify(result.parent)}/${slug}`;
+      break;
+    case 'stratum': {
+      const region = slugify(data[result.parent].parent);
+      const country = slugify(result.parent);
+      const stratumYear = name.substring(name.indexOf('(') + 1, name.indexOf(')'));
+      slug = slugify(name.split('(')[0]).slice(0, -1);
+      path = `/${stratumYear}/${region}/${country}/${slug}`;
+      break;
+    }
+    default:
   }
+  console.log(path, result.name);
   return path;
 };
 
+function createParentTitle(result, data) {
+  const { geographicType } = result;
+  const type = titleize(geographicType);
+  let label = '';
+  switch (geographicType) {
+    case 'region':
+      label = `${type} in Africa`;
+      break;
+    case 'country':
+      label = `${type} in ${data[result.parent].parent}`;
+      break;
+    case 'stratum':
+      label = `${type} in ${data[result.parent].parent}`;
+      break;
+    default:
+  }
+  return label;
+}
+
+const Result = (props) => {
+  const { result, endSearch, year, data } = props;
+  const { name, geographicType } = result;
+  let region;
+  switch (geographicType) {
+    case 'stratum':
+      region = slugify(data[result.parent].parent);
+      break;
+    case 'country':
+      region = slugify(result.parent);
+      break;
+    case 'region':
+      region = slugify(name);
+      break;
+    default:
+  }
+  const regionColorClass = `color--region-${region}`;
+  const regionHoverClass = `hover--region-${region}`;
+  return (
+    <Link
+      className={`search__result-item ${!!region ? regionHoverClass : ''}`}
+      key={`result-${name}`}
+      onClick={endSearch}
+      to={getPathForResult({
+        result,
+        year,
+        data
+      })}
+    >
+    <strong className={!!region ? regionColorClass : ''}>{name}</strong>
+    <div className="search__result__parent-label">{createParentTitle(result, data)}</div>
+    </Link>
+  );
+};
+
+Result.propTypes = {
+  year: PropTypes.string,
+  data: PropTypes.object.isRequired,
+  result: PropTypes.object.isRequired,
+  endSearch: PropTypes.func.isRequired,
+};
+
 const Results = (props) => {
-  const { results, endSearch, year, data } = props;
+  const { results } = props;
   return (
     <div className="search__results">{results.map(r => (
-      <Link
-        className="search__result-item"
-        key={`result-${r.name}`}
-        onClick={endSearch}
-        to={getPathForResult({
-          result: r,
-          year,
-          data
-        })}
-      >
-      {r.name}
-      </Link>
-  ))}</div>);
+        <Result key={`result_${r.name}`} result={r} {...props} />
+    ))}</div>
+  );
 };
 
 Results.propTypes = {
-  year: PropTypes.string,
-  data: PropTypes.object.isRequired,
   results: PropTypes.array.isRequired,
-  endSearch: PropTypes.func.isRequired,
 };
 
 class Search extends Component {
@@ -66,6 +128,12 @@ class Search extends Component {
     fetchSearchData((d) => {
       props.dispatch(receiveAutocompleteData(d));
     });
+  }
+
+  componentWillReceiveProps(props) {
+    if (!props.searchActive && this.state.results.length) {
+      this.setState({ results: [] });
+    }
   }
 
   getSearchData() {
