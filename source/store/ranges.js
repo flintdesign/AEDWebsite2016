@@ -1,13 +1,4 @@
-import {
-  //FETCH_KNOWN,
-  RECEIVE_KNOWN,
-  //FETCH_POSSIBLE,
-  //RECEIVE_POSSIBLE,
-  //FETCH_DOUBTFUL,
-  //RECEIVE_DOUBTFUL,
-  //FETCH_PROTECTED,
-  //RECEIVE_PROTECTED
-} from '../constants';
+import { RECEIVE_RANGE } from '../constants';
 
 const initialState = {
   known: [],
@@ -18,9 +9,9 @@ const initialState = {
 
 export const ranges = (state = initialState, action) => {
   switch (action.type) {
-    case RECEIVE_KNOWN:
+    case RECEIVE_RANGE:
       return { ...state,
-        known: action.data
+        [action.data.rangeType]: action.data.geometries
       };
     default:
       return state;

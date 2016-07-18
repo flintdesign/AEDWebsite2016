@@ -17,6 +17,8 @@ import {
   RECEIVE_BOUNDS,
 } from './actions/app_actions';
 
+import { FETCH_RANGE, RECEIVE_RANGE } from './constants';
+
 import cache from 'memory-cache';
 
 /*
@@ -205,14 +207,13 @@ export function fetchSearchData(successCallback, errorCallback = (err) => consol
 /* Known, possible, doubtful, protected */
 export const fetchRanges = (type, dispatch) => {
   const url = `${config.apiBaseURL}/${type}/geojson_map?simplify=1`;
-  dispatch({ type: `FETCH_${type.toUpperCase()}` });
-  console.log(`fetching from ${url}`);
+  dispatch({ type: FETCH_RANGE });
   fetch(url)
   .then(r => r.json())
   .then(d =>
     dispatch({
-      type: `RECEIVE_${type.toUpperCase()}`,
-      data: d.geometries
+      type: RECEIVE_RANGE,
+      data: { rangeType: type, geometries: d.geometries }
     }));
 };
 

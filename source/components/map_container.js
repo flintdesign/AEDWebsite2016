@@ -4,6 +4,7 @@ import { Map, TileLayer, Marker, GeoJson } from 'react-leaflet';
 import { divIcon } from 'leaflet';
 import config from '../config';
 import { getCoordData, getLabelPosition } from '../utils/geo_funcs';
+import keys from 'lodash.keys';
 import {
   flatten,
   slugify,
@@ -78,17 +79,15 @@ class MapContainer extends Component {
   render() {
     const geoJSONObjs = [];
     const labels = [];
-    let known;
 
-    if (this.props.known) {
-      known = this.props.known.map((k, i) =>
+    const rangeMarkup = keys(this.props.ranges).map(key =>
+      this.props.ranges[key].map((k, i) =>
         <GeoJson
-          key={`known-${i}`}
+          key={`range-${i}`}
           data={k}
-          className="known_geojson"
+          className={`${key}_geojson`}
         />
-      );
-    }
+      ));
 
     if (this.state.geoJSONData) {
       const self = this;
@@ -153,7 +152,7 @@ class MapContainer extends Component {
         <TileLayer
           url={tileURL}
         />
-        {known}
+        {rangeMarkup}
         {geoJSONObjs}
         {labels}
       </Map>
@@ -171,8 +170,10 @@ MapContainer.propTypes = {
   router: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired,
-  location: PropTypes.object.isRequired,
-  known: PropTypes.array
+  ranges: PropTypes.object,
+  location: PropTypes.shape({
+    pathname: PropTypes.string
+  })
 };
 
 export default withRouter(MapContainer);

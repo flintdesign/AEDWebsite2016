@@ -48,8 +48,9 @@ class App extends Component {
     this.props.dispatch(toggleSearch(false));
   }
 
-  handleClick() {
-    fetchRanges('known', this.props.dispatch);
+  handleClick(e) {
+    const rangeType = e.target.getAttribute('data-range-type');
+    fetchRanges(rangeType, this.props.dispatch);
   }
 
   fetchData(props, force = false) {
@@ -92,11 +93,17 @@ class App extends Component {
       error,
       bounds,
       searchActive,
-      known
+      ranges
     } = this.props;
 
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
     const searchOverlay = searchActive ? <div className="search__overlay" /> : null;
+
+    const rangeTypes = ['known', 'possible', 'doubtful', 'protected'];
+
+    const rangeMarkup = rangeTypes.map(r =>
+      <li key={r} data-range-type={r} onClick={this.handleClick}>Click for {r}</li>
+    );
 
     return (
       <div
@@ -107,11 +114,9 @@ class App extends Component {
         onClick={toggleSearch}
       >
         <main className={mainClasses[sidebarState]}>
-          <h1
-            onClick={this.handleClick}
-          >
-            Click for Known
-          </h1>
+          <ul>
+            {rangeMarkup}
+          </ul>
           <BreadCrumbNav params={this.props.params} />
           <Nav
             expandSidebar={this.expandSidebar}
@@ -129,7 +134,7 @@ class App extends Component {
             openSidebar: this.expandSidebar,
             cancelSearch: this.cancelSearch.bind(this),
             bounds: bounds,
-            known: known
+            ranges: ranges
           })}
         </main>
         <Sidebar
@@ -178,7 +183,7 @@ App.propTypes = {
   error: PropTypes.string,
   bounds: PropTypes.array,
   searchActive: PropTypes.bool.isRequired,
-  known: PropTypes.array
+  ranges: PropTypes.object
 };
 
 const mapStateToProps = (state, props) => {
@@ -203,7 +208,7 @@ const mapStateToProps = (state, props) => {
     sidebarState: state.navigation.sidebarState,
     bounds: state.geographyData.bounds,
     searchActive: state.search.searchActive,
-    known: state.ranges.known
+    ranges: state.ranges
   };
 };
 
