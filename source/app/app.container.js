@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Nav from '../components/nav';
+import Ranges from '../components/ranges';
 import BreadCrumbNav from '../components/breadcrumb_nav';
 import Sidebar from '../components/sidebar';
 import TotalCount from '../components/total_count';
@@ -8,7 +9,12 @@ import HelpNav from '../components/help_nav';
 import { getEntityName } from '../utils/convenience_funcs';
 import { formatNumber } from '../utils/format_utils';
 import { fetchGeography, fetchRanges } from '../api';
-import { toggleSearch, expandSidebar, contractSidebar } from '../actions';
+import {
+  toggleSearch,
+  toggleLegend,
+  expandSidebar,
+  contractSidebar
+} from '../actions';
 
 class App extends Component {
   constructor(props, context) {
@@ -18,6 +24,7 @@ class App extends Component {
     this.onHandleClick = this.onHandleClick.bind(this);
     this.fetchData = this.fetchData.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleLegendClick = this.handleLegendClick.bind(this);
     this.state = {
       showSidebar: false
     };
@@ -51,6 +58,10 @@ class App extends Component {
   handleClick(e) {
     const rangeType = e.target.getAttribute('data-range-type');
     fetchRanges(rangeType, this.props.dispatch);
+  }
+
+  handleLegendClick() {
+    this.props.dispatch(toggleLegend());
   }
 
   fetchData(props, force = false) {
@@ -93,17 +104,13 @@ class App extends Component {
       error,
       bounds,
       searchActive,
-      ranges
+      ranges,
+      ui
     } = this.props;
 
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
     const searchOverlay = searchActive ? <div className="search__overlay" /> : null;
 
-    const rangeTypes = ['known', 'possible', 'doubtful', 'protected'];
-
-    const rangeMarkup = rangeTypes.map(r =>
-      <li key={r} data-range-type={r} onClick={this.handleClick}>Click for {r}</li>
-    );
 
     return (
       <div
@@ -114,9 +121,11 @@ class App extends Component {
         onClick={toggleSearch}
       >
         <main className={mainClasses[sidebarState]}>
-          <ul>
-            {rangeMarkup}
-          </ul>
+          <Ranges
+            handleClick={this.handleClick}
+            handleLegendClick={this.handleLegendClick}
+            legendActive={ui.legendActive}
+          />
           <BreadCrumbNav params={this.props.params} />
           <Nav
             expandSidebar={this.expandSidebar}
@@ -183,7 +192,8 @@ App.propTypes = {
   error: PropTypes.string,
   bounds: PropTypes.array,
   searchActive: PropTypes.bool.isRequired,
-  ranges: PropTypes.object
+  ranges: PropTypes.object,
+  ui: PropTypes.object
 };
 
 const mapStateToProps = (state, props) => {
@@ -208,7 +218,8 @@ const mapStateToProps = (state, props) => {
     sidebarState: state.navigation.sidebarState,
     bounds: state.geographyData.bounds,
     searchActive: state.search.searchActive,
-    ranges: state.ranges
+    ranges: state.ranges,
+    ui: state.ui
   };
 };
 

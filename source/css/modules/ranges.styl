@@ -1,10 +1,11 @@
+$box = #bababa
+
 .range_geojson
   z-index 100
   stroke #333
   fill #333
   stroke-width 0
   stroke-opacity 0
-
 
 .known_geojson
   @extend .range_geojson
@@ -21,3 +22,67 @@
 .doubtful_geojson
   @extend .range_geojson
   fill-opacity 0.025
+
+.range__item
+  display inline-block
+  width 100%
+  margin-bottom 10px
+  font-weight bold
+  font-size 14px
+
+.range__icon
+  float left
+  clear none
+  margin-right 10px
+  display inline-block
+  width 20px
+  height 20px
+  border-radius 50%
+  background #eee
+  position relative
+  top 2px
+
+.ranges__container
+  background #fff
+  padding 10px
+  position absolute
+  left 5%
+  z-index 100
+  top 15px
+  width 230px
+  -moz-box-shadow 0 0 3px $box
+  -webkit-box-shadow 0 0 3px $box
+  -o-box-shadow 0 0 3px $box
+  -ms-box-shadow 0 0 3px $box
+  box-shadow 0 0 3px $box
+  h3
+    color $text-light
+    letter-spacing 2px
+    font-size 13px
+    text-transform uppercase
+    position relative
+    &:after
+      position absolute
+      content '\203A'
+      font-size 20px
+    &.expanded:after
+      transform rotate(-90deg)
+      left 200px
+      bottom 2px
+    &.contracted:after
+      transform rotate(90deg)
+      left 205px
+      bottom 0
+
+
+.ranges_dropdown
+  padding 5px
+  transition max-height 200ms ease-in-out
+  overflow hidden
+  padding 0
+  margin 0
+  &.contracted
+    max-height 0
+  &.expanded
+    /* arbitrarily high height (http://stackoverflow.com/a/8331169/931934) */
+    max-height 500em

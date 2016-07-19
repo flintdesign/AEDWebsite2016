@@ -6,13 +6,16 @@ import App from './app/app.container';
 import MapContainer from './components/map_container';
 import Resources from './components/resources';
 import About from './components/about';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import rootReducer from './store/reducer';
 import thunk from 'redux-thunk';
 
 require('./css/main.styl');
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
+const store = createStore(rootReducer, compose(
+  applyMiddleware(thunk),
+  window.devToolsExtension ? window.devToolsExtension() : f => f
+));
 
 render((
   <Provider store={store}>

@@ -5,7 +5,8 @@ import {
 } from './app_actions';
 
 import {
-  RECEIVE_AUTOCOMPLETE
+  RECEIVE_AUTOCOMPLETE,
+  TOGGLE_LEGEND
 } from '../constants';
 
 export function toggleSearch(bool = null) {
@@ -13,6 +14,10 @@ export function toggleSearch(bool = null) {
     type: TOGGLE_SEARCH,
     bool
   });
+}
+
+export function toggleLegend() {
+  return ({ type: TOGGLE_LEGEND });
 }
 
 export function expandSidebar() {
