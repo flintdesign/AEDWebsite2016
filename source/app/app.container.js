@@ -13,7 +13,8 @@ import {
   toggleSearch,
   toggleLegend,
   expandSidebar,
-  contractSidebar
+  contractSidebar,
+  toggleRange
 } from '../actions';
 
 class App extends Component {
@@ -24,6 +25,7 @@ class App extends Component {
     this.onHandleClick = this.onHandleClick.bind(this);
     this.fetchData = this.fetchData.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.toggleRange = this.toggleRange.bind(this);
     this.handleLegendClick = this.handleLegendClick.bind(this);
     this.state = {
       showSidebar: false
@@ -53,6 +55,10 @@ class App extends Component {
 
   cancelSearch() {
     this.props.dispatch(toggleSearch(false));
+  }
+
+  toggleRange(rangeType) {
+    this.props.dispatch(toggleRange(rangeType));
   }
 
   handleClick(e) {
@@ -124,7 +130,8 @@ class App extends Component {
           <Ranges
             handleClick={this.handleClick}
             handleLegendClick={this.handleLegendClick}
-            legendActive={ui.legendActive}
+            toggleRange={this.toggleRange}
+            ui={ui}
           />
           <BreadCrumbNav params={this.props.params} />
           <Nav
@@ -143,7 +150,8 @@ class App extends Component {
             openSidebar: this.expandSidebar,
             cancelSearch: this.cancelSearch.bind(this),
             bounds: bounds,
-            ranges: ranges
+            ranges: ranges,
+            ui: ui
           })}
         </main>
         <Sidebar

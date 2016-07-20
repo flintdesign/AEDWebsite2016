@@ -80,14 +80,17 @@ class MapContainer extends Component {
     const geoJSONObjs = [];
     const labels = [];
 
-    const rangeMarkup = keys(this.props.ranges).map(key =>
-      this.props.ranges[key].map((k, i) =>
+    const rangeMarkup = keys(this.props.ranges).map(key => {
+      let className = `range_geojson ${key}_geojson`;
+      className += this.props.ui[key] ? ' show' : ' hide';
+      return this.props.ranges[key].map((k, i) =>
         <GeoJson
-          key={`range-${i}`}
+          key={`range-${i}-${this.props.ui[key]}`}
           data={k}
-          className={`${key}_geojson`}
+          className={className}
         />
-      ));
+      );
+    });
 
     if (this.state.geoJSONData) {
       const self = this;
@@ -167,10 +170,11 @@ MapContainer.propTypes = {
   year: PropTypes.string.isRequired,
   cancelSearch: PropTypes.func,
   bounds: PropTypes.array,
+  ui: PropTypes.object.isRequired,
+  ranges: PropTypes.object,
   router: PropTypes.shape({
     push: PropTypes.func.isRequired
   }).isRequired,
-  ranges: PropTypes.object,
   location: PropTypes.shape({
     pathname: PropTypes.string
   })

@@ -2,7 +2,7 @@ import { RECEIVE_RANGE } from '../constants';
 
 const initialState = {
   known: [],
-  doubful: [],
+  doubtful: [],
   possible: [],
   protected: []
 };

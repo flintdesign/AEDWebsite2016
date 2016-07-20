@@ -6,21 +6,21 @@ $box = #bababa
   fill #333
   stroke-width 0
   stroke-opacity 0
+  &.show
+    visibility visible
+  &.hide
+    visibility hidden
 
 .known_geojson
-  @extend .range_geojson
   fill-opacity 0.1
 
 .possible_geojson
-  @extend .range_geojson
   fill-opacity 0.07
 
 .protected_geojson
-  @extend .range_geojson
   fill-opacity 0.04
 
 .doubtful_geojson
-  @extend .range_geojson
   fill-opacity 0.025
 
 .range__item
@@ -29,6 +29,11 @@ $box = #bababa
   margin-bottom 10px
   font-weight bold
   font-size 14px
+  cursor pointer
+  &.shown .range__icon
+    background #000
+  &.hidden .range__icon
+    background #eee
 
 .range__icon
   float left
@@ -61,6 +66,7 @@ $box = #bababa
     font-size 13px
     text-transform uppercase
     position relative
+    cursor pointer
     &:after
       position absolute
       content '\203A'

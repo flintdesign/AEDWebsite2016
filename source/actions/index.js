@@ -6,7 +6,8 @@ import {
 
 import {
   RECEIVE_AUTOCOMPLETE,
-  TOGGLE_LEGEND
+  TOGGLE_LEGEND,
+  TOGGLE_RANGE
 } from '../constants';
 
 export function toggleSearch(bool = null) {
@@ -30,4 +31,8 @@ export function contractSidebar() {
 
 export function receiveAutocompleteData(data) {
   return ({ type: RECEIVE_AUTOCOMPLETE, data });
+}
+
+export function toggleRange(rangeType) {
+  return ({ type: TOGGLE_RANGE, rangeType });
 }
