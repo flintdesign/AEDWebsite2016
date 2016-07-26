@@ -27,6 +27,7 @@ class App extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.toggleRange = this.toggleRange.bind(this);
     this.handleLegendClick = this.handleLegendClick.bind(this);
+    this.cancelSearch = this.cancelSearch.bind(this);
     this.state = {
       showSidebar: false
     };
@@ -115,7 +116,9 @@ class App extends Component {
     } = this.props;
 
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
-    const searchOverlay = searchActive ? <div className="search__overlay" /> : null;
+    const searchOverlay = searchActive
+      ? <div onClick={this.cancelSearch} className="search__overlay" />
+      : null;
 
 
     return (
@@ -148,7 +151,7 @@ class App extends Component {
             subGeographyData: subGeographyData,
             year: routeYear,
             openSidebar: this.expandSidebar,
-            cancelSearch: this.cancelSearch.bind(this),
+            cancelSearch: this.cancelSearch,
             bounds: bounds,
             ranges: ranges,
             ui: ui

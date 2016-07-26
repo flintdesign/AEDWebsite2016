@@ -1,11 +1,11 @@
 import {
-  TOGGLE_SEARCH,
   EXPAND_SIDEBAR,
   CONTRACT_SIDEBAR,
 } from './app_actions';
 
 import {
   RECEIVE_AUTOCOMPLETE,
+  TOGGLE_SEARCH,
   TOGGLE_LEGEND,
   TOGGLE_RANGE
 } from '../constants';

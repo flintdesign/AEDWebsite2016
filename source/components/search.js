@@ -86,8 +86,8 @@ const Result = (props) => {
         data
       })}
     >
-    <strong className={!!region ? regionColorClass : ''}>{name}</strong>
-    <div className="search__result__parent-label">{createParentTitle(result, data)}</div>
+      <strong className={!!region ? regionColorClass : ''}>{name}</strong>
+      <div className="search__result__parent-label">{createParentTitle(result, data)}</div>
     </Link>
   );
 };
@@ -103,7 +103,7 @@ const Results = (props) => {
   const { results } = props;
   return (
     <div className="search__results">{results.map(r => (
-        <Result key={`result_${r.name}`} result={r} {...props} />
+      <Result key={`result_${r.name}`} result={r} {...props} />
     ))}</div>
   );
 };
