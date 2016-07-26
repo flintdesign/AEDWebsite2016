@@ -79,11 +79,13 @@
   max-height 410px
   overflow-y auto
   border-top 1.5px solid $border
+  border-bottom-left-radius 3px
+  border-bottom-right-radius 3px
 
 .search__result-item
-  display flex
+  display block
   text-decoration none
-  padding 0 15px
+  padding 15px
   background white
   border 1.5px solid $border
   border-top none
@@ -96,9 +98,8 @@
     background #f7f4f4
 
   strong
-    display inline-block
+    display block
     margin-right 5px
-    white-space nowrap
     max-width 60%
     text-overflow ellipsis
     overflow hidden
