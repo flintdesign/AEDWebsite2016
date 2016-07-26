@@ -34,7 +34,6 @@ const getPathForResult = ({ result, year, data }) => {
     }
     default:
   }
-  console.log(path, result.name);
   return path;
 };
 
@@ -176,7 +175,7 @@ class Search extends Component {
   }
 
   search(query) {
-    this.searchEngine.search(query, this.updateResults.bind(this), (e) => console.log(e));
+    this.searchEngine.search(query, this.updateResults.bind(this));
   }
 
   updateResults(results) {
