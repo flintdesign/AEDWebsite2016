@@ -81,9 +81,9 @@
   border-top 1.5px solid $border
 
 .search__result-item
-  display block
+  display flex
   text-decoration none
-  padding 15px
+  padding 1px 0 4px 5px
   background white
   border 1.5px solid $border
   border-top none
@@ -94,6 +94,13 @@
 
   &:hover
     background #f7f4f4
+
+  strong
+    margin-right 5px
+    white-space nowrap
+    max-width 60%
+    text-overflow ellipsis
+    overflow hidden
 
 .search__result__parent-label
   @extend .small-heading
