@@ -69,9 +69,19 @@ class MapContainer extends Component {
 
   handleClick(e) {
     const href = e.target.options.href;
+    const currentPath = this.props.location.pathname;
+    let newPath = '';
     if (location.pathname.indexOf(href) > -1) { return; }
-    const path = this.props.location.pathname + href;
-    this.props.router.push(path);
+    // Check to see if we are already at the input zone level,
+    // if so replace the last segment with the new input zone segment
+    // else add the new href to the end of the path
+    if (this.props.location.pathname.split('/').length === 5) {
+      const lastSegment = currentPath.substr(currentPath.lastIndexOf('/'));
+      newPath = currentPath.replace(lastSegment, href);
+    } else {
+      newPath = currentPath + href;
+    }
+    this.props.router.push(newPath);
     this.props.cancelSearch();
   }
 
