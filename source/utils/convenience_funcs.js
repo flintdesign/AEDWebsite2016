@@ -34,21 +34,22 @@ export const regionById = (id) => geometa.regions[id];
 
 export const replaceURLPart = (pathname, slug) => {
   const urlParts = uniq(compact(pathname.split('/')));
+  const _slug = slug.replace('/', '');
   const length = urlParts.length;
   let url = `/${urlParts[0]}`;
   switch (length) {
     case 1:
       // we only have the year, so add the slug
-      url += `/${slug}`;
+      url += `/${_slug}`;
       break;
     case 2:
       // we have a year and a region, so keep the year and the region and add the country slug
-      url += `/${urlParts[1]}/${slug}`;
+      url += `/${urlParts[1]}/${_slug}`;
       break;
     case 3:
     case 4:
       // year, region, country; add stratum/zone
-      url += `/${urlParts[1]}/${urlParts[2]}/${slug}`;
+      url += `/${urlParts[1]}/${urlParts[2]}/${_slug}`;
       break;
     default:
       url = `/${urlParts[0]}`;
