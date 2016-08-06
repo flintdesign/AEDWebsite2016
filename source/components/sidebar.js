@@ -87,6 +87,9 @@ class Sidebar extends Component {
       error,
     } = this.props;
 
+    this.handleSpanClick = this.handleSpanClick.bind(this);
+    this.handleNarrativeClick = this.handleNarrativeClick.bind(this);
+
     const years = ['2013', '2006', '2002', '1998', '1995'];
     const yearLinks = years.map(y => {
       const toVal = compact(window.location.pathname.split('/'));

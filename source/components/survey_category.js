@@ -24,6 +24,7 @@ export default class SurveyCategory extends Component {
       range_assessed,
       range_area
     } = this.props;
+    this.handleClick = this.handleClick.bind(this);
     return (
       <div className={className}>
         <h3 onClick={this.handleClick}>{surveyType}</h3>

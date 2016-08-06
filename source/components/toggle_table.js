@@ -16,7 +16,7 @@ export default class ToggleTable extends Component {
   render() {
     const { titleMarkup, rowMarkup } = this.props;
     const className = `${this.state.toggled ? 'open' : 'closed'} sidebar__table-container`;
-
+    this.handleClick = this.handleClick.bind(this);
     return (
       <div className={className}>
         <h3 onClick={this.handleClick}>{titleMarkup}</h3>

@@ -112,7 +112,9 @@ class App extends Component {
       bounds,
       searchActive,
       ranges,
-      ui
+      ui,
+      routeGeography,
+      routeGeographyId
     } = this.props;
 
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
@@ -154,7 +156,10 @@ class App extends Component {
             cancelSearch: this.cancelSearch,
             bounds: bounds,
             ranges: ranges,
-            ui: ui
+            ui: ui,
+            loading: loading,
+            routeGeography: routeGeography,
+            routeGeographyId: routeGeographyId
           })}
         </main>
         <Sidebar

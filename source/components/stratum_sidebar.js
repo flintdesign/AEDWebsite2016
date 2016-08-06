@@ -19,7 +19,7 @@ export default function StratumSidebar(props) {
           </tr>
           <tr>
             <td className="indented font-normal">Year Conducted</td>
-            <td>{formatNumber(stratum.year)}</td>
+            <td>{stratum.year}</td>
           </tr>
           <tr>
             <td className="indented font-normal">&plusmn;95% CL</td>

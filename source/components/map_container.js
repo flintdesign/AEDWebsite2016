@@ -40,7 +40,6 @@ class MapContainer extends Component {
     let obj = {};
     const coords = data.coordinates.map(flatten);
     const coordData = getCoordData(coords);
-
     if (coords.length > 1) {
       obj = {
         ...data,
@@ -65,7 +64,7 @@ class MapContainer extends Component {
   getLabelFontSize() {
     // 16px is base font size, and it should gradually increase
     // as the map zooms in.
-    return 16 + (2 * Math.abs(4 - this.state.zoomLevel));
+    return 14 + (2 * Math.abs(4 - this.state.zoomLevel));
   }
 
   handleClick(e) {
@@ -81,7 +80,6 @@ class MapContainer extends Component {
   render() {
     const geoJSONObjs = [];
     const labels = [];
-
     const rangeMarkup = keys(this.props.ranges).map(key => {
       let className = `range_geojson ${key}_geojson`;
       className += this.props.ui[key] ? ' show' : ' hide';
@@ -93,22 +91,21 @@ class MapContainer extends Component {
         />
       );
     });
-
     if (this.state.geoJSONData) {
       const self = this;
       this.state.geoJSONData.map(datum => {
         let geoJSONClassName = slugify(datum.name || '');
 
-        if (self.props.currentGeography === 'region') {
+        if (self.props.routeGeography === 'region') {
           geoJSONClassName =
-            `${self.props.currentGeography}-${self.props.currentGeographyId}__country`;
+            `region-${self.props.routeGeographyId}__country`;
         }
 
-        if (self.props.currentGeography === 'country' && datum.region) {
+        if (self.props.routeGeography === 'country' && datum.region) {
           geoJSONClassName = `region-${slugify(datum.region)}__stratum`;
         }
 
-        if (datum.coordinates && self.props.currentGeography === 'continent') {
+        if (datum.coordinates && self.props.routeGeography === 'continent' && self.props.currentGeography === 'continent') {
           const icon = divIcon({
             className: 'leaflet-marker-icon',
             html: `<h1 style="font-size:${self.getLabelFontSize()}px"
@@ -167,7 +164,9 @@ class MapContainer extends Component {
 
 MapContainer.propTypes = {
   currentGeography: PropTypes.string,
+  routeGeography: PropTypes.string,
   currentGeographyId: PropTypes.string,
+  routeGeographyId: PropTypes.string,
   subGeographyData: PropTypes.array,
   year: PropTypes.string.isRequired,
   cancelSearch: PropTypes.func,
