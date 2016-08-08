@@ -95,6 +95,7 @@ class MapContainer extends Component {
       const self = this;
       this.state.geoJSONData.map(datum => {
         let geoJSONClassName = slugify(datum.name || '');
+        let objectHref = `/${slugify(datum.name)}`;
 
         if (self.props.routeGeography === 'region') {
           geoJSONClassName =
@@ -103,6 +104,7 @@ class MapContainer extends Component {
 
         if (self.props.routeGeography === 'country' && datum.region) {
           geoJSONClassName = `region-${slugify(datum.region)}__stratum`;
+          objectHref = `/${slugify(datum.name)}-${datum.id}`;
         }
 
         if (datum.coordinates && self.props.routeGeography === 'continent' && self.props.currentGeography === 'continent') {
@@ -123,11 +125,10 @@ class MapContainer extends Component {
             />
           );
         }
-
         geoJSONObjs.push(
           <GeoJson
             key={`${datum.id}_${slugify(datum.name || '')}`}
-            href={`/${slugify(datum.name)}`}
+            href={objectHref}
             data={datum}
             className={geoJSONClassName}
             onClick={self.handleClick}

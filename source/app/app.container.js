@@ -6,7 +6,7 @@ import BreadCrumbNav from '../components/breadcrumb_nav';
 import Sidebar from '../components/sidebar';
 import TotalCount from '../components/total_count';
 import HelpNav from '../components/help_nav';
-import { getEntityName } from '../utils/convenience_funcs';
+import { getEntityName, getGeoFromId } from '../utils/convenience_funcs';
 import { formatNumber } from '../utils/format_utils';
 import { fetchGeography, fetchRanges } from '../api';
 import {
@@ -36,7 +36,7 @@ class App extends Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.location.query !== this.props.location.query) {
-      this.fetchData(newProps, true);
+      this.fetchData(newProps, false);
     }
   }
 
@@ -114,9 +114,10 @@ class App extends Component {
       ranges,
       ui,
       routeGeography,
-      routeGeographyId
+      routeGeographyId,
+      selectedStratum
     } = this.props;
-
+    console.log('selectedStratum', selectedStratum);
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
     const searchOverlay = searchActive
       ? <div onClick={this.cancelSearch} className="search__overlay" />
@@ -209,7 +210,8 @@ App.propTypes = {
   bounds: PropTypes.array,
   searchActive: PropTypes.bool.isRequired,
   ranges: PropTypes.object,
-  ui: PropTypes.object
+  ui: PropTypes.object,
+  selectedStratum: PropTypes.object
 };
 
 const mapStateToProps = (state, props) => {
@@ -218,6 +220,12 @@ const mapStateToProps = (state, props) => {
     routeGeography = 'country';
   } else if (props.params.region) {
     routeGeography = 'region';
+  }
+  let selectedStratum = null;
+  if (props.params.stratum) {
+    const stratumId = props.params.stratum;
+    const geos = state.geographyData.subGeographies;
+    selectedStratum = getGeoFromId(stratumId, geos);
   }
   return {
     error: state.geographyData.error,
@@ -235,7 +243,8 @@ const mapStateToProps = (state, props) => {
     bounds: state.geographyData.bounds,
     searchActive: state.search.searchActive,
     ranges: state.ranges,
-    ui: state.ui
+    ui: state.ui,
+    selectedStratum: selectedStratum
   };
 };
 

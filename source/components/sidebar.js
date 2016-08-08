@@ -11,7 +11,7 @@ import {
   pluralize,
   getNextGeography,
   getEntityName,
-  titleize,
+  //titleize,
   getParentRegionFromURL
 } from '../utils/convenience_funcs';
 
@@ -43,7 +43,12 @@ class Sidebar extends Component {
   getStratumFromHref() {
     const parts = this.props.location.pathname.split('/');
     const stratumName = parts[parts.length - 1];
-    return find(this.props.geographies.strata, s => s.stratum === titleize(stratumName));
+    const stratumIdParts = stratumName.split('-');
+    const stratumId = stratumIdParts[stratumIdParts.length - 1];
+    // THE FOLLOW DOES NOT WORK FOR FINDING THE RIGHT STRATUM
+    // TAKING THE URL SEGMENT AND TITLIZING DOES NOT ALWAYS
+    // RETURN A MATCHING NAME IN THE STATUM LIST
+    return find(this.props.geographies.strata, s => s.strcode === stratumId);
   }
 
   handleSpanClick(e) {

@@ -1,6 +1,7 @@
 import map from './slug_map';
 import compact from 'lodash.compact';
 import uniq from 'lodash.uniq';
+import find from 'lodash.find';
 import geometa from '../geometa';
 
 export const getNextGeography = currentGeography => {
@@ -82,4 +83,10 @@ export const getEntityName = (location) => {
 export const getParentRegionFromURL = (location) => {
   const parts = compact(location.pathname.split('/'));
   return parts.length === 1 ? '' : parts[1];
+};
+
+export const getGeoFromId = (id, geographies) => {
+  const stratumIdParts = id.split('-');
+  const stratumId = stratumIdParts[stratumIdParts.length - 1];
+  return find(geographies, s => s.strcode === stratumId);
 };

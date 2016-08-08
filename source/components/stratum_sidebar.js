@@ -3,7 +3,6 @@ import { formatNumber } from '../utils/format_utils';
 
 export default function StratumSidebar(props) {
   const { stratum } = props;
-
   return (
     <div>
       <h3 className="heading__small">Total Stratum Elephant Counts</h3>
