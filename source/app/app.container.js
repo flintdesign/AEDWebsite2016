@@ -117,7 +117,12 @@ class App extends Component {
       routeGeographyId,
       selectedStratum
     } = this.props;
-    console.log('selectedStratum', selectedStratum);
+    let finalTotalEstimate = totalEstimate;
+    if (selectedStratum) {
+      if (selectedStratum.data) {
+        finalTotalEstimate = selectedStratum.data.estimate;
+      }
+    }
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
     const searchOverlay = searchActive
       ? <div onClick={this.cancelSearch} className="search__overlay" />
@@ -180,7 +185,7 @@ class App extends Component {
         {totalEstimate &&
           <TotalCount
             entity={getEntityName(this.props.location)}
-            count={formatNumber(totalEstimate)}
+            count={formatNumber(finalTotalEstimate)}
           />
         }
         <HelpNav location={location} />
@@ -224,8 +229,12 @@ const mapStateToProps = (state, props) => {
   let selectedStratum = null;
   if (props.params.stratum) {
     const stratumId = props.params.stratum;
-    const geos = state.geographyData.subGeographies;
-    selectedStratum = getGeoFromId(stratumId, geos);
+    const geosData = state.geographyData.subGeographies;
+    const geos = state.geographyData.geographies.strata;
+    selectedStratum = {
+      geography: getGeoFromId(stratumId, geosData),
+      data: getGeoFromId(stratumId, geos)
+    };
   }
   return {
     error: state.geographyData.error,

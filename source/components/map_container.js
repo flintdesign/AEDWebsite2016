@@ -179,7 +179,8 @@ MapContainer.propTypes = {
   }).isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string
-  })
+  }),
+  selectedStratum: PropTypes.object
 };
 
 export default withRouter(MapContainer);
