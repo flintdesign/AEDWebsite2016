@@ -32,7 +32,6 @@ export function geographies(state = initialState, action) {
   };
   switch (action.type) {
     case RECEIVE_GEOGRAPHY_DATA:
-      // console.log('RECEIVE_GEOGRAPHY_DATA', action.data);
       return { ...state,
         // having null for the error value caused it
         // to not update
@@ -49,7 +48,6 @@ export function geographies(state = initialState, action) {
         ...state, error: action.data
       };
     case RECEIVE_SUBGEOGRAPHY_DATA:
-      // console.log('RECEIVE_SUBGEOGRAPHY_DATA', action.data);
       return { ...state,
         loading: false,
         subGeographies: action.data

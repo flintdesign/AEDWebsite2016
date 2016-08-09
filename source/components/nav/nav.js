@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import {
   SIDEBAR_CLOSED,
   SIDEBAR_FULL,
-} from '../constants';
+} from '../../constants';
 import Search from './search';
 
 export default function Nav(props) {

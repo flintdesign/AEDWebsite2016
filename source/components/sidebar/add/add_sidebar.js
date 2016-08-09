@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import isEmpty from 'lodash.isempty';
 import CountsBySubGeography from './counts_by_subgeography';
 import CountsBySurveyCategory from './counts_by_survey_category';
-import { pluralize, getNextGeography } from '../utils/convenience_funcs';
+import { pluralize, getNextGeography } from '../../../utils/convenience_funcs';
 
 export default function ADDSidebar(props) {
   const { geographies, currentTitle, currentGeography, year, sidebarState } = props;

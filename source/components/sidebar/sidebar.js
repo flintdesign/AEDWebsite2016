@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
-import ADDSidebar from './add_sidebar';
-import DPPSSidebar from './dpps_sidebar';
+import ADDSidebar from './add/add_sidebar';
+import DPPSSidebar from './dpps/dpps_sidebar';
 import StratumSidebar from './stratum_sidebar';
 import CountTypeToggle from './count_type_toggle';
 import compact from 'lodash.compact';
@@ -13,7 +13,7 @@ import {
   getEntityName,
   //titleize,
   getParentRegionFromURL
-} from '../utils/convenience_funcs';
+} from '../../utils/convenience_funcs';
 
 class Sidebar extends Component {
   constructor(props, context) {

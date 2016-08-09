@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { formatNumber, formatFloat } from '../utils/format_utils.js';
+import { formatNumber, formatFloat } from '../../../utils/format_utils.js';
 
 export default class SurveyCategory extends Component {
   constructor(props, context) {

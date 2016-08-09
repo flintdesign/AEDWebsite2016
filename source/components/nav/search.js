@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
-import { toggleSearch, receiveAutocompleteData } from '../actions';
+import { toggleSearch, receiveAutocompleteData } from '../../actions';
 import { connect } from 'react-redux';
-import { SEARCH_PLACEHOLDER } from '../constants';
-import { slugify, titleize } from '../utils/convenience_funcs';
+import { SEARCH_PLACEHOLDER } from '../../constants';
+import { slugify, titleize } from '../../utils/convenience_funcs';
 import Bloodhound from 'bloodhound-js';
-import { fetchSearchData } from '../api';
+import { fetchSearchData } from '../../api';
 import assign from 'lodash.assign';
 
 const getPathForResult = ({ result, year, data }) => {

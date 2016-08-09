@@ -2,8 +2,8 @@ import React, { PropTypes } from 'react';
 import find from 'lodash.find';
 import ParentADD from './parent_add';
 import SurveyCategory from './survey_category';
-import { SIDEBAR_FULL } from '../constants';
-import { formatNumber } from '../utils/format_utils.js';
+import { SIDEBAR_FULL } from '../../../constants';
+import { formatNumber } from '../../../utils/format_utils.js';
 
 export default function CountsBySurveyCategory(props) {
   const { summary_totals, areas, sidebarState, totals, year } = props;

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-import { titleize } from '../utils/convenience_funcs';
+import { titleize } from '../../utils/convenience_funcs';
 import compact from 'lodash.compact';
 
 const PATH_PARTS = ['year', 'region', 'country', 'stratum'];

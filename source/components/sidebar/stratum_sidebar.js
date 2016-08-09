@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { formatNumber } from '../utils/format_utils';
+import { formatNumber } from '../../utils/format_utils';
 
 export default function StratumSidebar(props) {
   const { stratum } = props;

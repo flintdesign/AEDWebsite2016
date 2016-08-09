@@ -60,11 +60,24 @@ class MapContainer extends Component {
     return obj;
   }
 
-
   getLabelFontSize() {
     // 16px is base font size, and it should gradually increase
     // as the map zooms in.
     return 14 + (2 * Math.abs(4 - this.state.zoomLevel));
+  }
+
+  getRangeMarkup(ranges, ui) {
+    return keys(ranges).map(key => {
+      let className = `range_geojson ${key}_geojson`;
+      className += ui[key] ? ' show' : ' hide';
+      return ranges[key].map((k, i) =>
+        <GeoJson
+          key={`range-${i}-${ui[key]}`}
+          data={k}
+          className={className}
+        />
+      );
+    });
   }
 
   handleClick(e) {
@@ -76,21 +89,10 @@ class MapContainer extends Component {
     this.props.cancelSearch();
   }
 
-
   render() {
     const geoJSONObjs = [];
     const labels = [];
-    const rangeMarkup = keys(this.props.ranges).map(key => {
-      let className = `range_geojson ${key}_geojson`;
-      className += this.props.ui[key] ? ' show' : ' hide';
-      return this.props.ranges[key].map((k, i) =>
-        <GeoJson
-          key={`range-${i}-${this.props.ui[key]}`}
-          data={k}
-          className={className}
-        />
-      );
-    });
+    const rangeMarkup = this.getRangeMarkup(this.props.ranges, this.props.ui);
     if (this.state.geoJSONData) {
       const self = this;
       this.state.geoJSONData.map(datum => {
@@ -142,7 +144,6 @@ class MapContainer extends Component {
 
     /* eslint max-len: [0] */
     const tileURL = `${config.mapboxURL}/tiles/256/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`;
-
     return (
       <Map
         bounds={this.props.bounds}

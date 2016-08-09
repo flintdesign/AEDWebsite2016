@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Nav from '../components/nav';
+import Nav from '../components/nav/nav';
+import BreadCrumbNav from '../components/nav/breadcrumb_nav';
+import HelpNav from '../components/nav/help_nav';
 import Ranges from '../components/ranges';
-import BreadCrumbNav from '../components/breadcrumb_nav';
-import Sidebar from '../components/sidebar';
+import Sidebar from '../components/sidebar/sidebar';
 import TotalCount from '../components/total_count';
-import HelpNav from '../components/help_nav';
 import { getEntityName, getGeoFromId } from '../utils/convenience_funcs';
 import { formatNumber } from '../utils/format_utils';
 import { fetchGeography, fetchRanges } from '../api';
@@ -127,7 +127,6 @@ class App extends Component {
     const searchOverlay = searchActive
       ? <div onClick={this.cancelSearch} className="search__overlay" />
       : null;
-
 
     return (
       <div

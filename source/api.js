@@ -21,6 +21,9 @@ import { FETCH_RANGE, RECEIVE_RANGE } from './constants';
 
 import cache from 'memory-cache';
 
+const fiveMinutes = 1000 * 60 * 5;
+const cacheDuration = fiveMinutes;
+
 /*
 *   Fetches geoJSON data from the API for a single geography
 *
@@ -42,15 +45,25 @@ export function fetchGeoJSON(geoType, geoItem) {
   // Get the ID or (if the item is a country) ISO code
   const geoId = geoItem.iso_code || geoItem.id || geoItem.strcode;
 
+  const cacheKey = `geojson-${geoType}-${geoId}`;
+  const cacheResponse = cache.get(cacheKey);
+  if (cacheResponse) {
+    return cacheResponse;
+  }
+
   // Fetch the geoJSON data
   return fetch(`${config.apiBaseURL}/${geoType}/${geoId}/geojson_map${getSimplifyParam(geoType)}`)
   .then(r => r.json())
-  .then(d => ({
-    ...d,
-    ...geoItem,
-    name: geoItem[geoType] || geoItem[geoType.toUpperCase()],
-    id: geoItem.id || geoItem.iso_code || geoItem.strcode
-  }));
+  .then(d => {
+    const output = {
+      ...d,
+      ...geoItem,
+      name: geoItem[geoType] || geoItem[geoType.toUpperCase()],
+      id: geoItem.id || geoItem.iso_code || geoItem.strcode
+    };
+    cache.put(cacheKey, output, cacheDuration);
+    return output;
+  });
 }
 
 /*
@@ -79,9 +92,6 @@ export function loadSubGeography(dispatch, data, subGeoType) {
     });
   });
 }
-
-const fiveMinutes = 1000 * 60 * 5;
-const cacheDuration = fiveMinutes;
 
 function fetchBounds(dispatch, geoType, mappedId) {
   // look up in cache first
@@ -168,12 +178,13 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
       .then(r => r.json())
       .then(d2 => {
         // dispatch "receive" action with response data
+        const dataWithNarrative = { ...data, narrative: d2.narrative };
+        console.log(dataWithNarrative);
         dispatch({
           type: RECEIVE_GEOGRAPHY_DATA,
-          data: { ...data, narrative: d2.narrative }
+          data: dataWithNarrative
         });
       });
-
 
       // fetch subgeography data
       const subGeoType = getNextGeography(geoType);
