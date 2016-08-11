@@ -8,4 +8,4 @@ export const RECEIVE_BOUNDS = 'RECEIVE_BOUNDS';
 export const EXPAND_SIDEBAR = 'EXPAND_SIDEBAR';
 export const CONTRACT_SIDEBAR = 'CONTRACT_SIDEBAR';
 
-export const CHANGE_LEVEL = 'CHANGE_LEVEL';
+export const CHANGE_MAP = 'CHANGE_MAP';

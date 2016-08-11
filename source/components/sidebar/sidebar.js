@@ -30,6 +30,11 @@ class Sidebar extends Component {
     };
   }
 
+  componentDidMount() {
+    this.handleSpanClick = this.handleSpanClick.bind(this);
+    this.handleNarrativeClick = this.handleNarrativeClick.bind(this);
+  }
+
   onAStratum() {
     return compact(this.props.location.pathname.split('/')).length === 4;
   }
@@ -66,6 +71,8 @@ class Sidebar extends Component {
       (vizType === 'add' && isArray(geographies[`${pluralize(subGeography)}_sums`]))
       ||
       (vizType === 'dpps' && isArray(geographies[`${pluralize(subGeography)}_sum`]))
+      ||
+      (currentGeography === 'country' && !this.onAStratum())
     );
   }
 
@@ -91,11 +98,7 @@ class Sidebar extends Component {
       currentNarrative,
       error,
     } = this.props;
-
-    this.handleSpanClick = this.handleSpanClick.bind(this);
-    this.handleNarrativeClick = this.handleNarrativeClick.bind(this);
-
-    const years = ['2013', '2006', '2002', '1998', '1995'];
+    const years = ['2015', '2013', '2006', '2002', '1998', '1995'];
     const yearLinks = years.map(y => {
       const toVal = compact(window.location.pathname.split('/'));
       const linkVal = toVal.length ? `${y}/${toVal.splice(1).join('/')}` : y;

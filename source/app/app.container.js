@@ -31,7 +31,10 @@ class App extends Component {
     this.state = {
       showSidebar: false
     };
-    this.fetchData(props, true);
+  }
+
+  componentDidMount() {
+    this.fetchData(this.props, true);
   }
 
   componentWillReceiveProps(newProps) {
@@ -164,7 +167,8 @@ class App extends Component {
             ui: ui,
             loading: loading,
             routeGeography: routeGeography,
-            routeGeographyId: routeGeographyId
+            routeGeographyId: routeGeographyId,
+            dispatch: dispatch
           })}
         </main>
         <Sidebar

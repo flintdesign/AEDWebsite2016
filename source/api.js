@@ -100,17 +100,18 @@ function fetchBounds(dispatch, geoType, mappedId) {
   if (cacheResponse) {
     return dispatch({ type: RECEIVE_BOUNDS, data: cacheResponse });
   }
-
+  const url = `${config.apiBaseURL}/${geoType}/${mappedId}/geojson_map`;
   // value not cached; fetching
-  return fetch(`${config.apiBaseURL}/${geoType}/${mappedId}/geojson_map`)
+  return fetch(url)
     .then(r => r.json())
     .then(d => {
       const coords = d.coordinates.map(flatten);
       const bounds = getCoordData(coords).bounds;
-      cache.put(cacheKey, bounds, cacheDuration);
+      const data = { bounds: bounds, border: d };
+      cache.put(cacheKey, data, cacheDuration);
       dispatch({
         type: RECEIVE_BOUNDS,
-        data: bounds
+        data
       });
     });
 }
@@ -179,7 +180,6 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
       .then(d2 => {
         // dispatch "receive" action with response data
         const dataWithNarrative = { ...data, narrative: d2.narrative };
-        console.log(dataWithNarrative);
         dispatch({
           type: RECEIVE_GEOGRAPHY_DATA,
           data: dataWithNarrative

@@ -11,7 +11,7 @@ export default {
 
   /* countries: central-africa */
   'democratic-republic-of-congo': 'CD',
-  'central african republic': 'CF',
+  'central-african-republic': 'CF',
   'congo': 'CG',
   'cameroon': 'CM',
   'gabon': 'GA',

@@ -11,6 +11,9 @@ import {
   getNextGeography,
   replaceURLPart
 } from '../utils/convenience_funcs';
+import {
+  CHANGE_MAP,
+} from '../actions/app_actions';
 
 class MapContainer extends Component {
   constructor(props, context) {
@@ -87,6 +90,7 @@ class MapContainer extends Component {
     if (location.pathname.indexOf(href) > -1) { return; }
     this.props.router.push(newPath);
     this.props.cancelSearch();
+    this.props.dispatch({ type: CHANGE_MAP, data: 'test' });
   }
 
   render() {
@@ -181,7 +185,8 @@ MapContainer.propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string
   }),
-  selectedStratum: PropTypes.object
+  selectedStratum: PropTypes.object,
+  dispatch: PropTypes.func.isRequired
 };
 
 export default withRouter(MapContainer);

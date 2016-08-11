@@ -10,8 +10,19 @@ export default function ADDSidebar(props) {
   const data = type => geographies[`${type}_sums`][0];
 
   // TODO The API is broken on this at the country level
-  const addData = geographies[`${pluralize(subGeography)}_sums`][0];
-
+  let addData;
+  if (currentGeography === 'country') {
+    addData = {
+      PERCENT_OF_RANGE_ASSESSED: geographies.areas[0].percent_range_assessed,
+      ASSESSED_RANGE: geographies.assessed_range,
+      ESTIMATE: geographies.summary_sums[0].ESTIMATE,
+      GUESS_MIN: geographies.summary_sums[0].GUESS_MIN,
+      GUESS_MAX: geographies.summary_sums[0].GUESS_MAX,
+      RANGE_AREA: geographies.areas[0].range_area
+    };
+  } else {
+    addData = geographies[`${pluralize(subGeography)}_sums`][0];
+  }
 
   return (
     <div>
