@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 import isEmpty from 'lodash.isempty';
 import ParentDPPS from './parent_dpps';
-import AreaRange from './area_range';
+import AreaRange from '../area_range';
 import SurveyTypeDPPS from './survey_type_dpps';
 import ChildDPPS from './child_dpps';
-import { formatNumber } from '../utils/format_utils.js';
-import { pluralize, getNextGeography } from '../utils/convenience_funcs';
+import { formatNumber } from '../../../utils/format_utils.js';
+import { pluralize, getNextGeography } from '../../../utils/convenience_funcs';
 
 export default function DPPSSidebar(props) {
   const { geographies, currentTitle, currentGeography } = props;

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
-import AreaRange from './area_range';
-import { formatNumber, formatFloat } from '../utils/format_utils.js';
+import AreaRange from '../area_range';
+import { formatNumber, formatFloat } from '../../../utils/format_utils.js';
 
 export default function ParentADD(props) {
   const { data, year } = props;

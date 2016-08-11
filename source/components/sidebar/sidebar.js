@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
-import ADDSidebar from './add_sidebar';
-import DPPSSidebar from './dpps_sidebar';
+import ADDSidebar from './add/add_sidebar';
+import DPPSSidebar from './dpps/dpps_sidebar';
 import StratumSidebar from './stratum_sidebar';
 import CountTypeToggle from './count_type_toggle';
 import compact from 'lodash.compact';
@@ -11,9 +11,9 @@ import {
   pluralize,
   getNextGeography,
   getEntityName,
-  titleize,
+  //titleize,
   getParentRegionFromURL
-} from '../utils/convenience_funcs';
+} from '../../utils/convenience_funcs';
 
 class Sidebar extends Component {
   constructor(props, context) {
@@ -30,6 +30,11 @@ class Sidebar extends Component {
     };
   }
 
+  componentDidMount() {
+    this.handleSpanClick = this.handleSpanClick.bind(this);
+    this.handleNarrativeClick = this.handleNarrativeClick.bind(this);
+  }
+
   onAStratum() {
     return compact(this.props.location.pathname.split('/')).length === 4;
   }
@@ -43,7 +48,12 @@ class Sidebar extends Component {
   getStratumFromHref() {
     const parts = this.props.location.pathname.split('/');
     const stratumName = parts[parts.length - 1];
-    return find(this.props.geographies.strata, s => s.stratum === titleize(stratumName));
+    const stratumIdParts = stratumName.split('-');
+    const stratumId = stratumIdParts[stratumIdParts.length - 1];
+    // THE FOLLOW DOES NOT WORK FOR FINDING THE RIGHT STRATUM
+    // TAKING THE URL SEGMENT AND TITLIZING DOES NOT ALWAYS
+    // RETURN A MATCHING NAME IN THE STATUM LIST
+    return find(this.props.geographies.strata, s => s.strcode === stratumId);
   }
 
   handleSpanClick(e) {
@@ -61,6 +71,8 @@ class Sidebar extends Component {
       (vizType === 'add' && isArray(geographies[`${pluralize(subGeography)}_sums`]))
       ||
       (vizType === 'dpps' && isArray(geographies[`${pluralize(subGeography)}_sum`]))
+      ||
+      (currentGeography === 'country' && !this.onAStratum())
     );
   }
 
@@ -86,11 +98,7 @@ class Sidebar extends Component {
       currentNarrative,
       error,
     } = this.props;
-
-    this.handleSpanClick = this.handleSpanClick.bind(this);
-    this.handleNarrativeClick = this.handleNarrativeClick.bind(this);
-
-    const years = ['2013', '2006', '2002', '1998', '1995'];
+    const years = ['2015', '2013', '2006', '2002', '1998', '1995'];
     const yearLinks = years.map(y => {
       const toVal = compact(window.location.pathname.split('/'));
       const linkVal = toVal.length ? `${y}/${toVal.splice(1).join('/')}` : y;

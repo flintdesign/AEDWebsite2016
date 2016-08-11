@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
-import { formatNumber } from '../utils/format_utils.js';
-import { capitalize } from '../utils/convenience_funcs.js';
-import { SIDEBAR_FULL } from '../constants';
+import { formatNumber } from '../../../utils/format_utils.js';
+import { capitalize } from '../../../utils/convenience_funcs.js';
+import { SIDEBAR_FULL } from '../../../constants';
 
 export default function CountsBySubGeography(props) {
   const { geographies, subGeography, sidebarState, totals } = props;

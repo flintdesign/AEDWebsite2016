@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Nav from '../components/nav';
+import Nav from '../components/nav/nav';
+import BreadCrumbNav from '../components/nav/breadcrumb_nav';
+import HelpNav from '../components/nav/help_nav';
 import Ranges from '../components/ranges';
-import BreadCrumbNav from '../components/breadcrumb_nav';
-import Sidebar from '../components/sidebar';
+import Sidebar from '../components/sidebar/sidebar';
 import TotalCount from '../components/total_count';
-import HelpNav from '../components/help_nav';
-import { getEntityName } from '../utils/convenience_funcs';
+import { getEntityName, getGeoFromId } from '../utils/convenience_funcs';
 import { formatNumber } from '../utils/format_utils';
 import { fetchGeography, fetchRanges } from '../api';
 import {
@@ -31,12 +31,15 @@ class App extends Component {
     this.state = {
       showSidebar: false
     };
-    this.fetchData(props, true);
+  }
+
+  componentDidMount() {
+    this.fetchData(this.props, true);
   }
 
   componentWillReceiveProps(newProps) {
     if (newProps.location.query !== this.props.location.query) {
-      this.fetchData(newProps, true);
+      this.fetchData(newProps, false);
     }
   }
 
@@ -114,14 +117,19 @@ class App extends Component {
       ranges,
       ui,
       routeGeography,
-      routeGeographyId
+      routeGeographyId,
+      selectedStratum
     } = this.props;
-
+    let finalTotalEstimate = totalEstimate;
+    if (selectedStratum) {
+      if (selectedStratum.data) {
+        finalTotalEstimate = selectedStratum.data.estimate;
+      }
+    }
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
     const searchOverlay = searchActive
       ? <div onClick={this.cancelSearch} className="search__overlay" />
       : null;
-
 
     return (
       <div
@@ -159,7 +167,8 @@ class App extends Component {
             ui: ui,
             loading: loading,
             routeGeography: routeGeography,
-            routeGeographyId: routeGeographyId
+            routeGeographyId: routeGeographyId,
+            dispatch: dispatch
           })}
         </main>
         <Sidebar
@@ -179,7 +188,7 @@ class App extends Component {
         {totalEstimate &&
           <TotalCount
             entity={getEntityName(this.props.location)}
-            count={formatNumber(totalEstimate)}
+            count={formatNumber(finalTotalEstimate)}
           />
         }
         <HelpNav location={location} />
@@ -209,7 +218,8 @@ App.propTypes = {
   bounds: PropTypes.array,
   searchActive: PropTypes.bool.isRequired,
   ranges: PropTypes.object,
-  ui: PropTypes.object
+  ui: PropTypes.object,
+  selectedStratum: PropTypes.object
 };
 
 const mapStateToProps = (state, props) => {
@@ -218,6 +228,16 @@ const mapStateToProps = (state, props) => {
     routeGeography = 'country';
   } else if (props.params.region) {
     routeGeography = 'region';
+  }
+  let selectedStratum = null;
+  if (props.params.stratum) {
+    const stratumId = props.params.stratum;
+    const geosData = state.geographyData.subGeographies;
+    const geos = state.geographyData.geographies.strata;
+    selectedStratum = {
+      geography: getGeoFromId(stratumId, geosData),
+      data: getGeoFromId(stratumId, geos)
+    };
   }
   return {
     error: state.geographyData.error,
@@ -235,7 +255,8 @@ const mapStateToProps = (state, props) => {
     bounds: state.geographyData.bounds,
     searchActive: state.search.searchActive,
     ranges: state.ranges,
-    ui: state.ui
+    ui: state.ui,
+    selectedStratum: selectedStratum
   };
 };
 

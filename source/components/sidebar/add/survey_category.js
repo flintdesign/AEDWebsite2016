@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { formatNumber, formatFloat } from '../utils/format_utils.js';
+import { formatNumber, formatFloat } from '../../../utils/format_utils.js';
 
 export default class SurveyCategory extends Component {
   constructor(props, context) {
@@ -8,6 +8,10 @@ export default class SurveyCategory extends Component {
     this.state = {
       toggled: false
     };
+  }
+
+  componentDidMount() {
+    this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick() {
@@ -24,7 +28,6 @@ export default class SurveyCategory extends Component {
       range_assessed,
       range_area
     } = this.props;
-    this.handleClick = this.handleClick.bind(this);
     return (
       <div className={className}>
         <h3 onClick={this.handleClick}>{surveyType}</h3>

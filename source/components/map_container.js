@@ -11,6 +11,9 @@ import {
   getNextGeography,
   replaceURLPart
 } from '../utils/convenience_funcs';
+import {
+  CHANGE_MAP,
+} from '../actions/app_actions';
 
 class MapContainer extends Component {
   constructor(props, context) {
@@ -60,11 +63,24 @@ class MapContainer extends Component {
     return obj;
   }
 
-
   getLabelFontSize() {
     // 16px is base font size, and it should gradually increase
     // as the map zooms in.
     return 14 + (2 * Math.abs(4 - this.state.zoomLevel));
+  }
+
+  getRangeMarkup(ranges, ui) {
+    return keys(ranges).map(key => {
+      let className = `range_geojson ${key}_geojson`;
+      className += ui[key] ? ' show' : ' hide';
+      return ranges[key].map((k, i) =>
+        <GeoJson
+          key={`range-${i}-${ui[key]}`}
+          data={k}
+          className={className}
+        />
+      );
+    });
   }
 
   handleClick(e) {
@@ -74,27 +90,18 @@ class MapContainer extends Component {
     if (location.pathname.indexOf(href) > -1) { return; }
     this.props.router.push(newPath);
     this.props.cancelSearch();
+    this.props.dispatch({ type: CHANGE_MAP, data: 'test' });
   }
-
 
   render() {
     const geoJSONObjs = [];
     const labels = [];
-    const rangeMarkup = keys(this.props.ranges).map(key => {
-      let className = `range_geojson ${key}_geojson`;
-      className += this.props.ui[key] ? ' show' : ' hide';
-      return this.props.ranges[key].map((k, i) =>
-        <GeoJson
-          key={`range-${i}-${this.props.ui[key]}`}
-          data={k}
-          className={className}
-        />
-      );
-    });
+    const rangeMarkup = this.getRangeMarkup(this.props.ranges, this.props.ui);
     if (this.state.geoJSONData) {
       const self = this;
       this.state.geoJSONData.map(datum => {
         let geoJSONClassName = slugify(datum.name || '');
+        let objectHref = `/${slugify(datum.name)}`;
 
         if (self.props.routeGeography === 'region') {
           geoJSONClassName =
@@ -103,6 +110,7 @@ class MapContainer extends Component {
 
         if (self.props.routeGeography === 'country' && datum.region) {
           geoJSONClassName = `region-${slugify(datum.region)}__stratum`;
+          objectHref = `/${slugify(datum.name)}-${datum.id}`;
         }
 
         if (datum.coordinates && self.props.routeGeography === 'continent' && self.props.currentGeography === 'continent') {
@@ -123,11 +131,10 @@ class MapContainer extends Component {
             />
           );
         }
-
         geoJSONObjs.push(
           <GeoJson
             key={`${datum.id}_${slugify(datum.name || '')}`}
-            href={`/${slugify(datum.name)}`}
+            href={objectHref}
             data={datum}
             className={geoJSONClassName}
             onClick={self.handleClick}
@@ -141,7 +148,6 @@ class MapContainer extends Component {
 
     /* eslint max-len: [0] */
     const tileURL = `${config.mapboxURL}/tiles/256/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`;
-
     return (
       <Map
         bounds={this.props.bounds}
@@ -178,7 +184,9 @@ MapContainer.propTypes = {
   }).isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string
-  })
+  }),
+  selectedStratum: PropTypes.object,
+  dispatch: PropTypes.func.isRequired
 };
 
 export default withRouter(MapContainer);

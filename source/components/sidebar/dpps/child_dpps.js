@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { formatNumber } from '../utils/format_utils.js';
+import { formatNumber } from '../../../utils/format_utils.js';
 import ToggleTable from './toggle_table.js';
 
 export default function ChildDPPS(props) {
