@@ -113,6 +113,7 @@ class App extends Component {
       sidebarState,
       error,
       bounds,
+      // border,
       searchActive,
       ranges,
       ui,
@@ -130,7 +131,6 @@ class App extends Component {
     const searchOverlay = searchActive
       ? <div onClick={this.cancelSearch} className="search__overlay" />
       : null;
-
     return (
       <div
         className={
@@ -216,6 +216,7 @@ App.propTypes = {
   sidebarState: PropTypes.number,
   error: PropTypes.string,
   bounds: PropTypes.array,
+  // border: PropTypes.object,
   searchActive: PropTypes.bool.isRequired,
   ranges: PropTypes.object,
   ui: PropTypes.object,
@@ -253,6 +254,7 @@ const mapStateToProps = (state, props) => {
     subGeographyData: state.geographyData.subGeographies,
     sidebarState: state.navigation.sidebarState,
     bounds: state.geographyData.bounds,
+    // border: state.geographyData.border,
     searchActive: state.search.searchActive,
     ranges: state.ranges,
     ui: state.ui,

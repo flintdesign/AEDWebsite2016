@@ -18,6 +18,7 @@ const initialState = {
   currentGeography: 'continent',
   currentGeographyId: 'africa',
   currentNarrative: null,
+  border: {}
 };
 export function geographies(state = initialState, action) {
   switch (action.type) {
@@ -44,7 +45,7 @@ export function geographies(state = initialState, action) {
       };
     case RECEIVE_BOUNDS:
       return {
-        ...state, bounds: action.data.bounds
+        ...state, bounds: action.bounds
       };
     case FETCH_GEOGRAPHY_DATA:
     case FETCH_SUBGEOGRAPHY_DATA:

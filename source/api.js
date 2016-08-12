@@ -66,6 +66,20 @@ export function fetchGeoJSON(geoType, geoItem) {
   });
 }
 
+export function fetchGeoJSONById(type, id) {
+  // Fetch the geoJSON data
+  return fetch(`${config.apiBaseURL}/${type}/${id}/geojson_map`)
+  .then(r => r.json())
+  .then(d => {
+    const output = {
+      ...d,
+      id,
+      type
+    };
+    return output;
+  });
+}
+
 /*
 *   Fetches and loads geoJSON data into the store. This is a separate method
 *   because the subGeography list may be sourced either from previously-fetched
@@ -98,20 +112,19 @@ function fetchBounds(dispatch, geoType, mappedId) {
   const cacheKey = `${geoType}-${mappedId}`;
   const cacheResponse = cache.get(cacheKey);
   if (cacheResponse) {
-    return dispatch({ type: RECEIVE_BOUNDS, data: cacheResponse });
+    return dispatch({ type: RECEIVE_BOUNDS, bounds: cacheResponse });
   }
-  const url = `${config.apiBaseURL}/${geoType}/${mappedId}/geojson_map`;
+  const url = `${config.apiBaseURL}/${geoType}/${mappedId}/geojson_map?simplify=4.0`;
   // value not cached; fetching
   return fetch(url)
     .then(r => r.json())
     .then(d => {
       const coords = d.coordinates.map(flatten);
       const bounds = getCoordData(coords).bounds;
-      const data = { bounds: bounds, border: d };
-      cache.put(cacheKey, data, cacheDuration);
+      cache.put(cacheKey, bounds, cacheDuration);
       dispatch({
         type: RECEIVE_BOUNDS,
-        data
+        bounds: bounds
       });
     });
 }

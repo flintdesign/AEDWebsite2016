@@ -83,9 +83,11 @@ path
 
 .region-west-africa__country
   fill-opacity 0.1
+  stroke-opacity 0
   
   &:hover
     fill-opacity 0.2
+    stroke-opacity 1
 
 .region-central-africa__country,
 .region-central-africa__stratum
@@ -128,4 +130,38 @@ path
   fill-opacity 0.1
   
   &:hover
-    fill-opacity 0.2
+    fill-opacity 0.2  
+    
+.border
+  fill-opacity 0
+  
+.border--eastern-africa.border--region
+  stroke $eastern-africa
+  fill-opacity 0
+  stroke-width 3
+  pointer-events none
+
+.border--southern-africa.border--region
+  stroke $southern-africa
+  fill-opacity 0
+  stroke-width 3
+  pointer-events none
+
+.border--west-africa.border--region
+  stroke $west-africa
+  fill-opacity 0
+  stroke-width 3
+  pointer-events none
+
+.border--central-africa.border--region
+  stroke $central-africa
+  fill-opacity 0
+  stroke-width 3
+  pointer-events none
+
+.border--country
+  stroke black
+  fill-opacity 0
+  stroke-width 3
+  pointer-events none
+

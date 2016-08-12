@@ -95,6 +95,7 @@ class MapContainer extends Component {
 
   render() {
     const geoJSONObjs = [];
+    // const geoJSONBorderObjs = [];
     const labels = [];
     const rangeMarkup = this.getRangeMarkup(this.props.ranges, this.props.ui);
     if (this.state.geoJSONData) {
@@ -128,6 +129,8 @@ class MapContainer extends Component {
               position={getLabelPosition(datum)}
               name={datum.name}
               icon={icon}
+              href={objectHref}
+              onClick={self.handleClick}
             />
           );
         }
@@ -145,7 +148,15 @@ class MapContainer extends Component {
         return datum;
       });
     }
-
+    // if (this.props.border.coordinates && !this.props.loading) {
+    //   geoJSONBorderObjs.push(
+    //     <GeoJson
+    //       key={`border_${this.props.currentGeographyId}`}
+    //       data={this.props.border}
+    //       className={`border border--${this.props.currentGeographyId} border--${this.props.currentGeography}`}
+    //     />
+    //   );
+    // }
     /* eslint max-len: [0] */
     const tileURL = `${config.mapboxURL}/tiles/256/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`;
     return (
@@ -177,6 +188,9 @@ MapContainer.propTypes = {
   year: PropTypes.string.isRequired,
   cancelSearch: PropTypes.func,
   bounds: PropTypes.array,
+  // border: PropTypes.object,
+  loading: PropTypes.bool,
+  params: PropTypes.object,
   ui: PropTypes.object.isRequired,
   ranges: PropTypes.object,
   router: PropTypes.shape({
