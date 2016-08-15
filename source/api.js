@@ -15,6 +15,7 @@ import {
   FETCH_SUBGEOGRAPHY_DATA,
   RECEIVE_SUBGEOGRAPHY_DATA,
   RECEIVE_BOUNDS,
+  RECEIVE_BORDER,
 } from './actions/app_actions';
 
 import { FETCH_RANGE, RECEIVE_RANGE } from './constants';
@@ -66,6 +67,20 @@ export function fetchGeoJSON(geoType, geoItem) {
   });
 }
 
+export function fetchGeoJSONById(type, id) {
+  // Fetch the geoJSON data
+  return fetch(`${config.apiBaseURL}/${type}/${id}/geojson_map`)
+  .then(r => r.json())
+  .then(d => {
+    const output = {
+      ...d,
+      id,
+      type
+    };
+    return output;
+  });
+}
+
 /*
 *   Fetches and loads geoJSON data into the store. This is a separate method
 *   because the subGeography list may be sourced either from previously-fetched
@@ -98,24 +113,42 @@ function fetchBounds(dispatch, geoType, mappedId) {
   const cacheKey = `${geoType}-${mappedId}`;
   const cacheResponse = cache.get(cacheKey);
   if (cacheResponse) {
-    return dispatch({ type: RECEIVE_BOUNDS, data: cacheResponse });
+    return dispatch({ type: RECEIVE_BOUNDS, bounds: cacheResponse });
   }
-  const url = `${config.apiBaseURL}/${geoType}/${mappedId}/geojson_map`;
+  const url = `${config.apiBaseURL}/${geoType}/${mappedId}/geojson_map?simplify=4.0`;
   // value not cached; fetching
   return fetch(url)
     .then(r => r.json())
     .then(d => {
       const coords = d.coordinates.map(flatten);
       const bounds = getCoordData(coords).bounds;
-      const data = { bounds: bounds, border: d };
-      cache.put(cacheKey, data, cacheDuration);
+      cache.put(cacheKey, bounds, cacheDuration);
       dispatch({
         type: RECEIVE_BOUNDS,
-        data
+        bounds: bounds
       });
     });
 }
 
+function fetchBorder(dispatch, geoType, mappedId) {
+  // look up in cache first
+  const cacheKey = `border-${geoType}-${mappedId}`;
+  const cacheResponse = cache.get(cacheKey);
+  if (cacheResponse) {
+    return dispatch({ type: RECEIVE_BORDER, border: cacheResponse });
+  }
+  const url = `${config.apiBaseURL}/${geoType}/${mappedId}/geojson_map`;
+  // value not cached; fetching
+  return fetch(url)
+    .then(r => r.json())
+    .then(d => {
+      cache.put(cacheKey, d, cacheDuration);
+      dispatch({
+        type: RECEIVE_BORDER,
+        border: d
+      });
+    });
+}
 
 /*
 *   Fetches a list of subGeographies from the API and sends that data to the
@@ -156,10 +189,16 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
   // Dispatch the "loading" action
   dispatch({ type: FETCH_GEOGRAPHY_DATA, data: { countType: count } });
 
-  const mappedId = mapSlugToId(slug);
+  let mappedId;
+  if (type === 'stratum') {
+    mappedId = id;
+  } else {
+    mappedId = mapSlugToId(slug);
+  }
 
   // fetch bound
   fetchBounds(dispatch, geoType, mappedId);
+  fetchBorder(dispatch, geoType, mappedId);
 
   const fetchURL = `${config.apiBaseURL}/${type}/${mappedId}/${year}/${count}`;
   // Dispatch async call to the APIk

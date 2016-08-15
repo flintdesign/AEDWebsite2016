@@ -11,6 +11,7 @@ export default function ADDSidebar(props) {
 
   // TODO The API is broken on this at the country level
   let addData;
+  let addChangeData;
   if (currentGeography === 'country') {
     addData = {
       PERCENT_OF_RANGE_ASSESSED: geographies.areas[0].percent_range_assessed,
@@ -24,6 +25,15 @@ export default function ADDSidebar(props) {
     addData = geographies[`${pluralize(subGeography)}_sums`][0];
   }
 
+  addChangeData = {
+    PERCENT_OF_RANGE_ASSESSED: geographies.areas_by_reason[0].percent_range_assessed,
+    ASSESSED_RANGE: geographies.assessed_range,
+    ESTIMATE: geographies.causes_of_change_sums[0].ESTIMATE,
+    GUESS_MIN: geographies.causes_of_change_sums[0].GUESS_MIN,
+    GUESS_MAX: geographies.causes_of_change_sums[0].GUESS_MAX,
+    RANGE_AREA: geographies.areas_by_reason[0].range_area
+  };
+
   return (
     <div>
       {!isEmpty(geographies) && currentTitle === 'summary_area' &&
@@ -31,8 +41,11 @@ export default function ADDSidebar(props) {
           <CountsBySurveyCategory
             summary_totals={geographies.summary_totals}
             areas={geographies.areas}
+            causes_of_change={geographies.causes_of_change}
+            areas_of_change={geographies.areas_by_reason}
             sidebarState={sidebarState}
             totals={addData}
+            change_totals={addChangeData}
             year={year}
           />
         </div>

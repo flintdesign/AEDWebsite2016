@@ -5,6 +5,7 @@ import {
   FETCH_SUBGEOGRAPHY_DATA,
   RECEIVE_SUBGEOGRAPHY_DATA,
   RECEIVE_BOUNDS,
+  RECEIVE_BORDER,
   CHANGE_MAP,
 } from '../actions/app_actions';
 import { getTotalEstimate } from '../utils/convenience_funcs';
@@ -12,12 +13,15 @@ import { getTotalEstimate } from '../utils/convenience_funcs';
 const initialState = {
   error: null,
   loading: false,
+  canInput: false,
+  parentGeography: [],
   geographies: {},
   subGeographies: [],
   totalEstimate: '426032',
   currentGeography: 'continent',
   currentGeographyId: 'africa',
   currentNarrative: null,
+  border: {}
 };
 export function geographies(state = initialState, action) {
   switch (action.type) {
@@ -32,6 +36,7 @@ export function geographies(state = initialState, action) {
         currentGeography: action.data.type,
         currentGeographyId: action.data.id,
         currentNarrative: action.data.narrative,
+        canInput: true
       };
     case RECEIVE_GEOGRAPHY_ERROR:
       return {
@@ -44,11 +49,16 @@ export function geographies(state = initialState, action) {
       };
     case RECEIVE_BOUNDS:
       return {
-        ...state, bounds: action.data.bounds
+        ...state, bounds: action.bounds
+      };
+    case RECEIVE_BORDER:
+      return {
+        ...state, border: action.border
       };
     case FETCH_GEOGRAPHY_DATA:
+      return { ...state, loading: true, canInput: false, parentGeography: state.subGeographies };
     case FETCH_SUBGEOGRAPHY_DATA:
-      return { ...state, loading: true };
+      return { ...state, loading: true, canInput: false };
     case CHANGE_MAP:
       return state;
     default:

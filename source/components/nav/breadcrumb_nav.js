@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-import { titleize } from '../../utils/convenience_funcs';
+import { titleize, titleizeStratum } from '../../utils/convenience_funcs';
 import compact from 'lodash.compact';
 
 const PATH_PARTS = ['year', 'region', 'country', 'stratum'];
@@ -24,6 +24,10 @@ const BreadCrumbNav = (props) => {
   if (params.length < 2) { return null; } // only render if we are at least at the region level
   const crumbs = params.map((p, i) => {
     let className = '';
+    let title = titleize(p);
+    if (i === 3) {
+      title = titleizeStratum(p);
+    }
     // Add region color to active breadcrumb
     if (i === params.length - 1 && PATH_PARTS.length > 1) {
       className = `color--region-${params[1]}`;
@@ -32,7 +36,7 @@ const BreadCrumbNav = (props) => {
       <span key={`breadcrumb${i}`}>
         <BreadCrumbLink
           path={`/${params.slice(0, i + 1).join('/')}`}
-          label={(i === 0 ? 'Africa' : titleize(p))}
+          label={(i === 0 ? 'Africa' : title)}
           className={className}
         />
         {(i === params.length - 1 ?

@@ -6,8 +6,9 @@ import HelpNav from '../components/nav/help_nav';
 import Ranges from '../components/ranges';
 import Sidebar from '../components/sidebar/sidebar';
 import TotalCount from '../components/total_count';
-import { getEntityName, getGeoFromId } from '../utils/convenience_funcs';
+import { getEntityName, getGeoFromId, flatten } from '../utils/convenience_funcs';
 import { formatNumber } from '../utils/format_utils';
+import { getCoordData } from '../utils/geo_funcs';
 import { fetchGeography, fetchRanges } from '../api';
 import {
   toggleSearch,
@@ -103,16 +104,19 @@ class App extends Component {
       geographies,
       totalEstimate,
       loading,
+      canInput,
       dispatch,
       params,
       currentGeography,
       currentGeographyId,
       currentNarrative,
+      parentGeographyData,
       subGeographyData,
       routeYear,
       sidebarState,
       error,
       bounds,
+      border,
       searchActive,
       ranges,
       ui,
@@ -130,7 +134,6 @@ class App extends Component {
     const searchOverlay = searchActive
       ? <div onClick={this.cancelSearch} className="search__overlay" />
       : null;
-
     return (
       <div
         className={
@@ -158,14 +161,18 @@ class App extends Component {
           {React.cloneElement(children, {
             currentGeography: currentGeography,
             currentGeographyId: currentGeographyId,
+            parentGeographyData: parentGeographyData,
             subGeographyData: subGeographyData,
             year: routeYear,
+            sidebarState: sidebarState,
             openSidebar: this.expandSidebar,
             cancelSearch: this.cancelSearch,
             bounds: bounds,
+            border: border,
             ranges: ranges,
             ui: ui,
             loading: loading,
+            canInput,
             routeGeography: routeGeography,
             routeGeographyId: routeGeographyId,
             dispatch: dispatch
@@ -184,8 +191,9 @@ class App extends Component {
           currentGeography={currentGeography}
           currentGeographyId={currentGeographyId}
           currentNarrative={currentNarrative}
+          canInput={canInput}
         />
-        {totalEstimate &&
+        {totalEstimate && canInput &&
           <TotalCount
             entity={getEntityName(this.props.location)}
             count={formatNumber(finalTotalEstimate)}
@@ -207,15 +215,18 @@ App.propTypes = {
   currentNarrative: PropTypes.string,
   geographies: PropTypes.object,
   loading: PropTypes.bool,
+  canInput: PropTypes.bool,
   dispatch: PropTypes.func.isRequired,
   totalEstimate: PropTypes.string,
   routeGeography: PropTypes.string,
   routeGeographyId: PropTypes.string,
   routeYear: PropTypes.string,
+  parentGeographyData: PropTypes.array,
   subGeographyData: PropTypes.array,
   sidebarState: PropTypes.number,
   error: PropTypes.string,
   bounds: PropTypes.array,
+  border: PropTypes.object,
   searchActive: PropTypes.bool.isRequired,
   ranges: PropTypes.object,
   ui: PropTypes.object,
@@ -229,30 +240,35 @@ const mapStateToProps = (state, props) => {
   } else if (props.params.region) {
     routeGeography = 'region';
   }
+  let finalBounds = state.geographyData.bounds;
   let selectedStratum = null;
   if (props.params.stratum) {
     const stratumId = props.params.stratum;
     const geosData = state.geographyData.subGeographies;
-    const geos = state.geographyData.geographies.strata;
     selectedStratum = {
-      geography: getGeoFromId(stratumId, geosData),
-      data: getGeoFromId(stratumId, geos)
+      data: getGeoFromId(stratumId, geosData)
     };
+    const _coords = selectedStratum.data.coordinates.map(flatten);
+    finalBounds = getCoordData(_coords).bounds;
   }
+
   return {
     error: state.geographyData.error,
     totalEstimate: state.geographyData.totalEstimate,
     geographies: state.geographyData.geographies,
     loading: state.geographyData.loading,
+    canInput: state.geographyData.canInput,
     currentGeography: state.geographyData.currentGeography,
     currentGeographyId: state.geographyData.currentGeographyId,
     currentNarrative: state.geographyData.currentNarrative,
     routeGeography: routeGeography,
     routeGeographyId: props.params[routeGeography] || 'africa',
     routeYear: props.params.year || '2013',
+    parentGeographyData: state.geographyData.parentGeography,
     subGeographyData: state.geographyData.subGeographies,
     sidebarState: state.navigation.sidebarState,
-    bounds: state.geographyData.bounds,
+    bounds: finalBounds,
+    border: state.geographyData.border,
     searchActive: state.search.searchActive,
     ranges: state.ranges,
     ui: state.ui,

@@ -24,6 +24,12 @@ export const capitalize = word => `${word[0].toUpperCase()}${word.split('').spli
 export const titleize = str => compact(str.split('-')).map(word => capitalize(word)).join(' ');
 export const slugify = str => str.toLowerCase().split(' ').join('-');
 
+export const titleizeStratum = (p) => {
+  const titleParts = p.split('-');
+  const lastPart = titleParts[titleParts.length - 1];
+  return titleize(p.replace(lastPart, ''));
+};
+
 export const flatten = ary => {
   ary.reduce((a, b) => a.concat(b));
   return ary;
@@ -77,7 +83,13 @@ export const geoTypeFromHref = event => {
 
 export const getEntityName = (location) => {
   const parts = compact(location.pathname.split('/'));
-  return parts.length > 1 ? titleize(parts[parts.length - 1]) : 'Africa';
+  let title;
+  if (parts.length === 4) {
+    title = titleizeStratum(parts[parts.length - 1]);
+  } else {
+    title = titleize(parts[parts.length - 1]);
+  }
+  return parts.length > 1 ? title : 'Africa';
 };
 
 export const getParentRegionFromURL = (location) => {

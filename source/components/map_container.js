@@ -1,6 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { withRouter } from 'react-router';
-import { Map, TileLayer, Marker, GeoJson } from 'react-leaflet';
+import {
+  Map,
+  TileLayer,
+  Marker,
+  GeoJson,
+  // Popup
+} from 'react-leaflet';
 import { divIcon } from 'leaflet';
 import config from '../config';
 import { getCoordData, getLabelPosition } from '../utils/geo_funcs';
@@ -11,23 +17,28 @@ import {
   getNextGeography,
   replaceURLPart
 } from '../utils/convenience_funcs';
-import {
-  CHANGE_MAP,
-} from '../actions/app_actions';
 
 class MapContainer extends Component {
   constructor(props, context) {
     super(props, context);
     this.handleClick = this.handleClick.bind(this);
+    this.handleMouseover = this.handleMouseover.bind(this);
+    this.handleMouseout = this.handleMouseout.bind(this);
     this.onZoomEnd = this.onZoomEnd.bind(this);
     this.getLabelFontSize = this.getLabelFontSize.bind(this);
     this.state = {
       geoJSONData: [],
-      geoJSONObjs: [],
+      geoJSONObjs: []
     };
   }
 
   componentWillReceiveProps(nextProps) {
+    const self = this;
+    if (nextProps.sidebarState !== this.props.sidebarState) {
+      setTimeout(() => {
+        self.refs.map.leafletElement.invalidateSize(true);
+      }, 200);
+    }
     if (!nextProps.subGeographyData) return;
     this.setState({
       geoJSONData: nextProps.subGeographyData.map(this.setGeoJSON),
@@ -84,17 +95,26 @@ class MapContainer extends Component {
   }
 
   handleClick(e) {
+    if (!this.props.canInput) return;
     const href = e.target.options.href;
     const currentPath = this.props.location.pathname;
     const newPath = replaceURLPart(currentPath, href);
     if (location.pathname.indexOf(href) > -1) { return; }
     this.props.router.push(newPath);
     this.props.cancelSearch();
-    this.props.dispatch({ type: CHANGE_MAP, data: 'test' });
+  }
+
+  handleMouseout(e) {
+    e.target.closePopup();
+  }
+
+  handleMouseover(e) {
+    e.target.openPopup();
   }
 
   render() {
     const geoJSONObjs = [];
+    const geoJSONBorderObjs = [];
     const labels = [];
     const rangeMarkup = this.getRangeMarkup(this.props.ranges, this.props.ui);
     if (this.state.geoJSONData) {
@@ -128,6 +148,10 @@ class MapContainer extends Component {
               position={getLabelPosition(datum)}
               name={datum.name}
               icon={icon}
+              href={objectHref}
+              onClick={self.handleClick}
+              onMouseOver={self.handleMouseover}
+              onMouseOut={self.handleMouseout}
             />
           );
         }
@@ -145,7 +169,19 @@ class MapContainer extends Component {
         return datum;
       });
     }
-
+    if (this.props.border.coordinates && !this.props.loading && this.props.canInput) {
+      let borderClass = '';
+      if (this.props.params.region) {
+        borderClass += `region--${this.props.params.region}`;
+      }
+      geoJSONBorderObjs.push(
+        <GeoJson
+          key={`border_${this.props.currentGeographyId}`}
+          data={this.props.border}
+          className={`border border--${this.props.currentGeographyId} border--${this.props.currentGeography} ${borderClass}`}
+        />
+      );
+    }
     /* eslint max-len: [0] */
     const tileURL = `${config.mapboxURL}/tiles/256/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`;
     return (
@@ -153,15 +189,17 @@ class MapContainer extends Component {
         bounds={this.props.bounds}
         minZoom={4}
         maxBounds={config.maxMapBounds}
-        maxZoom={12}
+        maxZoom={10}
         onZoomEnd={this.onZoomEnd}
         onClick={this.props.cancelSearch}
+        ref="map"
       >
         <TileLayer
           url={tileURL}
         />
         {rangeMarkup}
-        {geoJSONObjs}
+        {geoJSONBorderObjs}
+        {this.props.canInput && geoJSONObjs}
         {labels}
       </Map>
     );
@@ -173,10 +211,15 @@ MapContainer.propTypes = {
   routeGeography: PropTypes.string,
   currentGeographyId: PropTypes.string,
   routeGeographyId: PropTypes.string,
+  parentGeographyData: PropTypes.array,
   subGeographyData: PropTypes.array,
   year: PropTypes.string.isRequired,
   cancelSearch: PropTypes.func,
   bounds: PropTypes.array,
+  border: PropTypes.object,
+  loading: PropTypes.bool,
+  canInput: PropTypes.bool,
+  params: PropTypes.object,
   ui: PropTypes.object.isRequired,
   ranges: PropTypes.object,
   router: PropTypes.shape({
@@ -186,7 +229,8 @@ MapContainer.propTypes = {
     pathname: PropTypes.string
   }),
   selectedStratum: PropTypes.object,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  sidebarState: PropTypes.number.isRequired
 };
 
 export default withRouter(MapContainer);

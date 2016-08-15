@@ -1,3 +1,8 @@
 import React from 'react';
+// import { withRouter } from 'react-router';
 
-export default () => <h1>About</h1>;
+export default function About() {
+  return (
+    <h1>About</h1>
+  );
+}
