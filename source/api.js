@@ -15,6 +15,7 @@ import {
   FETCH_SUBGEOGRAPHY_DATA,
   RECEIVE_SUBGEOGRAPHY_DATA,
   RECEIVE_BOUNDS,
+  RECEIVE_BORDER,
 } from './actions/app_actions';
 
 import { FETCH_RANGE, RECEIVE_RANGE } from './constants';
@@ -129,6 +130,25 @@ function fetchBounds(dispatch, geoType, mappedId) {
     });
 }
 
+function fetchBorder(dispatch, geoType, mappedId) {
+  // look up in cache first
+  const cacheKey = `border-${geoType}-${mappedId}`;
+  const cacheResponse = cache.get(cacheKey);
+  if (cacheResponse) {
+    return dispatch({ type: RECEIVE_BORDER, border: cacheResponse });
+  }
+  const url = `${config.apiBaseURL}/${geoType}/${mappedId}/geojson_map`;
+  // value not cached; fetching
+  return fetch(url)
+    .then(r => r.json())
+    .then(d => {
+      cache.put(cacheKey, d, cacheDuration);
+      dispatch({
+        type: RECEIVE_BORDER,
+        border: d
+      });
+    });
+}
 
 /*
 *   Fetches a list of subGeographies from the API and sends that data to the
@@ -178,6 +198,7 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
 
   // fetch bound
   fetchBounds(dispatch, geoType, mappedId);
+  fetchBorder(dispatch, geoType, mappedId);
 
   const fetchURL = `${config.apiBaseURL}/${type}/${mappedId}/${year}/${count}`;
   // Dispatch async call to the APIk

@@ -5,6 +5,7 @@ import {
   FETCH_SUBGEOGRAPHY_DATA,
   RECEIVE_SUBGEOGRAPHY_DATA,
   RECEIVE_BOUNDS,
+  RECEIVE_BORDER,
   CHANGE_MAP,
 } from '../actions/app_actions';
 import { getTotalEstimate } from '../utils/convenience_funcs';
@@ -13,6 +14,7 @@ const initialState = {
   error: null,
   loading: false,
   canInput: false,
+  parentGeography: [],
   geographies: {},
   subGeographies: [],
   totalEstimate: '426032',
@@ -49,7 +51,12 @@ export function geographies(state = initialState, action) {
       return {
         ...state, bounds: action.bounds
       };
+    case RECEIVE_BORDER:
+      return {
+        ...state, border: action.border
+      };
     case FETCH_GEOGRAPHY_DATA:
+      return { ...state, loading: true, canInput: false, parentGeography: state.subGeographies };
     case FETCH_SUBGEOGRAPHY_DATA:
       return { ...state, loading: true, canInput: false };
     case CHANGE_MAP:

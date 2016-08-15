@@ -17,9 +17,6 @@ import {
   getNextGeography,
   replaceURLPart
 } from '../utils/convenience_funcs';
-import {
-  CHANGE_MAP,
-} from '../actions/app_actions';
 
 class MapContainer extends Component {
   constructor(props, context) {
@@ -31,11 +28,17 @@ class MapContainer extends Component {
     this.getLabelFontSize = this.getLabelFontSize.bind(this);
     this.state = {
       geoJSONData: [],
-      geoJSONObjs: [],
+      geoJSONObjs: []
     };
   }
 
   componentWillReceiveProps(nextProps) {
+    const self = this;
+    if (nextProps.sidebarState !== this.props.sidebarState) {
+      setTimeout(() => {
+        self.refs.map.leafletElement.invalidateSize(true);
+      }, 200);
+    }
     if (!nextProps.subGeographyData) return;
     this.setState({
       geoJSONData: nextProps.subGeographyData.map(this.setGeoJSON),
@@ -99,7 +102,6 @@ class MapContainer extends Component {
     if (location.pathname.indexOf(href) > -1) { return; }
     this.props.router.push(newPath);
     this.props.cancelSearch();
-    this.props.dispatch({ type: CHANGE_MAP, data: 'test' });
   }
 
   handleMouseout(e) {
@@ -112,7 +114,7 @@ class MapContainer extends Component {
 
   render() {
     const geoJSONObjs = [];
-    // const geoJSONBorderObjs = [];
+    const geoJSONBorderObjs = [];
     const labels = [];
     const rangeMarkup = this.getRangeMarkup(this.props.ranges, this.props.ui);
     if (this.state.geoJSONData) {
@@ -167,15 +169,19 @@ class MapContainer extends Component {
         return datum;
       });
     }
-    // if (this.props.border.coordinates && !this.props.loading) {
-    //   geoJSONBorderObjs.push(
-    //     <GeoJson
-    //       key={`border_${this.props.currentGeographyId}`}
-    //       data={this.props.border}
-    //       className={`border border--${this.props.currentGeographyId} border--${this.props.currentGeography}`}
-    //     />
-    //   );
-    // }
+    if (this.props.border.coordinates && !this.props.loading && this.props.canInput) {
+      let borderClass = '';
+      if (this.props.params.region) {
+        borderClass += `region--${this.props.params.region}`;
+      }
+      geoJSONBorderObjs.push(
+        <GeoJson
+          key={`border_${this.props.currentGeographyId}`}
+          data={this.props.border}
+          className={`border border--${this.props.currentGeographyId} border--${this.props.currentGeography} ${borderClass}`}
+        />
+      );
+    }
     /* eslint max-len: [0] */
     const tileURL = `${config.mapboxURL}/tiles/256/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`;
     return (
@@ -183,15 +189,17 @@ class MapContainer extends Component {
         bounds={this.props.bounds}
         minZoom={4}
         maxBounds={config.maxMapBounds}
-        maxZoom={12}
+        maxZoom={10}
         onZoomEnd={this.onZoomEnd}
         onClick={this.props.cancelSearch}
+        ref="map"
       >
         <TileLayer
           url={tileURL}
         />
         {rangeMarkup}
-        {geoJSONObjs}
+        {geoJSONBorderObjs}
+        {this.props.canInput && geoJSONObjs}
         {labels}
       </Map>
     );
@@ -203,11 +211,12 @@ MapContainer.propTypes = {
   routeGeography: PropTypes.string,
   currentGeographyId: PropTypes.string,
   routeGeographyId: PropTypes.string,
+  parentGeographyData: PropTypes.array,
   subGeographyData: PropTypes.array,
   year: PropTypes.string.isRequired,
   cancelSearch: PropTypes.func,
   bounds: PropTypes.array,
-  // border: PropTypes.object,
+  border: PropTypes.object,
   loading: PropTypes.bool,
   canInput: PropTypes.bool,
   params: PropTypes.object,
@@ -220,7 +229,8 @@ MapContainer.propTypes = {
     pathname: PropTypes.string
   }),
   selectedStratum: PropTypes.object,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  sidebarState: PropTypes.number.isRequired
 };
 
 export default withRouter(MapContainer);

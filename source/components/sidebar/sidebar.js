@@ -77,8 +77,8 @@ class Sidebar extends Component {
   }
 
   shouldRenderSidebar(sidebar) {
-    const { countType, loading } = this.props;
-    if (loading) return false;
+    const { countType, loading, canInput } = this.props;
+    if (loading || !canInput) return false;
     if (sidebar === 'add') {
       return (typeof countType === 'undefined' || countType === 'ADD') &&
         this.subGeographyHasCorrectKeys('add');
@@ -92,6 +92,7 @@ class Sidebar extends Component {
       location,
       geographies,
       loading,
+      canInput,
       year,
       currentGeography,
       currentGeographyId,
@@ -169,11 +170,11 @@ class Sidebar extends Component {
         </section>
 
         <section className="sidebar__inner">
-          {loading &&
+          {!canInput &&
             <h1>Loading <span className="loading-spinner"></span></h1>
           }
 
-          {!loading &&
+          {canInput &&
             <div
               className={`${this.state.narrativeOpen ? 'open' : 'closed'} sidebar__narrative`}
               onClick={this.handleNarrativeClick}
@@ -232,6 +233,7 @@ Sidebar.propTypes = {
   geographies: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
   loading: PropTypes.bool,
+  canInput: PropTypes.bool,
   year: PropTypes.string.isRequired,
   currentGeography: PropTypes.string,
   currentGeographyId: PropTypes.string,
