@@ -103,6 +103,7 @@ class App extends Component {
       geographies,
       totalEstimate,
       loading,
+      canInput,
       dispatch,
       params,
       currentGeography,
@@ -166,6 +167,7 @@ class App extends Component {
             ranges: ranges,
             ui: ui,
             loading: loading,
+            canInput,
             routeGeography: routeGeography,
             routeGeographyId: routeGeographyId,
             dispatch: dispatch
@@ -185,7 +187,7 @@ class App extends Component {
           currentGeographyId={currentGeographyId}
           currentNarrative={currentNarrative}
         />
-        {totalEstimate &&
+        {totalEstimate && canInput &&
           <TotalCount
             entity={getEntityName(this.props.location)}
             count={formatNumber(finalTotalEstimate)}
@@ -207,6 +209,7 @@ App.propTypes = {
   currentNarrative: PropTypes.string,
   geographies: PropTypes.object,
   loading: PropTypes.bool,
+  canInput: PropTypes.bool,
   dispatch: PropTypes.func.isRequired,
   totalEstimate: PropTypes.string,
   routeGeography: PropTypes.string,
@@ -245,6 +248,7 @@ const mapStateToProps = (state, props) => {
     totalEstimate: state.geographyData.totalEstimate,
     geographies: state.geographyData.geographies,
     loading: state.geographyData.loading,
+    canInput: state.geographyData.canInput,
     currentGeography: state.geographyData.currentGeography,
     currentGeographyId: state.geographyData.currentGeographyId,
     currentNarrative: state.geographyData.currentNarrative,

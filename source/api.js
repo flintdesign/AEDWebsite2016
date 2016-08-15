@@ -169,7 +169,12 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
   // Dispatch the "loading" action
   dispatch({ type: FETCH_GEOGRAPHY_DATA, data: { countType: count } });
 
-  const mappedId = mapSlugToId(slug);
+  let mappedId;
+  if (type === 'stratum') {
+    mappedId = id;
+  } else {
+    mappedId = mapSlugToId(slug);
+  }
 
   // fetch bound
   fetchBounds(dispatch, geoType, mappedId);

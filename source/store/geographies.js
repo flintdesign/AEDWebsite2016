@@ -12,6 +12,7 @@ import { getTotalEstimate } from '../utils/convenience_funcs';
 const initialState = {
   error: null,
   loading: false,
+  canInput: false,
   geographies: {},
   subGeographies: [],
   totalEstimate: '426032',
@@ -33,6 +34,7 @@ export function geographies(state = initialState, action) {
         currentGeography: action.data.type,
         currentGeographyId: action.data.id,
         currentNarrative: action.data.narrative,
+        canInput: true
       };
     case RECEIVE_GEOGRAPHY_ERROR:
       return {
@@ -49,7 +51,7 @@ export function geographies(state = initialState, action) {
       };
     case FETCH_GEOGRAPHY_DATA:
     case FETCH_SUBGEOGRAPHY_DATA:
-      return { ...state, loading: true };
+      return { ...state, loading: true, canInput: false };
     case CHANGE_MAP:
       return state;
     default:
