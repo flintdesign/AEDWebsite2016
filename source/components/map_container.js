@@ -33,11 +33,8 @@ class MapContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const self = this;
     if (nextProps.sidebarState !== this.props.sidebarState) {
-      setTimeout(() => {
-        self.refs.map.leafletElement.invalidateSize(true);
-      }, 200);
+      this.realignMap();
     }
     if (!nextProps.subGeographyData) return;
     this.setState({
@@ -94,6 +91,13 @@ class MapContainer extends Component {
     });
   }
 
+  realignMap() {
+    const self = this;
+    setTimeout(() => {
+      self.refs.map.leafletElement.invalidateSize(true);
+    }, 250);
+  }
+
   handleClick(e) {
     if (!this.props.canInput) return;
     const href = e.target.options.href;
@@ -116,6 +120,7 @@ class MapContainer extends Component {
     const geoJSONObjs = [];
     const geoJSONBorderObjs = [];
     const labels = [];
+    const stratumLabels = [];
     const rangeMarkup = this.getRangeMarkup(this.props.ranges, this.props.ui);
     if (this.state.geoJSONData) {
       const self = this;
@@ -132,8 +137,7 @@ class MapContainer extends Component {
           geoJSONClassName = `region-${slugify(datum.region)}__stratum`;
           objectHref = `/${slugify(datum.name)}-${datum.id}`;
         }
-
-        if (datum.coordinates && self.props.routeGeography === 'continent' && self.props.currentGeography === 'continent') {
+        if (datum.region && datum.coordinates && self.props.routeGeography === 'continent' && self.props.currentGeography === 'continent') {
           const icon = divIcon({
             className: 'leaflet-marker-icon',
             html: `<h1 style="font-size:${self.getLabelFontSize()}px"
@@ -188,8 +192,7 @@ class MapContainer extends Component {
       <Map
         bounds={this.props.bounds}
         minZoom={4}
-        maxBounds={config.maxMapBounds}
-        maxZoom={10}
+        maxZoom={8}
         onZoomEnd={this.onZoomEnd}
         onClick={this.props.cancelSearch}
         ref="map"
@@ -201,6 +204,7 @@ class MapContainer extends Component {
         {geoJSONBorderObjs}
         {this.props.canInput && geoJSONObjs}
         {labels}
+        {stratumLabels}
       </Map>
     );
   }

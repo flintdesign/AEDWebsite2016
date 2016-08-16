@@ -46,6 +46,14 @@
   &:active
     outline 0
 
+.search__trigger
+  position absolute
+  top 0
+  right 0
+  width 40px
+  height 40px
+  cursor pointer
+
 .icon__magnifying-glass
   position absolute
   border 2.5px solid #888
@@ -103,6 +111,46 @@
     max-width 60%
     text-overflow ellipsis
     overflow hidden
+  
+  &.hover--region-southern-africa
+    &:hover
+      background $southern-africa
+      
+      .color--region-southern-africa
+        color white
+        text-decoration underline
+      .search__result__parent-label
+        color white
+        
+  &.hover--region-west-africa
+    &:hover
+      background $west-africa
+      
+      .color--region-west-africa
+        color white
+        text-decoration underline
+      .search__result__parent-label
+        color white
+        
+  &.hover--region-central-africa
+    &:hover
+      background $central-africa
+      
+      .color--region-central-africa
+        color white
+        text-decoration underline
+      .search__result__parent-label
+        color white
+        
+  &.hover--region-eastern-africa
+    &:hover
+      background $eastern-africa
+      
+      .color--region-eastern-africa
+        color white
+        text-decoration underline
+      .search__result__parent-label
+        color white
 
 .search__result__parent-label
   @extend .small-heading

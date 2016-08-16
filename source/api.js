@@ -60,7 +60,8 @@ export function fetchGeoJSON(geoType, geoItem) {
       ...d,
       ...geoItem,
       name: geoItem[geoType] || geoItem[geoType.toUpperCase()],
-      id: geoItem.id || geoItem.iso_code || geoItem.strcode
+      id: geoItem.id || geoItem.iso_code || geoItem.strcode,
+      geoType
     };
     cache.put(cacheKey, output, cacheDuration);
     return output;
@@ -218,12 +219,35 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
       .then(r => r.json())
       .then(d2 => {
         // dispatch "receive" action with response data
-        const dataWithNarrative = { ...data, narrative: d2.narrative };
+        const narrative = d2.narrative;
+        const dataWithNarrative = { ...data, narrative };
         dispatch({
           type: RECEIVE_GEOGRAPHY_DATA,
           data: dataWithNarrative
         });
       });
+      // const cacheKey = `${mappedId}-narrative`;
+      // const cacheResponse = cache.get(cacheKey);
+      // if (cacheResponse) {
+      //   dispatch({
+      //     type: RECEIVE_GEOGRAPHY_DATA,
+      //     data: { ...data, narrative: cacheResponse }
+      //   });
+      // } else {
+      //   // fetch the narrative data
+      //   fetch(`${config.apiBaseURL}/${type}/${mappedId}/narrative`)
+      //   .then(r => r.json())
+      //   .then(d2 => {
+      //     // dispatch "receive" action with response data
+      //     const narrative = d2.narrative;
+      //     cache.put(cacheKey, narrative);
+      //     const dataWithNarrative = { ...data, narrative };
+      //     dispatch({
+      //       type: RECEIVE_GEOGRAPHY_DATA,
+      //       data: dataWithNarrative
+      //     });
+      //   });
+      // }
 
       // fetch subgeography data
       const subGeoType = getNextGeography(geoType);
