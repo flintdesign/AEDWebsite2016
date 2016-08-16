@@ -33,7 +33,7 @@ const cacheDuration = fiveMinutes;
 */
 
 const getSimplifyParam = (geoType) => {
-  if (geoType === 'stratum') { return ''; }
+  if (geoType === 'stratum' || geoType === 'country') { return ''; }
   const geoMap = {
     continent: 3.0,
     region: 1.5,
