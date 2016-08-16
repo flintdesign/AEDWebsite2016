@@ -1,2 +1,8 @@
-export const formatNumber = num => parseInt(num, 10).toLocaleString();
+const numberWithCommas = (x) => {
+  const parts = x.toString().split('.');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return parts.join('.');
+};
+
+export const formatNumber = num => numberWithCommas(parseInt(num, 10));
 export const formatFloat = num => parseFloat(num, 10).toFixed(1);
