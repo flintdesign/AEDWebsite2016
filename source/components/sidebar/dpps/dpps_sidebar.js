@@ -39,7 +39,9 @@ export default function DPPSSidebar(props) {
           />
 
           <SurveyTypeDPPS
-            surveys={geographies.area_of_range_covered_by_continent}
+            surveys={
+              geographies.area_of_range_covered_by_continent ||
+              geographies.area_of_range_covered_by_region}
             tablesTitle="Counts by Survey Category"
           />
         </div>

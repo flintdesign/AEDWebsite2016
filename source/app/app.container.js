@@ -40,7 +40,11 @@ class App extends Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.location.query !== this.props.location.query) {
-      this.fetchData(newProps, false);
+      if (newProps.location.query.count_type) {
+        this.fetchData(newProps, true);
+      } else {
+        this.fetchData(newProps, false);
+      }
     }
   }
 

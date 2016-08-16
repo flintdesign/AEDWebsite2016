@@ -137,7 +137,7 @@ class MapContainer extends Component {
           geoJSONClassName = `region-${slugify(datum.region)}__stratum`;
           objectHref = `/${slugify(datum.name)}-${datum.id}`;
         }
-        if (datum.region && datum.coordinates && self.props.routeGeography === 'continent' && self.props.currentGeography === 'continent') {
+        if (datum.geoType === 'region' && datum.coordinates && self.props.routeGeography === 'continent' && self.props.currentGeography === 'continent') {
           const icon = divIcon({
             className: 'leaflet-marker-icon',
             html: `<h1 style="font-size:${self.getLabelFontSize()}px"
