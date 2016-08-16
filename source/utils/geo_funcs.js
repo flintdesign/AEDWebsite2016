@@ -17,6 +17,8 @@ export const getCoordData = (coords) => {
   const minLat = Math.min.apply(Math, lats);
   const minLong = Math.min.apply(Math, longs);
 
+  const offset = 0;
+
   const output = {
     maxLat: maxLat,
     minLat: minLat,
@@ -24,11 +26,11 @@ export const getCoordData = (coords) => {
     minLong: minLong,
     center: [[0, 0], [0, 0]],
     bounds: [[
-      minLat,
-      minLong,
+      minLat + offset,
+      minLong + offset,
     ], [
-      maxLat,
-      maxLong,
+      maxLat - offset,
+      maxLong - offset,
     ]]
   };
   return output;

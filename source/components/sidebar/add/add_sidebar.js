@@ -9,11 +9,11 @@ export default function ADDSidebar(props) {
   const subGeography = getNextGeography(currentGeography);
   const data = type => geographies[`${type}_sums`][0];
 
-  // TODO The API is broken on this at the country level
-  let addData;
+  // TODO The API does not include strata summaries
+  let addSummaryData;
   let addChangeData;
   if (currentGeography === 'country') {
-    addData = {
+    addSummaryData = {
       PERCENT_OF_RANGE_ASSESSED: geographies.areas[0].percent_range_assessed,
       ASSESSED_RANGE: geographies.assessed_range,
       ESTIMATE: geographies.summary_sums[0].ESTIMATE,
@@ -22,18 +22,19 @@ export default function ADDSidebar(props) {
       RANGE_AREA: geographies.areas[0].range_area
     };
   } else {
-    addData = geographies[`${pluralize(subGeography)}_sums`][0];
+    addSummaryData = data(pluralize(subGeography));
   }
 
-  addChangeData = {
-    PERCENT_OF_RANGE_ASSESSED: geographies.areas_by_reason[0].percent_range_assessed,
-    ASSESSED_RANGE: geographies.assessed_range,
-    ESTIMATE: geographies.causes_of_change_sums[0].ESTIMATE,
-    GUESS_MIN: geographies.causes_of_change_sums[0].GUESS_MIN,
-    GUESS_MAX: geographies.causes_of_change_sums[0].GUESS_MAX,
-    RANGE_AREA: geographies.areas_by_reason[0].range_area
-  };
-
+  if (geographies.causes_of_change_sums.length > 0) {
+    addChangeData = {
+      PERCENT_OF_RANGE_ASSESSED: geographies.areas[0].percent_range_assessed,
+      ASSESSED_RANGE: geographies.assessed_range,
+      ESTIMATE: geographies.causes_of_change_sums[0].ESTIMATE,
+      GUESS_MIN: geographies.causes_of_change_sums[0].GUESS_MIN,
+      GUESS_MAX: geographies.causes_of_change_sums[0].GUESS_MAX,
+      RANGE_AREA: geographies.areas[0].range_area
+    };
+  }
   return (
     <div>
       {!isEmpty(geographies) && currentTitle === 'summary_area' &&
@@ -44,8 +45,8 @@ export default function ADDSidebar(props) {
             causes_of_change={geographies.causes_of_change}
             areas_of_change={geographies.areas_by_reason}
             sidebarState={sidebarState}
-            totals={addData}
-            change_totals={addChangeData}
+            totals={addSummaryData}
+            changeTotals={addChangeData}
             year={year}
           />
         </div>

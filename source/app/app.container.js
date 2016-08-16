@@ -175,6 +175,7 @@ class App extends Component {
             canInput,
             routeGeography: routeGeography,
             routeGeographyId: routeGeographyId,
+            selectedStratum: selectedStratum,
             dispatch: dispatch
           })}
         </main>
@@ -233,15 +234,22 @@ App.propTypes = {
   selectedStratum: PropTypes.object
 };
 
+App.contextTypes = {
+  store: React.PropTypes.object
+};
+
 const mapStateToProps = (state, props) => {
+  // DETERMINE routeGeography FROM PARAMS
   let routeGeography = 'continent';
   if (props.params.country) {
     routeGeography = 'country';
   } else if (props.params.region) {
     routeGeography = 'region';
   }
+  //GET CURRENT BOUNDS BASED ON LEVEL
   let finalBounds = state.geographyData.bounds;
   let selectedStratum = null;
+  // IF STRATUM SELECTED, USE STRATUM BOUNDS
   if (props.params.stratum) {
     const stratumId = props.params.stratum;
     const geosData = state.geographyData.subGeographies;
@@ -251,7 +259,7 @@ const mapStateToProps = (state, props) => {
     const _coords = selectedStratum.data.coordinates.map(flatten);
     finalBounds = getCoordData(_coords).bounds;
   }
-
+  // MAP STATE AND PROPS
   return {
     error: state.geographyData.error,
     totalEstimate: state.geographyData.totalEstimate,

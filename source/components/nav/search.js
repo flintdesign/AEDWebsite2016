@@ -209,16 +209,20 @@ class Search extends Component {
   render() {
     const focusedName = this.props.searchActive ? 'focused' : 'blurred';
     const inputClassName = `${focusedName} search__input`;
+    const containerClassName = `search__container ${focusedName}`;
     return (
-      <div className="search__container">
+      <div className={containerClassName}>
         <div className={inputClassName}>
           {this.input()}
+          <span
+            className="icon__magnifying-glass"
+          />
           <span
             onClick={() => {
               this.getSearchData();
               this.props.dispatch(toggleSearch());
             }}
-            className="icon__magnifying-glass"
+            className="search__trigger"
           />
           {this.results()}
         </div>

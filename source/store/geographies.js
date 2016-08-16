@@ -21,7 +21,8 @@ const initialState = {
   currentGeography: 'continent',
   currentGeographyId: 'africa',
   currentNarrative: null,
-  border: {}
+  border: {},
+  geoJSON: {}
 };
 export function geographies(state = initialState, action) {
   switch (action.type) {

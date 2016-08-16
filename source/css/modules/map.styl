@@ -46,6 +46,7 @@ h1.region-4
 
 path
   transition fill-opacity 200ms ease-in-out, stroke-width 200ms ease-in-out
+  fill-opacity 0
   &.north-africa
     stroke-opacity 0
     fill-opacity 0
@@ -89,6 +90,11 @@ path
   &:hover
     fill-opacity 0.2
 
+.region-west-africa__stratum
+  stroke-width 1.0
+  &:hover, &.active
+    fill-opacity 0.5
+
 .region-central-africa__country,
 .region-central-africa__stratum
   stroke $central-africa
@@ -103,6 +109,11 @@ path
   
   &:hover
     fill-opacity 0.2
+
+.region-central-africa__stratum
+  stroke-width 1.0
+  &:hover, &.active
+    fill-opacity 0.5
 
 .region-southern-africa__country,
 .region-southern-africa__stratum
@@ -119,6 +130,11 @@ path
   &:hover
     fill-opacity 0.2
 
+.region-southern-africa__stratum
+  stroke-width 1.0
+  &:hover, &.active
+    fill-opacity 0.5
+
 
 .region-eastern-africa__country,
 .region-eastern-africa__stratum
@@ -128,15 +144,18 @@ path
   fill-opacity 0.1
   stroke-width 1.5
   
-  &:hover
-    fill-opacity 0.2
-
 .region-eastern-africa__country
   fill-opacity 0.1
   stroke-opacity 0
   
   &:hover
-    fill-opacity 0.2  
+    fill-opacity 0.2
+
+.region-eastern-africa__stratum
+  stroke-width 1.0
+  &:hover, &.active
+    fill-opacity 0.5
+  
     
 .border
   stroke-width 0
