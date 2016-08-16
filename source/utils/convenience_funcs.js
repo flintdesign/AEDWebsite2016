@@ -111,5 +111,14 @@ export const getTotalEstimate = (data) => {
     }
     return data.summary_sums[0].ESTIMATE;
   }
-  return data[`${pluralize(getNextGeography(data.type))}_sum`][0].DEFINITE;
+  if (data[`${pluralize(getNextGeography(data.type))}_sum`]) {
+    return data[`${pluralize(getNextGeography(data.type))}_sum`][0].DEFINITE;
+  }
+  let finalTotal = 0;
+  if (data.country_totals) {
+    data.country_totals.forEach(t => {
+      finalTotal += parseInt(t.DEFINITE, 10);
+    });
+  }
+  return `${finalTotal}`;
 };

@@ -59,7 +59,7 @@ export function fetchGeoJSON(geoType, geoItem) {
     const output = {
       ...d,
       ...geoItem,
-      name: geoItem[geoType] || geoItem[geoType.toUpperCase()],
+      name: geoItem[geoType] || geoItem[geoType.toUpperCase()] || geoItem.CNTRYNAME,
       id: geoItem.id || geoItem.iso_code || geoItem.strcode,
       geoType
     };
@@ -200,6 +200,7 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
   // fetch bound
   fetchBounds(dispatch, geoType, mappedId);
   fetchBorder(dispatch, geoType, mappedId);
+  // fetchSurroundingGeography();
 
   const fetchURL = `${config.apiBaseURL}/${type}/${mappedId}/${year}/${count}`;
   // Dispatch async call to the APIk
