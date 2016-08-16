@@ -18,6 +18,14 @@ export default class SurveyCategory extends Component {
     this.setState({ toggled: !this.state.toggled });
   }
 
+  formatGuesses(guessMin, guessMax) {
+    let formatted = `${formatNumber(guessMin)} – ${formatNumber(guessMax)}`;
+    if (guessMin === guessMax && guessMax === '0') {
+      formatted = '-';
+    }
+    return formatted;
+  }
+
   render() {
     const className = `${this.state.toggled ? 'open' : 'closed'} sidebar__table-container`;
     const {
@@ -35,11 +43,11 @@ export default class SurveyCategory extends Component {
           <tbody>
             <tr>
               <td>Estimates from Surveys</td>
-              <td>{estimate}</td>
+              <td>{formatNumber(estimate)}</td>
             </tr>
             <tr>
               <td>Guesses</td>
-              <td>{formatNumber(guess_min)} – {formatNumber(guess_max)}</td>
+              <td>{this.formatGuesses(guess_min, guess_max)}</td>
             </tr>
             <tr>
               <td>% Known &amp; Possible Range</td>
