@@ -1,6 +1,8 @@
 import {
   EXPAND_SIDEBAR,
   CONTRACT_SIDEBAR,
+  RECEIVE_ADJACENT_DATA,
+  RECEIVE_BOUNDS
 } from './app_actions';
 
 import {
@@ -35,4 +37,12 @@ export function receiveAutocompleteData(data) {
 
 export function toggleRange(rangeType) {
   return ({ type: TOGGLE_RANGE, rangeType });
+}
+
+export function clearAdjacentData() {
+  return ({ type: RECEIVE_ADJACENT_DATA, data: [] });
+}
+
+export function updateBounds(newBounds) {
+  return ({ type: RECEIVE_BOUNDS, bounds: newBounds });
 }

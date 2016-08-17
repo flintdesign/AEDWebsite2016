@@ -9,13 +9,15 @@ import TotalCount from '../components/total_count';
 import { getEntityName, getGeoFromId, flatten } from '../utils/convenience_funcs';
 import { formatNumber } from '../utils/format_utils';
 import { getCoordData } from '../utils/geo_funcs';
-import { fetchGeography, fetchRanges } from '../api';
+import { fetchGeography, fetchRanges, fetchAdjacentGeography } from '../api';
 import {
   toggleSearch,
   toggleLegend,
   expandSidebar,
   contractSidebar,
-  toggleRange
+  toggleRange,
+  clearAdjacentData,
+  updateBounds
 } from '../actions';
 
 class App extends Component {
@@ -29,6 +31,8 @@ class App extends Component {
     this.toggleRange = this.toggleRange.bind(this);
     this.handleLegendClick = this.handleLegendClick.bind(this);
     this.cancelSearch = this.cancelSearch.bind(this);
+    this.clearAdjacentData = this.clearAdjacentData.bind(this);
+    this.updateBounds = this.updateBounds.bind(this);
     this.state = {
       showSidebar: false
     };
@@ -40,7 +44,10 @@ class App extends Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.location.query !== this.props.location.query) {
-      if (newProps.location.query.count_type) {
+      if (newProps.location.query.count_type !== this.props.location.query.count_type) {
+        this.fetchData(newProps, true);
+      } else if (newProps.location.pathname !== this.props.location.pathname
+        && !newProps.params.stratum) {
         this.fetchData(newProps, true);
       } else {
         this.fetchData(newProps, false);
@@ -70,6 +77,14 @@ class App extends Component {
     this.props.dispatch(toggleRange(rangeType));
   }
 
+  clearAdjacentData() {
+    this.props.dispatch(clearAdjacentData());
+  }
+
+  updateBounds(newBounds) {
+    this.props.dispatch(updateBounds(newBounds));
+  }
+
   handleClick(e) {
     const rangeType = e.target.getAttribute('data-range-type');
     fetchRanges(rangeType, this.props.dispatch);
@@ -84,10 +99,12 @@ class App extends Component {
       routeGeography,
       routeGeographyId,
       currentGeography,
+      subGeographyData,
       routeYear,
       loading,
       dispatch,
-      location
+      location,
+      params
     } = props;
 
     if (force || (routeGeography !== currentGeography && !loading)) {
@@ -98,6 +115,35 @@ class App extends Component {
         routeYear,
         location.query.count_type
       );
+    }
+
+    if (params.country && params.region && !params.stratum) {
+      // we looking at a country, grab its surrounding countries inside its region
+      fetchAdjacentGeography(
+        dispatch,
+        'region',
+        params.region,
+        routeGeography,
+        routeGeographyId
+      );
+    } else if (params.region && !params.country && !params.stratum) {
+      // we look at a region, grabs its surrounding regions inside the continent
+      fetchAdjacentGeography(
+        dispatch,
+        'continent',
+        'africa',
+        routeGeography,
+        routeGeographyId
+      );
+    } else if (params.region && params.country && params.stratum) {
+      const stratumId = params.stratum;
+      const geosData = subGeographyData;
+      const stratumData = getGeoFromId(stratumId, geosData);
+      const _coords = stratumData.coordinates.map(flatten);
+      const stratumBounds = getCoordData(_coords).bounds;
+      this.updateBounds(stratumBounds);
+    } else {
+      this.clearAdjacentData();
     }
   }
 
@@ -116,6 +162,7 @@ class App extends Component {
       currentNarrative,
       parentGeographyData,
       subGeographyData,
+      adjacentData,
       routeYear,
       sidebarState,
       error,
@@ -163,6 +210,7 @@ class App extends Component {
             loading={loading}
           />
           {React.cloneElement(children, {
+            adjacentData: adjacentData,
             currentGeography: currentGeography,
             currentGeographyId: currentGeographyId,
             parentGeographyData: parentGeographyData,
@@ -227,6 +275,7 @@ App.propTypes = {
   routeGeographyId: PropTypes.string,
   routeYear: PropTypes.string,
   parentGeographyData: PropTypes.array,
+  adjacentData: PropTypes.array,
   subGeographyData: PropTypes.array,
   sidebarState: PropTypes.number,
   error: PropTypes.string,
@@ -250,18 +299,14 @@ const mapStateToProps = (state, props) => {
   } else if (props.params.region) {
     routeGeography = 'region';
   }
-  //GET CURRENT BOUNDS BASED ON LEVEL
-  let finalBounds = state.geographyData.bounds;
   let selectedStratum = null;
-  // IF STRATUM SELECTED, USE STRATUM BOUNDS
   if (props.params.stratum) {
     const stratumId = props.params.stratum;
     const geosData = state.geographyData.subGeographies;
+    const stratumData = getGeoFromId(stratumId, geosData);
     selectedStratum = {
-      data: getGeoFromId(stratumId, geosData)
+      data: stratumData
     };
-    const _coords = selectedStratum.data.coordinates.map(flatten);
-    finalBounds = getCoordData(_coords).bounds;
   }
   // MAP STATE AND PROPS
   return {
@@ -278,8 +323,9 @@ const mapStateToProps = (state, props) => {
     routeYear: props.params.year || '2013',
     parentGeographyData: state.geographyData.parentGeography,
     subGeographyData: state.geographyData.subGeographies,
+    adjacentData: state.geographyData.adjacentData,
     sidebarState: state.navigation.sidebarState,
-    bounds: finalBounds,
+    bounds: state.geographyData.bounds,
     border: state.geographyData.border,
     searchActive: state.search.searchActive,
     ranges: state.ranges,
