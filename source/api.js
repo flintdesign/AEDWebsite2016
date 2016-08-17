@@ -16,6 +16,7 @@ import {
   RECEIVE_SUBGEOGRAPHY_DATA,
   RECEIVE_BOUNDS,
   RECEIVE_BORDER,
+  RECEIVE_ADJACENT_DATA
 } from './actions/app_actions';
 
 import { FETCH_RANGE, RECEIVE_RANGE } from './constants';
@@ -151,6 +152,21 @@ function fetchBorder(dispatch, geoType, mappedId) {
     });
 }
 
+function fetchAdjacentGeoJSON(type, item) {
+  const id = item.iso_code || item.id;
+  return fetch(`${config.apiBaseURL}/${type}/${id}/geojson_map?simplify=0.3`)
+  .then(r => r.json())
+  .then(d => {
+    const output = {
+      ...d,
+      ...item,
+      geoType: type
+    };
+    return output;
+  });
+}
+
+
 /*
 *   Fetches a list of subGeographies from the API and sends that data to the
 *   `loadSubGeography` for processing into the store
@@ -168,6 +184,34 @@ export function fetchSubGeography(dispatch, geoType, geoId, subGeoType) {
   fetch(`${config.apiBaseURL}/${geoType}/${geoId}/${pluralize(subGeoType)}`)
   .then(r => r.json())
   .then(d => loadSubGeography(dispatch, d, subGeoType));
+}
+
+export function fetchAdjacentGeography(dispatch, parentType, parentSlug, currentType) {
+  const mappedParentId = mapSlugToId(parentSlug);
+  // const mappedCurrentId = mapSlugToId(currentSlug);
+
+  const cacheKey = `adjacent-${parentType}-${parentSlug}`;
+  const cacheResponse = cache.get(cacheKey);
+  if (cacheResponse) {
+    return dispatch({ type: RECEIVE_ADJACENT_DATA, data: cacheResponse });
+  }
+
+  return fetch(`${config.apiBaseURL}/${parentType}/${mappedParentId}/${pluralize(currentType)}`)
+  .then(r => r.json())
+  .then(d => {
+    let data = d;
+    if (currentType === 'country') {
+      data = data.countries.filter(item => item.is_surveyed);
+    }
+    return Promise.all(data.map(c => fetchAdjacentGeoJSON(currentType, c)))
+    .then(adjacentData => {
+      cache.put(cacheKey, adjacentData, cacheDuration);
+      dispatch({
+        type: RECEIVE_ADJACENT_DATA,
+        data: adjacentData
+      });
+    });
+  });
 }
 
 /*
@@ -200,7 +244,6 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
   // fetch bound
   fetchBounds(dispatch, geoType, mappedId);
   fetchBorder(dispatch, geoType, mappedId);
-  // fetchSurroundingGeography();
 
   const fetchURL = `${config.apiBaseURL}/${type}/${mappedId}/${year}/${count}`;
   // Dispatch async call to the APIk

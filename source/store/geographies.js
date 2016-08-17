@@ -7,6 +7,7 @@ import {
   RECEIVE_BOUNDS,
   RECEIVE_BORDER,
   CHANGE_MAP,
+  RECEIVE_ADJACENT_DATA
 } from '../actions/app_actions';
 import { getTotalEstimate } from '../utils/convenience_funcs';
 
@@ -22,7 +23,8 @@ const initialState = {
   currentGeographyId: 'africa',
   currentNarrative: null,
   border: {},
-  geoJSON: {}
+  geoJSON: {},
+  adjacentData: []
 };
 export function geographies(state = initialState, action) {
   switch (action.type) {
@@ -55,6 +57,11 @@ export function geographies(state = initialState, action) {
     case RECEIVE_BORDER:
       return {
         ...state, border: action.border
+      };
+    case RECEIVE_ADJACENT_DATA:
+      return {
+        ...state,
+        adjacentData: action.data
       };
     case FETCH_GEOGRAPHY_DATA:
       return { ...state, loading: true, canInput: false, parentGeography: state.subGeographies };

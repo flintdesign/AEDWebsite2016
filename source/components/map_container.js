@@ -22,6 +22,7 @@ class MapContainer extends Component {
   constructor(props, context) {
     super(props, context);
     this.handleClick = this.handleClick.bind(this);
+    this.handleAdjacentClick = this.handleAdjacentClick.bind(this);
     this.handleMouseover = this.handleMouseover.bind(this);
     this.handleMouseout = this.handleMouseout.bind(this);
     this.onZoomEnd = this.onZoomEnd.bind(this);
@@ -108,6 +109,13 @@ class MapContainer extends Component {
     this.props.cancelSearch();
   }
 
+  handleAdjacentClick(e) {
+    if (!this.props.canInput) return;
+    const href = e.target.options.href;
+    this.props.router.replace(href);
+    this.props.cancelSearch();
+  }
+
   handleMouseout(e) {
     e.target.closePopup();
   }
@@ -121,6 +129,7 @@ class MapContainer extends Component {
     const geoJSONBorderObjs = [];
     const labels = [];
     const stratumLabels = [];
+    const adjacentGeoJSONObjs = [];
     const rangeMarkup = this.getRangeMarkup(this.props.ranges, this.props.ui);
     if (this.state.geoJSONData) {
       const self = this;
@@ -173,6 +182,29 @@ class MapContainer extends Component {
         return datum;
       });
     }
+
+    this.props.adjacentData.map(adjacent => {
+      const slugifiedName = slugify(adjacent.name);
+      const location = this.props.location.pathname;
+      const currentPathParts = location.split('/');
+      const rootPath = location.replace(currentPathParts[currentPathParts.length - 1], '');
+      const adjacentHref = `${rootPath}${slugifiedName}`;
+      if (slugifiedName !== currentPathParts[currentPathParts.length - 1]
+        && slugifiedName !== currentPathParts[currentPathParts.length - 2]
+        && slugifiedName !== 'north-africa' && slugifiedName !== 'sudan') {
+        adjacentGeoJSONObjs.push(
+          <GeoJson
+            key={`${adjacent.id}_${slugifiedName}`}
+            onClick={this.handleAdjacentClick}
+            href={adjacentHref}
+            data={adjacent}
+            className={`adjacent ${adjacent.geoType}`}
+          />
+        );
+      }
+      return adjacent;
+    });
+
     if (this.props.border.coordinates && !this.props.loading && this.props.canInput) {
       let borderClass = '';
       if (this.props.params.region) {
@@ -202,6 +234,7 @@ class MapContainer extends Component {
         />
         {rangeMarkup}
         {geoJSONBorderObjs}
+        {this.props.canInput && adjacentGeoJSONObjs}
         {this.props.canInput && geoJSONObjs}
         {labels}
         {stratumLabels}
@@ -217,6 +250,7 @@ MapContainer.propTypes = {
   routeGeographyId: PropTypes.string,
   parentGeographyData: PropTypes.array,
   subGeographyData: PropTypes.array,
+  adjacentData: PropTypes.array,
   year: PropTypes.string.isRequired,
   cancelSearch: PropTypes.func,
   bounds: PropTypes.array,
@@ -227,7 +261,8 @@ MapContainer.propTypes = {
   ui: PropTypes.object.isRequired,
   ranges: PropTypes.object,
   router: PropTypes.shape({
-    push: PropTypes.func.isRequired
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired
   }).isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string
