@@ -207,7 +207,7 @@ export function fetchAdjacentGeography(dispatch, parentType, parentSlug, current
   .then(d => {
     let data = d;
     if (currentType === 'country') {
-      data = data.countries.filter(item => item.is_surveyed);
+      data = data.countries.filter(item => item.is_surveyed || (item.name === 'Somalia'));
     }
     return Promise.all(data.map(c => fetchAdjacentGeoJSON(currentType, c)))
     .then(adjacentData => {
