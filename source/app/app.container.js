@@ -17,7 +17,8 @@ import {
   contractSidebar,
   toggleRange,
   clearAdjacentData,
-  updateBounds
+  updateBounds,
+  selectStratum
 } from '../actions';
 
 class App extends Component {
@@ -85,6 +86,10 @@ class App extends Component {
     this.props.dispatch(updateBounds(newBounds));
   }
 
+  selectStratum(stratumData) {
+    this.props.dispatch(selectStratum(stratumData));
+  }
+
   handleClick(e) {
     const rangeType = e.target.getAttribute('data-range-type');
     fetchRanges(rangeType, this.props.dispatch);
@@ -142,6 +147,7 @@ class App extends Component {
       const _coords = stratumData.coordinates.map(flatten);
       const stratumBounds = getCoordData(_coords).bounds;
       this.updateBounds(stratumBounds);
+      this.selectStratum(stratumData);
     } else {
       this.clearAdjacentData();
     }
@@ -177,9 +183,7 @@ class App extends Component {
     } = this.props;
     let finalTotalEstimate = totalEstimate;
     if (selectedStratum) {
-      if (selectedStratum.data) {
-        finalTotalEstimate = selectedStratum.data.estimate;
-      }
+      finalTotalEstimate = selectedStratum.estimate;
     }
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
     const searchOverlay = searchActive
@@ -299,15 +303,15 @@ const mapStateToProps = (state, props) => {
   } else if (props.params.region) {
     routeGeography = 'region';
   }
-  let selectedStratum = null;
-  if (props.params.stratum) {
-    const stratumId = props.params.stratum;
-    const geosData = state.geographyData.subGeographies;
-    const stratumData = getGeoFromId(stratumId, geosData);
-    selectedStratum = {
-      data: stratumData
-    };
-  }
+  // let selectedStratum = null;
+  // if (props.params.stratum) {
+  //   const stratumId = props.params.stratum;
+  //   const geosData = state.geographyData.subGeographies;
+  //   const stratumData = getGeoFromId(stratumId, geosData);
+  //   selectedStratum = {
+  //     data: stratumData
+  //   };
+  // }
   // MAP STATE AND PROPS
   return {
     error: state.geographyData.error,
@@ -330,7 +334,7 @@ const mapStateToProps = (state, props) => {
     searchActive: state.search.searchActive,
     ranges: state.ranges,
     ui: state.ui,
-    selectedStratum: selectedStratum
+    selectedStratum: state.geographyData.selectedStratum
   };
 };
 

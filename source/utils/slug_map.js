@@ -34,6 +34,7 @@ export default {
   'burkina-faso': 'BF',
   'benin': 'BJ',
   'cote-divoire': 'CI',
+  'côte-d\'ivoire': 'CI',
   'ghana': 'GH',
   'guinea': 'GN',
   'guinea-bissau': 'GW',

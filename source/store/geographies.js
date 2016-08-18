@@ -7,14 +7,15 @@ import {
   RECEIVE_BOUNDS,
   RECEIVE_BORDER,
   CHANGE_MAP,
-  RECEIVE_ADJACENT_DATA
+  RECEIVE_ADJACENT_DATA,
+  SELECT_STRATUM
 } from '../actions/app_actions';
 import { getTotalEstimate } from '../utils/convenience_funcs';
 
 const initialState = {
   error: null,
   loading: false,
-  canInput: false,
+  canInput: true,
   parentGeography: [],
   geographies: {},
   subGeographies: [],
@@ -24,7 +25,8 @@ const initialState = {
   currentNarrative: null,
   border: {},
   geoJSON: {},
-  adjacentData: []
+  adjacentData: [],
+  selectedStratum: null
 };
 export function geographies(state = initialState, action) {
   switch (action.type) {
@@ -48,7 +50,8 @@ export function geographies(state = initialState, action) {
     case RECEIVE_SUBGEOGRAPHY_DATA:
       return { ...state,
         loading: false,
-        subGeographies: action.data
+        subGeographies: action.data,
+        selectedStratum: null
       };
     case RECEIVE_BOUNDS:
       return {
@@ -62,6 +65,11 @@ export function geographies(state = initialState, action) {
       return {
         ...state,
         adjacentData: action.data
+      };
+    case SELECT_STRATUM:
+      return {
+        ...state,
+        selectedStratum: action.data
       };
     case FETCH_GEOGRAPHY_DATA:
       return { ...state, loading: true, canInput: false, parentGeography: state.subGeographies };

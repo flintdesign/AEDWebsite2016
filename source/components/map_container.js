@@ -130,6 +130,7 @@ class MapContainer extends Component {
     const labels = [];
     const stratumLabels = [];
     const adjacentGeoJSONObjs = [];
+    const selectedStratumObjs = [];
     const rangeMarkup = this.getRangeMarkup(this.props.ranges, this.props.ui);
     if (this.state.geoJSONData) {
       const self = this;
@@ -189,6 +190,10 @@ class MapContainer extends Component {
       const currentPathParts = location.split('/');
       const rootPath = location.replace(currentPathParts[currentPathParts.length - 1], '');
       const adjacentHref = `${rootPath}${slugifiedName}`;
+      let adjacentClass = `adjacent ${adjacent.geoType} adjacent--${slugifiedName}`;
+      if (adjacent.region) {
+        adjacentClass += ` adjacent--${adjacent.region}`;
+      }
       if (slugifiedName !== currentPathParts[currentPathParts.length - 1]
         && slugifiedName !== currentPathParts[currentPathParts.length - 2]
         && slugifiedName !== 'north-africa' && slugifiedName !== 'sudan') {
@@ -198,12 +203,23 @@ class MapContainer extends Component {
             onClick={this.handleAdjacentClick}
             href={adjacentHref}
             data={adjacent}
-            className={`adjacent ${adjacent.geoType}`}
+            className={adjacentClass}
           />
         );
       }
       return adjacent;
     });
+
+    if (this.props.selectedStratum) {
+      const stratum = this.props.selectedStratum;
+      selectedStratumObjs.push(
+        <GeoJson
+          key={`/${slugify(stratum.name)}-${stratum.id}`}
+          data={stratum}
+          className={`region-${slugify(stratum.region)}__stratum active`}
+        />
+      );
+    }
 
     if (this.props.border.coordinates && !this.props.loading && this.props.canInput) {
       let borderClass = '';
@@ -233,9 +249,10 @@ class MapContainer extends Component {
           url={tileURL}
         />
         {rangeMarkup}
-        {geoJSONBorderObjs}
-        {this.props.canInput && adjacentGeoJSONObjs}
+        {this.props.canInput && geoJSONBorderObjs}
         {this.props.canInput && geoJSONObjs}
+        {this.props.canInput && adjacentGeoJSONObjs}
+        {this.props.canInput && selectedStratumObjs}
         {labels}
         {stratumLabels}
       </Map>

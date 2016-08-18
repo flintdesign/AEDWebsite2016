@@ -2,7 +2,8 @@ import {
   EXPAND_SIDEBAR,
   CONTRACT_SIDEBAR,
   RECEIVE_ADJACENT_DATA,
-  RECEIVE_BOUNDS
+  RECEIVE_BOUNDS,
+  SELECT_STRATUM
 } from './app_actions';
 
 import {
@@ -45,4 +46,8 @@ export function clearAdjacentData() {
 
 export function updateBounds(newBounds) {
   return ({ type: RECEIVE_BOUNDS, bounds: newBounds });
+}
+
+export function selectStratum(stratumData) {
+  return ({ type: SELECT_STRATUM, data: stratumData });
 }
