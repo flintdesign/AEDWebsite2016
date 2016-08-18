@@ -1,5 +1,5 @@
 $stroke-opacity = 0
-$fill-opacity = 0.75
+$fill-opacity = 0.65
 $hover-fill-opacity = 0.85
 
 .leaflet-container
@@ -37,7 +37,7 @@ $hover-fill-opacity = 0.85
   stroke-width 2
   &:hover
     fill-opacity $hover-fill-opacity
-    stroke-opacity 1
+    stroke-opacity 0
     stroke-width 2
 
 /* hide norhern africa's label */
@@ -53,37 +53,63 @@ path
   &.eastern-africa
     stroke $eastern-africa
     fill $eastern-africa
+    stroke-opacity 0
     @extend .mapsvg
     &:hover
       stroke darken($eastern-africa, 20%)
   &.central-africa
     stroke $central-africa
     fill $central-africa
+    stroke-opacity 0
     @extend .mapsvg
     &:hover
       stroke darken($central-africa, 20%)
   &.west-africa
     stroke $west-africa
     fill $west-africa
+    stroke-opacity 0
     @extend .mapsvg
     &:hover
       stroke darken($west-africa, 20%)
   &.southern-africa
     stroke $southern-africa
     fill $southern-africa
+    stroke-opacity 0
     @extend .mapsvg
     &:hover
       stroke darken($southern-africa, 20%)
 
 .adjacent
-  stroke $west-africa
-  fill-opacity 0.1
+  transition stroke 200ms ease-in-out, fill 200ms ease-in-out, fill-opacity 200ms ease-in-out, stroke-width 200ms ease-in-out
+  stroke #b5b5b5
+  fill #dddddd
+  fill-opacity 0.3
   stroke-opacity 0
   stroke-width 1.5
   
   &:hover
-    fill-opacity 0.2
-    stroke-opacity 1
+    stroke-opacity 0
+    fill-opacity 0.65
+  
+  &--west-africa
+    &:hover
+      stroke $west-africa
+      fill $west-africa
+  
+  &--southern-africa
+    &:hover
+      stroke $southern-africa
+      fill $southern-africa 
+  
+  &--eastern-africa
+    &:hover
+      stroke $eastern-africa
+      fill $eastern-africa 
+  
+  &--central-africa
+    &:hover
+      stroke $central-africa
+      fill $central-africa 
 
 .region-west-africa__country,
 .region-west-africa__stratum
@@ -102,8 +128,11 @@ path
 
 .region-west-africa__stratum
   stroke-width 1.0
-  &:hover, &.active
+  &:hover
     fill-opacity 0.5
+
+  &.active
+    fill-opacity 1
 
 .region-central-africa__country,
 .region-central-africa__stratum
@@ -118,12 +147,14 @@ path
   stroke-opacity 0
   
   &:hover
-    fill-opacity 0.2
+    fill-opacity 0.4
 
 .region-central-africa__stratum
   stroke-width 1.0
-  &:hover, &.active
-    fill-opacity 0.5
+  &:hover
+    fill-opacity 0.4
+  &.active
+    fill-opacity 1
 
 .region-southern-africa__country,
 .region-southern-africa__stratum
@@ -138,12 +169,14 @@ path
   stroke-opacity 0
   
   &:hover
-    fill-opacity 0.2
+    fill-opacity 0.4
 
 .region-southern-africa__stratum
   stroke-width 1.0
-  &:hover, &.active
-    fill-opacity 0.5
+  &:hover
+    fill-opacity 0.4
+  &.active
+    fill-opacity 1
 
 
 .region-eastern-africa__country,
@@ -159,12 +192,14 @@ path
   stroke-opacity 0
   
   &:hover
-    fill-opacity 0.2
+    fill-opacity 0.4
 
 .region-eastern-africa__stratum
   stroke-width 1.0
-  &:hover, &.active
-    fill-opacity 0.5
+  &:hover
+    fill-opacity 0.4
+  &.active
+    fill-opacity 1
   
     
 .border
@@ -175,31 +210,31 @@ path
 .border--eastern-africa.border--region
   stroke $eastern-africa
   fill-opacity 0
-  stroke-width 3
+  stroke-width 2
   pointer-events none
 
 .border--southern-africa.border--region
   stroke $southern-africa
   fill-opacity 0
-  stroke-width 3
+  stroke-width 2
   pointer-events none
 
 .border--west-africa.border--region
   stroke $west-africa
   fill-opacity 0
-  stroke-width 3
+  stroke-width 2
   pointer-events none
 
 .border--central-africa.border--region
   stroke $central-africa
   fill-opacity 0
-  stroke-width 3
+  stroke-width 2
   pointer-events none
 
 .border--country
   stroke black
   fill-opacity 0
-  stroke-width 3
+  stroke-width 2
   pointer-events none
 
 .border--country.region--central-africa

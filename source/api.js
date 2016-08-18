@@ -5,7 +5,8 @@ import {
   pluralize,
   getNextGeography,
   mapSlugToId,
-  flatten
+  flatten,
+  regionById
 } from './utils/convenience_funcs';
 
 import {
@@ -154,13 +155,18 @@ function fetchBorder(dispatch, geoType, mappedId) {
 
 function fetchAdjacentGeoJSON(type, item) {
   const id = item.iso_code || item.id;
+  let region;
+  if (type === 'country') {
+    region = regionById(item.region_id).className;
+  }
   return fetch(`${config.apiBaseURL}/${type}/${id}/geojson_map?simplify=0.3`)
   .then(r => r.json())
   .then(d => {
     const output = {
       ...d,
       ...item,
-      geoType: type
+      geoType: type,
+      region
     };
     return output;
   });
