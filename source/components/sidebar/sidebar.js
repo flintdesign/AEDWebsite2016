@@ -6,7 +6,7 @@ import StratumSidebar from './stratum_sidebar';
 import CountTypeToggle from './count_type_toggle';
 import compact from 'lodash.compact';
 import find from 'lodash.find';
-import isArray from 'lodash.isArray';
+import isArray from 'lodash.isarray';
 import {
   pluralize,
   getNextGeography,
