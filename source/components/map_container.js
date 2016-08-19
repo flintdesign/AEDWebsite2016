@@ -101,6 +101,7 @@ class MapContainer extends Component {
 
   handleClick(e) {
     if (!this.props.canInput) return;
+    this.props.updateBounds(e.target.options.bounds);
     const href = e.target.options.href;
     const currentPath = this.props.location.pathname;
     const newPath = replaceURLPart(currentPath, href);
@@ -111,6 +112,7 @@ class MapContainer extends Component {
 
   handleAdjacentClick(e) {
     if (!this.props.canInput) return;
+    this.props.updateBounds(e.target.options.bounds);
     const href = e.target.options.href;
     this.props.router.replace(href);
     this.props.cancelSearch();
@@ -204,6 +206,7 @@ class MapContainer extends Component {
             href={adjacentHref}
             data={adjacent}
             className={adjacentClass}
+            bounds={adjacent.bounds}
           />
         );
       }
@@ -249,7 +252,7 @@ class MapContainer extends Component {
           url={tileURL}
         />
         {rangeMarkup}
-        {this.props.canInput && geoJSONBorderObjs}
+        {geoJSONBorderObjs}
         {this.props.canInput && geoJSONObjs}
         {this.props.canInput && adjacentGeoJSONObjs}
         {this.props.canInput && selectedStratumObjs}
@@ -270,6 +273,7 @@ MapContainer.propTypes = {
   adjacentData: PropTypes.array,
   year: PropTypes.string.isRequired,
   cancelSearch: PropTypes.func,
+  updateBounds: PropTypes.func,
   bounds: PropTypes.array,
   border: PropTypes.object,
   loading: PropTypes.bool,
