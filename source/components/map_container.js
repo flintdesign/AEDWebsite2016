@@ -151,7 +151,7 @@ class MapContainer extends Component {
         }
         if (datum.geoType === 'region' && datum.coordinates && self.props.routeGeography === 'continent' && self.props.currentGeography === 'continent') {
           const icon = divIcon({
-            className: 'leaflet-marker-icon',
+            className: `leaflet-marker-icon ${slugify(datum.name)}`,
             html: `<h1 style="font-size:${self.getLabelFontSize()}px"
                   class="leaflet-marker-icon__label
                   ${getNextGeography(self.props.currentGeography)}-${datum.id}">
