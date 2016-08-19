@@ -2,6 +2,9 @@ if (process.env.NODE_ENV === 'production') {
   const express = require('express');
   const app = express();
   app.use(express.static(`${__dirname}/public`));
+  app.get('/*', (req, res) => {
+    res.sendFile('index.html');
+  });
   const port = process.env.PORT || 8080;
   app.listen(port, () => console.log('Express server running at http://localhost:8080'));
 } else {
