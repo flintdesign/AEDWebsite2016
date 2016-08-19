@@ -223,6 +223,7 @@ class App extends Component {
             sidebarState: sidebarState,
             openSidebar: this.expandSidebar,
             cancelSearch: this.cancelSearch,
+            updateBounds: this.updateBounds,
             bounds: bounds,
             border: border,
             ranges: ranges,

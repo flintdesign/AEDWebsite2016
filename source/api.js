@@ -162,11 +162,14 @@ function fetchAdjacentGeoJSON(type, item) {
   return fetch(`${config.apiBaseURL}/${type}/${id}/geojson_map?simplify=0.3`)
   .then(r => r.json())
   .then(d => {
+    const coords = d.coordinates.map(flatten);
+    const bounds = getCoordData(coords).bounds;
     const output = {
       ...d,
       ...item,
       geoType: type,
-      region
+      region,
+      bounds
     };
     return output;
   });
