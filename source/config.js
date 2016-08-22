@@ -5,5 +5,6 @@ export default {
   apiBaseURL: 'http://staging.elephantdatabase.org/api',
   // maxMapBounds: [[38.5730952, -20.8207639], [-40.7265232, 65.6147961]],
   maxMapBounds: [[42.203309, -28.818811], [-44.036343, 73.261280]],
-  rangeTypes: ['known', 'possible', 'doubtful', 'protected']
+  rangeTypes: ['known', 'possible', 'protected']
+  // rangeTypes: ['known', 'possible', 'doubtful', 'protected']
 };

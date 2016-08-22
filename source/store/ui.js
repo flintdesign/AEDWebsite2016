@@ -8,7 +8,7 @@ const initialState = {
   known: true,
   doubtful: false,
   possible: true,
-  protected: false
+  protected: true
 };
 
 export const ui = (state = initialState, action) => {
