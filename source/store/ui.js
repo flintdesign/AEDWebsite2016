@@ -5,9 +5,9 @@ import {
 
 const initialState = {
   legendActive: false,
-  known: false,
+  known: true,
   doubtful: false,
-  possible: false,
+  possible: true,
   protected: false
 };
 
