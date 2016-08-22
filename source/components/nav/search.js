@@ -46,7 +46,7 @@ function createParentTitle(result, data) {
       label = `${type} in Africa`;
       break;
     case 'country':
-      label = `${type} in ${data[result.parent].parent}`;
+      label = `${type} in ${result.parent}`;
       break;
     case 'stratum':
       label = `${type} in ${data[result.parent].parent}`;
