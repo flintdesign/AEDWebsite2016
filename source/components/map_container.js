@@ -5,6 +5,7 @@ import {
   TileLayer,
   Marker,
   GeoJson,
+  LayerGroup
   // Popup
 } from 'react-leaflet';
 import { divIcon } from 'leaflet';
@@ -103,8 +104,6 @@ class MapContainer extends Component {
     if (!this.props.canInput) return;
     if (this.props.sidebarState === 0) {
       this.props.openSidebar();
-    } else {
-      this.props.updateBounds(e.target.options.bounds);
     }
     const href = e.target.options.href;
     const currentPath = this.props.location.pathname;
@@ -116,7 +115,7 @@ class MapContainer extends Component {
 
   handleAdjacentClick(e) {
     if (!this.props.canInput) return;
-    this.props.updateBounds(e.target.options.bounds);
+    // this.props.updateBounds(e.target.options.bounds);
     const href = e.target.options.href;
     this.props.router.replace(href);
     this.props.cancelSearch();
@@ -255,13 +254,17 @@ class MapContainer extends Component {
         <TileLayer
           url={tileURL}
         />
-        {rangeMarkup}
-        {geoJSONBorderObjs}
-        {this.props.canInput && geoJSONObjs}
-        {this.props.canInput && adjacentGeoJSONObjs}
-        {this.props.canInput && selectedStratumObjs}
-        {labels}
-        {stratumLabels}
+        <LayerGroup>
+          {rangeMarkup}
+        </LayerGroup>
+        <LayerGroup>
+          {geoJSONBorderObjs}
+          {this.props.canInput && geoJSONObjs}
+          {this.props.canInput && adjacentGeoJSONObjs}
+          {this.props.canInput && selectedStratumObjs}
+          {labels}
+          {stratumLabels}
+        </LayerGroup>
       </Map>
     );
   }
