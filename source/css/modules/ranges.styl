@@ -13,13 +13,20 @@ $box = #bababa
     visibility hidden
 
 .known_geojson
-  fill-opacity 0.25
+  fill-opacity 0.32
 
 .possible_geojson
-  fill-opacity 0.1
+  fill-opacity 0.12
 
 .protected_geojson
   fill-opacity 0.04
+  z-index 0
+  stroke #999
+  fill transparent
+  stroke-dasharray 2,3
+  stroke-width 1
+  stroke-opacity 1
+  pointer-events none
 
 .doubtful_geojson
   fill-opacity 0.025
@@ -27,12 +34,17 @@ $box = #bababa
 .range__item
   display inline-block
   width 100%
-  margin-bottom 10px
+  margin 5px 0
   font-weight bold
-  font-size 14px
+  font-size 0.85em
   cursor pointer
-  &.shown .range__icon
-    background #000
+  &.shown[data-range-type="known"] .range__icon 
+    background rgba(51,51,51,0.32)
+  &.shown[data-range-type="possible"] .range__icon 
+    background rgba(51,51,51,0.12)
+  &.shown[data-range-type="protected"] .range__icon 
+    background $white
+    border 1px dashed #999
   &.hidden .range__icon
     background #eee
 
@@ -50,7 +62,8 @@ $box = #bababa
 
 .ranges__container
   background #fff
-  padding 10px
+  border-radius 2px
+  padding 10px 12px
   position absolute
   left 5%
   z-index 1
@@ -63,22 +76,31 @@ $box = #bababa
   box-shadow 0 0 3px $box
   h3
     color $text-light
-    letter-spacing 2px
-    font-size 13px
+    letter-spacing 0.15em
+    font-size 12px
+    font-weight 500
     text-transform uppercase
     position relative
     cursor pointer
     &:after
+      background url('/images/chevron-down.svg') no-repeat 50% 45%
+      content ''
+      height 20px
       position absolute
-      content '\203A'
-      font-size 20px
+      width 20px
+    &.expanded
+      margin-bottom 1em
     &.expanded:after
-      transform rotate(-90deg)
-      left 200px
+      background url('/images/chevron-up.svg') no-repeat 50% 55%
+      background-size 65%
+      content ''
+      right 0
       bottom 2px
     &.contracted:after
-      transform rotate(90deg)
-      left 205px
+      background url('/images/chevron-down.svg') no-repeat 50% 45%
+      background-size 65%
+      content ''
+      right 0
       bottom 0
 
 .main__container.breadcrumbs-active .ranges__container
@@ -95,3 +117,4 @@ $box = #bababa
   &.expanded
     /* arbitrarily high height (http://stackoverflow.com/a/8331169/931934) */
     max-height 500em
+    padding 0 5px

@@ -34,19 +34,22 @@
 
 .sidebar__toggle
   position fixed
-  top 10px
+  top 15px
   right 0
-  padding 10px 15px
-  color #e3e3e3
+  padding 6px 15px
+  color $white
   cursor pointer
   &.closed
     background $brand-dark-md
-    border-radius 6px 0 0 6px
+    border-radius 3px 0 0 3px
   &.open
     background none
 
+.breadcrumbs-active .sidebar__toggle.closed
+  top 67px
+
 .breadcrumbs-active .sidebar__toggle
-  top 62.5px
+  top 15px
 
 .sidebar__toggle--expand
   right 40px
