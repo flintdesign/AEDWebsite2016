@@ -96,12 +96,16 @@ class MapContainer extends Component {
     const self = this;
     setTimeout(() => {
       self.refs.map.leafletElement.invalidateSize(true);
-    }, 250);
+    }, 500);
   }
 
   handleClick(e) {
     if (!this.props.canInput) return;
-    this.props.updateBounds(e.target.options.bounds);
+    if (this.props.sidebarState === 0) {
+      this.props.openSidebar();
+    } else {
+      this.props.updateBounds(e.target.options.bounds);
+    }
     const href = e.target.options.href;
     const currentPath = this.props.location.pathname;
     const newPath = replaceURLPart(currentPath, href);
@@ -272,6 +276,7 @@ MapContainer.propTypes = {
   subGeographyData: PropTypes.array,
   adjacentData: PropTypes.array,
   year: PropTypes.string.isRequired,
+  openSidebar: PropTypes.func,
   cancelSearch: PropTypes.func,
   updateBounds: PropTypes.func,
   bounds: PropTypes.array,
