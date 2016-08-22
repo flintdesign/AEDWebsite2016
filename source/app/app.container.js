@@ -41,6 +41,8 @@ class App extends Component {
 
   componentDidMount() {
     this.fetchData(this.props, true);
+    fetchRanges('known', this.props.dispatch);
+    fetchRanges('possible', this.props.dispatch);
   }
 
   componentWillReceiveProps(newProps) {
