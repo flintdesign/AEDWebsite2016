@@ -6,6 +6,7 @@ $box = #bababa
   fill #333
   stroke-width 0
   stroke-opacity 0
+  pointer-events none
   &.show
     visibility visible
   &.hide
@@ -19,6 +20,13 @@ $box = #bababa
 
 .protected_geojson
   fill-opacity 0.04
+  z-index 100
+  stroke #999
+  fill transparent
+  stroke-dasharray 2,5
+  stroke-width 1
+  stroke-opacity 1
+  pointer-events none
 
 .doubtful_geojson
   fill-opacity 0.025
@@ -62,8 +70,9 @@ $box = #bababa
   box-shadow 0 0 3px $box
   h3
     color $text-light
-    letter-spacing 2px
-    font-size 13px
+    letter-spacing 0.15em
+    font-size 12px
+    font-weight 500
     text-transform uppercase
     position relative
     cursor pointer
