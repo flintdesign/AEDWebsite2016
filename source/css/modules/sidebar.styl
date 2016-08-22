@@ -3,6 +3,9 @@
 
 aside
   background #f7f7f7
+  -webkit-box-shadow 0px 2px 5px rgba(0, 0, 0, 0.08)
+  -moz-box-shadow 0px 2px 5px rgba(0, 0, 0, 0.08)
+  box-shadow 0px 2px 5px rgba(0, 0, 0, 0.08)
   min-height 100vh
   transition width 250ms
   position relative
@@ -44,6 +47,7 @@ aside table
     height 80vh
 
 .sidebar__year-nav__container
+  background inherit
   position relative
   -webkit-font-smoothing auto
   &:after
@@ -56,7 +60,7 @@ aside table
 .sidebar__year-nav
   border 1px solid #fff
   border-width 0 0 1px 0
-  background transparent
+  letter-spacing 0.1em
   -webkit-appearance none
   padding 3px 16px 3px 0
   color #fff
@@ -94,18 +98,23 @@ aside table
 .sidebar__viz-type
   margin-left 0
   padding-left 0
+  li
+    padding 1px 0
 
 .sidebar__viz-toggle
   @extend .small-heading
+  border-bottom 1px solid transparent
   line-height 1
   margin-bottom 10px
   display table
-  color #fff
+  color $gray-lightest
+  font-weight 700
   text-decoration none
   padding-bottom 3px
   cursor pointer
   &.active, &:hover
     @extend .small-current
+    color $white
 
 .sidebar__entity-name
   font-family 'Noe Display', Georgia, serif
@@ -113,7 +122,7 @@ aside table
   font-style normal
   font-size 36px
   line-height 36px
-  margin 55px 0 10px
+  margin 50px 0 10px //margin top change temporary
   -webkit-font-smoothing auto
 
 .sidebar__entity-input-zone
@@ -122,6 +131,7 @@ aside table
   margin-top -10px
 
 .sidebar__stats-table
+  font-size 0.98em
   width 100%
   margin-bottom 30px
   h3
@@ -134,16 +144,12 @@ aside table
       text-align right
   tbody td,
   thead th
-    padding 6px 0
+    padding 0.5em 0
     span
       color $text-light
     &:last-child
       font-weight bold
       text-align right
-
-.sidebar__stats-table.bold-all
-  tbody td:first-child
-    font-weight bold
 
 .count-type-toggle
   position absolute
@@ -155,8 +161,8 @@ aside table
     cursor pointer
     -webkit-font-smoothing auto
     letter-spacing 1px
-    font-size 12px
-    width 50px
+    font-size 10px
+    width 48px
     text-align center
     margin -2px
     &:first-of-type a
@@ -183,17 +189,18 @@ aside table
     a
       color #fff
       text-decoration none
-      padding 3px 7px
+      padding 5px 8px
 
 .sidebar__count-summary
   &--causes-of-change
     margin-top 30px
 
 .sidebar__table-container
-  border-bottom 2px solid #dcdcdc
+  border-bottom 1px solid $gray-light
   h3
+    font-size 0.98em
     font-weight 600
-    padding 10px 0
+    padding 0.75em 0
     cursor pointer
     position relative
     &:after
@@ -217,7 +224,6 @@ aside table
       display table
 
 .sidebar__narrative
-  border-bottom 2px solid #dcdcdc
   margin-bottom 10px
   overflow hidden
 
@@ -264,7 +270,9 @@ aside table
     text-align center
     width 100%
   h1
+    font-size 3em
     left 50%
+    line-height 1.1
     margin 0
     position absolute
     top 50%

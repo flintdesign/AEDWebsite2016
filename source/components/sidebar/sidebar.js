@@ -103,7 +103,8 @@ class Sidebar extends Component {
       error,
       selectedStratum
     } = this.props;
-    const years = ['2015', '2013', '2006', '2002', '1998', '1995'];
+    // const years = ['2015', '2013', '2006', '2002', '1998', '1995'];
+    const years = ['2015', '2013'];
     const yearLinks = years.map(y => {
       const toVal = compact(window.location.pathname.split('/'));
       const linkVal = toVal.length ? `${y}/${toVal.splice(1).join('/')}` : y;

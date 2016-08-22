@@ -1,6 +1,6 @@
 $stroke-opacity = 0
-$fill-opacity = 0.65
-$hover-fill-opacity = 0.85
+$fill-opacity = 0.68
+$hover-fill-opacity = 0.25
 
 .leaflet-container
   width 100%
@@ -27,6 +27,7 @@ $hover-fill-opacity = 0.85
   left -100px
   position absolute
   color #fff
+  text-shadow 1px 2px rgba(0,0,0,0.15)
   font-weight bold
   text-transform uppercase
   letter-spacing 3px
@@ -39,7 +40,7 @@ $hover-fill-opacity = 0.85
   stroke-opacity 0.75
   stroke-width 2
   &:hover
-    fill-opacity $hover-fill-opacity
+    fill-opacity 0.85
     stroke-opacity 0
     stroke-width 2
 
@@ -86,13 +87,13 @@ path
   transition stroke 200ms ease-in-out, fill 200ms ease-in-out, fill-opacity 200ms ease-in-out, stroke-width 200ms ease-in-out
   stroke #b5b5b5
   fill #dddddd
-  fill-opacity 0.3
+  fill-opacity 0.15
   stroke-opacity 0
   stroke-width 1.5
   
   &:hover
-    stroke-opacity 0
-    fill-opacity 0.65
+    stroke-opacity 0.8
+    fill-opacity $hover-fill-opacity
   
   &--west-africa
     &:hover
@@ -135,7 +136,7 @@ path
     fill-opacity 0.5
 
   &.active
-    fill-opacity 1
+    fill-opacity 0.7
 
 .region-central-africa__country,
 .region-central-africa__stratum
@@ -155,9 +156,9 @@ path
 .region-central-africa__stratum
   stroke-width 1.0
   &:hover
-    fill-opacity 0.4
+    fill-opacity 0.5
   &.active
-    fill-opacity 1
+    fill-opacity 0.7
 
 .region-southern-africa__country,
 .region-southern-africa__stratum
@@ -175,11 +176,11 @@ path
     fill-opacity 0.4
 
 .region-southern-africa__stratum
-  stroke-width 1.0
+  stroke-width 1.25
   &:hover
-    fill-opacity 0.4
+    fill-opacity 0.5
   &.active
-    fill-opacity 1
+    fill-opacity 0.7
 
 
 .region-eastern-africa__country,
@@ -200,9 +201,9 @@ path
 .region-eastern-africa__stratum
   stroke-width 1.0
   &:hover
-    fill-opacity 0.4
+    fill-opacity 0.5
   &.active
-    fill-opacity 1
+    fill-opacity 0.7
   
     
 .border
