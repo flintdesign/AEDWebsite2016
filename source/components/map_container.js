@@ -5,6 +5,7 @@ import {
   TileLayer,
   Marker,
   GeoJson,
+  LayerGroup
   // Popup
 } from 'react-leaflet';
 import { divIcon } from 'leaflet';
@@ -96,12 +97,14 @@ class MapContainer extends Component {
     const self = this;
     setTimeout(() => {
       self.refs.map.leafletElement.invalidateSize(true);
-    }, 250);
+    }, 500);
   }
 
   handleClick(e) {
     if (!this.props.canInput) return;
-    this.props.updateBounds(e.target.options.bounds);
+    if (this.props.sidebarState === 0) {
+      this.props.openSidebar();
+    }
     const href = e.target.options.href;
     const currentPath = this.props.location.pathname;
     const newPath = replaceURLPart(currentPath, href);
@@ -112,7 +115,7 @@ class MapContainer extends Component {
 
   handleAdjacentClick(e) {
     if (!this.props.canInput) return;
-    this.props.updateBounds(e.target.options.bounds);
+    // this.props.updateBounds(e.target.options.bounds);
     const href = e.target.options.href;
     this.props.router.replace(href);
     this.props.cancelSearch();
@@ -251,13 +254,17 @@ class MapContainer extends Component {
         <TileLayer
           url={tileURL}
         />
-        {rangeMarkup}
-        {geoJSONBorderObjs}
-        {this.props.canInput && geoJSONObjs}
-        {this.props.canInput && adjacentGeoJSONObjs}
-        {this.props.canInput && selectedStratumObjs}
-        {labels}
-        {stratumLabels}
+        <LayerGroup>
+          {rangeMarkup}
+        </LayerGroup>
+        <LayerGroup>
+          {geoJSONBorderObjs}
+          {this.props.canInput && geoJSONObjs}
+          {this.props.canInput && adjacentGeoJSONObjs}
+          {this.props.canInput && selectedStratumObjs}
+          {labels}
+          {stratumLabels}
+        </LayerGroup>
       </Map>
     );
   }
@@ -272,6 +279,7 @@ MapContainer.propTypes = {
   subGeographyData: PropTypes.array,
   adjacentData: PropTypes.array,
   year: PropTypes.string.isRequired,
+  openSidebar: PropTypes.func,
   cancelSearch: PropTypes.func,
   updateBounds: PropTypes.func,
   bounds: PropTypes.array,

@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import isEmpty from 'lodash.isempty';
 import CountsBySubGeography from './counts_by_subgeography';
+import CountsByInputZones from './counts_by_input_zones';
 import CountsBySurveyCategory from './counts_by_survey_category';
 import { pluralize, getNextGeography } from '../../../utils/convenience_funcs';
 
@@ -52,13 +53,21 @@ export default function ADDSidebar(props) {
         </div>
       }
 
-      {!isEmpty(geographies) && currentTitle === 'totals' &&
+      {!isEmpty(geographies) && currentTitle === 'totals' && !geographies.strata &&
         <div>
           <CountsBySubGeography
             geographies={geographies[pluralize(subGeography)]}
             subGeography={subGeography}
             sidebarState={sidebarState}
             totals={{ ...data('summary'), ...data(pluralize(subGeography)) }}
+          />
+        </div>
+      }
+      {!isEmpty(geographies) && currentTitle === 'totals' && geographies.strata &&
+        <div>
+          <CountsByInputZones
+            strata={geographies.strata}
+            sidebarState={sidebarState}
           />
         </div>
       }

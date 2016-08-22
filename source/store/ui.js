@@ -5,10 +5,10 @@ import {
 
 const initialState = {
   legendActive: false,
-  known: false,
+  known: true,
   doubtful: false,
-  possible: false,
-  protected: false
+  possible: true,
+  protected: true
 };
 
 export const ui = (state = initialState, action) => {

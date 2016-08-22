@@ -35,6 +35,12 @@ class Sidebar extends Component {
     this.handleNarrativeClick = this.handleNarrativeClick.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.currentGeographyId !== this.props.currentGeographyId) {
+      this.setState({ currentTitle: 'summary_area' });
+    }
+  }
+
   onAStratum() {
     return compact(this.props.location.pathname.split('/')).length === 4;
   }
@@ -50,9 +56,6 @@ class Sidebar extends Component {
     const stratumName = parts[parts.length - 1];
     const stratumIdParts = stratumName.split('-');
     const stratumId = stratumIdParts[stratumIdParts.length - 1];
-    // THE FOLLOW DOES NOT WORK FOR FINDING THE RIGHT STRATUM
-    // TAKING THE URL SEGMENT AND TITLIZING DOES NOT ALWAYS
-    // RETURN A MATCHING NAME IN THE STATUM LIST
     return find(this.props.geographies.strata, s => s.strcode === stratumId);
   }
 
@@ -98,6 +101,7 @@ class Sidebar extends Component {
       currentGeographyId,
       currentNarrative,
       error,
+      selectedStratum
     } = this.props;
     const years = ['2015', '2013', '2006', '2002', '1998', '1995'];
     const yearLinks = years.map(y => {
@@ -130,7 +134,10 @@ class Sidebar extends Component {
         </aside>
       );
     }
-
+    let totalsTitle = 'Continental & regional totals';
+    if (geographies.strata) {
+      totalsTitle = 'Stratum Totals';
+    }
     return (
       <aside className={sidebarClasses[sidebarState]}>
         <section className={`sidebar__inner ${sidebarInnerClassName}`}>
@@ -140,10 +147,25 @@ class Sidebar extends Component {
             </ul>
           </div>
           <h1 className="sidebar__entity-name">{getEntityName(this.props.location)}</h1>
-          {geographies && !geographies.strata &&
+          {selectedStratum && selectedStratum.inpzone &&
+            <div>
+              <h3 className="sidebar__entity-input-zone">
+                Part of {selectedStratum.inpzone} Input Zone
+              </h3>
+            </div>
+          }
+          {canInput && geographies && !selectedStratum &&
             <div>
               <nav className="sidebar__viz-type">
                 <ul>
+                  <li onClick={self.handleSpanClick}>
+                    <span
+                      className={this.getCurrentTitle('narrative')}
+                      data-title={'narrative'}
+                    >
+                      {currentGeography} INFO
+                    </span>
+                  </li>
                   <li onClick={self.handleSpanClick}>
                     <span
                       className={this.getCurrentTitle('summary_area')}
@@ -157,7 +179,7 @@ class Sidebar extends Component {
                       className={this.getCurrentTitle('totals')}
                       data-title={'totals'}
                     >
-                      Continental &amp; regional totals
+                      {totalsTitle}
                     </span>
                   </li>
                 </ul>
@@ -174,16 +196,6 @@ class Sidebar extends Component {
             <h1>Loading <span className="loading-spinner"></span></h1>
           }
 
-          {canInput &&
-            <div
-              className={`${this.state.narrativeOpen ? 'open' : 'closed'} sidebar__narrative`}
-              onClick={this.handleNarrativeClick}
-            >
-              <h3 className="heading__small">{currentGeography} INFO</h3>
-              <div dangerouslySetInnerHTML={{ __html: currentNarrative }} />
-            </div>
-          }
-
           {!loading && error &&
             <div>
               <h1>There was an error loading data.</h1>
@@ -191,6 +203,12 @@ class Sidebar extends Component {
                 We're sorry, there's no data for this combination of year and geographic location.
                 Please try another area or date.
               </p>
+            </div>
+          }
+
+          {this.state.currentTitle === 'narrative' &&
+            <div className="sidebar__narrative">
+              <div dangerouslySetInnerHTML={{ __html: currentNarrative }} />
             </div>
           }
 
@@ -213,9 +231,9 @@ class Sidebar extends Component {
             />
           }
 
-          {this.onAStratum() && this.getStratumFromHref() &&
+          {selectedStratum &&
             <StratumSidebar
-              stratum={this.getStratumFromHref()}
+              stratum={selectedStratum}
             />
           }
         </section>
@@ -238,6 +256,7 @@ Sidebar.propTypes = {
   currentGeography: PropTypes.string,
   currentGeographyId: PropTypes.string,
   currentNarrative: PropTypes.string,
+  selectedStratum: PropTypes.object
 };
 
 export default Sidebar;

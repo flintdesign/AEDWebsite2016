@@ -41,6 +41,9 @@ class App extends Component {
 
   componentDidMount() {
     this.fetchData(this.props, true);
+    fetchRanges('known', this.props.dispatch);
+    fetchRanges('possible', this.props.dispatch);
+    fetchRanges('protected', this.props.dispatch);
   }
 
   componentWillReceiveProps(newProps) {
@@ -250,6 +253,7 @@ class App extends Component {
           currentGeographyId={currentGeographyId}
           currentNarrative={currentNarrative}
           canInput={canInput}
+          selectedStratum={selectedStratum}
         />
         {totalEstimate && canInput &&
           <TotalCount
