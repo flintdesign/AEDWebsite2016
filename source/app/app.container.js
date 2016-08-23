@@ -301,6 +301,7 @@ App.contextTypes = {
 };
 
 const mapStateToProps = (state, props) => {
+  console.log(props);
   // DETERMINE routeGeography FROM PARAMS
   let routeGeography = 'continent';
   if (props.params.country) {
@@ -308,15 +309,7 @@ const mapStateToProps = (state, props) => {
   } else if (props.params.region) {
     routeGeography = 'region';
   }
-  // let selectedStratum = null;
-  // if (props.params.stratum) {
-  //   const stratumId = props.params.stratum;
-  //   const geosData = state.geographyData.subGeographies;
-  //   const stratumData = getGeoFromId(stratumId, geosData);
-  //   selectedStratum = {
-  //     data: stratumData
-  //   };
-  // }
+
   // MAP STATE AND PROPS
   return {
     error: state.geographyData.error,

@@ -60,7 +60,9 @@ class Sidebar extends Component {
   }
 
   handleSpanClick(e) {
-    this.setState({ currentTitle: e.target.dataset.title });
+    if (e.target.dataset.title) {
+      this.setState({ currentTitle: e.target.dataset.title });
+    }
   }
 
   handleNarrativeClick(_e) {

@@ -59,6 +59,8 @@ export default function ADDSidebar(props) {
             geographies={geographies[pluralize(subGeography)]}
             subGeography={subGeography}
             sidebarState={sidebarState}
+            parentId={geographies.id}
+            currentYear={year}
             totals={{ ...data('summary'), ...data(pluralize(subGeography)) }}
           />
         </div>

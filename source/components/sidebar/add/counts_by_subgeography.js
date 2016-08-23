@@ -1,11 +1,27 @@
 import React, { PropTypes } from 'react';
 import { formatNumber } from '../../../utils/format_utils.js';
-import { capitalize } from '../../../utils/convenience_funcs.js';
+import { Link } from 'react-router';
+import { capitalize, slugify } from '../../../utils/convenience_funcs.js';
 import { SIDEBAR_FULL } from '../../../constants';
 
-export default function CountsBySubGeography(props) {
-  const { geographies, subGeography, sidebarState, totals } = props;
+const SidebarMapLink = ({ label, path }) => (
+  <Link
+    to={path}
+  >
+    {label}
+  </Link>
+);
+SidebarMapLink.propTypes = {
+  path: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired
+};
 
+export default function CountsBySubGeography(props) {
+  const { geographies, subGeography, sidebarState, totals, parentId, currentYear } = props;
+  let basePathForLinks = `/${currentYear}/${parentId}`;
+  if (parentId === 'africa') {
+    basePathForLinks = `/${currentYear}`;
+  }
   let markup = null;
   if (geographies) {
     if (sidebarState < SIDEBAR_FULL) {
@@ -19,7 +35,10 @@ export default function CountsBySubGeography(props) {
             <tbody>{geographies.map((g, i) => (
               <tr key={i}>
                 <td className="subgeography-totals__subgeography-name">
-                  {g[subGeography]}
+                  <SidebarMapLink
+                    path={`${basePathForLinks}/${slugify(g[subGeography])}`}
+                    label={g[subGeography]}
+                  />
                   {'  '}
                   <span>{formatNumber(g.RANGE_AREA)} km<sup>2</sup></span>
                 </td>
@@ -98,6 +117,8 @@ export default function CountsBySubGeography(props) {
 
 CountsBySubGeography.propTypes = {
   geographies: PropTypes.array,
+  parentId: PropTypes.string,
+  currentYear: PropTypes.string,
   subGeography: PropTypes.string.isRequired,
   sidebarState: PropTypes.number.isRequired,
   totals: PropTypes.object.isRequired,
