@@ -3,9 +3,9 @@
 
 aside
   background #f7f7f7
-  -webkit-box-shadow 0px 2px 5px rgba(0, 0, 0, 0.08)
-  -moz-box-shadow 0px 2px 5px rgba(0, 0, 0, 0.08)
-  box-shadow 0px 2px 5px rgba(0, 0, 0, 0.08)
+  -webkit-box-shadow 0px 2px 5px rgba(0, 0, 0, 0.2)
+  -moz-box-shadow 0px 2px 5px rgba(0, 0, 0, 0.2)
+  box-shadow 0px 2px 5px rgba(0, 0, 0, 0.2)
   min-height 100vh
   transition width 250ms
   position relative
@@ -33,15 +33,15 @@ aside table
     text-align left
 
 .sidebar__inner
-  padding 20px 40px 80px
+  padding 25px 35px 20vh
   background #fff
   -webkit-font-smoothing antialiased
   position relative
   &:first-child
     background $brand-dark
     color #fff
-    height 20vh
-    min-height 200px
+    height auto
+    padding-bottom 25px
   &:last-child
     overflow-y auto
     height 80vh
@@ -112,26 +112,30 @@ aside table
   text-decoration none
   padding-bottom 3px
   cursor pointer
+  transition border-color 0.25s
   &.active, &:hover
     @extend .small-current
     color $white
+    transition border-color 0.25s
 
 .sidebar__entity-name
   font-family 'Noe Display', Georgia, serif
   font-weight 700
   font-style normal
-  font-size 36px
-  line-height 36px
+  font-size 2em
+  letter-spacing 0.015em
+  line-height 1.15
   margin 50px 0 10px //margin top change temporary
   -webkit-font-smoothing auto
 
 .sidebar__entity-input-zone
   font-weight normal
   font-style normal
+  font-size 0.9em
   margin-top -10px
 
 .sidebar__stats-table
-  font-size 0.98em
+  font-size 0.9em
   width 100%
   margin-bottom 30px
   h3
@@ -142,9 +146,15 @@ aside table
     border-bottom 1px solid
     td:last-child
       text-align right
+  tr
+    background transparent
+    transition background-color 0.3s
+    &:hover
+      background #f8f8f8
+      transition background-color 0.3s
   tbody td,
   thead th
-    padding 0.5em 0
+    padding 0.5em 0.65em
     span
       color $text-light
     &:last-child
@@ -196,35 +206,40 @@ aside table
     margin-top 30px
 
 .sidebar__table-container
-  border-bottom 1px solid $gray-light
+  border-bottom 1px solid $gray-lightest
   h3
-    font-size 0.98em
+    font-size 0.9em
     font-weight 600
     padding 0.75em 0
     cursor pointer
     position relative
     &:after
+      content ''
+      height 20px
+      opacity 0.8
+      position absolute
+      width 20px
       display inline-block
       position absolute
-      right 10px
-      color $text-light
-      top 20%
   &.closed
     h3:after
-      content '\276f'
-      transform rotate(90deg)
+      background url('/images/chevron-bold-down.svg') no-repeat 50% 70%
+      background-size 70%
+      content ''
+      right 8px
     table
       display none
   &.open
     h3:after
-      content '\276f'
-      transform rotate(-90deg)
+      background url('/images/chevron-bold-up.svg') no-repeat 50% 70%
+      background-size 66.7%
+      content ''
       right 8px
     table
       display table
 
 .sidebar__narrative
-  margin-bottom 10px
+  margin 10px 10px 15px
   overflow hidden
 
   h3
@@ -252,7 +267,9 @@ aside table
     height auto
   
   p
-    margin 1em 0
+    font-size 0.95em
+    line-height 1.5
+    margin 1.2em 0
     
     &:first-child
       margin-top 0
@@ -293,6 +310,9 @@ aside table
       background darken($southern-africa, 30%)
       color #fff
       border 1px solid darken($southern-africa, 45%)
+  .sidebar__year-nav__container
+    ul:hover
+      background $southern-africa
 
 .sidebar__inner.region-eastern-africa,
 .sidebar__loader.region-eastern-africa
@@ -306,6 +326,9 @@ aside table
       background darken($eastern-africa, 30%)
       color #fff
       border 1px solid darken($eastern-africa, 45%)
+  .sidebar__year-nav__container
+    ul:hover
+      background $eastern-africa
 
 .sidebar__inner.region-central-africa,
 .sidebar__loader.region-central-africa
@@ -319,6 +342,9 @@ aside table
       background darken($central-africa, 30%)
       color #fff
       border 1px solid darken($central-africa, 45%)
+  .sidebar__year-nav__container
+    ul:hover
+      background $central-africa
 
 .sidebar__inner.region-west-africa,
 .sidebar__loader.region-west-africa
@@ -332,3 +358,6 @@ aside table
       background darken($west-africa, 30%)
       color #fff
       border 1px solid darken($west-africa, 45%)
+  .sidebar__year-nav__container
+    ul:hover
+      background $west-africa
