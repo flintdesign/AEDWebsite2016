@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
-import { titleize } from '../utils/convenience_funcs';
+// import { titleize } from '../utils/convenience_funcs';
+import { formatNumber } from '../utils/format_utils';
 // import baffle from 'baffle';
 
 class TotalCount extends Component {
@@ -19,15 +20,24 @@ class TotalCount extends Component {
   // }
 
   render() {
-    const { count, entity, canInput } = this.props;
+    const { count, canInput, summary, atStratum } = this.props;
+    console.log(summary[0]);
     return (
       <div>
         {canInput &&
           <div className="total-count">
-            <div ref="total_count">{count}
-              <span className="total-count__plus-minus">&plusmn;</span>
+            <div className="total-count__count" ref="total_count">
+              {count}<span className="total-count__plus-minus">&plusmn;</span>
             </div>
-            <small>Estimated Elephants in {titleize(entity)}</small>
+            <small>Estimates from Surveys</small>
+            {summary && summary[0] && !atStratum &&
+              <div>
+                <div className="total-count__guesses">
+                  {formatNumber(summary[0].GUESS_MIN)} - {formatNumber(summary[0].GUESS_MAX)}
+                </div>
+                <small>Guesses</small>
+              </div>
+            }
           </div>
         }
       </div>
@@ -38,7 +48,9 @@ class TotalCount extends Component {
 TotalCount.propTypes = {
   count: PropTypes.string.isRequired,
   entity: PropTypes.string.isRequired,
-  canInput: PropTypes.bool
+  canInput: PropTypes.bool,
+  atStratum: PropTypes.bool,
+  summary: PropTypes.array
 };
 
 export default TotalCount;

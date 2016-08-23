@@ -185,8 +185,10 @@ class App extends Component {
       selectedStratum
     } = this.props;
     let finalTotalEstimate = totalEstimate;
+    let atStratum = false;
     if (selectedStratum) {
       finalTotalEstimate = selectedStratum.estimate;
+      atStratum = true;
     }
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
     const searchOverlay = searchActive
@@ -260,6 +262,8 @@ class App extends Component {
             entity={getEntityName(this.props.location)}
             count={formatNumber(finalTotalEstimate)}
             canInput={canInput}
+            atStratum={atStratum}
+            summary={geographies.summary_sums || []}
           />
         }
         <HelpNav location={location} />
