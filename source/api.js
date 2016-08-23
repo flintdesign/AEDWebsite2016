@@ -16,7 +16,9 @@ import {
   FETCH_SUBGEOGRAPHY_DATA,
   RECEIVE_SUBGEOGRAPHY_DATA,
   RECEIVE_BOUNDS,
+  FETCH_BORDER,
   RECEIVE_BORDER,
+  FETCH_ADJACENT_DATA,
   RECEIVE_ADJACENT_DATA
 } from './actions/app_actions';
 
@@ -135,6 +137,7 @@ function fetchBounds(dispatch, geoType, mappedId) {
 
 function fetchBorder(dispatch, geoType, mappedId) {
   // look up in cache first
+  dispatch({ type: FETCH_BORDER });
   const cacheKey = `border-${geoType}-${mappedId}`;
   const cacheResponse = cache.get(cacheKey);
   if (cacheResponse) {
@@ -148,7 +151,11 @@ function fetchBorder(dispatch, geoType, mappedId) {
       cache.put(cacheKey, d, cacheDuration);
       dispatch({
         type: RECEIVE_BORDER,
-        border: d
+        border: {
+          ...d,
+          geoType: geoType,
+          mapId: mappedId
+        }
       });
     });
 }
@@ -198,6 +205,7 @@ export function fetchSubGeography(dispatch, geoType, geoId, subGeoType) {
 export function fetchAdjacentGeography(dispatch, parentType, parentSlug, currentType) {
   const mappedParentId = mapSlugToId(parentSlug);
   // const mappedCurrentId = mapSlugToId(currentSlug);
+  dispatch({ type: FETCH_ADJACENT_DATA });
 
   const cacheKey = `adjacent-${parentType}-${parentSlug}`;
   const cacheResponse = cache.get(cacheKey);
