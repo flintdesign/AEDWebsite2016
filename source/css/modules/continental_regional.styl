@@ -1,13 +1,20 @@
 .subgeography-totals
-  font-size 0.98em
+  font-size 0.9em
   tbody tr
+    background transparent
     border-top none
     border-bottom 1px solid $gray-light
     border-collapse collapse
+    transition background-color 0.3s
+    &:hover
+      background #f8f8f8
+      transition background-color 0.3s
   thead tr
     border-top 0
   th:not(:first-child), td:not(:first-child)
     text-align right
+  td
+    padding 0.9em 0.65em
     
   &--causes-of-change
     margin-top: 30px

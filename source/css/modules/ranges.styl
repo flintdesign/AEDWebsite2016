@@ -63,27 +63,33 @@ $box = #bababa
 .ranges__container
   background #fff
   border-radius 2px
-  padding 10px 12px
+  padding 7px 12px 9px
   position absolute
   left 5%
   z-index 1
   top 15px
   width 230px
-  -moz-box-shadow 0 0 3px $box
-  -webkit-box-shadow 0 0 3px $box
-  -o-box-shadow 0 0 3px $box
-  -ms-box-shadow 0 0 3px $box
-  box-shadow 0 0 3px $box
+  -moz-box-shadow 0 0 5px $box
+  -webkit-box-shadow 0 0 5px $box
+  -o-box-shadow 0 0 5px $box
+  -ms-box-shadow 0 0 5px $box
+  box-shadow 0 0 5px $box
+  transition color 0.3s
+  &:hover
+    h3
+      color #555
+      transition color 0.3s
   h3
     color $text-light
     letter-spacing 0.15em
-    font-size 12px
+    font-size 0.75em
     font-weight 500
     text-transform uppercase
     position relative
     cursor pointer
     &:after
-      background url('/images/chevron-down.svg') no-repeat 50% 45%
+      background url('/images/chevron-bold-down.svg') no-repeat 50% 45%
+      background-size 70%
       content ''
       height 20px
       position absolute
@@ -91,14 +97,14 @@ $box = #bababa
     &.expanded
       margin-bottom 1em
     &.expanded:after
-      background url('/images/chevron-up.svg') no-repeat 50% 55%
-      background-size 65%
+      background url('/images/chevron-bold-up.svg') no-repeat 50% 45%
+      background-size 66%
       content ''
       right 0
       bottom 2px
     &.contracted:after
-      background url('/images/chevron-down.svg') no-repeat 50% 45%
-      background-size 65%
+      background url('/images/chevron-bold-down.svg') no-repeat 50% 45%
+      background-size 70%
       content ''
       right 0
       bottom 0
