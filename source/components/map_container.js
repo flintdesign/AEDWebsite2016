@@ -94,11 +94,11 @@ class MapContainer extends Component {
     });
   }
 
-  realignMap() {
+  realignMap(timing = 500, animate = true) {
     const self = this;
     setTimeout(() => {
-      self.refs.map.leafletElement.invalidateSize(true);
-    }, 500);
+      self.refs.map.leafletElement.invalidateSize(animate);
+    }, timing);
   }
 
   handleClick(e) {
