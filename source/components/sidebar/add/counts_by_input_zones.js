@@ -20,7 +20,6 @@ SidebarMapLink.propTypes = {
 export default function CountsByInputZones(props) {
   const { strata, params } = props;
   const basePathForLinks = `/${params.year}/${params.region}/${params.country}`;
-  console.log(strata);
   return (
     <div>
       <h4 className="heading__small">
