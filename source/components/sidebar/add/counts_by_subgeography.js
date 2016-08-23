@@ -7,6 +7,7 @@ import { SIDEBAR_FULL } from '../../../constants';
 const SidebarMapLink = ({ label, path }) => (
   <Link
     to={path}
+    className="sidebar__map-link"
   >
     {label}
   </Link>

@@ -301,7 +301,6 @@ App.contextTypes = {
 };
 
 const mapStateToProps = (state, props) => {
-  console.log(props);
   // DETERMINE routeGeography FROM PARAMS
   let routeGeography = 'continent';
   if (props.params.country) {
