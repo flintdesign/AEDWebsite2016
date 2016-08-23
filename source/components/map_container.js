@@ -254,7 +254,7 @@ class MapContainer extends Component {
       >
         <TileLayer url={tileURL} />
         <LayerGroup>
-          {rangeMarkup}
+          {this.props.canInput && rangeMarkup}
         </LayerGroup>
         <LayerGroup>
           {this.props.canInput && geoJSONBorderObjs}
