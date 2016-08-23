@@ -255,10 +255,11 @@ class App extends Component {
           canInput={canInput}
           selectedStratum={selectedStratum}
         />
-        {totalEstimate && canInput &&
+        {totalEstimate &&
           <TotalCount
             entity={getEntityName(this.props.location)}
             count={formatNumber(finalTotalEstimate)}
+            canInput={canInput}
           />
         }
         <HelpNav location={location} />

@@ -94,11 +94,11 @@ class MapContainer extends Component {
     });
   }
 
-  realignMap() {
+  realignMap(timing = 500, animate = true) {
     const self = this;
     setTimeout(() => {
-      self.refs.map.leafletElement.invalidateSize(true);
-    }, 500);
+      self.refs.map.leafletElement.invalidateSize(animate);
+    }, timing);
   }
 
   handleClick(e) {
@@ -254,7 +254,7 @@ class MapContainer extends Component {
       >
         <TileLayer url={tileURL} />
         <LayerGroup>
-          {rangeMarkup}
+          {this.props.canInput && rangeMarkup}
         </LayerGroup>
         <LayerGroup>
           {this.props.canInput && geoJSONBorderObjs}
