@@ -60,7 +60,9 @@ class Sidebar extends Component {
   }
 
   handleSpanClick(e) {
-    this.setState({ currentTitle: e.target.dataset.title });
+    if (e.target.dataset.title) {
+      this.setState({ currentTitle: e.target.dataset.title });
+    }
   }
 
   handleNarrativeClick(_e) {
@@ -101,7 +103,8 @@ class Sidebar extends Component {
       currentGeographyId,
       currentNarrative,
       error,
-      selectedStratum
+      selectedStratum,
+      params
     } = this.props;
     // const years = ['2015', '2013', '2006', '2002', '1998', '1995'];
     const years = ['2015', '2013'];
@@ -220,6 +223,7 @@ class Sidebar extends Component {
               currentGeography={currentGeography}
               sidebarState={sidebarState}
               year={year}
+              params={params}
             />
           }
 

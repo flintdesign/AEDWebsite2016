@@ -6,7 +6,9 @@ import {
   RECEIVE_SUBGEOGRAPHY_DATA,
   RECEIVE_BOUNDS,
   RECEIVE_BORDER,
+  FETCH_BORDER,
   CHANGE_MAP,
+  FETCH_ADJACENT_DATA,
   RECEIVE_ADJACENT_DATA,
   SELECT_STRATUM
 } from '../actions/app_actions';
@@ -57,9 +59,18 @@ export function geographies(state = initialState, action) {
       return {
         ...state, bounds: action.bounds
       };
+    case FETCH_BORDER:
+      return {
+        ...state, border: {}
+      };
     case RECEIVE_BORDER:
       return {
         ...state, border: action.border
+      };
+    case FETCH_ADJACENT_DATA:
+      return {
+        ...state,
+        adjacentData: []
       };
     case RECEIVE_ADJACENT_DATA:
       return {

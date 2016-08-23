@@ -5,7 +5,8 @@ import {
   TileLayer,
   Marker,
   GeoJson,
-  LayerGroup
+  LayerGroup,
+  // ZoomControl
   // Popup
 } from 'react-leaflet';
 import { divIcon } from 'leaflet';
@@ -251,18 +252,16 @@ class MapContainer extends Component {
         onClick={this.props.cancelSearch}
         ref="map"
       >
-        <TileLayer
-          url={tileURL}
-        />
+        <TileLayer url={tileURL} />
         <LayerGroup>
           {rangeMarkup}
         </LayerGroup>
         <LayerGroup>
-          {geoJSONBorderObjs}
+          {this.props.canInput && geoJSONBorderObjs}
           {this.props.canInput && geoJSONObjs}
           {this.props.canInput && adjacentGeoJSONObjs}
           {this.props.canInput && selectedStratumObjs}
-          {labels}
+          {this.props.canInput && labels}
           {stratumLabels}
         </LayerGroup>
       </Map>
