@@ -13,11 +13,10 @@ export default function ParentADD(props) {
         <tbody>
           <tr>
             <td>Estimates from Surveys</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td className="indented font-normal">Estimates from Surveys</td>
-            <td>{formatNumber(data.ESTIMATE)}</td>
+            <td>
+              {formatNumber(data.ESTIMATE)}
+              <span>&plusmn;</span>
+            </td>
           </tr>
           <tr>
             <td>Guesses</td>
