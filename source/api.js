@@ -341,7 +341,7 @@ export function fetchSearchData(successCallback, errorCallback = (err) => consol
 
 /* Known, possible, doubtful, protected */
 export const fetchRanges = (type, dispatch) => {
-  const url = `${config.apiBaseURL}/${type}/geojson_map?simplify=1`;
+  const url = `${config.apiBaseURL}/${type}/geojson_map`;
   dispatch({ type: FETCH_RANGE });
   fetch(url)
   .then(r => r.json())
