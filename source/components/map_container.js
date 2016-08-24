@@ -6,7 +6,7 @@ import {
   Marker,
   GeoJson,
   LayerGroup,
-  // ZoomControl
+  ZoomControl
   // Popup
 } from 'react-leaflet';
 import { divIcon } from 'leaflet';
@@ -251,8 +251,10 @@ class MapContainer extends Component {
         onZoomEnd={this.onZoomEnd}
         onClick={this.props.cancelSearch}
         ref="map"
+        zoomControl={false}
       >
         <TileLayer url={tileURL} />
+        <ZoomControl position={'bottomright'} />
         <LayerGroup>
           {this.props.canInput && rangeMarkup}
         </LayerGroup>
