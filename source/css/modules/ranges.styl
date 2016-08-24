@@ -13,23 +13,24 @@ $box = #bababa
     visibility hidden
 
 .known_geojson
-  fill-opacity 0.32
+  fill-opacity 0.5
+  stroke #222
 
 .possible_geojson
-  fill-opacity 0.12
+  fill-opacity 0.22
 
 .protected_geojson
   fill-opacity 0.04
   z-index 0
-  stroke #999
+  stroke #555
   fill transparent
-  stroke-dasharray 2,3
-  stroke-width 1
+  stroke-dasharray 2,4
+  stroke-width 1.25
   stroke-opacity 1
   pointer-events none
 
 .doubtful_geojson
-  fill-opacity 0.025
+  fill-opacity 0.05
 
 .range__item
   display inline-block
@@ -39,12 +40,14 @@ $box = #bababa
   font-size 0.85em
   cursor pointer
   &.shown[data-range-type="known"] .range__icon 
-    background rgba(51,51,51,0.32)
+    background rgba(34,34,34,0.5)
   &.shown[data-range-type="possible"] .range__icon 
-    background rgba(51,51,51,0.12)
+    background rgba(51,51,51,0.22)
+  &.shown[data-range-type="doubtful"] .range__icon 
+    background rgba(51,51,51,0.05)
   &.shown[data-range-type="protected"] .range__icon 
     background $white
-    border 1px dashed #999
+    border 1px dashed #555
   &.hidden .range__icon
     background #eee
 
