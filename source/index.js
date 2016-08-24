@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { Router, Route, Redirect, IndexRedirect, browserHistory } from 'react-router';
 import App from './app/app.container';
 import MapContainer from './components/map_container';
+import Intro from './components/pages/intro';
 import Resources from './components/pages/resources';
 import AboutContainer from './components/pages/about_container';
 import { createStore, applyMiddleware, compose } from 'redux';
@@ -36,6 +37,7 @@ const store = createStore(rootReducer, compose(
 render((
   <Provider store={store}>
     <Router history={browserHistory}>
+      <Route path={'/intro'} component={Intro} />
       <Route path={'/about'} component={AboutContainer} />
       <Route path={'/resources'} component={Resources} />
       <Route path={'/'} component={App}>
