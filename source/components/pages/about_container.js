@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { withRouter } from 'react-router';
 import aboutData from 'json!./../../data/about.json';
 // import Markdown from 'react-remarkable';
-import IntroMarkup from 'html!./../../data/introduction.html';
+import IntroMarkup from 'html!./../../data/about/introduction.html';
 
 class AboutContainer extends Component {
   constructor(props, context) {
@@ -43,10 +43,7 @@ class AboutContainer extends Component {
           </nav>
         </div>
         <div className="about-content">
-          <div className="about-content__section" id={'introduction'}>
-            <h2 className="about-content__section__title">
-              Introduction
-            </h2>
+          <div className="about-content__section" id="introduction">
             <div className="about-content__section__content">
               <div dangerouslySetInnerHTML={ { __html: IntroMarkup } }></div>
             </div>
