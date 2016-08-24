@@ -1,6 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { withRouter } from 'react-router';
-import aboutData from 'json!./../../data/about.json';
+import IntroMarkup from 'html!./../../data/about/introduction.html';
+import AboutUsMarkup from 'html!./../../data/about/about-us.html';
+import PartnersResourcesMarkup from 'html!./../../data/about/partners-resources.html';
+import KeyPointsMarkup from 'html!./../../data/about/key-points.html';
+import ReportsMarkup from 'html!./../../data/about/reports.html';
 
 class AboutContainer extends Component {
   constructor(props, context) {
@@ -8,13 +12,11 @@ class AboutContainer extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.state = {
       title: 'About',
-      activeId: '',
-      data: aboutData
+      activeId: ''
     };
   }
 
   componentDidMount() {
-    console.log(this.state.data);
   }
 
   handleClick(e) {
@@ -23,31 +25,71 @@ class AboutContainer extends Component {
 
   render() {
     return (
-      <div>
-        <div className="about-title-container">
-          <h1>{this.state.title}</h1>
-        </div>
-        <div className="about-menu">
-          <nav>
-            <ul>
-              {this.state.data.sections.map(section =>
-                <li>
-                  <a href={`#${section.id}`} onClick={this.handleClick}>
-                    {section.title}
+      <div className="about">
+        <div className="about-container">
+          <div className="about-sidebar">
+            <div className="about-sidebar__logo"></div>
+            <nav className="about-menu">
+              <ul>
+                <li className="about-menu__item">
+                  <a href="#introduction" onClick={this.handleClick}>
+                    Introduction
                   </a>
                 </li>
-              )}
-            </ul>
-          </nav>
-        </div>
-        <div className="about-content">
-          {this.state.data.sections.map(section =>
-            <div className="about-content__section" id={`${section.id}`}>
-              <h2 className="about-content__section__title">
-                {section.title}
-              </h2>
+                <li className="about-menu__item">
+                  <a href="#about-us" onClick={this.handleClick}>
+                    About Us
+                  </a>
+                </li>
+                <li className="about-menu__item">
+                  <a href="#partners-resources" onClick={this.handleClick}>
+                    Partners &amp; Resources
+                  </a>
+                </li>
+                <li className="about-menu__item">
+                  <a href="#key-points" onClick={this.handleClick}>
+                    Key Points
+                  </a>
+                </li>
+                <li className="about-menu__item">
+                  <a href="#reports" onClick={this.handleClick}>
+                    Reports
+                  </a>
+                </li>
+              </ul>
+            </nav>
+            <div className="about-sidebar__actions">
+              <h4>Resources for AED</h4>
+              <button href="/resources">Glossary of Terms</button>
             </div>
-          )}
+          </div>
+          <div className="about-content">
+            <div className="about-content__section" id="introduction">
+              <div className="about-content__section__content">
+                <div dangerouslySetInnerHTML={ { __html: IntroMarkup } }></div>
+              </div>
+            </div>
+            <div className="about-content__section" id="about-us">
+              <div className="about-content__section__content">
+                <div dangerouslySetInnerHTML={ { __html: AboutUsMarkup } }></div>
+              </div>
+            </div>
+            <div className="about-content__section" id="partners-resources">
+              <div className="about-content__section__content">
+                <div dangerouslySetInnerHTML={ { __html: PartnersResourcesMarkup } }></div>
+              </div>
+            </div>
+            <div className="about-content__section" id="key-points">
+              <div className="about-content__section__content">
+                <div dangerouslySetInnerHTML={ { __html: KeyPointsMarkup } }></div>
+              </div>
+            </div>
+            <div className="about-content__section" id="reports">
+              <div className="about-content__section__content">
+                <div dangerouslySetInnerHTML={ { __html: ReportsMarkup } }></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
