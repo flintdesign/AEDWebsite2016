@@ -13,19 +13,19 @@ class Ranges extends Component {
     };
   }
 
-  handleClick(e) {
-    const rangeType = e.target.getAttribute('data-range-type');
-    const currentCount = this.state[rangeType];
+  handleClick() {
+    // const rangeType = e.target.getAttribute('data-range-type');
+    // const currentCount = this.state[rangeType];
     // If it hasn't been clicked, forward the handleClick
     // function to fetch. Otherwise, increment the count to tell
     // whether to show or hide.
-    if (currentCount === 0) {
-      this.props.handleClick(e);
-    }
-    this.setState({
-      [rangeType]: currentCount + 1
-    });
-    this.props.toggleRange(rangeType);
+    // if (currentCount === 0) {
+    //   this.props.handleClick(e);
+    // }
+    // this.setState({
+    //   [rangeType]: currentCount + 1
+    // });
+    // this.props.toggleRange(rangeType);
   }
 
   copyMap() {
