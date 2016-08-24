@@ -21,7 +21,6 @@ class TotalCount extends Component {
 
   render() {
     const { count, canInput, summary, atStratum } = this.props;
-    console.log(summary[0]);
     return (
       <div>
         {canInput &&
