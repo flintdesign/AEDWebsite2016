@@ -29,7 +29,7 @@ export default class HelpNav extends Component {
           </ul>
         </div>
         <Link
-          to={{ query: { nav: true } }}
+          to={'/about'}
           className="help-nav"
         >
           ?
