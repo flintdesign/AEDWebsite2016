@@ -47,6 +47,7 @@ export default function CountsBySurveyCategory(props) {
               key={categoryData.SURVEYTYPE}
               surveyType={categoryData.SURVEYTYPE}
               estimate={categoryData.ESTIMATE}
+              confidence={categoryData.CONFIDENCE}
               guess_min={categoryData.GUESS_MIN}
               guess_max={categoryData.GUESS_MAX}
               range_assessed={categoryData.CATEGORY_RANGE_ASSESSED}
@@ -62,6 +63,7 @@ export default function CountsBySurveyCategory(props) {
                 key={changeData.CAUSE}
                 surveyType={changeData.CAUSE}
                 estimate={changeData.ESTIMATE}
+                confidence={changeData.CONFIDENCE}
                 guess_min={changeData.GUESS_MIN}
                 guess_max={changeData.GUESS_MAX}
                 range_assessed={changeData.CATEGORY_RANGE_ASSESSED}
@@ -80,6 +82,7 @@ export default function CountsBySurveyCategory(props) {
             <tr>
               <th></th>
               <th rowSpan="2" style={{ textAlign: 'right' }}>Estimate from surveys</th>
+              <th rowSpan="2" style={{ textAlign: 'right' }}>&plusmn;&#37; CL</th>
               <th colSpan="2" style={{ textAlign: 'center' }}>Guesses</th>
               <th rowSpan="2">Range Area</th>
               <th rowSpan="2">% of<br />Regional<br />Range</th>
@@ -97,6 +100,7 @@ export default function CountsBySurveyCategory(props) {
                   {categoryData.SURVEYTYPE}
                 </td>
                 <td>{formatNumber(categoryData.ESTIMATE)}</td>
+                <td>{formatNumber(categoryData.CONFIDENCE)}</td>
                 <td>{formatNumber(categoryData.GUESS_MIN)}</td>
                 <td>{formatNumber(categoryData.GUESS_MAX)}</td>
                 <td>{formatNumber(categoryData.AREA)}</td>
@@ -106,6 +110,7 @@ export default function CountsBySurveyCategory(props) {
             <tr className="subgeography-totals__totals" key="totals">
               <td className="subgeography-totals__subgeography-name">Totals</td>
               <td>{formatNumber(totals.ESTIMATE)}</td>
+              <td>{formatNumber(totals.CONFIDENCE) || '-'}</td>
               <td>{formatNumber(totals.GUESS_MIN)}</td>
               <td>{formatNumber(totals.GUESS_MAX)}</td>
               <td>{formatNumber(totals.RANGE_AREA)}</td>
@@ -119,6 +124,7 @@ export default function CountsBySurveyCategory(props) {
               <tr>
                 <th></th>
                 <th rowSpan="2" style={{ textAlign: 'right' }}>Estimate from surveys</th>
+                <th rowSpan="2" style={{ textAlign: 'right' }}>&plusmn;&#37; CL</th>
                 <th colSpan="2" style={{ textAlign: 'center' }}>Guesses</th>
                 <th rowSpan="2">Range Area</th>
                 <th rowSpan="2">% of<br />Regional<br />Range</th>
@@ -136,6 +142,7 @@ export default function CountsBySurveyCategory(props) {
                     {categoryData.CAUSE}
                   </td>
                   <td>{formatNumber(categoryData.ESTIMATE)}</td>
+                  <td>{formatNumber(categoryData.CONFIDENCE)}</td>
                   <td>{formatNumber(categoryData.GUESS_MIN)}</td>
                   <td>{formatNumber(categoryData.GUESS_MAX)}</td>
                   <td>{formatNumber(categoryData.AREA)}</td>
@@ -145,6 +152,7 @@ export default function CountsBySurveyCategory(props) {
               <tr className="subgeography-totals__totals" key="totals">
                 <td className="subgeography-totals__subgeography-name">Totals</td>
                 <td>{formatNumber(changeTotals.ESTIMATE)}</td>
+                <td>{formatNumber(changeTotals.CONFIDENCE)}</td>
                 <td>{formatNumber(changeTotals.GUESS_MIN)}</td>
                 <td>{formatNumber(changeTotals.GUESS_MAX)}</td>
                 <td>{formatNumber(changeTotals.RANGE_AREA)}</td>

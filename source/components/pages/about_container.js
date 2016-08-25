@@ -12,7 +12,7 @@ class AboutContainer extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.state = {
       title: 'About',
-      activeId: ''
+      activeId: '#introduction'
     };
   }
 
@@ -31,7 +31,7 @@ class AboutContainer extends Component {
             <div className="about-sidebar__logo"></div>
             <nav className="about-menu">
               <ul>
-                <li className="about-menu__item">
+                <li className={'about-menu__item'}>
                   <a href="#introduction" onClick={this.handleClick}>
                     Introduction
                   </a>

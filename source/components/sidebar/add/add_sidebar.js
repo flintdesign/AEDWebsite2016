@@ -18,6 +18,7 @@ export default function ADDSidebar(props) {
       PERCENT_OF_RANGE_ASSESSED: geographies.areas[0].percent_range_assessed,
       ASSESSED_RANGE: geographies.assessed_range,
       ESTIMATE: geographies.summary_sums[0].ESTIMATE,
+      CONFIDENCE: geographies.summary_sums[0].CONFIDENCE,
       GUESS_MIN: geographies.summary_sums[0].GUESS_MIN,
       GUESS_MAX: geographies.summary_sums[0].GUESS_MAX,
       RANGE_AREA: geographies.areas[0].range_area
@@ -31,6 +32,7 @@ export default function ADDSidebar(props) {
       PERCENT_OF_RANGE_ASSESSED: geographies.areas[0].percent_range_assessed,
       ASSESSED_RANGE: geographies.assessed_range,
       ESTIMATE: geographies.causes_of_change_sums[0].ESTIMATE,
+      CONFIDENCE: geographies.causes_of_change_sums[0].CONFIDENCE,
       GUESS_MIN: geographies.causes_of_change_sums[0].GUESS_MIN,
       GUESS_MAX: geographies.causes_of_change_sums[0].GUESS_MAX,
       RANGE_AREA: geographies.areas[0].range_area

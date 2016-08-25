@@ -4,5 +4,8 @@ const numberWithCommas = (x) => {
   return parts.join('.');
 };
 
-export const formatNumber = num => numberWithCommas(parseInt(num, 10));
+export const formatNumber = num => {
+  if (!num) return '-';
+  return numberWithCommas(parseInt(num, 10));
+};
 export const formatFloat = num => parseFloat(num, 10).toFixed(1);
