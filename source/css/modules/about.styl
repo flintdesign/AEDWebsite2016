@@ -30,14 +30,19 @@ $about-content-width = 65vw
   padding 60px 30px
   
   &__close
-    width 30px
-    height 30px
+    width 22px
+    height 22px
     position absolute
-    top 15px
-    left 35px
+    top 20px
+    left 20px
     background transparent url(/images/icon-close.svg) no-repeat center center
     background-size contain
     cursor pointer
+    opacity 0.65
+    transition opacity 0.25s
+    &:hover
+      opacity 1
+      transition opacity 0.25s
 
   &__logo
     width 100%
@@ -46,6 +51,8 @@ $about-content-width = 65vw
     background url('/images/afesg-notext-logo.png') no-repeat center center
     background-size contain
     text-align center
+    &:after
+      content ''
 
   button
     background $brand-dark
@@ -65,7 +72,7 @@ $about-content-width = 65vw
       width 100%
       transition background-color 0.25s
       &:hover
-        background lighten($gray-lightest, 25%)
+        background lighten($gray-lightest, 75%)
         transition background-color 0.25s
       &:last-child
         border-bottom 1px solid $gray-lightest
