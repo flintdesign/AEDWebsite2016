@@ -15,40 +15,32 @@ export default function Intro() {
           <div className={'col-one-third'}>
             <div className="intro__description">
               <p>
-                Welcome to the African Elephant Database, the most comprehensive database on the
-                status of any species of mammal in the wild.
-                The database is maintained by the African Elephant Specialist Group (AfESG),
-                and covers continental populations across 37 range states of the African Elephant.
-                The database provides information on changes in elephant numbers and shows
-                where these changes have taken place.
+                Welcome to the African Elephant Database (AED), the most comprehensive database
+                on the status of any species of mammal in the wild. The database is maintained
+                by the African Elephant Specialist Group (AfESG), and holds data on elephant
+                abundance and distribution across 37 countries where African elephants occur.
+                It provides information on changes in elephant numbers and shows where these
+                hanges have taken place. The database has been developed over 25 years and
+                went online in 2012.
               </p>
               <p>
-                The desire to conserve and manage elephants is widespread, and even if opinions
-                differ as to how best this goal can be achieved,
-                it is widely agreed that decisions should be informed by the most up-to-date and
-                reliable information available on the numbers
-                and distribution of Africa’s elephants. The AfESG and its AED occupy a unique and
-                pivotal position with regard to this need.
-                To learn more about its methods for establishing elephant numbers and how the data
-                is represented, visit our About page.
+                The AED relies on the contributions of countless survey biologists and experts
+                across the continent.
+                To learn more about the way the data is processed, and presented in tables and
+                maps and the methods used for establishing summaries at the national, regional
+                and continental level, visit our <a href="/about">About</a> section.
               </p>
               <small>
                 All materials on this site are Copyright (C) 1995-2016 IUCN - The International
-                Union for the Conservation of Nature.
-                Use is permitted only under the Creative Commons
-                Attribution-NonCommercial-ShareAlike
-                license - (http://creativecommons.org/licenses/by-nc-sa/3.0/).
+                Union for the Conservation of Nature. Use is permitted only under the
+                <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/"> Creative
+                Commons Attribution-NonCommercial-ShareAlike license.</a>
               </small>
             </div>
             <div className="intro__actions">
               <button className="intro__actions__button">
                 Enter the database
               </button>
-            </div>
-            <div className="intro__logos">
-              <div className="intro__logos__aesg">aesg</div>
-              <div className="intro__logos__iucn">iucn</div>
-              <div className="intro__logos__ssc">ssc</div>
             </div>
             <div className="intro__loader">
               <img src="/images/elephant-loader.gif" alt="Elephant walking" />
