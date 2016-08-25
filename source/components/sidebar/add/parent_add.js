@@ -19,6 +19,10 @@ export default function ParentADD(props) {
             </td>
           </tr>
           <tr>
+            <td>&plusmn;&#37; CL</td>
+            <td>{formatNumber(data.CONFIDENCE)}</td>
+          </tr>
+          <tr>
             <td>Guesses</td>
             <td>{formatNumber(data.GUESS_MIN)} – {formatNumber(data.GUESS_MAX)}</td>
           </tr>

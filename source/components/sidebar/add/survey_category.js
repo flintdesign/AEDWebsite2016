@@ -31,6 +31,7 @@ export default class SurveyCategory extends Component {
     const {
       surveyType,
       estimate,
+      confidence,
       guess_min,
       guess_max,
       range_assessed,
@@ -44,6 +45,10 @@ export default class SurveyCategory extends Component {
             <tr>
               <td>Estimates from Surveys</td>
               <td>{formatNumber(estimate)}</td>
+            </tr>
+            <tr>
+              <td>&plusmn;&#37; CL</td>
+              <td>{formatNumber(confidence)}</td>
             </tr>
             <tr>
               <td>Guesses</td>
@@ -67,6 +72,7 @@ export default class SurveyCategory extends Component {
 SurveyCategory.propTypes = {
   surveyType: PropTypes.string.isRequired,
   estimate: PropTypes.string.isRequired,
+  confidence: PropTypes.string.isRequired,
   guess_min: PropTypes.string.isRequired,
   guess_max: PropTypes.string.isRequired,
   range_assessed: PropTypes.string,
