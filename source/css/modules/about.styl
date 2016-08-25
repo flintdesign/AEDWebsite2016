@@ -5,9 +5,23 @@ $about-content-width = 65vw
   position relative
   display block
   width 100%
+  
+  button
+    background $brand-orange
+    border-radius 3px
+    color $white
+    letter-spacing 0.2em
+    margin 1em 0
+    min-width 225px
+    padding 1.5em 1.5em 1.6em
+    text-transform uppercase
+    transition background-color 0.25s
+    &:hover
+      background darken($brand-orange, 10%)
+      transition background-color 0.25s
 
 .about-sidebar
-  width $about-sidebar-width
+  max-width 400px
   height 100%
   position fixed
   top 0
@@ -18,35 +32,77 @@ $about-content-width = 65vw
   &__logo
     width 100%
     height 100px
-    margin 0 auto
-    background transparent no-repeat center center
+    margin 0 auto 3em
+    background url('/images/afesg-notext-logo.png') no-repeat center center
     background-size contain
     text-align center
-    
-    &:after
-      content 'logo'
+      
+  button
+    background $brand-dark
+    width 100%
+    &:hover
+      background $brand-dark-md
 
   .about-menu
     position static
     
     &__item
+      background $white
       border-top 1px solid $gray-lightest
       font-size 0.95em
       font-weight bold
       width 100%
+      transition background-color 0.25s
       &:hover
-        background $gray-lightest
+        background lighten($gray-lightest, 25%)
+        transition background-color 0.25s
       &:last-child
         border-bottom 1px solid $gray-lightest
       
       a
         color $brand-dark-md
         display block
-        padding 0.75em 0.5em
+        padding 0.75em
+        position relative
         text-decoration none
-      
+        transition color 0.25s
+        &:hover
+          color darken($brand-dark-md, 35%)
+          transition color 0.25s
+          &:after
+            opacity 1
+            transition opacity 0.25s
+        &:after
+          background url('/images/chevron-bold-down.svg') no-repeat 50% 70%
+          background-size 100%
+          content ''
+          display inline-block
+          height 12px
+          opacity 0
+          position absolute
+          right 1em
+          top 38%
+          -ms-transform rotate(-90deg)
+          -webkit-transform rotate(-90deg)
+          transform rotate(-90deg)
+          width 12px
+          transition opacity 0.25s
+                
       &.active
         background $gray-lightest
+        &:after
+          background url('/images/chevron-bold-down.svg') no-repeat 50% 70%
+          background-size 100%
+          content ''
+          display inline-block
+          height 12px
+          position absolute
+          right 1em
+          top 38%
+          -ms-transform rotate(-90deg)
+          -webkit-transform rotate(-90deg)
+          transform rotate(-90deg)
+          width 12px
   
   &__actions
     margin-top 30px
@@ -64,26 +120,30 @@ $about-content-width = 65vw
   
   &__section
     position relative
+    max-width 700px
     width 100%
     height auto
-    padding-bottom 60px
-    margin-bottom 60px
+    padding-bottom 40px
+    margin-bottom 20px
     border-bottom 1px solid #dddddd
     
   h2
+    color $brand-dark
     font-size 38px
-    margin 1em 0
+    margin 0 0 1em
+    padding-top 1em
 
   h3
+    color $brand-dark
     font-size 26px
     margin 1em 0
-    
   p
+    color $brand-dark
     margin 1.5em 0
   
   a
     text-decoration none
-    color #FF9701
+    color darken($central-africa, 20%)
     &:hover
       text-decoration underline
   
@@ -113,10 +173,13 @@ $about-content-width = 65vw
 
       &.iucn
         background-image url(/images/IUCN-logo.png)
+        background-size 45%
       &.ssc
         background-image url(/images/SSC-logo.png)
+        background-size 65%
       &.afesg
         background-image url(/images/afesg-logo.png)
+        background-size 70%
         
 .partners-resources
   &__link-grid
@@ -125,33 +188,57 @@ $about-content-width = 65vw
       
       &.aef
         background-image url(/images/AEF-logo.png)
+        background-size 50%
       &.awf
         background-image url(/images/AWF-logo.png)
+        background-size 65%
       &.ste
         background-image url(/images/STE-logo.png)
+        background-size 50%
       &.mike
         background-image url(/images/MIKE-logo.png)
+        background-size 40%
       &.defra
         background-image url(/images/DEFRA-logo.png)
+        background-size 50%
       &.tusk
         background-image url(/images/Tusk-logo.png)
+        background-size 50%
       &.wwf
         background-image url(/images/WWF-logo.png)
       &.usfws
         background-image url(/images/USFWS-logo.png)
       &.asesg
         background-image url(/images/AsESG-logo.png)
+        background-size 50%
       &.ec
         background-image url(/images/EC-logo.png)
+        background-size 35%
       &.cites
         background-image url(/images/CITES-logo.png)
+        background-size 40%
       &.solertium
         background-image url(/images/solertium-logo.png)
+        background-size 50%
         
 .reports
   .reports__list
     &__item
-      a
-        display block
-      h4
-        float left
+      border-top 1px solid $gray-lightest
+      clear both
+      display table
+      padding-top 2em
+      margin-top 2em
+      width 100%
+      .report__image
+        border 1px solid $gray-lightest
+        display table-cell
+        width 150px
+        transition border-color 0.25s
+        &:hover
+          border 1px solid $gray-light
+          transition border-color 0.25s
+    .reports__details
+      display table-cell
+      padding-left 1.5em
+      vertical-align top
