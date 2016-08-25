@@ -35,12 +35,6 @@ class Sidebar extends Component {
     this.handleNarrativeClick = this.handleNarrativeClick.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.currentGeographyId !== this.props.currentGeographyId) {
-      this.setState({ currentTitle: 'summary_area' });
-    }
-  }
-
   onAStratum() {
     return compact(this.props.location.pathname.split('/')).length === 4;
   }
