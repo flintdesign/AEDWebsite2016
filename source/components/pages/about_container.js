@@ -19,8 +19,20 @@ class AboutContainer extends Component {
   componentDidMount() {
   }
 
+  componentWillUpdate(nextProps) {
+    console.log(nextProps.location.hash);
+  }
+
+  setMenuItemClass(href) {
+    let itemClass = 'about-menu__item';
+    if (href === this.state.activeId) {
+      itemClass += ' active';
+    }
+    return itemClass;
+  }
+
   handleClick() {
-    console.log(this.props.params);
+    console.log(this.props.location.hash);
   }
 
   render() {
@@ -31,27 +43,27 @@ class AboutContainer extends Component {
             <div className="about-sidebar__logo"></div>
             <nav className="about-menu">
               <ul>
-                <li className={'about-menu__item'}>
+                <li className={this.setMenuItemClass('#introduction')}>
                   <a href="#introduction" onClick={this.handleClick}>
                     Introduction
                   </a>
                 </li>
-                <li className="about-menu__item">
+                <li className={this.setMenuItemClass('#about-us')}>
                   <a href="#about-us" onClick={this.handleClick}>
                     About Us
                   </a>
                 </li>
-                <li className="about-menu__item">
+                <li className={this.setMenuItemClass('#partners-resources')}>
                   <a href="#partners-resources" onClick={this.handleClick}>
                     Partners &amp; Resources
                   </a>
                 </li>
-                <li className="about-menu__item">
+                <li className={this.setMenuItemClass('#key-points')}>
                   <a href="#key-points" onClick={this.handleClick}>
                     Key Points
                   </a>
                 </li>
-                <li className="about-menu__item">
+                <li className={this.setMenuItemClass('#reports')}>
                   <a href="#reports" onClick={this.handleClick}>
                     Reports
                   </a>
