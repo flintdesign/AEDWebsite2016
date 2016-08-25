@@ -81,7 +81,10 @@ export default function CountsBySubGeography(props) {
               {geographies.map((g, i) => (
                 <tr key={i}>
                   <td className="subgeography-totals__subgeography-name">
-                    {g[subGeography]}
+                    <SidebarMapLink
+                      path={`${basePathForLinks}/${slugify(g[subGeography])}`}
+                      label={g[subGeography]}
+                    />
                   </td>
                   <td>{formatNumber(g.ESTIMATE)}</td>
                   <td>{formatNumber(g.CONFIDENCE)}</td>
