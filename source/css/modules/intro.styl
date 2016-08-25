@@ -1,13 +1,12 @@
 .intro
+  background-color $central-africa
   color white
   position absolute
   top 0
   left 0
   width 100%
   height 100vh
-  overflow hidden    
-  -webkit-animation intro-background linear 20s infinite 
-  animation intro-background linear 20s infinite
+  overflow auto    
   
   &__title
     font-family 'Noe Display', Georgia, serif
@@ -30,13 +29,13 @@
   .intro__description
     font-family 'acumin-pro', Helvetica, sans-serif
     font-size 0.88em
-    font-weight 100
     letter-spacing 0.015em
     line-height 1.5
     margin-bottom 1.5em
     opacity 1
     width 100%
     p
+      font-weight 100
       margin-bottom 1em
 
   .intro__loader
@@ -65,27 +64,3 @@
     font-size 0.68em
     letter-spacing 0.02em
     opacity 0.7
-
-@-webkit-keyframes intro-background
-  0% 
-    background-color $southern-africa
-  25%
-    background-color $west-africa
-  50%
-    background-color $eastern-africa
-  75%
-    background-color $central-africa
-  100% 
-    background-color $southern-africa  
-
-@keyframes intro-background
-  0% 
-    background-color $southern-africa
-  25%
-    background-color $west-africa
-  50%
-    background-color $eastern-africa
-  75%
-    background-color $central-africa
-  100% 
-    background-color $southern-africa
