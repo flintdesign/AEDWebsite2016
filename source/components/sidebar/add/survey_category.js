@@ -72,7 +72,7 @@ export default class SurveyCategory extends Component {
 SurveyCategory.propTypes = {
   surveyType: PropTypes.string.isRequired,
   estimate: PropTypes.string.isRequired,
-  confidence: PropTypes.string.isRequired,
+  confidence: PropTypes.string,
   guess_min: PropTypes.string.isRequired,
   guess_max: PropTypes.string.isRequired,
   range_assessed: PropTypes.string,

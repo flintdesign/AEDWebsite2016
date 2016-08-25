@@ -30,7 +30,6 @@ export default function CountsBySurveyCategory(props) {
     const glommed = { ...countType, ...area };
     causesOfChange.push(glommed);
   });
-
   let markup = null;
   if (sidebarState < SIDEBAR_FULL) {
     // Half-width sidebar

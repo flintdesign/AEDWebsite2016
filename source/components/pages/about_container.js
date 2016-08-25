@@ -9,18 +9,18 @@ import ReportsMarkup from 'html!./../../data/about/reports.html';
 class AboutContainer extends Component {
   constructor(props, context) {
     super(props, context);
-    this.handleClick = this.handleClick.bind(this);
     this.state = {
       title: 'About',
-      activeId: '#introduction'
+      activeId: props.location.hash || '#introduction'
     };
   }
 
-  componentDidMount() {
-  }
-
   componentWillUpdate(nextProps) {
-    console.log(nextProps.location.hash);
+    if (nextProps.location.hash !== this.state.activeId) {
+      this.setState({
+        activeId: nextProps.location.hash
+      });
+    }
   }
 
   setMenuItemClass(href) {
@@ -31,40 +31,37 @@ class AboutContainer extends Component {
     return itemClass;
   }
 
-  handleClick() {
-    console.log(this.props.location.hash);
-  }
-
   render() {
     return (
       <div className="about">
         <div className="about-container">
           <div className="about-sidebar">
+            <a href="/" className="about-sidebar__close"></a>
             <div className="about-sidebar__logo"></div>
             <nav className="about-menu">
               <ul>
                 <li className={this.setMenuItemClass('#introduction')}>
-                  <a href="#introduction" onClick={this.handleClick}>
+                  <a href="#introduction">
                     Introduction
                   </a>
                 </li>
                 <li className={this.setMenuItemClass('#about-us')}>
-                  <a href="#about-us" onClick={this.handleClick}>
+                  <a href="#about-us">
                     About Us
                   </a>
                 </li>
                 <li className={this.setMenuItemClass('#partners-resources')}>
-                  <a href="#partners-resources" onClick={this.handleClick}>
+                  <a href="#partners-resources">
                     Partners &amp; Resources
                   </a>
                 </li>
                 <li className={this.setMenuItemClass('#key-points')}>
-                  <a href="#key-points" onClick={this.handleClick}>
+                  <a href="#key-points">
                     Key Points
                   </a>
                 </li>
                 <li className={this.setMenuItemClass('#reports')}>
-                  <a href="#reports" onClick={this.handleClick}>
+                  <a href="#reports">
                     Reports
                   </a>
                 </li>
