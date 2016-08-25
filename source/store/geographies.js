@@ -17,6 +17,8 @@ import { getTotalEstimate } from '../utils/convenience_funcs';
 const initialState = {
   error: null,
   loading: false,
+  loadingData: false,
+  loadingGeoJSON: false,
   canInput: true,
   parentGeography: [],
   geographies: {},
@@ -31,13 +33,18 @@ const initialState = {
   selectedStratum: null
 };
 export function geographies(state = initialState, action) {
+  let isStillLoading = true;
   switch (action.type) {
     case RECEIVE_GEOGRAPHY_DATA:
+      if (!state.loadingGeoJSON) {
+        isStillLoading = false;
+      }
       return { ...state,
         // having null for the error value caused it
         // to not update
         error: '',
-        loading: false,
+        loading: isStillLoading,
+        loadingData: false,
         geographies: action.data,
         totalEstimate: getTotalEstimate(action.data),
         currentGeography: action.data.type,
@@ -50,22 +57,29 @@ export function geographies(state = initialState, action) {
         ...state, error: action.data
       };
     case RECEIVE_SUBGEOGRAPHY_DATA:
+      if (!state.loadingData) {
+        isStillLoading = false;
+      }
       return { ...state,
-        loading: false,
+        loading: isStillLoading,
+        loadingGeoJSON: false,
         subGeographies: action.data,
         selectedStratum: null
       };
     case RECEIVE_BOUNDS:
       return {
-        ...state, bounds: action.bounds
+        ...state,
+        bounds: action.bounds
       };
     case FETCH_BORDER:
       return {
-        ...state, border: {}
+        ...state,
+        border: {}
       };
     case RECEIVE_BORDER:
       return {
-        ...state, border: action.border
+        ...state,
+        border: action.border
       };
     case FETCH_ADJACENT_DATA:
       return {
@@ -83,9 +97,20 @@ export function geographies(state = initialState, action) {
         selectedStratum: action.data
       };
     case FETCH_GEOGRAPHY_DATA:
-      return { ...state, loading: true, canInput: false, parentGeography: state.subGeographies };
+      return {
+        ...state,
+        loadingData: true,
+        loading: true,
+        canInput: false,
+        parentGeography: state.subGeographies
+      };
     case FETCH_SUBGEOGRAPHY_DATA:
-      return { ...state, loading: true, canInput: false };
+      return {
+        ...state,
+        loadingGeoJSON: true,
+        loading: true,
+        canInput: false
+      };
     case CHANGE_MAP:
       return state;
     default:

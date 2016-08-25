@@ -19,8 +19,8 @@ class AboutContainer extends Component {
   componentDidMount() {
   }
 
-  handleClick(e) {
-    console.log(e.target);
+  handleClick() {
+    console.log(this.props.params);
   }
 
   render() {
@@ -97,7 +97,16 @@ class AboutContainer extends Component {
 }
 
 AboutContainer.propTypes = {
-  title: PropTypes.string
+  title: PropTypes.string,
+  params: PropTypes.object.isRequired,
+  router: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired
+  }).isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+    hash: PropTypes.string
+  }),
 };
 
 export default withRouter(AboutContainer);
