@@ -45,6 +45,9 @@ class App extends Component {
     fetchRanges('possible', this.props.dispatch);
     fetchRanges('protected', this.props.dispatch);
     fetchRanges('doubtful', this.props.dispatch);
+    if (this.props.params.region) {
+      this.expandSidebar();
+    }
   }
 
   componentWillReceiveProps(newProps) {
