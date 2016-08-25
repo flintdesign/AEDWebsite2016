@@ -9,18 +9,26 @@ import ReportsMarkup from 'html!./../../data/about/reports.html';
 class AboutContainer extends Component {
   constructor(props, context) {
     super(props, context);
-    this.handleClick = this.handleClick.bind(this);
     this.state = {
       title: 'About',
-      activeId: '#introduction'
+      activeId: props.location.hash || '#introduction'
     };
   }
 
-  componentDidMount() {
+  componentWillUpdate(nextProps) {
+    if (nextProps.location.hash !== this.state.activeId) {
+      this.setState({
+        activeId: nextProps.location.hash
+      });
+    }
   }
 
-  handleClick() {
-    console.log(this.props.params);
+  setMenuItemClass(href) {
+    let itemClass = 'about-menu__item';
+    if (href === this.state.activeId) {
+      itemClass += ' active';
+    }
+    return itemClass;
   }
 
   render() {
@@ -28,31 +36,32 @@ class AboutContainer extends Component {
       <div className="about">
         <div className="about-container">
           <div className="about-sidebar">
+            <a href="/" className="about-sidebar__close"></a>
             <div className="about-sidebar__logo"></div>
             <nav className="about-menu">
               <ul>
-                <li className={'about-menu__item'}>
-                  <a href="#introduction" onClick={this.handleClick}>
+                <li className={this.setMenuItemClass('#introduction')}>
+                  <a href="#introduction">
                     Introduction
                   </a>
                 </li>
-                <li className="about-menu__item">
-                  <a href="#about-us" onClick={this.handleClick}>
+                <li className={this.setMenuItemClass('#about-us')}>
+                  <a href="#about-us">
                     About Us
                   </a>
                 </li>
-                <li className="about-menu__item">
-                  <a href="#partners-resources" onClick={this.handleClick}>
+                <li className={this.setMenuItemClass('#partners-resources')}>
+                  <a href="#partners-resources">
                     Partners &amp; Resources
                   </a>
                 </li>
-                <li className="about-menu__item">
-                  <a href="#key-points" onClick={this.handleClick}>
+                <li className={this.setMenuItemClass('#key-points')}>
+                  <a href="#key-points">
                     Key Points
                   </a>
                 </li>
-                <li className="about-menu__item">
-                  <a href="#reports" onClick={this.handleClick}>
+                <li className={this.setMenuItemClass('#reports')}>
+                  <a href="#reports">
                     Reports
                   </a>
                 </li>
