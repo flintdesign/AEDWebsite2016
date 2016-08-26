@@ -14,15 +14,15 @@ export default function StratumSidebar(props) {
           </tr>
           <tr>
             <td className="indented font-normal">Estimate</td>
-            <td>{formatNumber(stratum.estimate)}</td>
+            <td>
+              {formatNumber(stratum.estimate)}
+              <span>&nbsp;&plusmn;&nbsp;
+              {formatNumber(stratum.lcl95)}</span>
+            </td>
           </tr>
           <tr>
             <td className="indented font-normal">Year Conducted</td>
             <td>{stratum.year}</td>
-          </tr>
-          <tr>
-            <td className="indented font-normal">&plusmn;95% CL</td>
-            <td>{stratum.lcl95}</td>
           </tr>
           <tr>
             <td>Source</td>

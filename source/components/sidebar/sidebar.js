@@ -127,6 +127,7 @@ class Sidebar extends Component {
       return (
         <aside className={`sidebar__loader ${loaderClass}`}>
           <section className="sidebar__inner">
+            <h4>African Elephant Database</h4>
             <h1 className="sidebar__entity-name">{getEntityName(this.props.location)}</h1>
           </section>
         </aside>
