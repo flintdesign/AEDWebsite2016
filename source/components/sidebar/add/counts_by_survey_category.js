@@ -88,7 +88,7 @@ export default function CountsBySurveyCategory(props) {
             <tr>
               <th className="subgeography-totals__subgeography-name">Survey Category</th>
               <th rowSpan="2" style={{ textAlign: 'right' }}>Estimate</th>
-              <th rowSpan="2" style={{ textAlign: 'right' }}>&plusmn;&#37; CL</th>
+              <th rowSpan="2" style={{ textAlign: 'right' }}>&plusmn;95&#37; CL</th>
               <th>From</th>
               <th>To</th>
             </tr>
@@ -133,7 +133,7 @@ export default function CountsBySurveyCategory(props) {
               <tr>
                 <th className="subgeography-totals__subgeography-name">Causes of Change</th>
                 <th rowSpan="2" style={{ textAlign: 'right' }}>Estimate</th>
-                <th rowSpan="2" style={{ textAlign: 'right' }}>&plusmn;&#37; CL</th>
+                <th rowSpan="2" style={{ textAlign: 'right' }}>&plusmn;95&#37; CL</th>
                 <th>From</th>
                 <th>To</th>
               </tr>
