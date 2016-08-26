@@ -9,7 +9,7 @@ export default function StratumSidebar(props) {
       <table className="sidebar__stats-table bold-all">
         <tbody>
           <tr>
-            <td>Number of Elephants</td>
+            <td><strong>Number of Elephants</strong></td>
             <td></td>
           </tr>
           <tr>
