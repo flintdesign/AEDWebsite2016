@@ -26,7 +26,9 @@ class TotalCount extends Component {
         {canInput &&
           <div className="total-count">
             <div className="total-count__count" ref="total_count">
-              {count}<span className="total-count__plus-minus">&plusmn;</span>
+              {count}
+              <span className="total-count__plus-minus">&plusmn;
+              </span>
             </div>
             <small>Estimates from Surveys</small>
             {summary && summary[0] && !atStratum &&
