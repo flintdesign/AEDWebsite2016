@@ -9,6 +9,7 @@ export default function Glossary() {
     <div>
       <div className="glossary">
         <div className="glossary-sidebar">
+          <a href="/" className="glossary-sidebar__close"></a>
           <div className="glossary-sidebar__header">
             <h2 className="glossary-sidebar__header__title">
               Glossary of Terms
