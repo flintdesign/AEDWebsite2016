@@ -56,7 +56,7 @@ export default function CountsBySurveyCategory(props) {
         </div>
         {changeTotals && (
           <div className="sidebar__count-summary sidebar__count-summary--causes-of-change">
-            <h3 className="heading__small">Counts by Causes of Change</h3>
+            <h3 className="heading__small">Counts by Reason for Change</h3>
             {causesOfChange.map(changeData => (
               <SurveyCategory
                 key={changeData.CAUSE}
