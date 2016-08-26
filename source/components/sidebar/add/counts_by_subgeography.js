@@ -55,24 +55,23 @@ export default function CountsBySubGeography(props) {
       // Full-screen sidebar
       markup = (
         <div>
-          <table className="subgeography-totals">
+          <table className="subgeography-totals table-fullwidth">
             <thead>
               <tr>
                 <th></th>
-                <th colSpan="2" style={{ textAlign: 'center' }}>Estimates from surveys</th>
-                <th colSpan="2" style={{ textAlign: 'center' }}>Guesses</th>
-                <th rowSpan="2">Range Area</th>
-                <th rowSpan="2">% of<br />Regional<br />Range</th>
-                <th rowSpan="2" className="subgeography-totals__subgeography-name">
-                  % of<br />Range<br />Assessed
-                </th>
-                <th rowSpan="2">IQI</th>
-                <th rowSpan="2">PFS</th>
+                <th colSpan="2" className="th-parent">Estimates from surveys</th>
+                <th colSpan="2" className="th-parent">Guesses</th>
+                <th colSpan="1" className="th-parent th-right">Range Area</th>
+                <th colSpan="1" className="th-parent th-right">% Known &amp;<br />
+                Possible Range</th>
+                <th colSpan="1" className="th-parent th-right">% of Range<br />Assessed</th>
+                <th rowSpan="1" className="th-parent th-right">IQI</th>
+                <th rowSpan="1" className="th-parent th-right">PFS</th>
               </tr>
               <tr>
                 <th className="subgeography-totals__subgeography-name">Country</th>
                 <th>Estimate</th>
-                <th>+- 95% CL</th>
+                <th>&plusmn;95&#37; CL</th>
                 <th>From</th>
                 <th>To</th>
               </tr>

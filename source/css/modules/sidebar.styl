@@ -25,6 +25,21 @@ aside
   &.full
     width 100%
     display block
+    .sidebar__narrative
+      -webkit-column-count 3
+      -moz-column-count 3
+      column-count 3
+      -webkit-column-gap 40px
+      -moz-column-gap 40px
+      column-gap 40px
+      @media only screen and (min-width 641px) and (max-width 1100px) 
+        -webkit-column-count 2
+        -moz-column-count 2
+        column-count 2
+      @media only screen and (max-width 640px)
+        -webkit-column-count 2
+        -moz-column-count 2
+        column-count 1
 
 aside table
   width 100%
@@ -239,8 +254,10 @@ aside table
       display table
 
 .sidebar__narrative
-  margin 10px 10px 15px
+  margin 10px auto 15px
+  max-width 1800px
   overflow hidden
+  padding 0 10px
 
   h3
     cursor pointer
@@ -276,10 +293,11 @@ aside table
 
 .sidebar__loader
   background-color $brand-dark
+  z-index 5
   .sidebar__inner
     background-color transparent
     background-image url('/images/elephant-loader.gif')
-    background-size 25%
+    background-size 125px
     background-position center bottom
     background-repeat no-repeat
 
