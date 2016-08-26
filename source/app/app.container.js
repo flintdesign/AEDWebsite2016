@@ -226,6 +226,7 @@ class App extends Component {
             onHandleClick={this.toggleSidebar}
             params={this.props.params}
             loading={loading}
+            searchActive={searchActive}
           />
           {React.cloneElement(children, {
             adjacentData: adjacentData,
