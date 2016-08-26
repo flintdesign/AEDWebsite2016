@@ -15,12 +15,9 @@ export default function ParentADD(props) {
             <td>Estimates from Surveys</td>
             <td>
               {formatNumber(data.ESTIMATE)}
-              <span>&plusmn;</span>
+              <span>&nbsp;&plusmn;&nbsp;
+              {formatNumber(data.CONFIDENCE)}</span>
             </td>
-          </tr>
-          <tr>
-            <td>&plusmn;&#37; CL</td>
-            <td>{formatNumber(data.CONFIDENCE)}</td>
           </tr>
           <tr>
             <td>Guesses</td>

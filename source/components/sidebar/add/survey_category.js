@@ -44,11 +44,10 @@ export default class SurveyCategory extends Component {
           <tbody>
             <tr>
               <td>Estimates from Surveys</td>
-              <td>{formatNumber(estimate)}</td>
-            </tr>
-            <tr>
-              <td>&plusmn;&#37; CL</td>
-              <td>{formatNumber(confidence)}</td>
+              <td>{formatNumber(estimate)}
+                <span>&nbsp;&plusmn;&nbsp;
+                {formatNumber(confidence)}</span>
+              </td>
             </tr>
             <tr>
               <td>Guesses</td>
