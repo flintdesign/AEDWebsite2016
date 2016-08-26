@@ -189,9 +189,14 @@ class App extends Component {
       selectedStratum
     } = this.props;
     let finalTotalEstimate = totalEstimate;
+    let finalTotalConfidence = '';
+    if (geographies.summary_sums) {
+      finalTotalConfidence = geographies.summary_sums[0].CONFIDENCE;
+    }
     let atStratum = false;
     if (selectedStratum) {
       finalTotalEstimate = selectedStratum.estimate;
+      finalTotalConfidence = selectedStratum.lcl95;
       atStratum = true;
     }
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
@@ -265,6 +270,7 @@ class App extends Component {
           <TotalCount
             entity={getEntityName(this.props.location)}
             count={formatNumber(finalTotalEstimate)}
+            confidence={formatNumber(finalTotalConfidence)}
             canInput={canInput}
             atStratum={atStratum}
             summary={geographies.summary_sums || []}
