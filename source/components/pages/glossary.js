@@ -36,7 +36,7 @@ export default function Glossary() {
               </li>
               <li className="glossary-menu__list__item">
                 <a href="#causes-of-change">
-                  Causes of Change
+                  Reason for Change
                 </a>
               </li>
             </ul>
