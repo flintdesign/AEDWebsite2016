@@ -61,6 +61,11 @@ class App extends Component {
         this.fetchData(newProps, false);
       }
     }
+    if (!this.props.subGeographyData.length &&
+      newProps.subGeographyData.length &&
+      this.props.params.stratum) {
+      this.loadStratumFromGeography(this.props.params.stratum, newProps.subGeographyData);
+    }
   }
 
   onHandleClick() {
@@ -106,6 +111,14 @@ class App extends Component {
     this.props.dispatch(toggleLegend());
   }
 
+  loadStratumFromGeography(stratumId, geography) {
+    const stratumData = getGeoFromId(stratumId, geography);
+    const _coords = stratumData.coordinates.map(flatten);
+    const stratumBounds = getCoordData(_coords).bounds;
+    this.updateBounds(stratumBounds);
+    this.selectStratum(stratumData);
+  }
+
   fetchData(props, force = false) {
     const {
       routeGeography,
@@ -147,14 +160,8 @@ class App extends Component {
         routeGeography,
         routeGeographyId
       );
-    } else if (params.region && params.country && params.stratum) {
-      const stratumId = params.stratum;
-      const geosData = subGeographyData;
-      const stratumData = getGeoFromId(stratumId, geosData);
-      const _coords = stratumData.coordinates.map(flatten);
-      const stratumBounds = getCoordData(_coords).bounds;
-      this.updateBounds(stratumBounds);
-      this.selectStratum(stratumData);
+    } else if (params.region && params.country && params.stratum && subGeographyData.length) {
+      this.loadStratumFromGeography(params.stratum, subGeographyData);
     } else {
       this.clearAdjacentData();
     }
