@@ -30,8 +30,8 @@ class TotalCount extends Component {
               <span className="total-count__plus-minus">&plusmn;
               {confidence}
               </span>
+              <small>Estimates from Surveys</small>
             </div>
-            <small>Estimates from Surveys</small>
             {summary && summary[0] && !atStratum &&
               <div>
                 <div className="total-count__guesses">
