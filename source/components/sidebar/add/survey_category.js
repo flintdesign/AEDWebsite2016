@@ -26,6 +26,11 @@ export default class SurveyCategory extends Component {
     return formatted;
   }
 
+  formatPercent(percentage) {
+    if (!percentage) return '-';
+    return `${formatFloat(percentage)}%`;
+  }
+
   render() {
     const className = `${this.state.toggled ? 'open' : 'closed'} sidebar__table-container`;
     const {
@@ -46,7 +51,11 @@ export default class SurveyCategory extends Component {
               <td>Estimates from Surveys</td>
               <td>{formatNumber(estimate)}
                 <span>&nbsp;&plusmn;&nbsp;
-                {formatNumber(confidence)}</span>
+                {confidence &&
+                  formatNumber(confidence)
+                }{!confidence &&
+                  ''
+                }</span>
               </td>
             </tr>
             <tr>
@@ -55,7 +64,7 @@ export default class SurveyCategory extends Component {
             </tr>
             <tr>
               <td>% Known &amp; Possible Range</td>
-              <td>{formatFloat(range_assessed)}%</td>
+              <td>{this.formatPercent(range_assessed)}</td>
             </tr>
             <tr>
               <td>Area (km<sup>2</sup>)</td>

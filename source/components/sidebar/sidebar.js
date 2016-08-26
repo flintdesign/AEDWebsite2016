@@ -205,7 +205,7 @@ class Sidebar extends Component {
             </div>
           }
 
-          {this.state.currentTitle === 'narrative' && canInput &&
+          {this.state.currentTitle === 'narrative' && canInput && !selectedStratum &&
             <div className="sidebar__narrative">
               <div dangerouslySetInnerHTML={{ __html: currentNarrative }} />
             </div>
