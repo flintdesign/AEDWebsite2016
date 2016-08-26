@@ -34,7 +34,9 @@ $glossary-content-width = 70vw
     color $white
     font-family 'Noe Display', Georgia, serif
     font-size 2.2em
-    margin-bottom 0.75em
+    line-height 1.05
+    margin-bottom 0.25em
+    margin-top 0.35em
     
   h4
     color lighten($brand-dark-md, 15%)
@@ -241,4 +243,30 @@ $glossary-content-width = 70vw
           top 38%
           width 13px
           transition opacity 0.25s
-        
+          
+  .survey-reliability__list
+    &__item
+      margin 2em 0
+      &__letter
+        border 3px solid $brand-dark
+        display inline-block
+        font-size 1.6em
+        font-weight 700
+        padding 0.25em 0.45em 0.35em
+    table
+      margin 1.5em 0
+      td
+        font-size 0.9em
+        line-height 1.7
+        padding-right 1.4em
+        width 50%
+    thead
+      color lighten($brand-dark, 50%)
+      font-size 0.72em
+      font-weight 200
+      letter-spacing 0.15em
+      text-align left
+      text-transform uppercase
+      th
+        padding-bottom 1em
+    
