@@ -27,7 +27,7 @@ class TotalCount extends Component {
           <div className="total-count">
             <div className="total-count__count" ref="total_count">
               {count}
-              <span className="total-count__plus-minus">&plusmn;
+              <span className="total-count__plus-minus">&nbsp;&plusmn;&nbsp;
               {confidence}
               </span>
               <small>Estimates from Surveys</small>
