@@ -247,7 +247,7 @@ class MapContainer extends Component {
       <Map
         bounds={this.props.bounds}
         minZoom={4}
-        maxZoom={8}
+        maxZoom={9}
         onZoomEnd={this.onZoomEnd}
         onClick={this.props.cancelSearch}
         ref="map"
