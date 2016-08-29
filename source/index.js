@@ -9,7 +9,9 @@ import Glossary from './components/pages/glossary';
 import AboutContainer from './components/pages/about_container';
 import { createStore, applyMiddleware, compose } from 'redux';
 import rootReducer from './store/reducer';
+import { loadState, saveState } from './store/localStorage';
 import thunk from 'redux-thunk';
+import { throttle } from 'lodash';
 
 require('./css/main.styl');
 
@@ -26,13 +28,20 @@ require('./css/main.styl');
 //     return returnValue;
 //   };
 // };
-
-const store = createStore(rootReducer, compose(
+const persistedState = loadState();
+console.log('persistedState', persistedState);
+const store = createStore(rootReducer, persistedState, compose(
   applyMiddleware(thunk),
   window.devToolsExtension ? window.devToolsExtension() : f => f
 ));
 
 // store.dispatch = addLoggingToDispatch(store);
+
+store.subscribe(throttle(() => {
+  saveState({
+    ui: store.getState().ui
+  });
+}, 1000));
 
 render((
   <Provider store={store}>

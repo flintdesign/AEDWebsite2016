@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
-export default function Intro() {
+export default function Intro(props) {
+  const { handleIntroClick, showIntro } = props;
+  const introClass = `intro ${showIntro ? 'shown' : 'dismissed'}`;
   return (
-    <div className={'intro'}>
+    <div className={introClass}>
       <div className={'intro__container'}>
         <div className={'row'}>
           <div className={'col-one-third col-main'}>
@@ -38,7 +40,7 @@ export default function Intro() {
               </small>
             </div>
             <div className="intro__actions">
-              <button className="intro__actions__button">
+              <button className="intro__actions__button" onClick={handleIntroClick}>
                 Enter the database
               </button>
             </div>
@@ -51,3 +53,8 @@ export default function Intro() {
     </div>
   );
 }
+
+Intro.propTypes = {
+  handleIntroClick: PropTypes.func.isRequired,
+  showIntro: PropTypes.bool
+};
