@@ -10,8 +10,7 @@ import {
   RECEIVE_AUTOCOMPLETE,
   TOGGLE_SEARCH,
   TOGGLE_LEGEND,
-  TOGGLE_RANGE,
-  DISMISS_INTRO
+  TOGGLE_RANGE
 } from '../constants';
 
 export function toggleSearch(bool = null) {
@@ -51,8 +50,4 @@ export function updateBounds(newBounds) {
 
 export function selectStratum(stratumData) {
   return ({ type: SELECT_STRATUM, data: stratumData });
-}
-
-export function dismissIntro() {
-  return ({ type: DISMISS_INTRO });
 }
