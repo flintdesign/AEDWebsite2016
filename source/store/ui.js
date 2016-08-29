@@ -1,7 +1,6 @@
 import {
   TOGGLE_LEGEND,
-  TOGGLE_RANGE,
-  DISMISS_INTRO
+  TOGGLE_RANGE
 } from '../constants';
 
 const initialState = {
@@ -9,14 +8,11 @@ const initialState = {
   known: true,
   doubtful: true,
   possible: true,
-  protected: true,
-  intro: true
+  protected: true
 };
 
 export const ui = (state = initialState, action) => {
   switch (action.type) {
-    case DISMISS_INTRO:
-      return { ...state, intro: false };
     case TOGGLE_LEGEND:
       return { ...state, legendActive: !state.legendActive };
     case TOGGLE_RANGE: {
