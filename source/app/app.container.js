@@ -5,6 +5,7 @@ import BreadCrumbNav from '../components/nav/breadcrumb_nav';
 import HelpNav from '../components/nav/help_nav';
 import Ranges from '../components/ranges';
 import Sidebar from '../components/sidebar/sidebar';
+import Intro from '../components/pages/intro';
 import TotalCount from '../components/total_count';
 import { getEntityName, getGeoFromId, flatten } from '../utils/convenience_funcs';
 import { formatNumber } from '../utils/format_utils';
@@ -29,13 +30,15 @@ class App extends Component {
     this.onHandleClick = this.onHandleClick.bind(this);
     this.fetchData = this.fetchData.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleIntroClick = this.handleIntroClick.bind(this);
     this.toggleRange = this.toggleRange.bind(this);
     this.handleLegendClick = this.handleLegendClick.bind(this);
     this.cancelSearch = this.cancelSearch.bind(this);
     this.clearAdjacentData = this.clearAdjacentData.bind(this);
     this.updateBounds = this.updateBounds.bind(this);
     this.state = {
-      showSidebar: false
+      showSidebar: false,
+      showIntro: !props.params.region
     };
   }
 
@@ -105,6 +108,12 @@ class App extends Component {
   handleClick(e) {
     const rangeType = e.target.getAttribute('data-range-type');
     fetchRanges(rangeType, this.props.dispatch);
+  }
+
+  handleIntroClick() {
+    this.setState({
+      showIntro: false
+    });
   }
 
   handleLegendClick() {
@@ -286,6 +295,10 @@ class App extends Component {
         }
         <HelpNav location={location} />
         {searchOverlay}
+        <Intro
+          handleIntroClick={this.handleIntroClick}
+          showIntro={this.state.showIntro}
+        />
       </div>
     );
   }
