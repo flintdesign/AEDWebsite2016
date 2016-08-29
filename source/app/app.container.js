@@ -19,7 +19,8 @@ import {
   toggleRange,
   clearAdjacentData,
   updateBounds,
-  selectStratum
+  selectStratum,
+  dismissIntro
 } from '../actions';
 
 class App extends Component {
@@ -35,6 +36,7 @@ class App extends Component {
     this.handleLegendClick = this.handleLegendClick.bind(this);
     this.cancelSearch = this.cancelSearch.bind(this);
     this.clearAdjacentData = this.clearAdjacentData.bind(this);
+    this.dismissIntro = this.dismissIntro.bind(this);
     this.updateBounds = this.updateBounds.bind(this);
     this.state = {
       showSidebar: false,
@@ -105,15 +107,20 @@ class App extends Component {
     this.props.dispatch(selectStratum(stratumData));
   }
 
+  dismissIntro() {
+    this.props.dispatch(dismissIntro());
+  }
+
   handleClick(e) {
     const rangeType = e.target.getAttribute('data-range-type');
     fetchRanges(rangeType, this.props.dispatch);
   }
 
   handleIntroClick() {
-    this.setState({
-      showIntro: false
-    });
+    this.dismissIntro();
+    // this.setState({
+    //   showIntro: false
+    // });
   }
 
   handleLegendClick() {
@@ -297,7 +304,7 @@ class App extends Component {
         {searchOverlay}
         <Intro
           handleIntroClick={this.handleIntroClick}
-          showIntro={this.state.showIntro}
+          showIntro={ui.intro}
         />
       </div>
     );
@@ -367,7 +374,7 @@ const mapStateToProps = (state, props) => {
     searchActive: state.search.searchActive,
     ranges: state.ranges,
     ui: state.ui,
-    selectedStratum: state.geographyData.selectedStratum
+    selectedStratum: state.geographyData.selectedStratum,
   };
 };
 
