@@ -61,8 +61,8 @@ class Glossary extends Component {
                     Survey Reliability
                   </a>
                 </li>
-                <li className={this.setMenuItemClass('#causes-of-change')}>
-                  <a href="#causes-of-change">
+                <li className={this.setMenuItemClass('#reason-for-change')}>
+                  <a href="#reason-for-change">
                     Reason for Change
                   </a>
                 </li>
@@ -79,7 +79,7 @@ class Glossary extends Component {
             <div className="glossary-content__section" id="survey-reliability">
               <div dangerouslySetInnerHTML={ { __html: SurveyReliability } } />
             </div>
-            <div className="glossary-content__section" id="causes-of-change">
+            <div className="glossary-content__section" id="reason-for-change">
               <div dangerouslySetInnerHTML={ { __html: CausesOfChange } } />
             </div>
           </div>
