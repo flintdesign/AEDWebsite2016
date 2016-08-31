@@ -12,6 +12,7 @@ import {
 import { divIcon, latLng, popup } from 'leaflet';
 import config from '../config';
 import { getCoordData, getLabelPosition } from '../utils/geo_funcs';
+import { formatNumber } from '../utils/format_utils.js';
 import keys from 'lodash.keys';
 import {
   flatten,
@@ -210,8 +211,8 @@ class MapContainer extends Component {
               bounds={datum.bounds}
               name={datum.name}
               region={slugify(datum.region)}
-              estimate={datum.estimate}
-              confidence={datum.lcl95}
+              estimate={formatNumber(datum.estimate)}
+              confidence={formatNumber(datum.lcl95)}
               onMouseOver={self.handleMouseover}
               onMouseOut={self.handleMouseout}
             / >
