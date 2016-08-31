@@ -14,16 +14,27 @@
 .breadcrumb-nav__link
   border-bottom 1px solid transparent
   padding 12px
-  display block
   text-decoration none
   text-transform uppercase
-  color rgba(black, .5)
-  font-size 0.76em
-  font-weight bold
-  letter-spacing 0.1em
+  color lighten($brand-dark-md, 35%)
+  font-size 0.7em
+  font-weight 300
+  letter-spacing 0.15em
+  transition color 0.2s
   &:hover
-    border-bottom 1px solid $light-gray
-    transition border-color 0.05s
+    color $brand-dark
+    transition color 0.2s
+  &.color--region-west-africa,
+  &.color--region-central-africa,
+  &.color--region-eastern-africa,
+  &.color--region-southern-africa
+    font-size 0.72em
+    font-weight 600
+    pointer-events none
+    transition none
+    &:hover
+      color inherit
+      transition none
 
 .breadcrumb-nav__link,
 .breadcrumb-nav__separator
@@ -35,3 +46,4 @@
   opacity .4
   font-size 13px
   transform translateY(-1px)
+  
