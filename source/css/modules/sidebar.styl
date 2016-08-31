@@ -53,13 +53,18 @@ aside table
   -webkit-font-smoothing antialiased
   position relative
   &:first-child
+    transition padding 300ms ease-in-out
     background $brand-dark
     color #fff
     height auto
     padding-bottom 25px
+    aside.full &
+      padding-top 35px
   &:last-child
     overflow-y auto
     height 80vh
+  
+    
 
 .sidebar__year-nav__container
   background inherit
@@ -95,6 +100,10 @@ aside table
       color #fff
       &:hover
         font-weight bold
+  li a.disabled
+    color #dddddd
+    pointer-events none
+    font-weight normal
 
 .sidebar__top-nav
   margin 0 0 15px 0
