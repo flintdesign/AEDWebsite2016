@@ -138,12 +138,14 @@ class MapContainer extends Component {
       name,
       confidence
     } = target.options;
-    const popupHtml = `<span>
-      ${name}<br />
-        <span class='confidence'>
-          ${estimate}&nbsp;&plusmn;&nbsp;${confidence}
-        </span>
-      </span>`;
+    const popupHtml = `<div class='stratum-popup__container'>
+      <span class='stratum-popup__estimate-confidence'>
+        ${estimate}<em>&nbsp;&plusmn;&nbsp;${confidence}</em>
+      </span>
+      <span class='stratum-popup__name'>
+        ${name}
+      </span>
+      </div>`;
     popup({
       minWidth: 150,
       closeButton: false,
