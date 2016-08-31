@@ -36,7 +36,7 @@ class AboutContainer extends Component {
       <div className="about">
         <div className="about-container">
           <div className="about-sidebar">
-            <a href="/" className="about-sidebar__close"></a>
+            <a href="/?hide_intro=true" className="about-sidebar__close"></a>
             <div className="about-sidebar__logo"></div>
             <nav className="about-menu">
               <ul>

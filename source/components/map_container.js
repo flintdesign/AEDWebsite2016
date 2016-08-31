@@ -6,10 +6,10 @@ import {
   Marker,
   GeoJson,
   LayerGroup,
-  ZoomControl
+  ZoomControl,
   // Popup
 } from 'react-leaflet';
-import { divIcon } from 'leaflet';
+import { divIcon, latLng, popup } from 'leaflet';
 import config from '../config';
 import { getCoordData, getLabelPosition } from '../utils/geo_funcs';
 import keys from 'lodash.keys';
@@ -106,6 +106,7 @@ class MapContainer extends Component {
     if (this.props.sidebarState === 0) {
       this.props.openSidebar();
     }
+    this.refs.map.leafletElement.closePopup();
     const href = e.target.options.href;
     const currentPath = this.props.location.pathname;
     const newPath = replaceURLPart(currentPath, href);
@@ -122,12 +123,35 @@ class MapContainer extends Component {
     this.props.cancelSearch();
   }
 
-  handleMouseout(e) {
-    e.target.closePopup();
+  handleMouseout() {
+    this.refs.map.leafletElement.closePopup();
   }
 
   handleMouseover(e) {
-    e.target.openPopup();
+    const target = e.target;
+    const {
+      center,
+      bounds,
+      region,
+      estimate,
+      name,
+      confidence
+    } = target.options;
+    const popupHtml = `<span>
+      ${name}<br />
+        <span class='confidence'>
+          ${estimate}&nbsp;&plusmn;&nbsp;${confidence}
+        </span>
+      </span>`;
+    popup({
+      minWidth: 150,
+      closeButton: false,
+      autoPan: false,
+      className: `stratum-popup stratum-popup--${region}`
+    })
+      .setLatLng(latLng(bounds[1][0], center[1]))
+      .setContent(popupHtml)
+      .openOn(this.refs.map.leafletElement);
   }
 
   render() {
@@ -137,6 +161,7 @@ class MapContainer extends Component {
     const stratumLabels = [];
     const adjacentGeoJSONObjs = [];
     const selectedStratumObjs = [];
+    // const popUps = [];
     const rangeMarkup = this.getRangeMarkup(this.props.ranges, this.props.ui);
     if (this.state.geoJSONData) {
       const self = this;
@@ -170,22 +195,39 @@ class MapContainer extends Component {
               icon={icon}
               href={objectHref}
               onClick={self.handleClick}
-              onMouseOver={self.handleMouseover}
-              onMouseOut={self.handleMouseout}
             />
           );
         }
-        geoJSONObjs.push(
-          <GeoJson
-            key={`${datum.id}_${slugify(datum.name || '')}`}
-            href={objectHref}
-            data={datum}
-            className={geoJSONClassName}
-            onClick={self.handleClick}
-            center={datum.center}
-            bounds={datum.bounds}
-          />
-        );
+        if (datum.geoType === 'stratum') {
+          geoJSONObjs.push(
+            <GeoJson
+              key={`${datum.id}_${slugify(datum.name || '')}`}
+              href={objectHref}
+              data={datum}
+              className={geoJSONClassName}
+              onClick={self.handleClick}
+              center={datum.center}
+              bounds={datum.bounds}
+              name={datum.name}
+              region={slugify(datum.region)}
+              estimate={datum.estimate}
+              confidence={datum.lcl95}
+              onMouseOver={self.handleMouseover}
+              onMouseOut={self.handleMouseout}
+            / >
+          );
+        } else {
+          geoJSONObjs.push(
+            <GeoJson
+              key={`${datum.id}_${slugify(datum.name || '')}`}
+              href={objectHref}
+              data={datum}
+              className={geoJSONClassName}
+              onClick={self.handleClick}
+              bounds={datum.bounds}
+            />
+          );
+        }
         return datum;
       });
     }
@@ -258,14 +300,12 @@ class MapContainer extends Component {
         <LayerGroup>
           {this.props.canInput && rangeMarkup}
         </LayerGroup>
-        <LayerGroup>
-          {this.props.canInput && geoJSONBorderObjs}
-          {this.props.canInput && geoJSONObjs}
-          {this.props.canInput && adjacentGeoJSONObjs}
-          {this.props.canInput && selectedStratumObjs}
-          {this.props.canInput && labels}
-          {stratumLabels}
-        </LayerGroup>
+        {this.props.canInput && geoJSONBorderObjs}
+        {this.props.canInput && geoJSONObjs}
+        {this.props.canInput && adjacentGeoJSONObjs}
+        {this.props.canInput && selectedStratumObjs}
+        {this.props.canInput && labels}
+        {stratumLabels}
       </Map>
     );
   }
