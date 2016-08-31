@@ -119,6 +119,11 @@ class Sidebar extends Component {
     let sidebarInnerClassName = `${currentGeography}__${currentGeographyId}`;
     sidebarInnerClassName += ` region-${getParentRegionFromURL(location)}`;
     const sidebarClasses = ['closed', 'open', 'full'];
+    const overviewTitleMap = {
+      continent: 'CONTINENTAL',
+      region: 'REGIONAL',
+      country: 'COUNTRY'
+    };
 
     const self = this;
 
@@ -162,7 +167,7 @@ class Sidebar extends Component {
                       className={this.getCurrentTitle('narrative')}
                       data-title={'narrative'}
                     >
-                      {currentGeography} INFO
+                      {overviewTitleMap[currentGeography]} OVERVIEW
                     </span>
                   </li>
                   <li onClick={self.handleSpanClick}>
