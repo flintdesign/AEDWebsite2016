@@ -55,7 +55,7 @@ class App extends Component {
     fetchRanges('possible', this.props.dispatch);
     fetchRanges('protected', this.props.dispatch);
     fetchRanges('doubtful', this.props.dispatch);
-    if (this.props.params.region) {
+    if (this.props.params.region && this.props.sidebarState === 0) {
       this.expandSidebar();
     }
   }
@@ -364,7 +364,7 @@ const mapStateToProps = (state, props) => {
     currentNarrative: state.geographyData.currentNarrative,
     routeGeography: routeGeography,
     routeGeographyId: props.params[routeGeography] || 'africa',
-    routeYear: props.params.year || '2013',
+    routeYear: props.params.year || '2015',
     parentGeographyData: state.geographyData.parentGeography,
     subGeographyData: state.geographyData.subGeographies,
     adjacentData: state.geographyData.adjacentData,
