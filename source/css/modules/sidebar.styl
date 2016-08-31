@@ -53,13 +53,18 @@ aside table
   -webkit-font-smoothing antialiased
   position relative
   &:first-child
+    transition padding 300ms ease-in-out
     background $brand-dark
     color #fff
     height auto
     padding-bottom 25px
+    aside.full &
+      padding-top 35px
   &:last-child
     overflow-y auto
     height 80vh
+  
+    
 
 .sidebar__year-nav__container
   background inherit
@@ -95,6 +100,10 @@ aside table
       color #fff
       &:hover
         font-weight bold
+  li a.disabled
+    color #dddddd
+    pointer-events none
+    font-weight normal
 
 .sidebar__top-nav
   margin 0 0 15px 0
@@ -321,6 +330,7 @@ aside table
 
 .heading__small
   @extend .small-heading
+  position relative
 
 .sidebar__inner.region-southern-africa,
 .sidebar__loader.region-southern-africa
@@ -393,3 +403,13 @@ aside table
   
   &:hover
     text-decoration underline
+
+.sidebar__glossary-link
+  position absolute
+  top 0
+  right 0
+  width 25px
+  height 100%
+  background transparent url(/images/icon-glossary.svg) no-repeat center center
+  background-size 15px auto
+  

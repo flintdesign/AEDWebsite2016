@@ -9,8 +9,10 @@ import ReportsMarkup from 'html!./../../data/about/reports.html';
 class AboutContainer extends Component {
   constructor(props, context) {
     super(props, context);
+    this.goBack = this.goBack.bind(this);
     this.state = {
       title: 'About',
+      returnLink: props.location.query.return_to || '/?hide_intro=true',
       activeId: props.location.hash || '#introduction'
     };
   }
@@ -31,12 +33,16 @@ class AboutContainer extends Component {
     return itemClass;
   }
 
+  goBack() {
+    this.props.router.push(this.state.returnLink);
+  }
+
   render() {
     return (
       <div className="about">
         <div className="about-container">
           <div className="about-sidebar">
-            <a href="/?hide_intro=true" className="about-sidebar__close"></a>
+            <a onClick={this.goBack} className="about-sidebar__close"></a>
             <div className="about-sidebar__logo"></div>
             <nav className="about-menu">
               <ul>
@@ -108,14 +114,8 @@ class AboutContainer extends Component {
 AboutContainer.propTypes = {
   title: PropTypes.string,
   params: PropTypes.object.isRequired,
-  router: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired
-  }).isRequired,
-  location: PropTypes.shape({
-    pathname: PropTypes.string,
-    hash: PropTypes.string
-  }),
+  router: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
 };
 
 export default withRouter(AboutContainer);

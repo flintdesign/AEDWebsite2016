@@ -29,7 +29,7 @@ export default class HelpNav extends Component {
           </ul>
         </div>
         <Link
-          to={'/about'}
+          to={`/about?return_to=${this.props.location.pathname}`}
           className="help-nav"
         >
           ?

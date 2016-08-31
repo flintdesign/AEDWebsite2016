@@ -40,7 +40,10 @@ export default function CountsBySurveyCategory(props) {
           year={year}
         />
         <div className="sidebar__count-summary">
-          <h3 className="heading__small">Counts by Survey Category</h3>
+          <h3 className="heading__small">
+            Counts by Survey Category
+            <a href="/glossary#survey-categories" className="sidebar__glossary-link" />
+          </h3>
           {surveyCategories.map(categoryData => (
             <SurveyCategory
               key={categoryData.SURVEYTYPE}
@@ -56,7 +59,10 @@ export default function CountsBySurveyCategory(props) {
         </div>
         {changeTotals && (
           <div className="sidebar__count-summary sidebar__count-summary--causes-of-change">
-            <h3 className="heading__small">Counts by Reason for Change</h3>
+            <h3 className="heading__small">
+              Counts by Reason for Change
+              <a href="/glossary#reason-for-change" className="sidebar__glossary-link" />
+            </h3>
             {causesOfChange.map(changeData => (
               <SurveyCategory
                 key={changeData.CAUSE}
