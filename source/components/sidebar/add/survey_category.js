@@ -50,12 +50,12 @@ export default class SurveyCategory extends Component {
             <tr>
               <td>Estimates from Surveys</td>
               <td>{formatNumber(estimate)}
-                <span>&nbsp;&plusmn;&nbsp;
+                &nbsp;&plusmn;&nbsp;
                 {confidence &&
                   formatNumber(confidence)
                 }{!confidence &&
                   ''
-                }</span>
+                }
               </td>
             </tr>
             <tr>
