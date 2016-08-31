@@ -106,12 +106,12 @@ class Sidebar extends Component {
       const toVal = compact(window.location.pathname.split('/'));
       const linkVal = toVal.length ? `${y}/${toVal.splice(1).join('/')}` : y;
       const className = (y === this.props.year) ||
-        (!this.props.year && y === '2013') ? 'current' : null;
+        (!this.props.year && y === '2015') ? 'current' : null;
       return (
         <li
           key={y} className={className}
         >
-          <Link to={`/${linkVal}`}>{y}</Link>
+          <Link className={y === '2013' ? 'disabled' : null} to={`/${linkVal}`}>{y}</Link>
         </li>
       );
     });

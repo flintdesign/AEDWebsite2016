@@ -43,7 +43,7 @@ render((
         // Yep, this is annoying. Stop React Router Link
         // from adding a trailing slash.
         <Redirect from="/*/" to="/*" />
-        <IndexRedirect to="/2013" />
+        <IndexRedirect to="/2015" />
         <Route path={'/:year(/:region)(/:country)(/:stratum)'} component={MapContainer} />
       </Route>
     </Router>
