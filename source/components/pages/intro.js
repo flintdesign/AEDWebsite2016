@@ -4,7 +4,7 @@ export default function Intro(props) {
   const { handleIntroClick, showIntro } = props;
   const introClass = `intro ${showIntro ? 'shown' : 'dismissed'}`;
   return (
-    <div className={introClass}>
+    <div className={introClass} onClick={handleIntroClick}>
       <div className={'intro__container'}>
         <div className={'row'}>
           <div className={'col-one-third col-main'}>

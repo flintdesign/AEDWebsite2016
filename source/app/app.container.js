@@ -36,9 +36,16 @@ class App extends Component {
     this.cancelSearch = this.cancelSearch.bind(this);
     this.clearAdjacentData = this.clearAdjacentData.bind(this);
     this.updateBounds = this.updateBounds.bind(this);
+    let showIntroOnLoad = true;
+    if (props.params.region) {
+      showIntroOnLoad = false;
+    }
+    if (props.location.query.hide_intro) {
+      showIntroOnLoad = false;
+    }
     this.state = {
       showSidebar: false,
-      showIntro: !props.params.region
+      showIntro: showIntroOnLoad
     };
   }
 
