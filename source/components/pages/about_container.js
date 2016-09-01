@@ -10,9 +10,13 @@ class AboutContainer extends Component {
   constructor(props, context) {
     super(props, context);
     this.goBack = this.goBack.bind(this);
+    let returnLink = '/?hide_intro=true';
+    if (props.location.query.return_to) {
+      returnLink = `${props.location.query.return_to}?hide_intro=true`;
+    }
     this.state = {
       title: 'About',
-      returnLink: props.location.query.return_to || '/?hide_intro=true',
+      returnLink: returnLink,
       activeId: props.location.hash || '#introduction'
     };
   }

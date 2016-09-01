@@ -48,7 +48,7 @@ export default function ADDSidebar(props) {
   }
   return (
     <div>
-      {!isEmpty(geographies) && currentTitle === 'summary_area' &&
+      {!isEmpty(geographies) && currentTitle === 'totals' &&
         <div>
           <CountsBySurveyCategory
             summary_totals={geographies.summary_totals}
@@ -64,7 +64,7 @@ export default function ADDSidebar(props) {
         </div>
       }
 
-      {!isEmpty(geographies) && currentTitle === 'totals' && !geographies.strata &&
+      {!isEmpty(geographies) && currentTitle === 'summary_area' && !geographies.strata &&
         <div>
           <CountsBySubGeography
             geographies={geographies[pluralize(subGeography)]}
@@ -76,13 +76,15 @@ export default function ADDSidebar(props) {
           />
         </div>
       }
-      {!isEmpty(geographies) && currentTitle === 'totals' && geographies.strata &&
+      {!isEmpty(geographies) && currentTitle === 'summary_area' && geographies.strata &&
         <div>
           <CountsByInputZones
             geographies={geographies}
             strata={geographies.strata}
             sidebarState={sidebarState}
             params={params}
+            totals={addSummaryData}
+            currentYear={year}
           />
         </div>
       }

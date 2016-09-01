@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { formatNumber } from '../../../utils/format_utils.js';
 import { Link } from 'react-router';
+import ParentADD from './parent_add';
 import { capitalize, slugify } from '../../../utils/convenience_funcs.js';
 import { SIDEBAR_FULL } from '../../../constants';
 
@@ -29,26 +30,32 @@ export default function CountsBySubGeography(props) {
       // Half-width sidebar
       markup = (
         <div>
-          <h4 className="heading__small">
-            Counts by {capitalize(subGeography)}
-          </h4>
-          <table className="subgeography-totals">
-            <tbody>{geographies.map((g, i) => (
-              <tr key={i}>
-                <td className="subgeography-totals__subgeography-name">
-                  <SidebarMapLink
-                    path={`${basePathForLinks}/${slugify(g[subGeography])}`}
-                    label={g[subGeography]}
-                  />
-                  {'  '}
-                  <span>{formatNumber(g.RANGE_AREA)} km<sup>2</sup></span>
-                </td>
-                <td className="subgeography-totals__estimate">
-                  {formatNumber(g.ESTIMATE)}
-                </td>
-              </tr>
-            ))}</tbody>
-          </table>
+          <ParentADD
+            data={totals}
+            year={currentYear}
+          />
+          <div>
+            <h4 className="heading__small">
+              Counts by {capitalize(subGeography)}
+            </h4>
+            <table className="subgeography-totals">
+              <tbody>{geographies.map((g, i) => (
+                <tr key={i}>
+                  <td className="subgeography-totals__subgeography-name">
+                    <SidebarMapLink
+                      path={`${basePathForLinks}/${slugify(g[subGeography])}`}
+                      label={g[subGeography]}
+                    />
+                    {'  '}
+                    <span>{formatNumber(g.RANGE_AREA)} km<sup>2</sup></span>
+                  </td>
+                  <td className="subgeography-totals__estimate">
+                    {formatNumber(g.ESTIMATE)}
+                  </td>
+                </tr>
+              ))}</tbody>
+            </table>
+          </div>
         </div>
       );
     } else {
