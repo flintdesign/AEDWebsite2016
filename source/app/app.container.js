@@ -45,7 +45,8 @@ class App extends Component {
     }
     this.state = {
       showSidebar: false,
-      showIntro: showIntroOnLoad
+      showIntro: showIntroOnLoad,
+      initialLoad: false
     };
   }
 
@@ -61,6 +62,11 @@ class App extends Component {
   }
 
   componentWillReceiveProps(newProps) {
+    if (newProps.canInput && !this.state.initialLoad && !newProps.loading) {
+      this.setState({
+        initialLoad: true
+      });
+    }
     if (newProps.location.query !== this.props.location.query) {
       if (newProps.location.query.count_type !== this.props.location.query.count_type) {
         this.fetchData(newProps, true);
@@ -226,6 +232,9 @@ class App extends Component {
     const searchOverlay = searchActive
       ? <div onClick={this.cancelSearch} className="search__overlay" />
       : null;
+    const loadingOverlay = !this.state.initialLoad
+      ? <div className="loading-overlay" />
+      : <div className="loading-overlay dismissed" />;
     return (
       <div
         className={
@@ -302,6 +311,7 @@ class App extends Component {
         }
         <HelpNav location={location} />
         {searchOverlay}
+        {loadingOverlay}
         <Intro
           handleIntroClick={this.handleIntroClick}
           showIntro={this.state.showIntro}
