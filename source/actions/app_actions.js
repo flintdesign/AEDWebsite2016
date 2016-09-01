@@ -12,5 +12,6 @@ export const SELECT_STRATUM = 'SELECT_STRATUM';
 
 export const EXPAND_SIDEBAR = 'EXPAND_SIDEBAR';
 export const CONTRACT_SIDEBAR = 'CONTRACT_SIDEBAR';
+export const SET_SIDEBAR = 'SET_SIDEBAR';
 
 export const CHANGE_MAP = 'CHANGE_MAP';

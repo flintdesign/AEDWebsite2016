@@ -1,6 +1,7 @@
 import {
   EXPAND_SIDEBAR,
   CONTRACT_SIDEBAR,
+  SET_SIDEBAR,
   RECEIVE_ADJACENT_DATA,
   RECEIVE_BOUNDS,
   SELECT_STRATUM
@@ -26,6 +27,10 @@ export function toggleLegend() {
 
 export function expandSidebar() {
   return ({ type: EXPAND_SIDEBAR });
+}
+
+export function setSidebar(data) {
+  return ({ type: SET_SIDEBAR, data });
 }
 
 export function contractSidebar() {

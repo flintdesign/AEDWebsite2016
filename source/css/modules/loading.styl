@@ -38,3 +38,25 @@ $anim-duration = 300ms
   100%
     -webkit-transform  rotate(360deg)
     transform  rotate(360deg)
+
+.loading-overlay
+  transition opacity 300ms, z-index 300ms 100ms, width 250ms
+  background rgba(#222, 0.5) no-repeat center center;
+  position absolute
+  top 0
+  left 0
+  width 100%
+  height 100%
+  z-index 1
+  background-image url(/images/loading-circle.gif);
+  background-size 60px auto
+
+  .sidebar--open &
+    width 65%
+  
+  &.dismissed
+    opacity 0
+    z-index -2
+  
+  
+  

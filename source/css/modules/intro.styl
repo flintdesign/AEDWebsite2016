@@ -1,5 +1,5 @@
 .intro
-  background-color $central-africa
+  background-color #212121
   color white
   position absolute
   top 0
@@ -9,23 +9,70 @@
   overflow auto  
   z-index 1002
   
+  &__entity-name
+    font-family 'Noe Display', Georgia, serif
+    font-weight 700
+    font-style normal
+    font-size 3em
+    letter-spacing 0.015em
+    line-height 1.15
+    margin 50px 0 10px //margin top change temporary
+    text-align center
+    -webkit-font-smoothing auto
+  
   &.dismissed
     transition opacity 150ms ease-in-out, z-index 300ms 300ms
     opacity 0
     z-index -1
-  
-  &__title
-    font-family 'Noe Display', Georgia, serif
-    font-style normal
-    margin-bottom 2em 
 
   .intro__container
-    margin 3.5em 3em 3em
+    margin 0
+    
+  .col-two-thirds
+    width 60%
+    @media (max-width $mobile-max)
+      width 100%
 
   .col-one-third
     height 100%
-    float left
-    width 33.3%
+    width 40%
+    @media (max-width $mobile-max)
+      width 100%
+    
+  .col-main
+    background $brand-dark
+    float right
+    height 100vh
+    
+  .intro__inner
+    background-color transparent
+    background-image url('/images/elephant-loader.gif')
+    background-size 125px
+    background-position center bottom
+    background-repeat no-repeat
+    height 100%
+    min-height 625px
+    overflow-y auto
+    padding 25px 0 20vh
+    text-align center
+    width 100%
+    left 50%
+    top 50%
+    transform translate(-50%, -50%)
+    
+    a
+      border-bottom 1px solid transparent
+      color $southern-africa
+      text-decoration none
+      transition border-color 0.25s
+      &:hover
+        border-bottom 1px solid $southern-africa
+        text-decoration none
+        transition border-color 0.25s
+
+    @media (max-width $mobile-max)
+      background-size 110px
+      
 
   .intro__title
     font-size 4em
@@ -34,39 +81,142 @@
 
   .intro__description
     font-family 'acumin-pro', Helvetica, sans-serif
-    font-size 0.88em
+    font-size 0.9em
+    font-weight 200
     letter-spacing 0.015em
-    line-height 1.5
-    margin-bottom 1.5em
+    line-height 1.55
+    margin 0 auto 1.5em
     opacity 1
+    text-align left
     width 100%
     p
       font-weight 100
       margin-bottom 1em
+    @media (max-width $mobile-max)
+      font-size 0.82em
+      line-height 1.5
+      
 
   .intro__loader
-    img
-      bottom 0
-      right 13%
+    background rgba(50, 47, 48, 0)
+    height 100vh
+    pointer-events none
+    position absolute
+    right 0
+    top 0
+    width 100%
+    z-index 5
+    animation intro-loader-background 10s 1 0s
+    
+    .intro__inner
       position absolute
-      width 12%
+      bottom 0
+      right 0
+      width 100%
+    
+    h1
+      font-size 3.2em
+      left 50%
+      line-height 1.1
+      margin 0
+      position absolute
+      opacity 0
+      top 50%
+      transform translate(-50%, -50%)
+      -webkit-animation intro-header 7s 1 1s
+      animation intro-header 7s 1 
+      @media (max-width $mobile-max)
+        font-size 2.8em
+      
+      
+  .intro__loaded
+    position absolute
+    z-index 2
+    
+    .intro__inner
+      &-content
+        position absolute
+        left 50%
+        top 50%
+        transform translate(-50%, -50%)
+        width 75%
+        @media (max-width $mobile-max)
+          width 80%
+      
 
   button, .button
-    background darken($central-africa, 30%)
+    background #494949
     border-radius 0.35em
     font-size 0.65em
-    letter-spacing 0.25em
+    letter-spacing 0.3em
+    margin 0 auto
     opacity 1
-    padding 1.75em
+    padding 1.7em 1.75em 1.75em
     text-align center
     text-transform uppercase
     width 100%
     transition background-color 0.3s
     &:hover
-      background darken($central-africa, 50%)
+      background $southern-africa
       transition background-color 0.3s
 
   small
     font-size 0.68em
     letter-spacing 0.02em
-    opacity 0.7
+    opacity 0.6
+    
+@keyframes intro-loader-background
+  0%
+    background rgba(50, 47, 48, 1)
+    
+  80%
+    opacity 85
+    background rgba(50, 47, 48, 1)
+    
+  100%
+    opacity 0
+    background rgba(50, 47, 48, 0)
+    
+@-webkit-keyframes intro-loader-background
+  0%
+    background rgba(50, 47, 48, 1)
+    
+  80%
+    opacity 85
+    background rgba(50, 47, 48, 1)
+    
+  100%
+    opacity 0
+    background rgba(50, 47, 48, 0)
+      
+@keyframes intro-header
+  0%
+    opacity 0
+    
+  20%
+    opacity 25
+
+  50%
+    opacity 100
+    
+  80%
+    opacity 85
+    
+  100%
+    opacity 0
+    
+@-webkit-keyframes intro-header
+  0%
+    opacity 0
+    
+  20%
+    opacity 25
+
+  50%
+    opacity 100
+    
+  80%
+    opacity 85
+    
+  100%
+    opacity 0

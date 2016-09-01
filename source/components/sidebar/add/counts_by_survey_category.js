@@ -14,7 +14,8 @@ export default function CountsBySurveyCategory(props) {
     sidebarState,
     totals,
     changeTotals,
-    year
+    year,
+    location
   } = props;
   const surveyCategories = [];
   const causesOfChange = [];
@@ -31,6 +32,7 @@ export default function CountsBySurveyCategory(props) {
     causesOfChange.push(glommed);
   });
   let markup = null;
+  const glossaryLink = `/glossary?return_to=${location.pathname}&sidebar_state=${sidebarState}`;
   if (sidebarState < SIDEBAR_FULL) {
     // Half-width sidebar
     markup = (
@@ -42,7 +44,10 @@ export default function CountsBySurveyCategory(props) {
         <div className="sidebar__count-summary">
           <h3 className="heading__small">
             Counts by Survey Category
-            <a href="/glossary#survey-categories" className="sidebar__glossary-link" />
+            <a
+              href={`${glossaryLink}#survey-categories`}
+              className="sidebar__glossary-link"
+            />
           </h3>
           {surveyCategories.map(categoryData => (
             <SurveyCategory
@@ -61,7 +66,10 @@ export default function CountsBySurveyCategory(props) {
           <div className="sidebar__count-summary sidebar__count-summary--causes-of-change">
             <h3 className="heading__small">
               Counts by Reason for Change
-              <a href="/glossary#reason-for-change" className="sidebar__glossary-link" />
+              <a
+                href={`${glossaryLink}#reason-for-change`}
+                className="sidebar__glossary-link"
+              />
             </h3>
             {causesOfChange.map(changeData => (
               <SurveyCategory
@@ -92,7 +100,13 @@ export default function CountsBySurveyCategory(props) {
               <th colSpan="1" className="th-parent th-right">Area <span>(KM<sup>2</sup>)</span></th>
             </tr>
             <tr>
-              <th className="subgeography-totals__subgeography-name">Survey Category</th>
+              <th className="subgeography-totals__subgeography-name">
+                Survey Category
+                <a
+                  href={`${glossaryLink}#survey-categories`}
+                  className="sidebar__glossary-link"
+                />
+              </th>
               <th rowSpan="2" style={{ textAlign: 'right' }}>Estimate</th>
               <th rowSpan="2" style={{ textAlign: 'right' }}>&plusmn;95&#37; CL</th>
               <th>From</th>
@@ -137,7 +151,13 @@ export default function CountsBySurveyCategory(props) {
                 <span>(KM<sup>2</sup>)</span></th>
               </tr>
               <tr>
-                <th className="subgeography-totals__subgeography-name">Causes of Change</th>
+                <th className="subgeography-totals__subgeography-name">
+                  Reason for Change
+                  <a
+                    href={`${glossaryLink}#reason-for-change`}
+                    className="sidebar__glossary-link"
+                  />
+                </th>
                 <th rowSpan="2" style={{ textAlign: 'right' }}>Estimate</th>
                 <th rowSpan="2" style={{ textAlign: 'right' }}>&plusmn;95&#37; CL</th>
                 <th>From</th>
@@ -186,4 +206,5 @@ CountsBySurveyCategory.propTypes = {
   totals: PropTypes.object.isRequired,
   changeTotals: PropTypes.object,
   year: PropTypes.string.isRequired,
+  location: PropTypes.object.isRequired
 };
