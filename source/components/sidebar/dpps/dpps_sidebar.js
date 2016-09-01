@@ -20,24 +20,8 @@ export default function DPPSSidebar(props) {
   const unassessedInKM = (unassessedPercent / 100) * totalRange;
   return (
     <div>
-      {!isEmpty(geographies) && currentTitle === 'summary_area' && data &&
+      {!isEmpty(geographies) && currentTitle === 'totals' && data &&
         <div>
-          <ParentDPPS
-            currentGeography={currentGeography}
-            definite={data.DEFINITE}
-            probable={data.PROBABLE}
-            possible={data.POSSIBLE}
-            speculative={data.SPECUL}
-          />
-
-          <AreaRange
-            totalRange={formatNumber(data.RANGEAREA)}
-            assessedInKM={formatNumber(assessedInKM)}
-            assessedPercent={data.SURVRANGPERC}
-            unassessedInKM={formatNumber(unassessedInKM)}
-            unassessedPercent={unassessedPercent}
-          />
-
           <SurveyTypeDPPS
             surveys={
               geographies.area_of_range_covered_by_continent ||
@@ -47,7 +31,7 @@ export default function DPPSSidebar(props) {
         </div>
       }
 
-      {!isEmpty(geographies) && currentTitle === 'totals' && data &&
+      {!isEmpty(geographies) && currentTitle === 'summary_area' && data &&
         <div>
           <ParentDPPS
             currentGeography={currentGeography}
@@ -61,7 +45,13 @@ export default function DPPSSidebar(props) {
             iqi={data.INFQLTYIDX}
             pfs={data.PFS}
           />
-
+          <AreaRange
+            totalRange={formatNumber(data.RANGEAREA)}
+            assessedInKM={formatNumber(assessedInKM)}
+            assessedPercent={data.SURVRANGPERC}
+            unassessedInKM={formatNumber(unassessedInKM)}
+            unassessedPercent={unassessedPercent}
+          />
           <ChildDPPS
             tablesTitle={`Numbers by ${subGeography}`}
             geographies={geographies[pluralize(subGeography)]}
