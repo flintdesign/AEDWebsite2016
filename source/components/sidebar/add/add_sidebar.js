@@ -6,7 +6,15 @@ import CountsBySurveyCategory from './counts_by_survey_category';
 import { pluralize, getNextGeography } from '../../../utils/convenience_funcs';
 
 export default function ADDSidebar(props) {
-  const { geographies, currentTitle, currentGeography, year, sidebarState, params } = props;
+  const {
+    geographies,
+    currentTitle,
+    currentGeography,
+    year,
+    sidebarState,
+    location,
+    params
+  } = props;
   const subGeography = getNextGeography(currentGeography);
   const data = type => geographies[`${type}_sums`][0];
 
@@ -51,6 +59,7 @@ export default function ADDSidebar(props) {
             totals={addSummaryData}
             changeTotals={addChangeData}
             year={year}
+            location={location}
           />
         </div>
       }
@@ -87,5 +96,6 @@ ADDSidebar.propTypes = {
   currentGeography: PropTypes.string.isRequired,
   year: PropTypes.string.isRequired,
   sidebarState: PropTypes.number.isRequired,
-  params: PropTypes.object
+  params: PropTypes.object,
+  location: PropTypes.object.isRequired
 };

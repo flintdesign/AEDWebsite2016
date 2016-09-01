@@ -224,6 +224,7 @@ class Sidebar extends Component {
               sidebarState={sidebarState}
               year={year}
               params={params}
+              location={location}
             />
           }
 

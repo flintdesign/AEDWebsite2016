@@ -164,7 +164,6 @@ class MapContainer extends Component {
     const stratumLabels = [];
     const adjacentGeoJSONObjs = [];
     const selectedStratumObjs = [];
-    // const popUps = [];
     const rangeMarkup = this.getRangeMarkup(this.props.ranges, this.props.ui);
     if (this.state.geoJSONData) {
       const self = this;

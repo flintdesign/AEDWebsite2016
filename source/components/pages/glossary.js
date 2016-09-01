@@ -8,8 +8,17 @@ import CausesOfChange from 'html!./../../data/glossary/causes-of-change.html';
 class Glossary extends Component {
   constructor(props, context) {
     super(props, context);
+    this.goBack = this.goBack.bind(this);
+    let returnLink = '/?hide_intro=true';
+    if (props.location.query.return_to) {
+      returnLink = props.location.query.return_to;
+    }
+    if (props.location.query.sidebar_state) {
+      returnLink += `?sidebar_state=${props.location.query.sidebar_state}`;
+    }
     this.state = {
       title: 'Glossary',
+      returnLink: returnLink,
       activeId: props.location.hash || '#range-categories'
     };
   }
@@ -30,12 +39,16 @@ class Glossary extends Component {
     return itemClass;
   }
 
+  goBack() {
+    this.props.router.push(this.state.returnLink);
+  }
+
   render() {
     return (
       <div>
         <div className="glossary">
           <div className="glossary-sidebar">
-            <a href="/?hide_intro=true" className="glossary-sidebar__close"></a>
+            <a onClick={this.goBack} className="glossary-sidebar__close"></a>
             <div className="glossary-sidebar__header">
               <h2 className="glossary-sidebar__header__title">
                 Glossary of Terms
@@ -92,14 +105,8 @@ class Glossary extends Component {
 Glossary.propTypes = {
   title: PropTypes.string,
   params: PropTypes.object.isRequired,
-  router: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired
-  }).isRequired,
-  location: PropTypes.shape({
-    pathname: PropTypes.string,
-    hash: PropTypes.string
-  }),
+  router: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
 };
 
 export default withRouter(Glossary);

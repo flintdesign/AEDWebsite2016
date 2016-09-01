@@ -15,6 +15,7 @@ import {
   toggleSearch,
   toggleLegend,
   expandSidebar,
+  setSidebar,
   contractSidebar,
   toggleRange,
   clearAdjacentData,
@@ -26,6 +27,7 @@ class App extends Component {
   constructor(props, context) {
     super(props, context);
     this.expandSidebar = this.expandSidebar.bind(this);
+    this.setSidebar = this.setSidebar.bind(this);
     this.contractSidebar = this.contractSidebar.bind(this);
     this.onHandleClick = this.onHandleClick.bind(this);
     this.fetchData = this.fetchData.bind(this);
@@ -56,8 +58,13 @@ class App extends Component {
     fetchRanges('possible', this.props.dispatch);
     fetchRanges('protected', this.props.dispatch);
     fetchRanges('doubtful', this.props.dispatch);
-    if (this.props.params.region && this.props.sidebarState === 0) {
-      this.expandSidebar();
+    if (this.props.location.query.sidebar_state) {
+      const requestedState = parseInt(this.props.location.query.sidebar_state, 10);
+      this.setSidebar(requestedState);
+    } else {
+      if (this.props.params.region && this.props.sidebarState === 0) {
+        this.expandSidebar();
+      }
     }
   }
 
@@ -88,6 +95,10 @@ class App extends Component {
     this.setState({
       showSidebar: !this.state.showSidebar
     });
+  }
+
+  setSidebar(sideBarState) {
+    this.props.dispatch(setSidebar(sideBarState));
   }
 
   expandSidebar() {
