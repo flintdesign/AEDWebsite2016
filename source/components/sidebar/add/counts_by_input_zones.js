@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
+import ParentADD from './parent_add';
 import { formatNumber } from '../../../utils/format_utils.js';
 import { slugify } from '../../../utils/convenience_funcs.js';
-// import { SIDEBAR_FULL } from '../../../constants';
+import { SIDEBAR_FULL } from '../../../constants';
 
 const SidebarMapLink = ({ label, path }) => (
   <Link
@@ -18,32 +19,67 @@ SidebarMapLink.propTypes = {
 };
 
 export default function CountsByInputZones(props) {
-  const { strata, params } = props;
+  const { strata, params, totals, currentYear, sidebarState } = props;
   const basePathForLinks = `/${params.year}/${params.region}/${params.country}`;
-  return (
-    <div>
-      <h4 className="heading__small">
-        Counts by Stratum
-      </h4>
-      <table className="subgeography-totals">
-        <tbody>{strata.map((g, i) => (
-          <tr key={i}>
-            <td className="subgeography-totals__subgeography-name">
-              <SidebarMapLink
-                path={`${basePathForLinks}/${slugify(g.stratum)}-${g.strcode}`}
-                label={g.stratum}
-              />
-              {'  '}
-              <span>{formatNumber(g.area_calc)} km<sup>2</sup></span>
-            </td>
-            <td className="subgeography-totals__estimate">
-              {formatNumber(g.estimate)}
-            </td>
-          </tr>
-        ))}</tbody>
-      </table>
-    </div>
-  );
+  let markup = null;
+  if (sidebarState < SIDEBAR_FULL) {
+    markup = (
+      <div>
+        <ParentADD
+          data={totals}
+          year={currentYear}
+        />
+        <div>
+          <h4 className="heading__small">
+            Counts by Stratum
+          </h4>
+          <table className="subgeography-totals">
+            <tbody>{strata.map((g, i) => (
+              <tr key={i}>
+                <td className="subgeography-totals__subgeography-name">
+                  <SidebarMapLink
+                    path={`${basePathForLinks}/${slugify(g.stratum)}-${g.strcode}`}
+                    label={g.stratum}
+                  />
+                  {'  '}
+                  <span>{formatNumber(g.area_calc)} km<sup>2</sup></span>
+                </td>
+                <td className="subgeography-totals__estimate">
+                  {formatNumber(g.estimate)}
+                </td>
+              </tr>
+            ))}</tbody>
+          </table>
+        </div>
+      </div>
+    );
+  } else {
+    markup = (
+      <div>
+        <h4 className="heading__small">
+          Counts by Stratum
+        </h4>
+        <table className="subgeography-totals">
+          <tbody>{strata.map((g, i) => (
+            <tr key={i}>
+              <td className="subgeography-totals__subgeography-name">
+                <SidebarMapLink
+                  path={`${basePathForLinks}/${slugify(g.stratum)}-${g.strcode}`}
+                  label={g.stratum}
+                />
+                {'  '}
+                <span>{formatNumber(g.area_calc)} km<sup>2</sup></span>
+              </td>
+              <td className="subgeography-totals__estimate">
+                {formatNumber(g.estimate)}
+              </td>
+            </tr>
+          ))}</tbody>
+        </table>
+      </div>
+    );
+  }
+  return markup;
 }
 
 CountsByInputZones.propTypes = {
@@ -51,4 +87,6 @@ CountsByInputZones.propTypes = {
   strata: PropTypes.array,
   sidebarState: PropTypes.number.isRequired,
   params: PropTypes.object,
+  currentYear: PropTypes.string,
+  totals: PropTypes.object.isRequired,
 };

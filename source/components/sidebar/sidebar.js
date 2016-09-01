@@ -138,8 +138,14 @@ class Sidebar extends Component {
         </aside>
       );
     }
-    let totalsTitle = 'Continental & regional totals';
-    if (geographies.strata) {
+    let totalsTitle = 'Continental totals';
+    if (currentGeography === 'continent') {
+      totalsTitle = 'Regional Totals';
+    }
+    if (currentGeography === 'region') {
+      totalsTitle = 'Country Totals';
+    }
+    if (currentGeography === 'country') {
       totalsTitle = 'Stratum Totals';
     }
     return (
@@ -175,7 +181,7 @@ class Sidebar extends Component {
                       className={this.getCurrentTitle('summary_area')}
                       data-title={'summary_area'}
                     >
-                      Summary totals &amp; Area of range covered
+                      Summary totals &amp; {totalsTitle}
                     </span>
                   </li>
                   <li onClick={self.handleSpanClick}>
@@ -183,7 +189,7 @@ class Sidebar extends Component {
                       className={this.getCurrentTitle('totals')}
                       data-title={'totals'}
                     >
-                      {totalsTitle}
+                      Reason for Change &amp; Counts by Survey Category
                     </span>
                   </li>
                 </ul>

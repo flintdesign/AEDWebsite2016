@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import find from 'lodash.find';
-import ParentADD from './parent_add';
 import SurveyCategory from './survey_category';
 import { SIDEBAR_FULL } from '../../../constants';
 import { formatNumber } from '../../../utils/format_utils.js';
@@ -14,7 +13,6 @@ export default function CountsBySurveyCategory(props) {
     sidebarState,
     totals,
     changeTotals,
-    year,
     location
   } = props;
   const surveyCategories = [];
@@ -37,10 +35,6 @@ export default function CountsBySurveyCategory(props) {
     // Half-width sidebar
     markup = (
       <div>
-        <ParentADD
-          data={totals}
-          year={year}
-        />
         <div className="sidebar__count-summary">
           <h3 className="heading__small">
             Counts by Survey Category
