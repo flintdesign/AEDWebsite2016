@@ -1,9 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { withRouter } from 'react-router';
+import GlossaryToggleItem from './glossary_toggle';
 import RangeCategories from 'html!./../../data/glossary/range-categories.html';
-import SurveyCategories from 'html!./../../data/glossary/survey-categories.html';
+import SurveyCategoriesIntro from 'html!./../../data/glossary/survey-categories.html';
+import SurveyCategoriesToggle from 'json!./../../data/glossary/survey-categories-toggle-list.json';
 import SurveyReliability from 'html!./../../data/glossary/survey-reliability.html';
-import CausesOfChange from 'html!./../../data/glossary/causes-of-change.html';
+import CausesOfChangeIntro from 'html!./../../data/glossary/causes-of-change.html';
+import CausesOfChangeToggle from 'json!./../../data/glossary/causes-of-change-toggle-list.json';
 
 class Glossary extends Component {
   constructor(props, context) {
@@ -87,13 +90,41 @@ class Glossary extends Component {
               <div dangerouslySetInnerHTML={ { __html: RangeCategories } } />
             </div>
             <div className="glossary-content__section" id="survey-categories">
-              <div dangerouslySetInnerHTML={ { __html: SurveyCategories } } />
+              <div className="survey-categories">
+                <div dangerouslySetInnerHTML={ { __html: SurveyCategoriesIntro } } />
+                <div className="glossary-content__section__inner">
+                  <ul className="glossary-toggle-list">
+                    {SurveyCategoriesToggle.data.map((item, i) => (
+                      <GlossaryToggleItem
+                        key={`survery-cat-toggle-${i}`}
+                        abbrv={item.abbrv}
+                        headerTitle={item.headerTitle}
+                        content={item.content}
+                      />
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
             <div className="glossary-content__section" id="survey-reliability">
               <div dangerouslySetInnerHTML={ { __html: SurveyReliability } } />
             </div>
             <div className="glossary-content__section" id="reason-for-change">
-              <div dangerouslySetInnerHTML={ { __html: CausesOfChange } } />
+              <div className="causes-of-change">
+                <div dangerouslySetInnerHTML={ { __html: CausesOfChangeIntro } } />
+                <div className="glossary-content__section__inner">
+                  <ul className="glossary-toggle-list">
+                    {CausesOfChangeToggle.data.map((item, i) => (
+                      <GlossaryToggleItem
+                        key={`cause-toggle-${i}`}
+                        abbrv={item.abbrv}
+                        headerTitle={item.headerTitle}
+                        content={item.content}
+                      />
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>
