@@ -13,7 +13,7 @@
   
 .breadcrumb-nav__link
   border-bottom 1px solid transparent
-  padding 12px
+  padding 10px
   text-decoration none
   text-transform uppercase
   color lighten($brand-dark-md, 35%)
@@ -60,11 +60,19 @@ main.main--closed &
     .breadcrumb-nav__link
       transition all 300ms ease-in-out
       color white
+      font-size 0.65em
+      letter-spacing 0.2em
+      opacity 0.8
       padding-top 10px
-      font-weight normal
+      font-weight 100
+      transition opacity .25s
+      &:hover
+        opacity 1
+        transition opacity .25s
       
     .breadcrumb-nav__separator
       color #f8f8f8
+      font-size 0.6em
       
     span:first-child
       .breadcrumb-nav__link
@@ -73,3 +81,4 @@ main.main--closed &
     span:last-child
       .breadcrumb-nav__link
         font-weight bold
+        opacity 1
