@@ -405,11 +405,16 @@ aside table
     text-decoration underline
 
 .sidebar__glossary-link
+  opacity 0.5
   position absolute
   top 0
   right 0
-  width 25px
+  width 32px
   height 100%
-  background transparent url(/images/icon-glossary.svg) no-repeat center center
-  background-size 15px auto
+  background transparent url(/images/icon-glossary.svg) no-repeat 40% 35%
+  background-size 18px auto
+  transition opacity 0.25s
+  &:hover
+    opacity 1
+    transition opacity 0.25s
   
