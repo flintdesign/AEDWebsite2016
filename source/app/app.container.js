@@ -374,7 +374,7 @@ const mapStateToProps = (state, props) => {
     currentNarrative: state.geographyData.currentNarrative,
     routeGeography: routeGeography,
     routeGeographyId: props.params[routeGeography] || 'africa',
-    routeYear: props.params.year || '2015',
+    routeYear: props.params.year || '2013',
     parentGeographyData: state.geographyData.parentGeography,
     subGeographyData: state.geographyData.subGeographies,
     adjacentData: state.geographyData.adjacentData,

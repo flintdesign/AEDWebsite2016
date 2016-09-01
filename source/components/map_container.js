@@ -5,7 +5,7 @@ import {
   TileLayer,
   Marker,
   GeoJson,
-  LayerGroup,
+  // LayerGroup,
   ZoomControl,
   // Popup
 } from 'react-leaflet';
@@ -300,9 +300,7 @@ class MapContainer extends Component {
       >
         <TileLayer url={tileURL} />
         <ZoomControl position={'bottomright'} />
-        <LayerGroup>
-          {this.props.canInput && rangeMarkup}
-        </LayerGroup>
+        {this.props.canInput && rangeMarkup}
         {this.props.canInput && geoJSONBorderObjs}
         {this.props.canInput && geoJSONObjs}
         {this.props.canInput && adjacentGeoJSONObjs}
