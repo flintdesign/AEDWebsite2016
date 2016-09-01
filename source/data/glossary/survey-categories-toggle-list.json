@@ -1,0 +1,59 @@
+{
+  "data": [
+    {
+      "abbrv": "AC",
+      "headerTitle": "Aerial Count, not specified",
+      "content": "<p>TBD</p>"
+    },
+    {
+      "abbrv": "AS",
+      "headerTitle": "Aerial Sample Count",
+      "content": "<p>AS are categorized using sampling intensity. In stratified aerial sample counts, effective sample intensity, defined as the proportion of animals actually seen to the population estimate, is used instead. In both cases, the following quality categories are based on percentage sampling intensity:</p><ul><li>1. Greater than 20%</li><li>2. 5% to 20%</li><li>3. Less than 5% or not reported</li></ul>"
+    },
+    {
+      "abbrv": "AT",
+      "headerTitle": "Aerial Sample Count",
+      "content": "<p>AT are categorized in terms of search rate , or the area covered per hour, as follows:</p><ul><li>1. Less than 100 km./hr</li><li>2. 100 - 200 km./hr</li><li>3. More than 200 km./hr or not reported</li></ul>"
+    },
+    {
+      "abbrv": "DC",
+      "headerTitle": "Dung Count",
+      "content": "<p>1. Percentage Relative Precision (PRP)1  for mean elephant density less than 30% and one of the following:</p><ul class='indented'><li>a. Dung decay rate measured on site for 50 dung-piles or more</li><li>b. Defecation rate measured on site</li><li>c. PRP for dung density estimate<sup>1</sup> 20%</li><li>d. Sampling done in both dry and wet seasons</li></ul><p>OR any three of the above four conditions in (a)-(d).</p><p>2. PRP for elephant density of 50% or less<br />OR any two of the following three conditions:</p><ul class='indented'><li>a. Decay rate measured on site for 30 dung-piles or more</li><li>b. Defecation rate measured on site</li></ul><p><small><sup>1</sup> is the 95% confidence limit expressed as a percentage of the estimate. Thus an estimate of 30 with confidence limits of ±15 has a PRP of 50%</small></p>"
+    },
+    {
+      "abbrv": "EX",
+      "headerTitle": "Extrapolation from GIS",
+      "content": "<p>TBD</p>"
+    },
+    {
+      "abbrv": "GD",
+      "headerTitle": "Genetic Dung Count",
+      "content": "<p>Effective sampling intensity, defined as the number of unique genotypes identified expressed as a percentage of the estimate, is used as the measure of quality for genetic dung counts, as follows:</p><ul><li>1. Greater than 40%</li><li>2. 20% to 40%</li><li>3. Less than 20% or not reported.</li></ul>"
+    },
+    {
+      "abbrv": "GS",
+      "headerTitle": "Ground Sample Count",
+      "content": "<p>GS are rated according to sampling intensity, or sample fraction, which is defined as the proportion of the input zone covered in the survey. The following quality scores are basedon percentage sampling intensity of a given area:</p><ul><li>1. Greater than 20%</li><li>2. 5% to 20%</li><li>3. Less than 5% or not reported</li></ul>"
+    },
+    {
+      "abbrv": "GT",
+      "headerTitle": "Ground Total Count",
+      "content": "<p>GT are given a data quality score of 1.</p>"
+    },
+    {
+      "abbrv": "IG",
+      "headerTitle": "Informed Guess",
+      "content": "<p>IG are given a data quality rating of 3.</p>"
+    },
+    {
+      "abbrv": "IR",
+      "headerTitle": "Individual Registration",
+      "content": "<p>IR are given a data quality score of 1. It is worth noting, however, that the categorization of IR studies is currently under review, as many such studies do not always cover entire populations, and hence do not necessarily merit a high quality rating.</p>"
+    },
+    {
+      "abbrv": "OG",
+      "headerTitle": "Other Guess",
+      "content": "<p>OG are given a data quality rating of 3.</p>"
+    }
+  ]
+}

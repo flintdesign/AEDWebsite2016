@@ -1,0 +1,49 @@
+{
+  "data": [
+    {
+      "abbrv": "RS",
+      "headerTitle": "Repeat Survey",
+      "content": "<p>Both surveys were conducted using comparable methodologies.</p>"
+    },
+    {
+      "abbrv": "DA",
+      "headerTitle": "Different Area",
+      "content": "<p>Both surveys were conducted using the same methodology, but the extent of the areas covered differ by 10% or more.</p>"
+    },
+    {
+      "abbrv": "DT",
+      "headerTitle": "Different Technique",
+      "content": "<p>The most recent survey uses a different survey methodology, or replaces a guess.</p>"
+    },
+    {
+      "abbrv": "NP",
+      "headerTitle": "New Population",
+      "content": "<p>A new entry into the AED, i.e. no previous survey or guess to compare with.</p>"
+    },
+    {
+      "abbrv": "PL",
+      "headerTitle": "Population Lost",
+      "content": "<p>The population is known to have disappeared from the site, be it through translocation or local extinction.</p>"
+    },
+    {
+      "abbrv": "NG",
+      "headerTitle": "New Guess",
+      "content": "<p>A guess replaces an older guess or a survey estimate that has been downgraded to the category of <strong>OTHER GUESSES</strong> for being more than 10 years old.</p>"
+    },
+    {
+      "abbrv": "NA",
+      "headerTitle": "New Analysis",
+      "content": "<p>Data from previous report has been re-analyzed or re-interpreted in the light of new information other than a new estimate.</p>"
+    },
+    {
+      "abbrv": "DD",
+      "headerTitle": "Data Degraded",
+      "content": "<p>The estimate in the previous report has been downgraded to the category of <strong>OTHER GUESSES</strong> for being more than 10 years old.</p>"
+    },
+    {
+      "abbrv": "—",
+      "headerTitle": "No Change",
+      "content": "<p>The estimate has been retained unchanged from previous report.</p>"
+    }
+  ]
+}
