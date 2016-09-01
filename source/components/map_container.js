@@ -12,6 +12,7 @@ import {
 import { divIcon, latLng, popup } from 'leaflet';
 import config from '../config';
 import { getCoordData, getLabelPosition } from '../utils/geo_funcs';
+import { formatNumber } from '../utils/format_utils.js';
 import keys from 'lodash.keys';
 import {
   flatten,
@@ -137,12 +138,14 @@ class MapContainer extends Component {
       name,
       confidence
     } = target.options;
-    const popupHtml = `<span>
-      ${name}<br />
-        <span class='confidence'>
-          ${estimate}&nbsp;&plusmn;&nbsp;${confidence}
-        </span>
-      </span>`;
+    const popupHtml = `<div class='stratum-popup__container'>
+      <span class='stratum-popup__estimate-confidence'>
+        ${estimate}<em>&nbsp;&plusmn;&nbsp;${confidence}</em>
+      </span>
+      <span class='stratum-popup__name'>
+        ${name}
+      </span>
+      </div>`;
     popup({
       minWidth: 150,
       closeButton: false,
@@ -210,8 +213,8 @@ class MapContainer extends Component {
               bounds={datum.bounds}
               name={datum.name}
               region={slugify(datum.region)}
-              estimate={datum.estimate}
-              confidence={datum.lcl95}
+              estimate={formatNumber(datum.estimate)}
+              confidence={formatNumber(datum.lcl95)}
               onMouseOver={self.handleMouseover}
               onMouseOut={self.handleMouseout}
             / >
