@@ -79,7 +79,7 @@ class AboutContainer extends Component {
             </nav>
             <div className="about-sidebar__actions">
               <h4>Resources for AED</h4>
-              <a className="button" href="/glossary">Glossary of Terms</a>
+              <a className="button" href="/glossary?return_to=/about">Glossary of Terms</a>
             </div>
           </div>
           <div className="about-content">
