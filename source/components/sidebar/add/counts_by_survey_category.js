@@ -41,6 +41,7 @@ export default function CountsBySurveyCategory(props) {
             <a
               href={`${glossaryLink}#survey-categories`}
               className="sidebar__glossary-link"
+              target="_blank"
             />
           </h3>
           {surveyCategories.map(categoryData => (
@@ -63,6 +64,7 @@ export default function CountsBySurveyCategory(props) {
               <a
                 href={`${glossaryLink}#reason-for-change`}
                 className="sidebar__glossary-link"
+                target="_blank"
               />
             </h3>
             {causesOfChange.map(changeData => (
@@ -99,6 +101,7 @@ export default function CountsBySurveyCategory(props) {
                 <a
                   href={`${glossaryLink}#survey-categories`}
                   className="sidebar__glossary-link"
+                  target="_blank"
                 />
               </th>
               <th rowSpan="2" style={{ textAlign: 'right' }}>Estimate</th>
@@ -150,6 +153,7 @@ export default function CountsBySurveyCategory(props) {
                   <a
                     href={`${glossaryLink}#reason-for-change`}
                     className="sidebar__glossary-link"
+                    target="_blank"
                   />
                 </th>
                 <th rowSpan="2" style={{ textAlign: 'right' }}>Estimate</th>
