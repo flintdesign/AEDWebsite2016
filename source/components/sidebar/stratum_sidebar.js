@@ -16,8 +16,8 @@ export default function StratumSidebar(props) {
             <td className="indented font-normal">Estimate</td>
             <td>
               {formatNumber(stratum.estimate)}
-              <span>&nbsp;&plusmn;&nbsp;
-              {formatNumber(stratum.lcl95)}</span>
+              &nbsp;&plusmn;&nbsp;
+              {formatNumber(stratum.lcl95)}
             </td>
           </tr>
           <tr>

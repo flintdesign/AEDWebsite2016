@@ -33,7 +33,7 @@ class TotalCount extends Component {
               <small>Estimates from Surveys</small>
             </div>
             {summary && summary[0] && !atStratum &&
-              <div>
+              <div className="total_count__container">
                 <div className="total-count__guesses">
                   {formatNumber(summary[0].GUESS_MIN)} - {formatNumber(summary[0].GUESS_MAX)}
                 </div>
