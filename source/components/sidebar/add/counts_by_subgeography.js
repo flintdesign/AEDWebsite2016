@@ -51,6 +51,8 @@ export default function CountsBySubGeography(props) {
                   </td>
                   <td className="subgeography-totals__estimate">
                     {formatNumber(g.ESTIMATE)}
+                    &nbsp;&plusmn;&nbsp;
+                    {formatNumber(g.CONFIDENCE)}
                   </td>
                 </tr>
               ))}</tbody>

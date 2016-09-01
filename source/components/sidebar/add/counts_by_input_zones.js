@@ -21,6 +21,7 @@ SidebarMapLink.propTypes = {
 export default function CountsByInputZones(props) {
   const { strata, params, totals, currentYear, sidebarState } = props;
   const basePathForLinks = `/${params.year}/${params.region}/${params.country}`;
+  console.log(strata);
   let markup = null;
   if (sidebarState < SIDEBAR_FULL) {
     markup = (
@@ -46,6 +47,8 @@ export default function CountsByInputZones(props) {
                 </td>
                 <td className="subgeography-totals__estimate">
                   {formatNumber(g.estimate)}
+                  &nbsp;&plusmn;&nbsp;
+                  {formatNumber(g.lcl95)}
                 </td>
               </tr>
             ))}</tbody>
@@ -72,6 +75,8 @@ export default function CountsByInputZones(props) {
               </td>
               <td className="subgeography-totals__estimate">
                 {formatNumber(g.estimate)}
+                &nbsp;&plusmn;&nbsp;
+                {formatNumber(g.lcl95)}
               </td>
             </tr>
           ))}</tbody>
