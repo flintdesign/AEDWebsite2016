@@ -189,7 +189,7 @@ class Sidebar extends Component {
                       className={this.getCurrentTitle('totals')}
                       data-title={'totals'}
                     >
-                      Reason for Change &amp; Counts by Survey Category
+                      Survey Category &amp; RFC
                     </span>
                   </li>
                 </ul>
