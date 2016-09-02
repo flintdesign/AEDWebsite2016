@@ -161,7 +161,6 @@ class MapContainer extends Component {
     const geoJSONObjs = [];
     const geoJSONBorderObjs = [];
     const labels = [];
-    const stratumLabels = [];
     const adjacentGeoJSONObjs = [];
     const selectedStratumObjs = [];
     const rangeMarkup = this.getRangeMarkup(this.props.ranges, this.props.ui);
@@ -170,12 +169,10 @@ class MapContainer extends Component {
       this.state.geoJSONData.map(datum => {
         let geoJSONClassName = slugify(datum.name || '');
         let objectHref = `/${slugify(datum.name)}`;
-
         if (self.props.routeGeography === 'region') {
           geoJSONClassName =
             `region-${self.props.routeGeographyId}__country`;
         }
-
         if (self.props.routeGeography === 'country' && datum.region) {
           geoJSONClassName = `region-${slugify(datum.region)}__stratum`;
           objectHref = `/${slugify(datum.name)}-${datum.id}`;
@@ -188,7 +185,6 @@ class MapContainer extends Component {
                   ${getNextGeography(self.props.currentGeography)}-${datum.id}">
                   ${datum.name}</h1>`
           });
-
           labels.push(
             <Marker
               key={datum.id}
@@ -305,7 +301,6 @@ class MapContainer extends Component {
         {this.props.canInput && adjacentGeoJSONObjs}
         {this.props.canInput && selectedStratumObjs}
         {this.props.canInput && labels}
-        {stratumLabels}
       </Map>
     );
   }

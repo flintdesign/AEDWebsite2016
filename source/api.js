@@ -276,39 +276,41 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
       };
 
       // fetch the narrative data
-      fetch(`${config.apiBaseURL}/${type}/${mappedId}/narrative`)
-      .then(r => r.json())
-      .then(d2 => {
-        // dispatch "receive" action with response data
-        const narrative = d2.narrative;
-        const dataWithNarrative = { ...data, narrative };
-        dispatch({
-          type: RECEIVE_GEOGRAPHY_DATA,
-          data: dataWithNarrative
-        });
-      });
-      // const cacheKey = `${mappedId}-narrative`;
-      // const cacheResponse = cache.get(cacheKey);
-      // if (cacheResponse) {
+      // fetch(`${config.apiBaseURL}/${type}/${mappedId}/narrative`)
+      // .then(r => r.json())
+      // .then(d2 => {
+      //   // dispatch "receive" action with response data
+      //   const narrative = d2.narrative;
+      //   const dataWithNarrative = { ...data, narrative };
       //   dispatch({
       //     type: RECEIVE_GEOGRAPHY_DATA,
-      //     data: { ...data, narrative: cacheResponse }
+      //     data: dataWithNarrative
       //   });
-      // } else {
-      //   // fetch the narrative data
-      //   fetch(`${config.apiBaseURL}/${type}/${mappedId}/narrative`)
-      //   .then(r => r.json())
-      //   .then(d2 => {
-      //     // dispatch "receive" action with response data
-      //     const narrative = d2.narrative;
-      //     cache.put(cacheKey, narrative);
-      //     const dataWithNarrative = { ...data, narrative };
-      //     dispatch({
-      //       type: RECEIVE_GEOGRAPHY_DATA,
-      //       data: dataWithNarrative
-      //     });
-      //   });
-      // }
+      // });
+      const cacheKey = `${mappedId}-narrative`;
+      const cacheResponse = cache.get(cacheKey);
+      if (cacheResponse) {
+        setTimeout(() => {
+          dispatch({
+            type: RECEIVE_GEOGRAPHY_DATA,
+            data: { ...data, narrative: cacheResponse }
+          });
+        }, 50);
+      } else {
+        // fetch the narrative data
+        fetch(`${config.apiBaseURL}/${type}/${mappedId}/narrative`)
+        .then(r => r.json())
+        .then(d2 => {
+          // dispatch "receive" action with response data
+          const narrative = d2.narrative;
+          cache.put(cacheKey, narrative);
+          const dataWithNarrative = { ...data, narrative };
+          dispatch({
+            type: RECEIVE_GEOGRAPHY_DATA,
+            data: dataWithNarrative
+          });
+        });
+      }
 
       // fetch subgeography data
       const subGeoType = getNextGeography(geoType);
