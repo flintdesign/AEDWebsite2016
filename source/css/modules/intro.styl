@@ -9,6 +9,29 @@
   overflow auto  
   z-index 1002
   
+  &-bg
+    position fixed
+    top 0
+    right 0
+    bottom 0
+    left 0
+    overflow hidden
+    z-index -100
+    &__video
+      position absolute
+      top 50%
+      left 50%
+      width auto
+      height 100vh
+      transform translate(-50%, -50%)
+      @media (max-width $mobile-max)
+        display none
+      @media (min-aspect-ratio 16/9)
+        height 175vh
+      @media (max-aspect-ratio 16/9)
+        width 200vh
+        
+
   &__entity-name
     font-family 'Noe Display', Georgia, serif
     font-weight 700
@@ -29,6 +52,7 @@
     margin 0
     
   .col-two-thirds
+    background transparent
     width 60%
     @media (max-width $mobile-max)
       width 100%
@@ -40,9 +64,11 @@
       width 100%
     
   .col-main
-    background $brand-dark
+    background rgba(40, 40, 40, 0.9)
     float right
     height 100vh
+    @media (max-width $mobile-max)
+      background rgba(40, 40, 40, 1)
     
   .intro__inner
     background-color transparent
@@ -98,7 +124,7 @@
       
 
   .intro__loader
-    background rgba(50, 47, 48, 0)
+    background rgba(40, 40, 40, 0)
     height 100vh
     pointer-events none
     position absolute
@@ -167,27 +193,27 @@
     
 @keyframes intro-loader-background
   0%
-    background rgba(50, 47, 48, 1)
+    background rgba(40, 40, 40, 1)
     
   80%
     opacity 85
-    background rgba(50, 47, 48, 1)
+    background rgba(40, 40, 40, 1)
     
   100%
     opacity 0
-    background rgba(50, 47, 48, 0)
+    background rgba(40, 40, 40, 0)
     
 @-webkit-keyframes intro-loader-background
   0%
-    background rgba(50, 47, 48, 1)
+    background rgba(40, 40, 40, 1)
     
   80%
     opacity 85
-    background rgba(50, 47, 48, 1)
+    background rgba(40, 40, 40, 1)
     
   100%
     opacity 0
-    background rgba(50, 47, 48, 0)
+    background rgba(40, 40, 40, 0)
       
 @keyframes intro-header
   0%
