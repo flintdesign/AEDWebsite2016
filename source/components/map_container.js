@@ -233,9 +233,13 @@ class MapContainer extends Component {
     this.props.adjacentData.map(adjacent => {
       const slugifiedName = slugify(adjacent.name);
       const location = this.props.location.pathname;
+      const params = this.props.params;
       const currentPathParts = location.split('/');
       const rootPath = location.replace(currentPathParts[currentPathParts.length - 1], '');
-      const adjacentHref = `${rootPath}${slugifiedName}`;
+      let adjacentHref = `${rootPath}${slugifiedName}`;
+      if (adjacent.geoType === 'country') {
+        adjacentHref = `/${params.year}/${adjacent.region}/${slugifiedName}`;
+      }
       let adjacentClass = `adjacent ${adjacent.geoType} adjacent--${slugifiedName}`;
       if (adjacent.region) {
         adjacentClass += ` adjacent--${adjacent.region}`;

@@ -148,18 +148,18 @@ function fetchBorder(dispatch, geoType, mappedId) {
   const url = `${config.apiBaseURL}/${geoType}/${mappedId}/geojson_map`;
   // value not cached; fetching
   return fetch(url)
-    .then(r => r.json())
-    .then(d => {
-      cache.put(cacheKey, d, cacheDuration);
-      dispatch({
-        type: RECEIVE_BORDER,
-        border: {
-          ...d,
-          geoType: geoType,
-          mapId: mappedId
-        }
-      });
+  .then(r => r.json())
+  .then(d => {
+    cache.put(cacheKey, d, cacheDuration);
+    dispatch({
+      type: RECEIVE_BORDER,
+      border: {
+        ...d,
+        geoType: geoType,
+        mapId: mappedId
+      }
     });
+  });
 }
 
 function fetchAdjacentGeoJSON(type, item) {
@@ -184,7 +184,6 @@ function fetchAdjacentGeoJSON(type, item) {
   });
 }
 
-
 /*
 *   Fetches a list of subGeographies from the API and sends that data to the
 *   `loadSubGeography` for processing into the store
@@ -206,7 +205,6 @@ export function fetchSubGeography(dispatch, geoType, geoId, subGeoType) {
 
 export function fetchAdjacentGeography(dispatch, parentType, parentSlug, currentType) {
   const mappedParentId = mapSlugToId(parentSlug);
-  // const mappedCurrentId = mapSlugToId(currentSlug);
   dispatch({ type: FETCH_ADJACENT_DATA });
 
   const cacheKey = `adjacent-${parentType}-${parentSlug}`;
@@ -215,7 +213,12 @@ export function fetchAdjacentGeography(dispatch, parentType, parentSlug, current
     return dispatch({ type: RECEIVE_ADJACENT_DATA, data: cacheResponse });
   }
 
-  return fetch(`${config.apiBaseURL}/${parentType}/${mappedParentId}/${pluralize(currentType)}`)
+  let url = `${config.apiBaseURL}/${parentType}/${mappedParentId}/${pluralize(currentType)}`;
+  if (currentType === 'country') {
+    url = `${config.apiBaseURL}/countries`;
+  }
+
+  return fetch(url)
   .then(r => r.json())
   .then(d => {
     let data = d;
@@ -334,14 +337,19 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
     });
 }
 
+export function fetchLoadGeoJSON(z, type) {
+  const _id = z.id || z.strcode;
+  return fetch(`${config.apiBaseURL}/${type}/${_id}/geojson_map`)
+  .then(r => r.json())
+  .then(r => ({ ...z, geoJSON: r }));
+}
+
 export function fetchStrata(z) {
   const url = `${config.apiBaseURL}/input_zone/${z.id}/strata`;
   return fetch(url)
   .then(r => r.json())
-  .then(({ strata }) => {
-    const output = { ...z, strata };
-    return output;
-  });
+  .then(({ strata }) => Promise.all(strata.map(s => fetchLoadGeoJSON(s, 'stratum'))))
+  .then(strata => ({ ...z, strata }));
 }
 
 export function fetchInputZones(p) {
@@ -349,7 +357,8 @@ export function fetchInputZones(p) {
   return fetch(url)
     .then(response => response.json())
     .then(({ input_zones }) => Promise.all(input_zones.map(z => fetchStrata(z))))
-    .then(zs => ({ ...p, input_zones: zs }));
+    .then(zones => Promise.all(zones.map(zone => fetchLoadGeoJSON(zone, 'input_zone'))))
+    .then(zones => ({ ...p, input_zones: zones }));
 }
 
 export function fetchStratumTree(dispatch, params) {
@@ -362,14 +371,13 @@ export function fetchStratumTree(dispatch, params) {
     return dispatch({ type: RECEIVE_STRATUM_TREE, data: cacheResponse });
   }
   return fetch(url)
-    .then(r => r.json())
-    .then(({ populations }) => {
-      Promise.all(populations.map(p => fetchInputZones(p)))
-        .then((stratumTree) => {
-          cache.put(cacheKey, stratumTree, cacheDuration);
-          dispatch({ type: RECEIVE_STRATUM_TREE, data: stratumTree });
-        });
-    });
+  .then(r => r.json())
+  .then(({ populations }) => Promise.all(populations.map(p => fetchInputZones(p))))
+  .then(populations => Promise.all(populations.map(p => fetchLoadGeoJSON(p, 'population'))))
+  .then(stratumTree => {
+    cache.put(cacheKey, stratumTree, cacheDuration);
+    dispatch({ type: RECEIVE_STRATUM_TREE, data: stratumTree });
+  });
 }
 
 export function fetchSearchData(successCallback, errorCallback = (err) => console.log(err)) {
