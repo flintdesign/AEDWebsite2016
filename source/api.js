@@ -19,7 +19,9 @@ import {
   FETCH_BORDER,
   RECEIVE_BORDER,
   FETCH_ADJACENT_DATA,
-  RECEIVE_ADJACENT_DATA
+  RECEIVE_ADJACENT_DATA,
+  FETCH_STRATUM_TREE,
+  RECEIVE_STRATUM_TREE
 } from './actions/app_actions';
 
 import { FETCH_RANGE, RECEIVE_RANGE } from './constants';
@@ -329,6 +331,44 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
         type: RECEIVE_GEOGRAPHY_ERROR,
         data: 'No data available'
       });
+    });
+}
+
+export function fetchStrata(z) {
+  const url = `${config.apiBaseURL}/input_zone/${z.id}/strata`;
+  return fetch(url)
+  .then(r => r.json())
+  .then(({ strata }) => {
+    const output = { ...z, strata };
+    return output;
+  });
+}
+
+export function fetchInputZones(p) {
+  const url = `${config.apiBaseURL}/population/${p.id}/input_zones`;
+  return fetch(url)
+    .then(response => response.json())
+    .then(({ input_zones }) => Promise.all(input_zones.map(z => fetchStrata(z))))
+    .then(zs => ({ ...p, input_zones: zs }));
+}
+
+export function fetchStratumTree(dispatch, params) {
+  const countryIso = mapSlugToId(params.country);
+  const url = `${config.apiBaseURL}/country/${countryIso}/populations`;
+  const cacheKey = `stratum-tree-${countryIso}`;
+  const cacheResponse = cache.get(cacheKey);
+  dispatch({ type: FETCH_STRATUM_TREE, data: params });
+  if (cacheResponse) {
+    return dispatch({ type: RECEIVE_STRATUM_TREE, data: cacheResponse });
+  }
+  return fetch(url)
+    .then(r => r.json())
+    .then(({ populations }) => {
+      Promise.all(populations.map(p => fetchInputZones(p)))
+        .then((stratumTree) => {
+          cache.put(cacheKey, stratumTree, cacheDuration);
+          dispatch({ type: RECEIVE_STRATUM_TREE, data: stratumTree });
+        });
     });
 }
 

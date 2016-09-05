@@ -10,7 +10,12 @@ import TotalCount from '../components/total_count';
 import { getEntityName, getGeoFromId, flatten } from '../utils/convenience_funcs';
 import { formatNumber } from '../utils/format_utils';
 import { getCoordData } from '../utils/geo_funcs';
-import { fetchGeography, fetchRanges, fetchAdjacentGeography } from '../api';
+import {
+  fetchGeography,
+  fetchRanges,
+  fetchAdjacentGeography,
+  fetchStratumTree
+} from '../api';
 import {
   toggleSearch,
   toggleLegend,
@@ -184,6 +189,7 @@ class App extends Component {
         routeGeography,
         routeGeographyId
       );
+      fetchStratumTree(dispatch, params);
     } else if (params.region && !params.country && !params.stratum) {
       // we look at a region, grabs its surrounding regions inside the continent
       fetchAdjacentGeography(
