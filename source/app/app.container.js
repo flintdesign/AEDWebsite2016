@@ -319,7 +319,7 @@ class App extends Component {
         />
         {totalEstimate &&
           <TotalCount
-            entity={getEntityName(this.props.location)}
+            entity={getEntityName(this.props.location, this.props.params)}
             count={formatNumber(finalTotalEstimate)}
             confidence={formatNumber(finalTotalConfidence)}
             canInput={canInput}

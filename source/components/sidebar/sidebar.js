@@ -126,14 +126,15 @@ class Sidebar extends Component {
     };
 
     const self = this;
-
     if (loading) {
       const loaderClass = `${sidebarInnerClassName} ${sidebarClasses[sidebarState]}`;
       return (
         <aside className={`sidebar__loader ${loaderClass}`}>
           <section className="sidebar__inner">
             <h4>African Elephant Database</h4>
-            <h1 className="sidebar__entity-name">{getEntityName(this.props.location)}</h1>
+            <h1 className="sidebar__entity-name">
+              {getEntityName(this.props.location, this.props.params)}
+            </h1>
           </section>
         </aside>
       );
@@ -156,7 +157,9 @@ class Sidebar extends Component {
               {yearLinks}
             </ul>
           </div>
-          <h1 className="sidebar__entity-name">{getEntityName(this.props.location)}</h1>
+          <h1 className="sidebar__entity-name">
+            {getEntityName(this.props.location, this.props.params)}
+          </h1>
           {selectedStratum && selectedStratum.inpzone &&
             <div>
               <h3 className="sidebar__entity-input-zone">
@@ -194,9 +197,11 @@ class Sidebar extends Component {
                   </li>
                 </ul>
               </nav>
-              <CountTypeToggle
-                location={location}
-              />
+              {currentGeography !== 'country' &&
+                <CountTypeToggle
+                  location={location}
+                />
+              }
             </div>
           }
         </section>

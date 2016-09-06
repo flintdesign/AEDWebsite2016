@@ -58,28 +58,34 @@ export default function CountsByInputZones(props) {
   } else {
     markup = (
       <div>
-        <h4 className="heading__small">
-          Counts by Stratum
-        </h4>
-        <table className="subgeography-totals">
-          <tbody>{strata.map((g, i) => (
-            <tr key={i}>
-              <td className="subgeography-totals__subgeography-name">
-                <SidebarMapLink
-                  path={`${basePathForLinks}/${slugify(g.stratum)}-${g.strcode}`}
-                  label={g.stratum}
-                />
-                {'  '}
-                <span>{formatNumber(g.area_calc)} km<sup>2</sup></span>
-              </td>
-              <td className="subgeography-totals__estimate">
-                {formatNumber(g.estimate)}
-                &nbsp;&plusmn;&nbsp;
-                {formatNumber(g.lcl95)}
-              </td>
-            </tr>
-          ))}</tbody>
-        </table>
+        <ParentADD
+          data={totals}
+          year={currentYear}
+        />
+        <div>
+          <h4 className="heading__small">
+            Counts by Stratum
+          </h4>
+          <table className="subgeography-totals">
+            <tbody>{strata.map((g, i) => (
+              <tr key={i}>
+                <td className="subgeography-totals__subgeography-name">
+                  <SidebarMapLink
+                    path={`${basePathForLinks}/${slugify(g.stratum)}-${g.strcode}`}
+                    label={g.stratum}
+                  />
+                  {'  '}
+                  <span>{formatNumber(g.area_calc)} km<sup>2</sup></span>
+                </td>
+                <td className="subgeography-totals__estimate">
+                  {formatNumber(g.estimate)}
+                  &nbsp;&plusmn;&nbsp;
+                  {formatNumber(g.lcl95)}
+                </td>
+              </tr>
+            ))}</tbody>
+          </table>
+        </div>
       </div>
     );
   }
