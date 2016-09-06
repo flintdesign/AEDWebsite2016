@@ -25,7 +25,14 @@ export default function SurveyTypeDPPS(props) {
 
   return (
     <div className="sidebar__count-summary">
-      <h3 className="heading__small">{tablesTitle}</h3>
+      <h3 className="heading__small">
+        {tablesTitle}
+        <a
+          href={'/glossary#survey-categories'}
+          className="sidebar__glossary-link"
+          target="_blank"
+        />
+      </h3>
       {tables}
     </div>
   );
