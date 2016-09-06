@@ -3,6 +3,7 @@ import isEmpty from 'lodash.isempty';
 import ParentDPPS from './parent_dpps';
 import AreaRange from '../area_range';
 import SurveyTypeDPPS from './survey_type_dpps';
+import CauseOfChangeDPPS from './cause_of_change_dpps';
 import ChildDPPS from './child_dpps';
 import { formatNumber } from '../../../utils/format_utils.js';
 import { pluralize, getNextGeography } from '../../../utils/convenience_funcs';
@@ -27,6 +28,12 @@ export default function DPPSSidebar(props) {
               geographies.area_of_range_covered_by_continent ||
               geographies.area_of_range_covered_by_region}
             tablesTitle="Counts by Survey Category"
+          />
+          <CauseOfChangeDPPS
+            surveys={
+              geographies.causes_of_change_by_continent ||
+              geographies.causes_of_change_by_region}
+            tablesTitle="Counts by Reasons for Change"
           />
         </div>
       }

@@ -2,12 +2,12 @@ import React, { PropTypes } from 'react';
 import { formatNumber } from '../../../utils/format_utils.js';
 import ToggleTable from './toggle_table.js';
 
-export default function SurveyTypeDPPS(props) {
+export default function CauseOfChangeDPPS(props) {
   const { tablesTitle, surveys } = props;
 
   const tables = surveys.map((survey, i) => {
-    const titleMarkup = (<span>{survey.surveytype}</span>);
-    const countTypes = ['Known', 'Possible', 'Total'];
+    const titleMarkup = (<span>{survey.CauseofChange}</span>);
+    const countTypes = ['Definite', 'Probable', 'Possible', 'Specul'];
 
     const childMarkup = countTypes.map((type, j) => (<tr key={j}>
       <td>{type}</td>
@@ -24,14 +24,14 @@ export default function SurveyTypeDPPS(props) {
   });
 
   return (
-    <div className="sidebar__count-summary">
+    <div className="sidebar__count-summary sidebar__count-summary--causes-of-change">
       <h3 className="heading__small">{tablesTitle}</h3>
       {tables}
     </div>
   );
 }
 
-SurveyTypeDPPS.propTypes = {
+CauseOfChangeDPPS.propTypes = {
   tablesTitle: PropTypes.string.isRequired,
   surveys: PropTypes.array.isRequired
 };

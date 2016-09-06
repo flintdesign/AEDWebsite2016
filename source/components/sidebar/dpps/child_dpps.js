@@ -17,9 +17,9 @@ export default function ChildDPPS(props) {
     </tr>));
 
     const titleMarkup = (
-      <div>{g.CNTRYNAME || g.REGION}{' '}
+      <span>{g.CNTRYNAME || g.REGION}{' '}
         <small>{formatNumber(g.RANGEAREA)} km<sup>2</sup></small>
-      </div>
+      </span>
     );
 
     return (
