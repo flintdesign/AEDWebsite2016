@@ -7,9 +7,9 @@ export default function Intro(props) {
     <div className={introClass} onClick={handleIntroClick}>
       <div className={'intro-bg'}>
           <video loop muted autoPlay poster="images/intro-video.mp4" className={'intro-bg__video'}>
-              <source src="images/intro-video.webm" type="video/webm" />
-              <source src="images/intro-video.mp4" type="video/mp4" />
-              <source src="images/intro-video.ogv" type="video/ogg" />
+              <source src="/images/intro-video.webm" type="video/webm" />
+              <source src="/images/intro-video.mp4" type="video/mp4" />
+              <source src="/images/intro-video.ogv" type="video/ogg" />
           </video>
       </div>
       <div className={'intro__container'}>

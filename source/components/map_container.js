@@ -5,9 +5,7 @@ import {
   TileLayer,
   Marker,
   GeoJson,
-  // LayerGroup,
-  ZoomControl,
-  // Popup
+  ZoomControl
 } from 'react-leaflet';
 import { divIcon, latLng, popup } from 'leaflet';
 import config from '../config';

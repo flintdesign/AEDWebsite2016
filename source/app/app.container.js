@@ -53,7 +53,8 @@ class App extends Component {
     this.state = {
       showSidebar: false,
       showIntro: showIntroOnLoad,
-      initialLoad: false
+      initialLoad: false,
+      getStratumTree: false
     };
   }
 
@@ -189,7 +190,7 @@ class App extends Component {
         routeGeography,
         routeGeographyId
       );
-      fetchStratumTree(dispatch, params);
+      if (this.state.getStratumTree) fetchStratumTree(dispatch, params);
     } else if (params.region && !params.country && !params.stratum) {
       // we look at a region, grabs its surrounding regions inside the continent
       fetchAdjacentGeography(
