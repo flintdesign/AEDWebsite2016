@@ -10,7 +10,9 @@ import {
   CHANGE_MAP,
   FETCH_ADJACENT_DATA,
   RECEIVE_ADJACENT_DATA,
-  SELECT_STRATUM
+  SELECT_STRATUM,
+  FETCH_STRATUM_TREE,
+  RECEIVE_STRATUM_TREE
 } from '../actions/app_actions';
 import { getTotalEstimate } from '../utils/convenience_funcs';
 
@@ -30,11 +32,16 @@ const initialState = {
   border: {},
   geoJSON: {},
   adjacentData: [],
-  selectedStratum: null
+  selectedStratum: null,
+  stratumTree: null
 };
 export function geographies(state = initialState, action) {
   let isStillLoading = true;
   switch (action.type) {
+    case FETCH_STRATUM_TREE:
+      return { ...state, stratumTree: null };
+    case RECEIVE_STRATUM_TREE:
+      return { ...state, stratumTree: action.data };
     case RECEIVE_GEOGRAPHY_DATA:
       if (!state.loadingGeoJSON) {
         isStillLoading = false;

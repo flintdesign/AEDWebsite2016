@@ -5,9 +5,7 @@ import {
   TileLayer,
   Marker,
   GeoJson,
-  // LayerGroup,
-  ZoomControl,
-  // Popup
+  ZoomControl
 } from 'react-leaflet';
 import { divIcon, latLng, popup } from 'leaflet';
 import config from '../config';
@@ -161,7 +159,6 @@ class MapContainer extends Component {
     const geoJSONObjs = [];
     const geoJSONBorderObjs = [];
     const labels = [];
-    const stratumLabels = [];
     const adjacentGeoJSONObjs = [];
     const selectedStratumObjs = [];
     const rangeMarkup = this.getRangeMarkup(this.props.ranges, this.props.ui);
@@ -170,12 +167,10 @@ class MapContainer extends Component {
       this.state.geoJSONData.map(datum => {
         let geoJSONClassName = slugify(datum.name || '');
         let objectHref = `/${slugify(datum.name)}`;
-
         if (self.props.routeGeography === 'region') {
           geoJSONClassName =
             `region-${self.props.routeGeographyId}__country`;
         }
-
         if (self.props.routeGeography === 'country' && datum.region) {
           geoJSONClassName = `region-${slugify(datum.region)}__stratum`;
           objectHref = `/${slugify(datum.name)}-${datum.id}`;
@@ -188,7 +183,6 @@ class MapContainer extends Component {
                   ${getNextGeography(self.props.currentGeography)}-${datum.id}">
                   ${datum.name}</h1>`
           });
-
           labels.push(
             <Marker
               key={datum.id}
@@ -237,9 +231,13 @@ class MapContainer extends Component {
     this.props.adjacentData.map(adjacent => {
       const slugifiedName = slugify(adjacent.name);
       const location = this.props.location.pathname;
+      const params = this.props.params;
       const currentPathParts = location.split('/');
       const rootPath = location.replace(currentPathParts[currentPathParts.length - 1], '');
-      const adjacentHref = `${rootPath}${slugifiedName}`;
+      let adjacentHref = `${rootPath}${slugifiedName}`;
+      if (adjacent.geoType === 'country') {
+        adjacentHref = `/${params.year}/${adjacent.region}/${slugifiedName}`;
+      }
       let adjacentClass = `adjacent ${adjacent.geoType} adjacent--${slugifiedName}`;
       if (adjacent.region) {
         adjacentClass += ` adjacent--${adjacent.region}`;
@@ -305,7 +303,6 @@ class MapContainer extends Component {
         {this.props.canInput && adjacentGeoJSONObjs}
         {this.props.canInput && selectedStratumObjs}
         {this.props.canInput && labels}
-        {stratumLabels}
       </Map>
     );
   }
