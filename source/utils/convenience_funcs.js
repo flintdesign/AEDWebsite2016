@@ -81,15 +81,29 @@ export const geoTypeFromHref = event => {
   return geoType;
 };
 
-export const getEntityName = (location) => {
+export const getEntityName = (location, params) => {
   const parts = compact(location.pathname.split('/'));
   let title;
-  if (parts.length === 4) {
-    title = titleizeStratum(parts[parts.length - 1]);
-  } else {
-    title = titleize(parts[parts.length - 1]);
+  switch (parts.length) {
+    case 4:
+      title = titleizeStratum(params.stratum);
+      break;
+    case 3:
+      title = titleize(params.country);
+      break;
+    case 2:
+      title = titleize(params.region);
+      break;
+    default:
+      title = 'Africa';
   }
-  return parts.length > 1 ? title : 'Africa';
+  return title;
+  // if (parts.length === 4) {
+  //   title = titleizeStratum(parts[parts.length - 1]);
+  // } else {
+  //   title = titleize(parts[parts.length - 1]);
+  // }
+  // return parts.length > 1 ? title : 'Africa';
 };
 
 export const getParentRegionFromURL = (location) => {
