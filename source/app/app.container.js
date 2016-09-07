@@ -95,6 +95,9 @@ class App extends Component {
       this.props.params.stratum) {
       this.loadStratumFromGeography(this.props.params.stratum, newProps.subGeographyData);
     }
+    if (!newProps.params.stratum && this.props.params.stratum) {
+      this.selectStratum(null);
+    }
   }
 
   onHandleClick() {
@@ -392,7 +395,7 @@ const mapStateToProps = (state, props) => {
     currentNarrative: state.geographyData.currentNarrative,
     routeGeography: routeGeography,
     routeGeographyId: props.params[routeGeography] || 'africa',
-    routeYear: props.params.year || '2013',
+    routeYear: props.params.year || '2015',
     parentGeographyData: state.geographyData.parentGeography,
     subGeographyData: state.geographyData.subGeographies,
     adjacentData: state.geographyData.adjacentData,
