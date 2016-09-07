@@ -11,6 +11,10 @@ import assign from 'lodash.assign';
 const getPathForResult = ({ result, year, data }) => {
   let path = '';
   let slug;
+  let region;
+  let country;
+  // let population;
+  console.log(result);
   const { name, geographicType } = result;
   switch (geographicType) {
     case 'continent':
@@ -24,15 +28,29 @@ const getPathForResult = ({ result, year, data }) => {
       slug = slugify(name);
       path = `/${year}/${slugify(result.parent)}/${slug}`;
       break;
+    // case 'population':
+    //   country = result.parent;
+    //   region = data[country].parent;
+    //   slug = slugify(name);
+    //   path = `/${year}/${slugify(region)}/${slugify(country)}/population/${slug}`;
+    //   break;
+    // case 'input_zone':
+    //   population = result.parent;
+    //   country = data[population].parent;
+    //   region = data[country].parent;
+    //   slug = slugify(name);
+    //   path = `/${year}/${slugify(region)}/${slugify(country)}/input_zone/${slug}`;
+    //   break;
     case 'stratum': {
-      const region = slugify(data[result.parent].parent);
-      const country = slugify(result.parent);
+      region = slugify(data[result.parent].parent);
+      country = slugify(result.parent);
       const stratumYear = name.substring(name.indexOf('(') + 1, name.indexOf(')'));
       slug = slugify(name.split('(')[0]).slice(0, -1);
       path = `/${stratumYear}/${region}/${country}/${slug}`;
       break;
     }
     default:
+      break;
   }
   return path;
 };
@@ -47,6 +65,12 @@ function createParentTitle(result, data) {
       break;
     case 'country':
       label = `${type} in ${result.parent}`;
+      break;
+    case 'population':
+      label = `${type}`;
+      break;
+    case 'input_zone':
+      label = 'Input Zone';
       break;
     case 'stratum':
       label = `${type} in ${data[result.parent].parent}`;
