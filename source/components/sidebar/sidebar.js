@@ -5,14 +5,11 @@ import DPPSSidebar from './dpps/dpps_sidebar';
 import StratumSidebar from './stratum_sidebar';
 import CountTypeToggle from './count_type_toggle';
 import compact from 'lodash.compact';
-import find from 'lodash.find';
 import isArray from 'lodash.isarray';
 import {
   pluralize,
   getNextGeography,
-  getEntityName,
-  //titleize,
-  getParentRegionFromURL
+  getEntityName
 } from '../../utils/convenience_funcs';
 
 class Sidebar extends Component {
@@ -23,7 +20,6 @@ class Sidebar extends Component {
     this.getCurrentTitle = this.getCurrentTitle.bind(this);
     this.subGeographyHasCorrectKeys = this.subGeographyHasCorrectKeys.bind(this);
     this.shouldRenderSidebar = this.shouldRenderSidebar.bind(this);
-    this.onAStratum = this.onAStratum.bind(this);
     this.state = {
       currentTitle: 'summary_area',
       narrativeOpen: false,
@@ -35,22 +31,10 @@ class Sidebar extends Component {
     this.handleNarrativeClick = this.handleNarrativeClick.bind(this);
   }
 
-  onAStratum() {
-    return compact(this.props.location.pathname.split('/')).length === 4;
-  }
-
   getCurrentTitle(title) {
     let currentClass = 'sidebar__viz-toggle';
     if (this.state.currentTitle === title) currentClass += ' active';
     return currentClass;
-  }
-
-  getStratumFromHref() {
-    const parts = this.props.location.pathname.split('/');
-    const stratumName = parts[parts.length - 1];
-    const stratumIdParts = stratumName.split('-');
-    const stratumId = stratumIdParts[stratumIdParts.length - 1];
-    return find(this.props.geographies.strata, s => s.strcode === stratumId);
   }
 
   handleSpanClick(e) {
@@ -64,14 +48,14 @@ class Sidebar extends Component {
   }
 
   subGeographyHasCorrectKeys(vizType) {
-    const { geographies, currentGeography } = this.props;
+    const { geographies, currentGeography, params } = this.props;
     const subGeography = getNextGeography(currentGeography);
     return (
       (vizType === 'add' && isArray(geographies[`${pluralize(subGeography)}_sums`]))
       ||
       (vizType === 'dpps' && isArray(geographies[`${pluralize(subGeography)}_sum`]))
       ||
-      (currentGeography === 'country' && !this.onAStratum())
+      (currentGeography === 'country' && !params.stratum)
     );
   }
 
@@ -106,18 +90,16 @@ class Sidebar extends Component {
       const toVal = compact(window.location.pathname.split('/'));
       const linkVal = toVal.length ? `${y}/${toVal.splice(1).join('/')}` : y;
       const className = (y === this.props.year) ||
-        (!this.props.year && y === '2013') ? 'current' : null;
+        (!this.props.year && y === '2015') ? 'current' : null;
       return (
-        <li
-          key={y} className={className}
-        >
-          <Link to={`/${linkVal}`}>{y}</Link>
+        <li key={y} className={className} >
+          <Link className={y === '2013' ? 'disabled' : null} to={`/${linkVal}`}>{y}</Link>
         </li>
       );
     });
 
     let sidebarInnerClassName = `${currentGeography}__${currentGeographyId}`;
-    sidebarInnerClassName += ` region-${getParentRegionFromURL(location)}`;
+    sidebarInnerClassName += ` region-${params.region}`;
     const sidebarClasses = ['closed', 'open', 'full'];
     const overviewTitleMap = {
       continent: 'CONTINENTAL',
@@ -133,7 +115,7 @@ class Sidebar extends Component {
           <section className="sidebar__inner">
             <h4>African Elephant Database</h4>
             <h1 className="sidebar__entity-name">
-              {getEntityName(this.props.location, this.props.params)}
+              {getEntityName(location, params)}
             </h1>
           </section>
         </aside>
@@ -158,7 +140,7 @@ class Sidebar extends Component {
             </ul>
           </div>
           <h1 className="sidebar__entity-name">
-            {getEntityName(this.props.location, this.props.params)}
+            {getEntityName(location, params)}
           </h1>
           {selectedStratum && selectedStratum.inpzone &&
             <div>
@@ -197,11 +179,9 @@ class Sidebar extends Component {
                   </li>
                 </ul>
               </nav>
-              {currentGeography !== 'country' &&
-                <CountTypeToggle
-                  location={location}
-                />
-              }
+              <CountTypeToggle
+                location={location}
+              />
             </div>
           }
         </section>
@@ -245,6 +225,7 @@ class Sidebar extends Component {
               currentTitle={this.state.currentTitle}
               currentGeography={currentGeography}
               sidebarState={sidebarState}
+              params={params}
             />
           }
 

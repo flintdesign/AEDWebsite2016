@@ -99,17 +99,6 @@ export const getEntityName = (location, params) => {
       title = 'Africa';
   }
   return title;
-  // if (parts.length === 4) {
-  //   title = titleizeStratum(parts[parts.length - 1]);
-  // } else {
-  //   title = titleize(parts[parts.length - 1]);
-  // }
-  // return parts.length > 1 ? title : 'Africa';
-};
-
-export const getParentRegionFromURL = (location) => {
-  const parts = compact(location.pathname.split('/'));
-  return parts.length === 1 ? '' : parts[1];
 };
 
 export const getGeoFromId = (id, geographies) => {

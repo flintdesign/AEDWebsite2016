@@ -71,8 +71,7 @@ export function geographies(state = initialState, action) {
       return { ...state,
         loading: isStillLoading,
         loadingGeoJSON: false,
-        subGeographies: action.data,
-        selectedStratum: null
+        subGeographies: action.data
       };
     case RECEIVE_BOUNDS:
       return {

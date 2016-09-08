@@ -104,9 +104,7 @@ class MapContainer extends Component {
 
   handleClick(e) {
     if (!this.props.canInput) return;
-    if (this.props.sidebarState === 0) {
-      this.props.openSidebar();
-    }
+    if (this.props.sidebarState === 0) this.props.openSidebar();
     this.refs.map.leafletElement.closePopup();
     const href = e.target.options.href;
     const currentPath = this.props.location.pathname;
