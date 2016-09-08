@@ -35,6 +35,7 @@ const initialState = {
   selectedStratum: null,
   stratumTree: null
 };
+
 export function geographies(state = initialState, action) {
   let isStillLoading = true;
   switch (action.type) {

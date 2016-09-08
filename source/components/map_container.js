@@ -51,7 +51,9 @@ class MapContainer extends Component {
 
   setGeoJSON(data) {
     let obj = {};
-    const coords = data.coordinates.map(flatten);
+    // temp //
+    const coordinates = data.coordinates || data.geometries[0].coordinates;
+    const coords = coordinates.map(flatten);
     const coordData = getCoordData(coords);
     if (coords.length > 1) {
       obj = {

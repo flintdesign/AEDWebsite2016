@@ -35,7 +35,7 @@ const cacheDuration = fiveMinutes;
 *   Fetches geoJSON data from the API for a single geography
 *
 *   geoType: One of ['region', 'country', 'stratum']
-*   geoItem: The object for which we're fetching geoJSON data
+*   entity: The object for which we're fetching geoJSON data
 */
 
 const getSimplifyParam = (geoType) => {
@@ -48,10 +48,9 @@ const getSimplifyParam = (geoType) => {
   return `?simplify=${geoMap[geoType]}`;
 };
 
-export function fetchGeoJSON(geoType, geoItem) {
+export function fetchGeoJSON(geoType, entity) {
   // Get the ID or (if the item is a country) ISO code
-  const geoId = geoItem.iso_code || geoItem.id || geoItem.strcode;
-
+  const geoId = entity.iso_code || entity.id || entity.strcode;
   const cacheKey = `geojson-${geoType}-${geoId}`;
   const cacheResponse = cache.get(cacheKey);
   if (cacheResponse) {
@@ -64,9 +63,9 @@ export function fetchGeoJSON(geoType, geoItem) {
   .then(d => {
     const output = {
       ...d,
-      ...geoItem,
-      name: geoItem[geoType] || geoItem[geoType.toUpperCase()] || geoItem.CNTRYNAME,
-      id: geoItem.id || geoItem.iso_code || geoItem.strcode,
+      ...entity,
+      name: entity[geoType] || entity[geoType.toUpperCase()] || entity.CNTRYNAME || entity.name,
+      id: entity.id || entity.iso_code || entity.strcode,
       geoType
     };
     cache.put(cacheKey, output, cacheDuration);
@@ -279,19 +278,7 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
         name: d.name,
         id: id
       };
-
-      // fetch the narrative data
-      // fetch(`${config.apiBaseURL}/${type}/${mappedId}/narrative`)
-      // .then(r => r.json())
-      // .then(d2 => {
-      //   // dispatch "receive" action with response data
-      //   const narrative = d2.narrative;
-      //   const dataWithNarrative = { ...data, narrative };
-      //   dispatch({
-      //     type: RECEIVE_GEOGRAPHY_DATA,
-      //     data: dataWithNarrative
-      //   });
-      // });
+      // GET NARRATIVE
       const cacheKey = `${mappedId}-narrative`;
       const cacheResponse = cache.get(cacheKey);
       if (cacheResponse) {
@@ -324,7 +311,16 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
       // contains a `regions` (pluralized subGeoType) key
       if (d[pluralize(subGeoType)]) {
         dispatch({ type: FETCH_SUBGEOGRAPHY_DATA });
-        loadSubGeography(dispatch, d[pluralize(subGeoType)], subGeoType);
+        let subGeoList = d[pluralize(subGeoType)];
+        if (subGeoType === 'input_zone') {
+          subGeoList = d[pluralize(subGeoType)].filter(z => `${z.analysis_year}` === geoYear);
+          const firstStratum = d.strata[0];
+          subGeoList = subGeoList.map(z => (
+            { ...z, region: firstStratum.region, country: firstStratum.country }
+          ));
+          console.log(subGeoList);
+        }
+        loadSubGeography(dispatch, subGeoList, subGeoType);
       } else {
         fetchSubGeography(dispatch, geoType, mappedId, subGeoType);
       }

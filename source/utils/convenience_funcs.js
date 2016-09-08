@@ -5,7 +5,7 @@ import find from 'lodash.find';
 import geometa from '../geometa';
 
 export const getNextGeography = currentGeography => {
-  const geographies = ['continent', 'region', 'country', 'stratum'];
+  const geographies = ['continent', 'region', 'country', 'input_zone'];
   return geographies[geographies.indexOf(currentGeography) + 1];
 };
 
@@ -14,7 +14,8 @@ export const pluralize = word => {
     contient: 'continents',
     region: 'regions',
     country: 'countries',
-    stratum: 'strata'
+    stratum: 'strata',
+    input_zone: 'input_zones'
   };
   return wordMapping[word];
 };

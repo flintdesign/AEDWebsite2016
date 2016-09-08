@@ -42,7 +42,10 @@ export default function CountsByInputZones(props) {
                     label={g.stratum}
                   />
                   {'  '}
-                  <span>{formatNumber(g.area_calc)} km<sup>2</sup></span>
+                  <span>
+                    {g.est_type},&nbsp;
+                    {formatNumber(g.area_calc)} km<sup>2</sup>
+                  </span>
                 </td>
                 <td className="subgeography-totals__estimate">
                   {formatNumber(g.estimate)}
