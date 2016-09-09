@@ -13,8 +13,7 @@ const getPathForResult = ({ result, year, data }) => {
   let slug;
   let region;
   let country;
-  // let population;
-  console.log(result);
+  let population;
   const { name, geographicType } = result;
   switch (geographicType) {
     case 'continent':
@@ -28,19 +27,19 @@ const getPathForResult = ({ result, year, data }) => {
       slug = slugify(name);
       path = `/${year}/${slugify(result.parent)}/${slug}`;
       break;
-    // case 'population':
-    //   country = result.parent;
-    //   region = data[country].parent;
-    //   slug = slugify(name);
-    //   path = `/${year}/${slugify(region)}/${slugify(country)}/population/${slug}`;
-    //   break;
-    // case 'input_zone':
-    //   population = result.parent;
-    //   country = data[population].parent;
-    //   region = data[country].parent;
-    //   slug = slugify(name);
-    //   path = `/${year}/${slugify(region)}/${slugify(country)}/input_zone/${slug}`;
-    //   break;
+    case 'population':
+      country = result.parent;
+      region = data[country].parent;
+      slug = slugify(name);
+      path = `/${year}/${slugify(region)}/${slugify(country)}/population/${slug}`;
+      break;
+    case 'input_zone':
+      population = result.parent;
+      country = data[population].parent;
+      region = data[country].parent;
+      // slug = slugify(name);
+      path = `/${year}/${slugify(region)}/${slugify(country)}/${result.id}`;
+      break;
     case 'stratum': {
       region = slugify(data[result.parent].parent);
       country = slugify(result.parent);
@@ -67,7 +66,7 @@ function createParentTitle(result, data) {
       label = `${type} in ${result.parent}`;
       break;
     case 'population':
-      label = `${type}`;
+      label = 'Population';
       break;
     case 'input_zone':
       label = 'Input Zone';

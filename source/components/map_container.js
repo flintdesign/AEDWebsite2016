@@ -51,7 +51,9 @@ class MapContainer extends Component {
 
   setGeoJSON(data) {
     let obj = {};
-    const coords = data.coordinates.map(flatten);
+    // temp //
+    const coordinates = data.coordinates || data.geometries[0].coordinates;
+    const coords = coordinates.map(flatten);
     const coordData = getCoordData(coords);
     if (coords.length > 1) {
       obj = {
@@ -93,7 +95,7 @@ class MapContainer extends Component {
     });
   }
 
-  realignMap(timing = 500, animate = true) {
+  realignMap(timing = 1000, animate = true) {
     const self = this;
     setTimeout(() => {
       self.refs.map.leafletElement.invalidateSize(animate);
@@ -204,7 +206,7 @@ class MapContainer extends Component {
               bounds={datum.bounds}
               name={datum.name}
               region={slugify(datum.region)}
-              estimate={formatNumber(datum.estimate)}
+              estimate={datum.estimate}
               confidence={formatNumber(datum.lcl95)}
               onMouseOver={self.handleMouseover}
               onMouseOut={self.handleMouseout}

@@ -35,7 +35,7 @@ const cacheDuration = fiveMinutes;
 *   Fetches geoJSON data from the API for a single geography
 *
 *   geoType: One of ['region', 'country', 'stratum']
-*   geoItem: The object for which we're fetching geoJSON data
+*   entity: The object for which we're fetching geoJSON data
 */
 
 const getSimplifyParam = (geoType) => {
@@ -43,15 +43,15 @@ const getSimplifyParam = (geoType) => {
   const geoMap = {
     continent: 3.0,
     region: 1.5,
-    country: 0.05
+    country: 0.05,
+    input_zone: 1.0
   };
   return `?simplify=${geoMap[geoType]}`;
 };
 
-export function fetchGeoJSON(geoType, geoItem) {
+export function fetchGeoJSON(geoType, entity) {
   // Get the ID or (if the item is a country) ISO code
-  const geoId = geoItem.iso_code || geoItem.id || geoItem.strcode;
-
+  const geoId = entity.iso_code || entity.id || entity.strcode;
   const cacheKey = `geojson-${geoType}-${geoId}`;
   const cacheResponse = cache.get(cacheKey);
   if (cacheResponse) {
@@ -64,9 +64,9 @@ export function fetchGeoJSON(geoType, geoItem) {
   .then(d => {
     const output = {
       ...d,
-      ...geoItem,
-      name: geoItem[geoType] || geoItem[geoType.toUpperCase()] || geoItem.CNTRYNAME,
-      id: geoItem.id || geoItem.iso_code || geoItem.strcode,
+      ...entity,
+      name: entity[geoType] || entity[geoType.toUpperCase()] || entity.CNTRYNAME || entity.name,
+      id: entity.id || entity.iso_code || entity.strcode,
       geoType
     };
     cache.put(cacheKey, output, cacheDuration);
@@ -236,6 +236,41 @@ export function fetchAdjacentGeography(dispatch, parentType, parentSlug, current
   });
 }
 
+export function fetchInputZoneData(z) {
+  const url = `${config.apiBaseURL}/input_zone/${z.id}/data`;
+  return fetch(url)
+  .then(r => r.json())
+  .then(data => ({ ...z, ...data }));
+}
+
+export function fetchNarrative(mappedId, type, data, dispatch) {
+  // GET NARRATIVE
+  const cacheKey = `${mappedId}-narrative`;
+  const cacheResponse = cache.get(cacheKey);
+  if (cacheResponse) {
+    setTimeout(() => {
+      dispatch({
+        type: RECEIVE_GEOGRAPHY_DATA,
+        data: { ...data, narrative: cacheResponse }
+      });
+    }, 50);
+  } else {
+    // fetch the narrative data
+    fetch(`${config.apiBaseURL}/${type}/${mappedId}/narrative`)
+    .then(r => r.json())
+    .then(d2 => {
+      // dispatch "receive" action with response data
+      const narrative = d2.narrative;
+      cache.put(cacheKey, narrative);
+      const dataWithNarrative = { ...data, narrative };
+      dispatch({
+        type: RECEIVE_GEOGRAPHY_DATA,
+        data: dataWithNarrative
+      });
+    });
+  }
+}
+
 /*
 *   Fetches geography data from the API and fires actions signaling the start
 *   of the request and the reception of data from the API
@@ -272,7 +307,7 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
   fetch(fetchURL)
     .then(r => r.json())
     .then(d => {
-      const data = {
+      let data = {
         ...d,
         type: type,
         countType: count,
@@ -280,41 +315,19 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
         id: id
       };
 
-      // fetch the narrative data
-      // fetch(`${config.apiBaseURL}/${type}/${mappedId}/narrative`)
-      // .then(r => r.json())
-      // .then(d2 => {
-      //   // dispatch "receive" action with response data
-      //   const narrative = d2.narrative;
-      //   const dataWithNarrative = { ...data, narrative };
-      //   dispatch({
-      //     type: RECEIVE_GEOGRAPHY_DATA,
-      //     data: dataWithNarrative
-      //   });
-      // });
-      const cacheKey = `${mappedId}-narrative`;
-      const cacheResponse = cache.get(cacheKey);
-      if (cacheResponse) {
-        setTimeout(() => {
-          dispatch({
-            type: RECEIVE_GEOGRAPHY_DATA,
-            data: { ...data, narrative: cacheResponse }
+      if (d.input_zones) {
+        const filteredInputZones = d.input_zones.filter(z => `${z.analysis_year}` === geoYear);
+        Promise.all(filteredInputZones.map(z => fetchInputZoneData(z)))
+        .then(zonesWithData => {
+          const zonesWithStrata = zonesWithData.map(zone => {
+            const strata = d.strata.filter(s => s.inpzone.trim() === zone.name.trim());
+            return { ...zone, strata };
           });
-        }, 50);
-      } else {
-        // fetch the narrative data
-        fetch(`${config.apiBaseURL}/${type}/${mappedId}/narrative`)
-        .then(r => r.json())
-        .then(d2 => {
-          // dispatch "receive" action with response data
-          const narrative = d2.narrative;
-          cache.put(cacheKey, narrative);
-          const dataWithNarrative = { ...data, narrative };
-          dispatch({
-            type: RECEIVE_GEOGRAPHY_DATA,
-            data: dataWithNarrative
-          });
+          data = { ...data, input_zones: zonesWithStrata };
+          fetchNarrative(mappedId, type, data, dispatch);
         });
+      } else {
+        fetchNarrative(mappedId, type, data, dispatch);
       }
 
       // fetch subgeography data
@@ -324,7 +337,24 @@ export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
       // contains a `regions` (pluralized subGeoType) key
       if (d[pluralize(subGeoType)]) {
         dispatch({ type: FETCH_SUBGEOGRAPHY_DATA });
-        loadSubGeography(dispatch, d[pluralize(subGeoType)], subGeoType);
+        let subGeoList = d[pluralize(subGeoType)];
+        if (subGeoType === 'input_zone') {
+          subGeoList = d[pluralize(subGeoType)].filter(z => `${z.analysis_year}` === geoYear);
+          const firstStratum = d.strata[0];
+          subGeoList = subGeoList.map(z => (
+            { ...z, region: firstStratum.region, country: firstStratum.country }
+          ));
+          Promise.all(subGeoList.map(z => fetchInputZoneData(z)))
+          .then(zonesWithData => {
+            const zonesWithStrata = zonesWithData.map(zone => {
+              const strata = d.strata.filter(s => s.inpzone.trim() === zone.name.trim());
+              return { ...zone, strata };
+            });
+            loadSubGeography(dispatch, zonesWithStrata, subGeoType);
+          });
+        } else {
+          loadSubGeography(dispatch, subGeoList, subGeoType);
+        }
       } else {
         fetchSubGeography(dispatch, geoType, mappedId, subGeoType);
       }

@@ -35,6 +35,7 @@ const initialState = {
   selectedStratum: null,
   stratumTree: null
 };
+
 export function geographies(state = initialState, action) {
   let isStillLoading = true;
   switch (action.type) {
@@ -115,7 +116,8 @@ export function geographies(state = initialState, action) {
         ...state,
         loadingGeoJSON: true,
         loading: true,
-        canInput: false
+        canInput: false,
+        subGeographies: []
       };
     case CHANGE_MAP:
       return state;
