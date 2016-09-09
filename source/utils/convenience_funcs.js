@@ -5,7 +5,7 @@ import find from 'lodash.find';
 import geometa from '../geometa';
 
 export const getNextGeography = currentGeography => {
-  const geographies = ['continent', 'region', 'country', 'input_zone'];
+  const geographies = ['continent', 'region', 'country', 'stratum'];
   return geographies[geographies.indexOf(currentGeography) + 1];
 };
 

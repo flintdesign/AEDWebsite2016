@@ -39,6 +39,7 @@ const getPathForResult = ({ result, year, data }) => {
       region = data[country].parent;
       // slug = slugify(name);
       path = `/${year}/${slugify(region)}/${slugify(country)}/${result.id}`;
+      break;
     case 'stratum': {
       region = slugify(data[result.parent].parent);
       country = slugify(result.parent);
@@ -46,6 +47,7 @@ const getPathForResult = ({ result, year, data }) => {
       slug = slugify(name.split('(')[0]).slice(0, -1);
       path = `/${stratumYear}/${region}/${country}/${slug}`;
       break;
+    }
     default:
       break;
   }

@@ -95,7 +95,7 @@ class MapContainer extends Component {
     });
   }
 
-  realignMap(timing = 500, animate = true) {
+  realignMap(timing = 1000, animate = true) {
     const self = this;
     setTimeout(() => {
       self.refs.map.leafletElement.invalidateSize(animate);
@@ -206,7 +206,7 @@ class MapContainer extends Component {
               bounds={datum.bounds}
               name={datum.name}
               region={slugify(datum.region)}
-              estimate={formatNumber(datum.estimate)}
+              estimate={datum.estimate}
               confidence={formatNumber(datum.lcl95)}
               onMouseOver={self.handleMouseover}
               onMouseOut={self.handleMouseout}

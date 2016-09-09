@@ -116,7 +116,8 @@ export function geographies(state = initialState, action) {
         ...state,
         loadingGeoJSON: true,
         loading: true,
-        canInput: false
+        canInput: false,
+        subGeographies: []
       };
     case CHANGE_MAP:
       return state;

@@ -129,7 +129,7 @@ class Sidebar extends Component {
       totalsTitle = 'Country Totals';
     }
     if (currentGeography === 'country') {
-      totalsTitle = 'Stratum Totals';
+      totalsTitle = 'Input Zone Totals';
     }
     return (
       <aside className={sidebarClasses[sidebarState]}>
