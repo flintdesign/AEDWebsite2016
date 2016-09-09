@@ -14,7 +14,8 @@ export const pluralize = word => {
     contient: 'continents',
     region: 'regions',
     country: 'countries',
-    stratum: 'strata'
+    stratum: 'strata',
+    input_zone: 'input_zones'
   };
   return wordMapping[word];
 };
