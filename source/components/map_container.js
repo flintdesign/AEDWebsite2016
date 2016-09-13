@@ -126,7 +126,6 @@ class MapContainer extends Component {
 
   handleAdjacentClick(e) {
     if (!this.props.canInput) return;
-    // this.props.updateBounds(e.target.options.bounds);
     const href = e.target.options.href;
     this.props.router.replace(href);
     this.props.cancelSearch();

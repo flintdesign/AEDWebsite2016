@@ -54,7 +54,7 @@ class TotalCount extends Component {
 
 TotalCount.propTypes = {
   count: PropTypes.string.isRequired,
-  confidence: PropTypes.string.isRequired,
+  confidence: PropTypes.string,
   entity: PropTypes.string.isRequired,
   canInput: PropTypes.bool,
   atStratumOrZone: PropTypes.bool,

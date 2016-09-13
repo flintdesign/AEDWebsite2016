@@ -73,7 +73,10 @@ export default function CountsByInputZones(props) {
     inputZoneTableList.push(
       <tr key={`${zone.id}`}>
         <td className="subgeography-totals__subgeography-name">
-          {zone.name}
+          <SidebarMapLink
+            path={`${basePathForLinks}?input_zone=${slugify(zone.name)}`}
+            label={`${zone.name}`}
+          />
         </td>
         <td>{zone.cause_of_change}</td>
         <td>{zone.survey_type}</td>
@@ -95,8 +98,11 @@ export default function CountsByInputZones(props) {
     zone.strata.forEach((stratum) => {
       inputZoneTableList.push(
         <tr key={`${zone.id}-${stratum.strcode}`}>
-          <td className="subgeography-totals__subgeography-name" style={ { paddingLeft: '2em' } }>
-            <a href={'?input_zone=${slugify(zone.name)}'}>{zone.name}</a>
+          <td className="subgeography-totals__subgeography-name" style={ { paddingLeft: '50px' } }>
+            <SidebarMapLink
+              path={`${basePathForLinks}/${slugify(stratum.stratum)}-${stratum.strcode}`}
+              label={`${stratum.stratum}`}
+            />
           </td>
           <td>{stratum.rc}</td>
           <td>{stratum.est_type}</td>

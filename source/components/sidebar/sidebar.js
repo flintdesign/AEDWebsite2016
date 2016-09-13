@@ -1,3 +1,4 @@
+/* eslint max-len: [0] */
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import ADDSidebar from './add/add_sidebar';
@@ -10,7 +11,8 @@ import isArray from 'lodash.isarray';
 import {
   pluralize,
   getNextGeography,
-  getEntityName
+  getEntityName,
+  slugify
 } from '../../utils/convenience_funcs';
 
 class Sidebar extends Component {
@@ -154,14 +156,20 @@ class Sidebar extends Component {
           {selectedStratum && selectedStratum.inpzone &&
             <div>
               <h3 className="sidebar__entity-input-zone">
-                Stratum in {selectedStratum.inpzone} Input Zone
+                Stratum in&nbsp;
+                <Link to={`${params.year}/${params.region}/${params.country}?input_zone=${slugify(selectedStratum.inpzone)}`}>
+                  {selectedStratum.inpzone} Input Zone
+                </Link>
               </h3>
             </div>
           }
           {selectedInputZone &&
             <div>
               <h3 className="sidebar__entity-input-zone">
-                Input Zone in {geographies.country}
+                Input Zone in&nbsp;
+                <Link to={`${location.pathname}`}>
+                  {geographies.country}
+                </Link>
               </h3>
             </div>
           }
