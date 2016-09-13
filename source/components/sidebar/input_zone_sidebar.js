@@ -113,6 +113,7 @@ export default function InputZoneSidebar(props) {
         </div>
         <div>
           <CountsByStrata
+            title={'COUNTS BY STRATUM'}
             strata={zone.strata}
             sidebarState={sidebarState}
             params={params}

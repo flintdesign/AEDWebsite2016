@@ -18,14 +18,14 @@ SidebarMapLink.propTypes = {
 };
 
 export default function CountsByStrata(props) {
-  const { strata, params, sidebarState } = props;
+  const { strata, params, sidebarState, title } = props;
   const basePathForLinks = `/${params.year}/${params.region}/${params.country}`;
   let markup = null;
   if (sidebarState < SIDEBAR_FULL) {
     markup = (
       <div>
         <h4 className="heading__small">
-          Counts by Stratum
+          {title || 'Counts by Stratum'}
         </h4>
         <table className="subgeography-totals">
           <tbody>{strata.map((g, i) => (
@@ -55,7 +55,7 @@ export default function CountsByStrata(props) {
     markup = (
       <div>
         <h4 className="heading__small">
-          Counts by Stratum
+          {title || 'Counts by Stratum'}
         </h4>
         <table className="subgeography-totals">
           <tbody>{strata.map((g, i) => (
@@ -85,5 +85,6 @@ export default function CountsByStrata(props) {
 CountsByStrata.propTypes = {
   strata: PropTypes.array,
   sidebarState: PropTypes.number.isRequired,
-  params: PropTypes.object
+  params: PropTypes.object,
+  title: PropTypes.string
 };
