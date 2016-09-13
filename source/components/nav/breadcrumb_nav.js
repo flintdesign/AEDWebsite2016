@@ -21,11 +21,14 @@ BreadCrumbLink.propTypes = {
 
 const BreadCrumbNav = (props) => {
   const params = compact(PATH_PARTS.map(k => props.params[k]));
+  if (props.location.query.input_zone) {
+    params.push(`${props.location.query.input_zone} Input Zone`);
+  }
   if (params.length < 2) { return null; } // only render if we are at least at the region level
   const crumbs = params.map((p, i) => {
     let className = '';
     let title = titleize(p);
-    if (i === 3) {
+    if (i === 3 && props.params.stratum) {
       title = titleizeStratum(p);
     }
     // Add region color to active breadcrumb
@@ -49,7 +52,8 @@ const BreadCrumbNav = (props) => {
 };
 
 BreadCrumbNav.propTypes = {
-  params: PropTypes.object
+  params: PropTypes.object,
+  location: PropTypes.object
 };
 
 export default BreadCrumbNav;

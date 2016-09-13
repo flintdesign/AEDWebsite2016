@@ -253,6 +253,8 @@ class Sidebar extends Component {
           {selectedInputZone &&
             <InputZoneSidebar
               zone={selectedInputZone}
+              sidebarState={sidebarState}
+              params={params}
             />
           }
         </section>

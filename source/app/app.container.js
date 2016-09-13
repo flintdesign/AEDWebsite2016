@@ -56,7 +56,7 @@ class App extends Component {
       showIntro: showIntroOnLoad,
       initialLoad: false,
       getStratumTree: false,
-      selectedInputZone: null
+      selectedInputZoneId: null
     };
   }
 
@@ -100,22 +100,10 @@ class App extends Component {
     if (!newProps.params.stratum && this.props.params.stratum) {
       this.selectStratum(null);
     }
-    if (newProps.geographies.input_zones) {
-      if (this.props.location.query.input_zone) {
-        const zoneSlug = this.props.location.query.input_zone;
-        const zones = newProps.geographies.input_zones;
-        this.loadZoneFromGeography(zoneSlug, zones);
-      }
-    }
     if (newProps.location.query.input_zone) {
-      if (this.props.geographies.input_zones) {
-        const zoneSlug = newProps.location.query.input_zone;
-        const zones = this.props.geographies.input_zones;
-        this.loadZoneFromGeography(zoneSlug, zones);
-      }
-    }
-    if (!newProps.location.query.input_zone && this.props.location.query.input_zone) {
-      this.setState({ selectedInputZone: null });
+      this.setState({ selectedInputZoneId: newProps.location.query.input_zone });
+    } else {
+      this.setState({ selectedInputZoneId: null });
     }
   }
 
@@ -184,11 +172,6 @@ class App extends Component {
     const stratumBounds = getCoordData(_coords).bounds;
     this.updateBounds(stratumBounds);
     this.selectStratum(stratumData);
-  }
-
-  loadZoneFromGeography(slug, inputZones) {
-    const zone = find(inputZones, z => slugify(z.name) === slug);
-    this.setState({ selectedInputZone: zone });
   }
 
   fetchData(props, force = false) {
@@ -273,11 +256,23 @@ class App extends Component {
     if (geographies.summary_sums) {
       finalTotalConfidence = geographies.summary_sums[0].CONFIDENCE;
     }
-    let atStratum = false;
+    let atStratumOrZone = false;
     if (selectedStratum) {
       finalTotalEstimate = selectedStratum.estimate;
       finalTotalConfidence = selectedStratum.lcl95;
-      atStratum = true;
+      atStratumOrZone = true;
+    }
+    let selectedZone;
+    if (this.state.selectedInputZoneId && geographies.input_zones) {
+      selectedZone = find(geographies.input_zones, z => {
+        const zone = slugify(z.name) === this.state.selectedInputZoneId;
+        return zone;
+      });
+    }
+    if (selectedZone) {
+      finalTotalEstimate = selectedZone.population_estimate;
+      finalTotalConfidence = selectedZone.percent_cl;
+      atStratumOrZone = true;
     }
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
     const searchOverlay = searchActive
@@ -301,7 +296,10 @@ class App extends Component {
             toggleRange={this.toggleRange}
             ui={ui}
           />
-          <BreadCrumbNav params={this.props.params} />
+          <BreadCrumbNav
+            params={this.props.params}
+            location={this.props.location}
+          />
           <Nav
             expandSidebar={this.expandSidebar}
             contractSidebar={this.contractSidebar}
@@ -331,7 +329,7 @@ class App extends Component {
             routeGeography: routeGeography,
             routeGeographyId: routeGeographyId,
             selectedStratum: selectedStratum,
-            selectedInputZone: this.state.selectedInputZone,
+            selectedInputZone: selectedZone,
             dispatch: dispatch
           })}
         </main>
@@ -350,15 +348,15 @@ class App extends Component {
           currentNarrative={currentNarrative}
           canInput={canInput}
           selectedStratum={selectedStratum}
-          selectedInputZone={this.state.selectedInputZone}
+          selectedInputZone={selectedZone}
         />
         {totalEstimate &&
           <TotalCount
             entity={getEntityName(location, params)}
             count={formatNumber(finalTotalEstimate)}
-            confidence={formatNumber(finalTotalConfidence)}
+            confidence={finalTotalConfidence}
             canInput={canInput}
-            atStratum={atStratum}
+            atStratumOrZone={atStratumOrZone}
             summary={geographies.summary_sums || []}
           />
         }

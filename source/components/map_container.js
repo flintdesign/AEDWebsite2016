@@ -288,7 +288,7 @@ class MapContainer extends Component {
           const stratumObjCoordData = getCoordData(stratumObjCoords);
           selectedStratumObjs.push(
             <GeoJson
-              key={`/${slugify(stratumObj.stratum)}-${stratumObj.strcode}`}
+              key={`/${slugify(stratumObj.stratum)}-${stratumObj.strcode}-input_zone`}
               data={stratumObj}
               className={`region-${slugify(stratumObj.region)}__stratum active active-zone`}
               onMouseOver={this.handleMouseover}
