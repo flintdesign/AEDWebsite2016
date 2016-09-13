@@ -265,15 +265,20 @@ aside table
   
   &--input-zone
     h3
-      padding-left 22px
+      padding 0.9em 0.45em 0.9em 2.5em
       &:hover
         background #f8f8f8
         transition background-color 0.3s
       &:after
+        opacity 0.65
         right auto
-        left 0
-        top 0
+        left 0.58em
+        top 1px
         margin-top 0.8em
+    &.open 
+      h3
+        &:after
+          top 0
         
 
 .sidebar__narrative
@@ -328,7 +333,7 @@ aside table
     text-align center
     width 100%
   h1
-    font-size 3em
+    font-size 2.8em
     left 50%
     line-height 1.1
     margin 0
