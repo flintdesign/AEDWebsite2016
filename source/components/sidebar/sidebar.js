@@ -1,15 +1,18 @@
+/* eslint max-len: [0] */
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import ADDSidebar from './add/add_sidebar';
 import DPPSSidebar from './dpps/dpps_sidebar';
 import StratumSidebar from './stratum_sidebar';
+import InputZoneSidebar from './input_zone_sidebar';
 import CountTypeToggle from './count_type_toggle';
 import compact from 'lodash.compact';
 import isArray from 'lodash.isarray';
 import {
   pluralize,
   getNextGeography,
-  getEntityName
+  getEntityName,
+  slugify
 } from '../../utils/convenience_funcs';
 
 class Sidebar extends Component {
@@ -82,6 +85,7 @@ class Sidebar extends Component {
       currentNarrative,
       error,
       selectedStratum,
+      selectedInputZone,
       params
     } = this.props;
     // const years = ['2015', '2013', '2006', '2002', '1998', '1995'];
@@ -139,17 +143,37 @@ class Sidebar extends Component {
               {yearLinks}
             </ul>
           </div>
-          <h1 className="sidebar__entity-name">
-            {getEntityName(location, params)}
-          </h1>
+          {!selectedInputZone &&
+            <h1 className="sidebar__entity-name">
+              {getEntityName(location, params)}
+            </h1>
+          }
+          {selectedInputZone &&
+            <h1 className="sidebar__entity-name">
+              {selectedInputZone.name}
+            </h1>
+          }
           {selectedStratum && selectedStratum.inpzone &&
             <div>
               <h3 className="sidebar__entity-input-zone">
-                Part of {selectedStratum.inpzone} Input Zone
+                Stratum in&nbsp;
+                <Link to={`${params.year}/${params.region}/${params.country}?input_zone=${slugify(selectedStratum.inpzone)}`}>
+                  {selectedStratum.inpzone} Input Zone
+                </Link>
               </h3>
             </div>
           }
-          {canInput && geographies && !selectedStratum &&
+          {selectedInputZone &&
+            <div>
+              <h3 className="sidebar__entity-input-zone">
+                Input Zone in&nbsp;
+                <Link to={`${location.pathname}`}>
+                  {geographies.country}
+                </Link>
+              </h3>
+            </div>
+          }
+          {canInput && geographies && !selectedStratum && !selectedInputZone &&
             <div>
               <nav className="sidebar__viz-type">
                 <ul>
@@ -207,7 +231,7 @@ class Sidebar extends Component {
             </div>
           }
 
-          {geographies && this.shouldRenderSidebar('add') &&
+          {geographies && this.shouldRenderSidebar('add') && !selectedInputZone &&
             <ADDSidebar
               geographies={geographies}
               currentTitle={this.state.currentTitle}
@@ -219,7 +243,7 @@ class Sidebar extends Component {
             />
           }
 
-          {geographies && this.shouldRenderSidebar('dpps') &&
+          {geographies && this.shouldRenderSidebar('dpps') && !selectedInputZone &&
             <DPPSSidebar
               geographies={geographies}
               currentTitle={this.state.currentTitle}
@@ -232,6 +256,13 @@ class Sidebar extends Component {
           {selectedStratum &&
             <StratumSidebar
               stratum={selectedStratum}
+            />
+          }
+          {selectedInputZone &&
+            <InputZoneSidebar
+              zone={selectedInputZone}
+              sidebarState={sidebarState}
+              params={params}
             />
           }
         </section>
@@ -254,7 +285,8 @@ Sidebar.propTypes = {
   currentGeography: PropTypes.string,
   currentGeographyId: PropTypes.string,
   currentNarrative: PropTypes.string,
-  selectedStratum: PropTypes.object
+  selectedStratum: PropTypes.object,
+  selectedInputZone: PropTypes.object
 };
 
 export default Sidebar;

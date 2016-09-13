@@ -20,19 +20,24 @@ class TotalCount extends Component {
   // }
 
   render() {
-    const { count, canInput, summary, atStratum, confidence } = this.props;
+    const { count, canInput, summary, atStratumOrZone, confidence } = this.props;
     return (
       <div>
         {canInput &&
           <div className="total-count">
             <div className="total-count__count" ref="total_count">
               {count}
-              <span className="total-count__plus-minus">&nbsp;&plusmn;&nbsp;
-              {confidence}
+              <span className="total-count__plus-minus">
+                {confidence &&
+                  <span>
+                    &nbsp;&plusmn;&nbsp;
+                    {formatNumber(confidence)}
+                  </span>
+                }
               </span>
               <small>Estimates from Surveys</small>
             </div>
-            {summary && summary[0] && !atStratum &&
+            {summary && summary[0] && !atStratumOrZone &&
               <div className="total_count__container">
                 <div className="total-count__guesses">
                   {formatNumber(summary[0].GUESS_MIN)} - {formatNumber(summary[0].GUESS_MAX)}
@@ -49,10 +54,10 @@ class TotalCount extends Component {
 
 TotalCount.propTypes = {
   count: PropTypes.string.isRequired,
-  confidence: PropTypes.string.isRequired,
+  confidence: PropTypes.string,
   entity: PropTypes.string.isRequired,
   canInput: PropTypes.bool,
-  atStratum: PropTypes.bool,
+  atStratumOrZone: PropTypes.bool,
   summary: PropTypes.array
 };
 

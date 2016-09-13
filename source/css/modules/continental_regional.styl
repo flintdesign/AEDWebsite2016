@@ -18,17 +18,18 @@
   
   &--input-zone
     td
-      padding 0.9em 0.65em 0.9em 22px
+      &:first-child
+        padding-top 0
+      padding 0.9em 0.65em 0.9em 50px
     tbody tr
       border-bottom none
     
     .sidebar__map-link
       position relative
       &:before
-        content '-'
+        content ''
         display inline-block
         position absolute
-        left -0.75em
     
   &--causes-of-change
     margin-top: 30px
@@ -56,6 +57,7 @@
   margin-left 0.3em
 
 .subgeography__input-zone
+  line-height 1.5
   position relative
   padding-right 28%
   &__totals
@@ -80,7 +82,8 @@
     border-bottom 2px solid $gray-light
     th
       color $brand-dark-md
-      padding-bottom 1em
+      line-height 1.2
+      padding 0 0.75em 1em
     .th-parent
       color $gray-medium
       font-size 0.75em
@@ -89,5 +92,7 @@
       text-transform uppercase
   tbody tr 
     border-bottom 1px solid $gray-lightest
+    td
+      padding 1em 0.75em
   .subgeography-totals__totals
     border-top 2px solid $gray-light !important

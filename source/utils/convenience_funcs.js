@@ -83,6 +83,9 @@ export const geoTypeFromHref = event => {
 };
 
 export const getEntityName = (location, params) => {
+  if (location.query.input_zone) {
+    return titleize(location.query.input_zone);
+  }
   const parts = compact(location.pathname.split('/'));
   let title;
   switch (parts.length) {
