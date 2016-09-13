@@ -157,7 +157,7 @@ class Sidebar extends Component {
             <div>
               <h3 className="sidebar__entity-input-zone">
                 Stratum in&nbsp;
-                <Link to={`${params.year}/${params.region}/${params.country}?input_zone=${slugify(selectedStratum.inpzone)}`}>
+                <Link to={`/${params.year}/${params.region}/${params.country}?input_zone=${slugify(selectedStratum.inpzone)}`}>
                   {selectedStratum.inpzone} Input Zone
                 </Link>
               </h3>
@@ -167,7 +167,7 @@ class Sidebar extends Component {
             <div>
               <h3 className="sidebar__entity-input-zone">
                 Input Zone in&nbsp;
-                <Link to={`${location.pathname}`}>
+                <Link to={`/${location.pathname}`}>
                   {geographies.country}
                 </Link>
               </h3>
