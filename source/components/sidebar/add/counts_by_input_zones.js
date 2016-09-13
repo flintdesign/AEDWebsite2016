@@ -34,7 +34,7 @@ export default function CountsByInputZones(props) {
           {formatNumber(zone.area)} km<sup>2</sup>
         </span>
         <div className="subgeography__input-zone__totals">
-          {zone.population_estimate}
+          {formatNumber(zone.population_estimate)}
           {zone.percent_cl &&
             <span>&nbsp;&plusmn;&nbsp;{zone.percent_cl}</span>
           }
@@ -82,7 +82,7 @@ export default function CountsByInputZones(props) {
         <td>{zone.survey_type}</td>
         <td>{zone.survey_reliability}</td>
         <td>{zone.survey_year}</td>
-        <td>{zone.population_estimate}</td>
+        <td>{formatNumber(zone.population_estimate)}</td>
         <td>
           {zone.percent_cl &&
             <span>{zone.percent_cl.trim()}</span>
