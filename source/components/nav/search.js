@@ -6,14 +6,15 @@ import { SEARCH_PLACEHOLDER } from '../../constants';
 import { slugify, titleize } from '../../utils/convenience_funcs';
 import Bloodhound from 'bloodhound-js';
 import { fetchSearchData } from '../../api';
-import assign from 'lodash.assign';
+// import assign from 'lodash.assign';
+import find from 'lodash.find';
 
 const getPathForResult = ({ result, year, data }) => {
   let path = '';
   let slug;
   let region;
   let country;
-  let population;
+  const countries = data.filter(d => d.geographicType === 'country');
   const { name, geographicType } = result;
   switch (geographicType) {
     case 'continent':
@@ -25,29 +26,14 @@ const getPathForResult = ({ result, year, data }) => {
       break;
     case 'country':
       slug = slugify(name);
-      path = `/${year}/${slugify(result.parent)}/${slug}`;
-      break;
-    case 'population':
-      country = result.parent;
-      region = data[country].parent;
-      slug = slugify(name);
-      path = `/${year}/${slugify(region)}/${slugify(country)}/population/${slug}`;
+      path = `/${year}/${slugify(result.parent.name)}/${slug}`;
       break;
     case 'input_zone':
-      population = result.parent;
-      country = data[population].parent;
-      region = data[country].parent;
+      country = result.parent_country.name;
+      region = find(countries, c => c.name === country).parent.name;
       slug = slugify(name);
       path = `/${year}/${slugify(region)}/${slugify(country)}?input_zone=${slug}`;
       break;
-    case 'stratum': {
-      region = slugify(data[result.parent].parent);
-      country = slugify(result.parent);
-      const stratumYear = name.substring(name.indexOf('(') + 1, name.indexOf(')'));
-      slug = slugify(name.split('(')[0]).slice(0, -1);
-      path = `/${stratumYear}/${region}/${country}/${slug}`;
-      break;
-    }
     default:
       break;
   }
@@ -63,13 +49,13 @@ function createParentTitle(result, data) {
       label = `${type} in Africa`;
       break;
     case 'country':
-      label = `${type} in ${result.parent}`;
+      label = `${type} in ${result.parent.name}`;
       break;
     case 'population':
       label = 'Population';
       break;
     case 'input_zone':
-      label = 'Input Zone';
+      label = `Input Zone in ${result.parent_country.name}`;
       break;
     case 'stratum':
       label = `${type} in ${data[result.parent].parent}`;
@@ -82,16 +68,18 @@ function createParentTitle(result, data) {
 const Result = (props) => {
   const { result, endSearch, year, data } = props;
   const { name, geographicType } = result;
+  const countries = data.filter(d => d.geographicType === 'country');
   let region;
   switch (geographicType) {
-    case 'stratum':
-      region = slugify(data[result.parent].parent);
-      break;
     case 'country':
-      region = slugify(result.parent);
+      region = slugify(result.parent.name);
       break;
     case 'region':
       region = slugify(name);
+      break;
+    case 'input_zone':
+      region = find(countries, c => c.name === result.parent_country.name).parent.name;
+      region = slugify(region);
       break;
     default:
   }
@@ -116,7 +104,7 @@ const Result = (props) => {
 
 Result.propTypes = {
   year: PropTypes.string,
-  data: PropTypes.object.isRequired,
+  data: PropTypes.array.isRequired,
   result: PropTypes.object.isRequired,
   endSearch: PropTypes.func.isRequired,
 };
@@ -124,9 +112,11 @@ Result.propTypes = {
 const Results = (props) => {
   const { results } = props;
   return (
-    <div className="search__results">{results.map(r => (
-      <Result key={`result_${r.name}`} result={r} {...props} />
-    ))}</div>
+    <div className="search__results">
+      {results.map(r => (
+        <Result key={`result_${r.name}`} result={r} {...props} />
+      ))}
+    </div>
   );
 };
 
@@ -161,13 +151,15 @@ class Search extends Component {
   getSearchData() {
     if (this.state.searchDataFetched) { return; }
     fetchSearchData((data) => {
-      this.setState({ searchData: data }, this.initSearchEngine.bind(this));
+      const filterd = data.filter(d => d.geographicType !== 'population');
+      this.setState({ searchData: filterd }, this.initSearchEngine.bind(this));
     });
   }
 
   initSearchEngine() {
     this.searchEngine = new Bloodhound({
-      local: Object.keys(this.state.searchData),
+      // local: Object.keys(this.state.searchData),
+      local: this.state.searchData.map(s => s.name),
       queryTokenizer: Bloodhound.tokenizers.whitespace,
       datumTokenizer: Bloodhound.tokenizers.whitespace
     });
@@ -203,7 +195,7 @@ class Search extends Component {
 
   updateResults(results) {
     this.setState({
-      results: results.map(key => assign({}, { name: key }, this.state.searchData[key]))
+      results: results.map(key => find(this.state.searchData, s => s.name === key))
     });
   }
 
