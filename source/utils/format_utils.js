@@ -5,6 +5,7 @@ const numberWithCommas = (x) => {
 };
 
 export const formatNumber = num => {
+  if (num === 0) return '0';
   if (!num) return '-';
   return numberWithCommas(parseInt(num, 10));
 };
