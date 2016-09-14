@@ -6,6 +6,9 @@ import App from './app/app.container';
 import MapContainer from './components/map_container';
 import Intro from './components/pages/intro';
 import Glossary from './components/pages/glossary';
+import References from './components/pages/references';
+import Errata2016 from './components/pages/errata_2016';
+import DARP from './components/pages/darp';
 import AboutContainer from './components/pages/about_container';
 import { createStore, applyMiddleware, compose } from 'redux';
 import rootReducer from './store/reducer';
@@ -39,6 +42,9 @@ render((
       <Route path={'/intro'} component={Intro} />
       <Route path={'/about'} component={AboutContainer} />
       <Route path={'/glossary'} component={Glossary} />
+      <Route path={'/references'} component={References} />
+      <Route path={'/errata-2016'} component={Errata2016} />
+      <Route path={'/darp'} component={DARP} />
       <Route path={'/'} component={App}>
         // Yep, this is annoying. Stop React Router Link
         // from adding a trailing slash.
