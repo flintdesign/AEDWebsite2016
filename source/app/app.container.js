@@ -77,31 +77,39 @@ class App extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.canInput && !this.state.initialLoad && !newProps.loading) {
+    const props = this.props;
+    const {
+      canInput,
+      loading,
+      location,
+      params,
+      subGeographyData
+    } = newProps;
+    if (canInput && !this.state.initialLoad && !loading) {
       this.setState({
         initialLoad: true
       });
     }
-    if (newProps.location.query !== this.props.location.query) {
-      if (newProps.location.query.count_type !== this.props.location.query.count_type) {
+    if (location.query !== props.location.query) {
+      if (location.query.count_type !== props.location.query.count_type) {
         this.fetchData(newProps, true);
-      } else if (newProps.location.pathname !== this.props.location.pathname
-        && !newProps.params.stratum) {
+      } else if (location.pathname !== props.location.pathname
+        && !params.stratum) {
         this.fetchData(newProps, true);
       } else {
         this.fetchData(newProps, false);
       }
     }
-    if (!this.props.subGeographyData.length &&
-      newProps.subGeographyData.length &&
-      this.props.params.stratum) {
-      this.loadStratumFromGeography(this.props.params.stratum, newProps.subGeographyData);
+    if (!props.subGeographyData.length &&
+      subGeographyData.length &&
+      props.params.stratum) {
+      this.loadStratumFromGeography(props.params.stratum, subGeographyData);
     }
-    if (!newProps.params.stratum && this.props.params.stratum) {
+    if (!params.stratum && props.params.stratum) {
       this.selectStratum(null);
     }
-    if (newProps.location.query.input_zone) {
-      this.setState({ selectedInputZoneId: newProps.location.query.input_zone });
+    if (location.query.input_zone) {
+      this.setState({ selectedInputZoneId: location.query.input_zone });
     } else {
       this.setState({ selectedInputZoneId: null });
     }
@@ -278,9 +286,16 @@ class App extends Component {
     const searchOverlay = searchActive
       ? <div onClick={this.cancelSearch} className="search__overlay" />
       : null;
-    const loadingOverlay = !this.state.initialLoad
+    const loadingOverlay = !this.state.initialLoad || loading
       ? <div className="loading-overlay" />
       : <div className="loading-overlay dismissed" />;
+    const getMainClass = () => {
+      let _class = mainClasses[sidebarState];
+      if (selectedZone) {
+        _class = `${_class} selected-zone`;
+      }
+      return _class;
+    };
     return (
       <div
         className={
@@ -289,7 +304,7 @@ class App extends Component {
           ${(!params.region ? '' : 'breadcrumbs-active')}`}
         onClick={toggleSearch}
       >
-        <main className={mainClasses[sidebarState]}>
+        <main className={getMainClass()}>
           <Ranges
             handleClick={this.handleClick}
             handleLegendClick={this.handleLegendClick}

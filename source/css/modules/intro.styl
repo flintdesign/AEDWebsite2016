@@ -73,8 +73,11 @@
     left 50%
     top 50%
     transform translate(-50%, -50%)
+    @media (max-width 1000px)
+      background-image none
     @media (max-width $mobile-max)
       min-height 0
+      background-image url('/images/elephant-loader.gif')
     
     a
       border-bottom 1px solid transparent
@@ -108,9 +111,15 @@
     p
       font-weight 100
       margin-bottom 1em
+    @media (max-width 1249px)
+      font-size 0.78em
+    @media (max-width 1000px)
+      font-size 0.72em
     @media (max-width $mobile-max)
       font-size 0.82em
       line-height 1.45
+    @media (max-height 749px)
+      font-size 0.75em
       
 
   .intro__loader

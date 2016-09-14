@@ -144,18 +144,32 @@ class Sidebar extends Component {
             </ul>
           </div>
           {!selectedInputZone &&
-            <h1 className="sidebar__entity-name">
+            <h1 className={`sidebar__entity-name ${selectedStratum ? ' sidebar__entity-name--stratum' : ''}`}>
+              {selectedStratum &&
+                <Link
+                  to={`/${params.year}/${params.region}/${params.country}`}
+                  className="sidebar__entity-name__back"
+                  title={`Back to ${geographies.country}`}
+                  dangerouslySetInnerHTML={{ __html: '&larr;' }}
+                />
+              }
               {getEntityName(location, params)}
             </h1>
           }
           {selectedInputZone &&
-            <h1 className="sidebar__entity-name">
+            <h1 className="sidebar__entity-name sidebar__entity-name--input-zone">
+              <Link
+                to={`/${params.year}/${params.region}/${params.country}`}
+                className="sidebar__entity-name__back"
+                title={`Back to ${geographies.country}`}
+                dangerouslySetInnerHTML={{ __html: '&larr;' }}
+              />
               {selectedInputZone.name}
             </h1>
           }
           {selectedStratum && selectedStratum.inpzone &&
             <div>
-              <h3 className="sidebar__entity-input-zone">
+              <h3 className="sidebar__entity-input-zone-subtitle">
                 Stratum in&nbsp;
                 <Link to={`/${params.year}/${params.region}/${params.country}?input_zone=${slugify(selectedStratum.inpzone)}`}>
                   {selectedStratum.inpzone} Input Zone
@@ -165,7 +179,7 @@ class Sidebar extends Component {
           }
           {selectedInputZone &&
             <div>
-              <h3 className="sidebar__entity-input-zone">
+              <h3 className="sidebar__entity-input-zone-subtitle">
                 Input Zone in&nbsp;
                 <Link to={`${location.pathname}`}>
                   {geographies.country}

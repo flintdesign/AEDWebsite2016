@@ -45,15 +45,6 @@ class MapContainer extends Component {
     });
   }
 
-  // componentDidUpdate() {
-  //   if (this.props.selectedInputZone) {
-  //     const theZone = this.props.selectedInputZone;
-  //     this.refs.map.leafletElement.setView(latLng(theZone.lat.trim(), theZone.lon.trim()), 7);
-  //   } else {
-  //     this.refs.map.leafletElement.fitBounds(this.props.bounds);
-  //   }
-  // }
-
   onZoomEnd(e) {
     /* eslint no-underscore-dangle: [0] */
     this.setState({ zoomLevel: e.target._zoom });
@@ -206,7 +197,7 @@ class MapContainer extends Component {
         if (datum.geoType === 'stratum') {
           geoJSONObjs.push(
             <GeoJson
-              key={`${datum.id}_${slugify(datum.name || '')}`}
+              key={`${datum.id}_${slugify(datum.stratum || '')}`}
               href={objectHref}
               data={datum}
               className={geoJSONClassName}
@@ -270,11 +261,21 @@ class MapContainer extends Component {
 
     if (this.props.selectedStratum) {
       const stratum = this.props.selectedStratum;
+      const stratumObjCoords = stratum.coordinates.map(flatten);
+      const stratumObjCoordData = getCoordData(stratumObjCoords);
       selectedStratumObjs.push(
         <GeoJson
           key={`/${slugify(stratum.name)}-${stratum.id}`}
           data={stratum}
           className={`region-${slugify(stratum.region)}__stratum active`}
+          center={stratumObjCoordData.center}
+          bounds={stratumObjCoordData.bounds}
+          name={stratum.name}
+          region={slugify(stratum.region)}
+          estimate={stratum.estimate}
+          confidence={formatNumber(stratum.lcl95)}
+          onMouseOver={this.handleMouseover}
+          onMouseOut={this.handleMouseout}
         />
       );
     }
