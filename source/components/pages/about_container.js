@@ -55,6 +55,11 @@ class AboutContainer extends Component {
                     Introduction
                   </a>
                 </li>
+                <li className={this.setMenuItemClass('#key-points')}>
+                  <a href="#key-points">
+                    Key Points
+                  </a>
+                </li>
                 <li className={this.setMenuItemClass('#about-us')}>
                   <a href="#about-us">
                     About Us
@@ -63,11 +68,6 @@ class AboutContainer extends Component {
                 <li className={this.setMenuItemClass('#partners-resources')}>
                   <a href="#partners-resources">
                     Partners &amp; Resources
-                  </a>
-                </li>
-                <li className={this.setMenuItemClass('#key-points')}>
-                  <a href="#key-points">
-                    Key Points
                   </a>
                 </li>
                 <li className={this.setMenuItemClass('#reports')}>
@@ -90,6 +90,11 @@ class AboutContainer extends Component {
                 <div dangerouslySetInnerHTML={ { __html: IntroMarkup } }></div>
               </div>
             </div>
+            <div className="about-content__section" id="key-points">
+              <div className="about-content__section__content">
+                <div dangerouslySetInnerHTML={ { __html: KeyPointsMarkup } }></div>
+              </div>
+            </div>
             <div className="about-content__section" id="about-us">
               <div className="about-content__section__content">
                 <div dangerouslySetInnerHTML={ { __html: AboutUsMarkup } }></div>
@@ -98,11 +103,6 @@ class AboutContainer extends Component {
             <div className="about-content__section" id="partners-resources">
               <div className="about-content__section__content">
                 <div dangerouslySetInnerHTML={ { __html: PartnersResourcesMarkup } }></div>
-              </div>
-            </div>
-            <div className="about-content__section" id="key-points">
-              <div className="about-content__section__content">
-                <div dangerouslySetInnerHTML={ { __html: KeyPointsMarkup } }></div>
               </div>
             </div>
             <div className="about-content__section" id="reports">
