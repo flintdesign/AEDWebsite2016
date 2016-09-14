@@ -1,3 +1,4 @@
+/* eslint max-len: [0] */
 import map from './slug_map';
 import compact from 'lodash.compact';
 import uniq from 'lodash.uniq';
@@ -22,8 +23,8 @@ export const pluralize = word => {
 
 export const capitalize = word => `${word[0].toUpperCase()}${word.split('').splice(1).join('')}`;
 // Have to call compact because the slug of some regions has two hyphens (parc-national--du-faro)
-export const titleize = str => compact(str.split('-')).map(word => capitalize(word)).join(' ');
-export const slugify = str => str.toLowerCase().split(' ').join('-');
+export const titleize = str => compact(str.split('-')).map(word => capitalize(word)).join(' ').replace('%2F', '/');
+export const slugify = str => str.toLowerCase().split(' ').join('-').replace('/', '%2F');
 
 export const titleizeStratum = (p) => {
   const titleParts = p.split('-');
@@ -83,6 +84,9 @@ export const geoTypeFromHref = event => {
 };
 
 export const getEntityName = (location, params) => {
+  if (location.query.input_zone) {
+    return titleize(location.query.input_zone);
+  }
   const parts = compact(location.pathname.split('/'));
   let title;
   switch (parts.length) {

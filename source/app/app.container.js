@@ -7,7 +7,8 @@ import Ranges from '../components/ranges';
 import Sidebar from '../components/sidebar/sidebar';
 import Intro from '../components/pages/intro';
 import TotalCount from '../components/total_count';
-import { getEntityName, getGeoFromId, flatten } from '../utils/convenience_funcs';
+import find from 'lodash.find';
+import { getEntityName, getGeoFromId, flatten, slugify } from '../utils/convenience_funcs';
 import { formatNumber } from '../utils/format_utils';
 import { getCoordData } from '../utils/geo_funcs';
 import {
@@ -54,7 +55,8 @@ class App extends Component {
       showSidebar: false,
       showIntro: showIntroOnLoad,
       initialLoad: false,
-      getStratumTree: false
+      getStratumTree: false,
+      selectedInputZoneId: null
     };
   }
 
@@ -97,6 +99,17 @@ class App extends Component {
     }
     if (!newProps.params.stratum && this.props.params.stratum) {
       this.selectStratum(null);
+    }
+    if (newProps.location.query.input_zone) {
+      this.setState({ selectedInputZoneId: newProps.location.query.input_zone });
+    } else {
+      this.setState({ selectedInputZoneId: null });
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.params.region && this.props.sidebarState === 0) {
+      this.expandSidebar();
     }
   }
 
@@ -243,11 +256,23 @@ class App extends Component {
     if (geographies.summary_sums) {
       finalTotalConfidence = geographies.summary_sums[0].CONFIDENCE;
     }
-    let atStratum = false;
+    let atStratumOrZone = false;
     if (selectedStratum) {
       finalTotalEstimate = selectedStratum.estimate;
       finalTotalConfidence = selectedStratum.lcl95;
-      atStratum = true;
+      atStratumOrZone = true;
+    }
+    let selectedZone;
+    if (this.state.selectedInputZoneId && geographies.input_zones) {
+      selectedZone = find(geographies.input_zones, z => {
+        const zone = slugify(z.name) === this.state.selectedInputZoneId;
+        return zone;
+      });
+    }
+    if (selectedZone) {
+      finalTotalEstimate = selectedZone.population_estimate;
+      finalTotalConfidence = selectedZone.percent_cl;
+      atStratumOrZone = true;
     }
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
     const searchOverlay = searchActive
@@ -271,7 +296,10 @@ class App extends Component {
             toggleRange={this.toggleRange}
             ui={ui}
           />
-          <BreadCrumbNav params={this.props.params} />
+          <BreadCrumbNav
+            params={this.props.params}
+            location={this.props.location}
+          />
           <Nav
             expandSidebar={this.expandSidebar}
             contractSidebar={this.contractSidebar}
@@ -301,6 +329,7 @@ class App extends Component {
             routeGeography: routeGeography,
             routeGeographyId: routeGeographyId,
             selectedStratum: selectedStratum,
+            selectedInputZone: selectedZone,
             dispatch: dispatch
           })}
         </main>
@@ -319,14 +348,15 @@ class App extends Component {
           currentNarrative={currentNarrative}
           canInput={canInput}
           selectedStratum={selectedStratum}
+          selectedInputZone={selectedZone}
         />
         {totalEstimate &&
           <TotalCount
             entity={getEntityName(location, params)}
             count={formatNumber(finalTotalEstimate)}
-            confidence={formatNumber(finalTotalConfidence)}
+            confidence={finalTotalConfidence}
             canInput={canInput}
-            atStratum={atStratum}
+            atStratumOrZone={atStratumOrZone}
             summary={geographies.summary_sums || []}
           />
         }

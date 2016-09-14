@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-import ParentADD from './parent_add';
 import { formatNumber } from '../../../utils/format_utils.js';
 import { slugify } from '../../../utils/convenience_funcs.js';
 import { SIDEBAR_FULL } from '../../../constants';
@@ -19,76 +18,64 @@ SidebarMapLink.propTypes = {
 };
 
 export default function CountsByStrata(props) {
-  const { strata, params, totals, currentYear, sidebarState } = props;
+  const { strata, params, sidebarState, title } = props;
   const basePathForLinks = `/${params.year}/${params.region}/${params.country}`;
   let markup = null;
   if (sidebarState < SIDEBAR_FULL) {
     markup = (
       <div>
-        <ParentADD
-          data={totals}
-          year={currentYear}
-        />
-        <div>
-          <h4 className="heading__small">
-            Counts by Stratum
-          </h4>
-          <table className="subgeography-totals">
-            <tbody>{strata.map((g, i) => (
-              <tr key={i}>
-                <td className="subgeography-totals__subgeography-name">
-                  <SidebarMapLink
-                    path={`${basePathForLinks}/${slugify(g.stratum)}-${g.strcode}`}
-                    label={g.stratum}
-                  />
-                  {'  '}
-                  <span>
-                    {g.est_type},&nbsp;
-                    {formatNumber(g.area_calc)} km<sup>2</sup>
-                  </span>
-                </td>
-                <td className="subgeography-totals__estimate">
-                  {formatNumber(g.estimate)}
-                  &nbsp;&plusmn;&nbsp;
-                  {formatNumber(g.lcl95)}
-                </td>
-              </tr>
-            ))}</tbody>
-          </table>
-        </div>
+        <h4 className="heading__small">
+          {title || 'Counts by Stratum'}
+        </h4>
+        <table className="subgeography-totals">
+          <tbody>{strata.map((g, i) => (
+            <tr key={i}>
+              <td className="subgeography-totals__subgeography-name">
+                <SidebarMapLink
+                  path={`${basePathForLinks}/${slugify(g.stratum)}-${g.strcode}`}
+                  label={g.stratum}
+                />
+                {'  '}
+                <span>
+                  {g.est_type},&nbsp;
+                  {formatNumber(g.area_calc)} km<sup>2</sup>
+                </span>
+              </td>
+              <td className="subgeography-totals__estimate">
+                {formatNumber(g.estimate)}
+                &nbsp;&plusmn;&nbsp;
+                {formatNumber(g.lcl95)}
+              </td>
+            </tr>
+          ))}</tbody>
+        </table>
       </div>
     );
   } else {
     markup = (
       <div>
-        <ParentADD
-          data={totals}
-          year={currentYear}
-        />
-        <div>
-          <h4 className="heading__small">
-            Counts by Stratum
-          </h4>
-          <table className="subgeography-totals">
-            <tbody>{strata.map((g, i) => (
-              <tr key={i}>
-                <td className="subgeography-totals__subgeography-name">
-                  <SidebarMapLink
-                    path={`${basePathForLinks}/${slugify(g.stratum)}-${g.strcode}`}
-                    label={g.stratum}
-                  />
-                  {'  '}
-                  <span>{formatNumber(g.area_calc)} km<sup>2</sup></span>
-                </td>
-                <td className="subgeography-totals__estimate">
-                  {formatNumber(g.estimate)}
-                  &nbsp;&plusmn;&nbsp;
-                  {formatNumber(g.lcl95)}
-                </td>
-              </tr>
-            ))}</tbody>
-          </table>
-        </div>
+        <h4 className="heading__small">
+          {title || 'Counts by Stratum'}
+        </h4>
+        <table className="subgeography-totals">
+          <tbody>{strata.map((g, i) => (
+            <tr key={i}>
+              <td className="subgeography-totals__subgeography-name">
+                <SidebarMapLink
+                  path={`${basePathForLinks}/${slugify(g.stratum)}-${g.strcode}`}
+                  label={g.stratum}
+                />
+                {'  '}
+                <span>{formatNumber(g.area_calc)} km<sup>2</sup></span>
+              </td>
+              <td className="subgeography-totals__estimate">
+                {formatNumber(g.estimate)}
+                &nbsp;&plusmn;&nbsp;
+                {formatNumber(g.lcl95)}
+              </td>
+            </tr>
+          ))}</tbody>
+        </table>
       </div>
     );
   }
@@ -96,10 +83,8 @@ export default function CountsByStrata(props) {
 }
 
 CountsByStrata.propTypes = {
-  geographies: PropTypes.object,
   strata: PropTypes.array,
   sidebarState: PropTypes.number.isRequired,
   params: PropTypes.object,
-  currentYear: PropTypes.string,
-  totals: PropTypes.object.isRequired,
+  title: PropTypes.string
 };

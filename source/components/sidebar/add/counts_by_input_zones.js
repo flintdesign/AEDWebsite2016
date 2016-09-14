@@ -25,13 +25,16 @@ export default function CountsByInputZones(props) {
   const inputZonesList = inputZones.map((zone, i) => {
     const titleMarkup = (
       <div className="subgeography__input-zone">
-        {zone.name}
+        <SidebarMapLink
+          path={`${basePathForLinks}?input_zone=${slugify(zone.name)}`}
+          label={`${zone.name}`}
+        />
         <span className="subgeography-summary">
           {zone.survey_type},&nbsp;
           {formatNumber(zone.area)} km<sup>2</sup>
         </span>
         <div className="subgeography__input-zone__totals">
-          {zone.population_estimate}
+          {formatNumber(zone.population_estimate)}
           {zone.percent_cl &&
             <span>&nbsp;&plusmn;&nbsp;{zone.percent_cl}</span>
           }
@@ -70,13 +73,16 @@ export default function CountsByInputZones(props) {
     inputZoneTableList.push(
       <tr key={`${zone.id}`}>
         <td className="subgeography-totals__subgeography-name">
-          {zone.name}
+          <SidebarMapLink
+            path={`${basePathForLinks}?input_zone=${slugify(zone.name)}`}
+            label={`${zone.name}`}
+          />
         </td>
         <td>{zone.cause_of_change}</td>
         <td>{zone.survey_type}</td>
         <td>{zone.survey_reliability}</td>
         <td>{zone.survey_year}</td>
-        <td>{zone.population_estimate}</td>
+        <td>{formatNumber(zone.population_estimate)}</td>
         <td>
           {zone.percent_cl &&
             <span>{zone.percent_cl.trim()}</span>
@@ -92,10 +98,10 @@ export default function CountsByInputZones(props) {
     zone.strata.forEach((stratum) => {
       inputZoneTableList.push(
         <tr key={`${zone.id}-${stratum.strcode}`}>
-          <td className="subgeography-totals__subgeography-name" style={ { paddingLeft: '2em' } }>
+          <td className="subgeography-totals__subgeography-name" style={ { paddingLeft: '50px' } }>
             <SidebarMapLink
               path={`${basePathForLinks}/${slugify(stratum.stratum)}-${stratum.strcode}`}
-              label={`- ${stratum.stratum}`}
+              label={`${stratum.stratum}`}
             />
           </td>
           <td>{stratum.rc}</td>

@@ -12,6 +12,7 @@ import config from '../config';
 import { getCoordData, getLabelPosition } from '../utils/geo_funcs';
 import { formatNumber } from '../utils/format_utils.js';
 import keys from 'lodash.keys';
+import find from 'lodash.find';
 import {
   flatten,
   slugify,
@@ -43,6 +44,15 @@ class MapContainer extends Component {
       geoJSONData: nextProps.subGeographyData.map(this.setGeoJSON),
     });
   }
+
+  // componentDidUpdate() {
+  //   if (this.props.selectedInputZone) {
+  //     const theZone = this.props.selectedInputZone;
+  //     this.refs.map.leafletElement.setView(latLng(theZone.lat.trim(), theZone.lon.trim()), 7);
+  //   } else {
+  //     this.refs.map.leafletElement.fitBounds(this.props.bounds);
+  //   }
+  // }
 
   onZoomEnd(e) {
     /* eslint no-underscore-dangle: [0] */
@@ -116,7 +126,6 @@ class MapContainer extends Component {
 
   handleAdjacentClick(e) {
     if (!this.props.canInput) return;
-    // this.props.updateBounds(e.target.options.bounds);
     const href = e.target.options.href;
     this.props.router.replace(href);
     this.props.cancelSearch();
@@ -270,6 +279,31 @@ class MapContainer extends Component {
       );
     }
 
+    if (this.props.selectedInputZone) {
+      this.props.selectedInputZone.strata.forEach((stratum) => {
+        const stratumObj = find(this.props.subGeographyData, s => s.strcode === stratum.strcode);
+        if (stratumObj) {
+          const stratumObjCoords = stratumObj.coordinates.map(flatten);
+          const stratumObjCoordData = getCoordData(stratumObjCoords);
+          selectedStratumObjs.push(
+            <GeoJson
+              key={`/${slugify(stratumObj.stratum)}-${stratumObj.strcode}-input_zone`}
+              data={stratumObj}
+              className={`region-${slugify(stratumObj.region)}__stratum active active-zone`}
+              onMouseOver={this.handleMouseover}
+              onMouseOut={this.handleMouseout}
+              center={stratumObjCoordData.center}
+              bounds={stratumObjCoordData.bounds}
+              name={stratumObj.name}
+              region={slugify(stratumObj.region)}
+              estimate={stratumObj.estimate}
+              confidence={formatNumber(stratumObj.lcl95)}
+            />
+          );
+        }
+      });
+    }
+
     if (this.props.border.coordinates && !this.props.loading && this.props.canInput) {
       let borderClass = '';
       if (this.props.params.region) {
@@ -335,6 +369,7 @@ MapContainer.propTypes = {
     pathname: PropTypes.string
   }),
   selectedStratum: PropTypes.object,
+  selectedInputZone: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
   sidebarState: PropTypes.number.isRequired
 };
