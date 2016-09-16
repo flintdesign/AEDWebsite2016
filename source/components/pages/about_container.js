@@ -81,7 +81,7 @@ class AboutContainer extends Component {
               <h4>Resources for AED</h4>
               <a className="button" href="/glossary?return_to=/about">Glossary of Terms</a>
               <a className="button" href="/references">References</a>
-              <a className="button" href="/errata-2016">AESR 2016 Errata</a>
+              <a className="button button__disabled" href="/errata-2016">AESR 2016 Errata</a>
             </div>
           </div>
           <div className="about-content">
