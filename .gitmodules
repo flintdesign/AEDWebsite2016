@@ -1,0 +1,3 @@
+[submodule "public/narratives"]
+	path = public/narratives
+	url = https://github.com/FlintMade/AEDNarratives.git
