@@ -311,6 +311,25 @@ aside table
   max-width 1800px
   overflow hidden
   padding 0 10px
+  
+  h2
+    color #848585
+    font-size 12px
+    letter-spacing 0.15em
+    margin-bottom 0.25em
+    padding-bottom 0.25em
+    text-transform uppercase
+    
+  p
+    font-size 0.95em
+    line-height 1.5
+    margin 1.2em 0
+    
+    &:first-child
+      margin-top 0
+  
+  h2 + p
+    margin-top 0.5em
 
   h3
     cursor pointer
@@ -336,14 +355,6 @@ aside table
   &.open div
     height auto
   
-  p
-    font-size 0.95em
-    line-height 1.5
-    margin 1.2em 0
-    
-    &:first-child
-      margin-top 0
-
 .sidebar__loader
   background-color $brand-dark
   z-index 5

@@ -1,6 +1,7 @@
 /* eslint max-len: [0] */
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
+import Markdown from 'react-remarkable';
 import ADDSidebar from './add/add_sidebar';
 import DPPSSidebar from './dpps/dpps_sidebar';
 import StratumSidebar from './stratum_sidebar';
@@ -241,7 +242,7 @@ class Sidebar extends Component {
 
           {this.state.currentTitle === 'narrative' && canInput && !selectedStratum &&
             <div className="sidebar__narrative">
-              <div dangerouslySetInnerHTML={{ __html: currentNarrative }} />
+              <Markdown source={currentNarrative} />
             </div>
           }
 

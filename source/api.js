@@ -8,6 +8,7 @@ import {
   flatten,
   regionById
 } from './utils/convenience_funcs';
+// import HelloWorldMarkup from 'html!markdown!./data/narratives/hello-world.md';
 
 import {
   FETCH_GEOGRAPHY_DATA,
@@ -243,32 +244,20 @@ export function fetchInputZoneData(z) {
   .then(data => ({ ...z, ...data }));
 }
 
-export function fetchNarrative(mappedId, type, data, dispatch) {
-  // GET NARRATIVE
-  const cacheKey = `${mappedId}-narrative`;
-  const cacheResponse = cache.get(cacheKey);
-  if (cacheResponse) {
-    setTimeout(() => {
-      dispatch({
-        type: RECEIVE_GEOGRAPHY_DATA,
-        data: { ...data, narrative: cacheResponse }
-      });
-    }, 50);
-  } else {
-    // fetch the narrative data
-    fetch(`${config.apiBaseURL}/${type}/${mappedId}/narrative`)
-    .then(r => r.json())
-    .then(d2 => {
-      // dispatch "receive" action with response data
-      const narrative = d2.narrative;
-      cache.put(cacheKey, narrative);
+export function fetchNarrative(data, dispatch) {
+  let narrative;
+  fetch(`/narratives/${data.id}.md`)
+    .then(r => r.text())
+    .then(r => {
+      narrative = r;
       const dataWithNarrative = { ...data, narrative };
-      dispatch({
-        type: RECEIVE_GEOGRAPHY_DATA,
-        data: dataWithNarrative
-      });
+      setTimeout(() => {
+        dispatch({
+          type: RECEIVE_GEOGRAPHY_DATA,
+          data: dataWithNarrative
+        });
+      }, 50);
     });
-  }
 }
 
 /*
@@ -276,87 +265,79 @@ export function fetchNarrative(mappedId, type, data, dispatch) {
 *   of the request and the reception of data from the API
 *
 *   dispatch: Must be passed in from the component
-*   geoType: One of ['continent', 'region', 'country', 'stratum']
-*   geoId: An ID matching the `geographyType` (either a number or string)
-*   geoYear: A valid survey year
-*   geoCount: One of ['add', 'dps']
+*   type: One of ['continent', 'region', 'country', 'stratum']
+*   slug: An ID matching the `geographyType` (either a number or string)
+*   year: A valid survey year
+*   count: One of ['add', 'dps']
 */
-export function fetchGeography(dispatch, geoType, slug, geoYear, geoCount) {
+export function fetchGeography(dispatch, type, slug, year, count) {
   // Formatting and validation
-  const type = geoType.toLowerCase();
   const id = slug.toLowerCase();
-  const year = geoYear;
-  const count = geoCount ? geoCount.toLowerCase() : 'add';
+  const _count = count ? count.toLowerCase() : 'add';
+  const apiId = mapSlugToId(slug);
+  let output = {
+    type: type,
+    countType: _count,
+    name: undefined,
+    id: id,
+    apiId: apiId
+  };
 
   // Dispatch the "loading" action
-  dispatch({ type: FETCH_GEOGRAPHY_DATA, data: { countType: count } });
-
-  let mappedId;
-  if (type === 'stratum') {
-    mappedId = id;
-  } else {
-    mappedId = mapSlugToId(slug);
-  }
+  dispatch({ type: FETCH_GEOGRAPHY_DATA, data: { countType: _count } });
 
   // fetch bound
-  fetchBounds(dispatch, geoType, mappedId);
-  fetchBorder(dispatch, geoType, mappedId);
+  fetchBounds(dispatch, type, apiId);
+  fetchBorder(dispatch, type, apiId);
 
-  const fetchURL = `${config.apiBaseURL}/${type}/${mappedId}/${year}/${count}`;
+  const fetchURL = `${config.apiBaseURL}/${type}/${apiId}/${year}/${_count}`;
   // Dispatch async call to the APIk
   fetch(fetchURL)
     .then(r => r.json())
     .then(d => {
-      let data = {
-        ...d,
-        type: type,
-        countType: count,
-        name: d.name,
-        id: id
-      };
-
-      if (d.input_zones) {
-        const filteredInputZones = d.input_zones.filter(z => `${z.analysis_year}` === geoYear);
+      output = { ...d, ...output };
+      if (output.input_zones) {
+        const filteredInputZones = d.input_zones.filter(z => `${z.analysis_year}` === year);
         Promise.all(filteredInputZones.map(z => fetchInputZoneData(z)))
-        .then(zonesWithData => {
-          const zonesWithStrata = zonesWithData.map(zone => {
+        .then(zones => {
+          const zonesWithStrata = zones.map(zone => {
             const strata = d.strata.filter(s => s.inpzone.trim() === zone.name.trim());
             return { ...zone, strata };
           });
-          data = { ...data, input_zones: zonesWithStrata };
-          fetchNarrative(mappedId, type, data, dispatch);
+          output = { ...output, input_zones: zonesWithStrata };
+          fetchNarrative(output, dispatch);
         });
       } else {
-        fetchNarrative(mappedId, type, data, dispatch);
+        fetchNarrative(output, dispatch);
       }
 
       // fetch subgeography data
-      const subGeoType = getNextGeography(geoType);
+      const subType = getNextGeography(type);
 
       // if the returned data (d) of, say, a continent
-      // contains a `regions` (pluralized subGeoType) key
-      if (d[pluralize(subGeoType)]) {
+      // contains a `regions` (pluralized subType) key
+      if (d[pluralize(subType)]) {
         dispatch({ type: FETCH_SUBGEOGRAPHY_DATA });
-        let subGeoList = d[pluralize(subGeoType)];
-        if (subGeoType === 'input_zone') {
-          subGeoList = d[pluralize(subGeoType)].filter(z => `${z.analysis_year}` === geoYear);
+        let subGeoList = d[pluralize(subType)];
+        if (subType === 'input_zone') {
+          subGeoList = d[pluralize(subType)].filter(z => `${z.analysis_year}` === year);
           const firstStratum = d.strata[0];
           subGeoList = subGeoList.map(z => (
             { ...z, region: firstStratum.region, country: firstStratum.country }
           ));
           Promise.all(subGeoList.map(z => fetchInputZoneData(z)))
-          .then(zonesWithData => {
-            const zonesWithStrata = zonesWithData.map(zone => {
+          .then(zones => {
+            const zonesWithStrata = zones.map(zone => {
               const strata = d.strata.filter(s => s.inpzone.trim() === zone.name.trim());
               return { ...zone, strata };
             });
-            loadSubGeography(dispatch, zonesWithStrata, subGeoType);
+            loadSubGeography(dispatch, zonesWithStrata, subType);
           });
         } else {
-          loadSubGeography(dispatch, subGeoList, subGeoType);
+          loadSubGeography(dispatch, subGeoList, subType);
         }
       } else {
-        fetchSubGeography(dispatch, geoType, mappedId, subGeoType);
+        fetchSubGeography(dispatch, type, apiId, subType);
       }
     })
     .catch(() => {
