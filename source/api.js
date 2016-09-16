@@ -8,7 +8,6 @@ import {
   flatten,
   regionById
 } from './utils/convenience_funcs';
-// import HelloWorldMarkup from 'html!markdown!./data/narratives/hello-world.md';
 
 import {
   FETCH_GEOGRAPHY_DATA,
