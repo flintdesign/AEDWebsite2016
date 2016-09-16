@@ -307,17 +307,13 @@ aside table
         
 
 .sidebar__narrative
-  margin 10px auto 15px
+  margin 0px auto 15px
   max-width 1800px
   overflow hidden
-  padding 0 10px
+  padding 0
   
   h2
-    color #848585
-    font-size 12px
-    letter-spacing 0.15em
-    margin-bottom 0.25em
-    padding-bottom 0.25em
+    @extend .heading__small
     text-transform uppercase
     
   p
@@ -329,7 +325,7 @@ aside table
       margin-top 0
   
   h2 + p
-    margin-top 0.5em
+    margin-top 1em
 
   h3
     cursor pointer
@@ -345,6 +341,7 @@ aside table
       transform rotate(90deg)
   
   &.open
+    margin 10px auto 15px
     h3
       &:after
         transform rotate(-90deg)
