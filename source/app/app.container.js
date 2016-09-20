@@ -307,6 +307,7 @@ class App extends Component {
           <BreadCrumbNav
             params={this.props.params}
             location={this.props.location}
+            selectedStratum={selectedStratum}
           />
           <Nav
             expandSidebar={this.expandSidebar}

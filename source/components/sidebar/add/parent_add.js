@@ -3,12 +3,12 @@ import AreaRange from '../area_range';
 import { formatNumber, formatFloat } from '../../../utils/format_utils.js';
 
 export default function ParentADD(props) {
-  const { data, year } = props;
+  const { data } = props;
   const unassessedRange = ((100 - data.PERCENT_OF_RANGE_ASSESSED) / 100) * data.ASSESSED_RANGE;
   const unassessedPercent = 100 - data.PERCENT_OF_RANGE_ASSESSED;
   return (
     <div>
-      <h3 className="heading__small">{year} Elephant Numbers</h3>
+      <h3 className="heading__small">Summary Totals</h3>
       <table className="sidebar__stats-table bold-all">
         <tbody>
           <tr>

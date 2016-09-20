@@ -5,7 +5,7 @@ export default class ToggleTable extends Component {
     super(props, context);
     this.handleClick = this.handleClick.bind(this);
     this.state = {
-      toggled: false
+      toggled: true
     };
   }
 

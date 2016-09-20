@@ -89,8 +89,7 @@ class Sidebar extends Component {
       selectedInputZone,
       params
     } = this.props;
-    // const years = ['2015', '2013', '2006', '2002', '1998', '1995'];
-    const years = ['2015', '2013'];
+    const years = ['2015'];
     const yearLinks = years.map(y => {
       const toVal = compact(window.location.pathname.split('/'));
       const linkVal = toVal.length ? `${y}/${toVal.splice(1).join('/')}` : y;
@@ -213,7 +212,7 @@ class Sidebar extends Component {
                       className={this.getCurrentTitle('totals')}
                       data-title={'totals'}
                     >
-                      Reason for change &amp; survey categories
+                      Reasons for change &amp; survey categories
                     </span>
                   </li>
                 </ul>

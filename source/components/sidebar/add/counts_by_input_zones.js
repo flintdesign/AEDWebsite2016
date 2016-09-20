@@ -127,6 +127,7 @@ export default function CountsByInputZones(props) {
           <ParentADD
             data={totals}
             year={currentYear}
+            sidebarState={sidebarState}
           />
         }
         <div className="sidebar__count-summary sidebar__count-summary--input-zones">
@@ -142,6 +143,13 @@ export default function CountsByInputZones(props) {
   } else {
     markup = (
       <div>
+        {totals && currentYear &&
+          <ParentADD
+            data={totals}
+            year={currentYear}
+            sidebarState={sidebarState}
+          />
+        }
         <table className="subgeography-totals table-fullwidth">
           <thead>
             <tr>
@@ -155,7 +163,7 @@ export default function CountsByInputZones(props) {
             </tr>
             <tr>
               <th className="subgeography-totals__subgeography-name">
-                Counts by Input Zones
+                Input Zones
               </th>
               <th className="th-left"></th>
               <th className="th-left">Type</th>
