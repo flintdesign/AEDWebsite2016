@@ -14,8 +14,7 @@ import { getCoordData } from '../utils/geo_funcs';
 import {
   fetchGeography,
   fetchRanges,
-  fetchAdjacentGeography,
-  fetchStratumTree
+  fetchAdjacentGeography
 } from '../api';
 import {
   toggleSearch,
@@ -45,12 +44,8 @@ class App extends Component {
     this.clearAdjacentData = this.clearAdjacentData.bind(this);
     this.updateBounds = this.updateBounds.bind(this);
     let showIntroOnLoad = true;
-    if (props.params.region) {
-      showIntroOnLoad = false;
-    }
-    if (props.location.query.hide_intro) {
-      showIntroOnLoad = false;
-    }
+    if (props.params.region) showIntroOnLoad = false;
+    if (props.location.query.hide_intro) showIntroOnLoad = false;
     this.state = {
       showSidebar: false,
       showIntro: showIntroOnLoad,
@@ -61,11 +56,14 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // FETCH INITIAL DATA FOR MAP AND DATA
     this.fetchData(this.props, true);
+    // FETCH ALL RANGES
     fetchRanges('known', this.props.dispatch);
     fetchRanges('possible', this.props.dispatch);
     fetchRanges('protected', this.props.dispatch);
     fetchRanges('doubtful', this.props.dispatch);
+    // URL QUERIES TO CONTROL STATE
     if (this.props.location.query.sidebar_state) {
       const requestedState = parseInt(this.props.location.query.sidebar_state, 10);
       this.setSidebar(requestedState);
@@ -86,9 +84,7 @@ class App extends Component {
       subGeographyData
     } = newProps;
     if (canInput && !this.state.initialLoad && !loading) {
-      this.setState({
-        initialLoad: true
-      });
+      this.setState({ initialLoad: true });
     }
     if (location.query !== props.location.query) {
       if (location.query.count_type !== props.location.query.count_type) {
@@ -115,16 +111,8 @@ class App extends Component {
     }
   }
 
-  componentDidUpdate() {
-    if (this.props.params.region && this.props.sidebarState === 0) {
-      this.expandSidebar();
-    }
-  }
-
   onHandleClick() {
-    this.setState({
-      showSidebar: !this.state.showSidebar
-    });
+    this.setState({ showSidebar: !this.state.showSidebar });
   }
 
   setSidebar(sideBarState) {
@@ -174,6 +162,7 @@ class App extends Component {
     this.props.dispatch(toggleLegend());
   }
 
+  // LOAD STRATUM DATA FROM ALREADY COLLECTED DATA
   loadStratumFromGeography(stratumId, geography) {
     const stratumData = getGeoFromId(stratumId, geography);
     const _coords = stratumData.coordinates.map(flatten);
@@ -204,7 +193,7 @@ class App extends Component {
         location.query.count_type
       );
     }
-
+    // DETERMINE WHICH ADJACENT GEOGRAPHY TO FETCH AND SHOW
     if (params.country && params.region && !params.stratum) {
       // we looking at a country, grab its surrounding countries inside its region
       fetchAdjacentGeography(
@@ -214,7 +203,6 @@ class App extends Component {
         routeGeography,
         routeGeographyId
       );
-      if (this.state.getStratumTree) fetchStratumTree(dispatch, params);
     } else if (params.region && !params.country && !params.stratum) {
       // we look at a region, grabs its surrounding regions inside the continent
       fetchAdjacentGeography(
@@ -244,7 +232,6 @@ class App extends Component {
       currentGeography,
       currentGeographyId,
       currentNarrative,
-      parentGeographyData,
       subGeographyData,
       adjacentData,
       routeYear,
@@ -259,6 +246,7 @@ class App extends Component {
       routeGeographyId,
       selectedStratum
     } = this.props;
+    // DETERMINE WHICH TOTAL FROM ESTIMATES TO DISPLAY
     let finalTotalEstimate = totalEstimate;
     let finalTotalConfidence = '';
     if (geographies.summary_sums) {
@@ -270,6 +258,7 @@ class App extends Component {
       finalTotalConfidence = selectedStratum.lcl95;
       atStratumOrZone = true;
     }
+    // DETERMINE WHETHER AN INPUT ZONE IS SELECTED
     let selectedZone;
     if (this.state.selectedInputZoneId && geographies.input_zones) {
       selectedZone = find(geographies.input_zones, z => {
@@ -282,13 +271,17 @@ class App extends Component {
       finalTotalConfidence = selectedZone.percent_cl;
       atStratumOrZone = true;
     }
+    // DETERMINE THE RIGHT CLASS FOR THE SIDEBAR
     const mainClasses = ['main--full', 'main--half', 'main--closed'];
+    // DETERMINE WHETHER TO SHOW SEARCH OVERLAY
     const searchOverlay = searchActive
       ? <div onClick={this.cancelSearch} className="search__overlay" />
       : null;
+    // DETERMINE WHETHER TO SHOW LOADING OVERLAY
     const loadingOverlay = !this.state.initialLoad || loading
       ? <div className="loading-overlay" />
       : <div className="loading-overlay dismissed" />;
+    // DETERMINE MAIN CLASS
     const getMainClass = () => {
       let _class = mainClasses[sidebarState];
       if (selectedZone) {
@@ -328,7 +321,6 @@ class App extends Component {
             adjacentData: adjacentData,
             currentGeography: currentGeography,
             currentGeographyId: currentGeographyId,
-            parentGeographyData: parentGeographyData,
             subGeographyData: subGeographyData,
             year: routeYear,
             sidebarState: sidebarState,
@@ -402,7 +394,6 @@ App.propTypes = {
   routeGeography: PropTypes.string,
   routeGeographyId: PropTypes.string,
   routeYear: PropTypes.string,
-  parentGeographyData: PropTypes.array,
   adjacentData: PropTypes.array,
   subGeographyData: PropTypes.array,
   sidebarState: PropTypes.number,
@@ -441,7 +432,6 @@ const mapStateToProps = (state, props) => {
     routeGeography: routeGeography,
     routeGeographyId: props.params[routeGeography] || 'africa',
     routeYear: props.params.year || '2015',
-    parentGeographyData: state.geographyData.parentGeography,
     subGeographyData: state.geographyData.subGeographies,
     adjacentData: state.geographyData.adjacentData,
     sidebarState: state.navigation.sidebarState,

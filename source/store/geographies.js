@@ -7,22 +7,18 @@ import {
   RECEIVE_BOUNDS,
   RECEIVE_BORDER,
   FETCH_BORDER,
-  CHANGE_MAP,
   FETCH_ADJACENT_DATA,
   RECEIVE_ADJACENT_DATA,
-  SELECT_STRATUM,
-  FETCH_STRATUM_TREE,
-  RECEIVE_STRATUM_TREE
+  SELECT_STRATUM
 } from '../actions/app_actions';
 import { getTotalEstimate } from '../utils/convenience_funcs';
 
 const initialState = {
   error: null,
   loading: false,
-  loadingData: false,
-  loadingGeoJSON: false,
+  currentlyLoadingData: false,
+  currentlyLoadingGeoJSON: false,
   canInput: true,
-  parentGeography: [],
   geographies: {},
   subGeographies: [],
   totalEstimate: '426032',
@@ -30,21 +26,15 @@ const initialState = {
   currentGeographyId: 'africa',
   currentNarrative: null,
   border: {},
-  geoJSON: {},
   adjacentData: [],
-  selectedStratum: null,
-  stratumTree: null
+  selectedStratum: null
 };
 
 export function geographies(state = initialState, action) {
   let isStillLoading = true;
   switch (action.type) {
-    case FETCH_STRATUM_TREE:
-      return { ...state, stratumTree: null };
-    case RECEIVE_STRATUM_TREE:
-      return { ...state, stratumTree: action.data };
     case RECEIVE_GEOGRAPHY_DATA:
-      if (!state.loadingGeoJSON) {
+      if (!state.currentlyLoadingGeoJSON) {
         isStillLoading = false;
       }
       return { ...state,
@@ -52,7 +42,7 @@ export function geographies(state = initialState, action) {
         // to not update
         error: '',
         loading: isStillLoading,
-        loadingData: false,
+        currentlyLoadingData: false,
         geographies: action.data,
         totalEstimate: getTotalEstimate(action.data),
         currentGeography: action.data.type,
@@ -65,12 +55,12 @@ export function geographies(state = initialState, action) {
         ...state, error: action.data
       };
     case RECEIVE_SUBGEOGRAPHY_DATA:
-      if (!state.loadingData) {
+      if (!state.currentlyLoadingData) {
         isStillLoading = false;
       }
       return { ...state,
         loading: isStillLoading,
-        loadingGeoJSON: false,
+        currentlyLoadingGeoJSON: false,
         subGeographies: action.data
       };
     case RECEIVE_BOUNDS:
@@ -106,21 +96,18 @@ export function geographies(state = initialState, action) {
     case FETCH_GEOGRAPHY_DATA:
       return {
         ...state,
-        loadingData: true,
+        currentlyLoadingData: true,
         loading: true,
-        canInput: false,
-        parentGeography: state.subGeographies
+        canInput: false
       };
     case FETCH_SUBGEOGRAPHY_DATA:
       return {
         ...state,
-        loadingGeoJSON: true,
+        currentlyLoadingGeoJSON: true,
         loading: true,
         canInput: false,
         subGeographies: []
       };
-    case CHANGE_MAP:
-      return state;
     default:
       return state;
   }
