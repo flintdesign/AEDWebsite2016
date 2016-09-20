@@ -19,9 +19,7 @@ import {
   FETCH_BORDER,
   RECEIVE_BORDER,
   FETCH_ADJACENT_DATA,
-  RECEIVE_ADJACENT_DATA,
-  FETCH_STRATUM_TREE,
-  RECEIVE_STRATUM_TREE
+  RECEIVE_ADJACENT_DATA
 } from './actions/app_actions';
 
 import { FETCH_RANGE, RECEIVE_RANGE } from './constants';
@@ -345,49 +343,6 @@ export function fetchGeography(dispatch, type, slug, year, count) {
         data: 'No data available'
       });
     });
-}
-
-export function fetchLoadGeoJSON(z, type) {
-  const _id = z.id || z.strcode;
-  return fetch(`${config.apiBaseURL}/${type}/${_id}/geojson_map`)
-  .then(r => r.json())
-  .then(r => ({ ...z, geoJSON: r }));
-}
-
-export function fetchStrata(z) {
-  const url = `${config.apiBaseURL}/input_zone/${z.id}/strata`;
-  return fetch(url)
-  .then(r => r.json())
-  .then(({ strata }) => Promise.all(strata.map(s => fetchLoadGeoJSON(s, 'stratum'))))
-  .then(strata => ({ ...z, strata }));
-}
-
-export function fetchInputZones(p) {
-  const url = `${config.apiBaseURL}/population/${p.id}/input_zones`;
-  return fetch(url)
-    .then(response => response.json())
-    .then(({ input_zones }) => Promise.all(input_zones.map(z => fetchStrata(z))))
-    .then(zones => Promise.all(zones.map(zone => fetchLoadGeoJSON(zone, 'input_zone'))))
-    .then(zones => ({ ...p, input_zones: zones }));
-}
-
-export function fetchStratumTree(dispatch, params) {
-  const countryIso = mapSlugToId(params.country);
-  const url = `${config.apiBaseURL}/country/${countryIso}/populations`;
-  const cacheKey = `stratum-tree-${countryIso}`;
-  const cacheResponse = cache.get(cacheKey);
-  dispatch({ type: FETCH_STRATUM_TREE, data: params });
-  if (cacheResponse) {
-    return dispatch({ type: RECEIVE_STRATUM_TREE, data: cacheResponse });
-  }
-  return fetch(url)
-  .then(r => r.json())
-  .then(({ populations }) => Promise.all(populations.map(p => fetchInputZones(p))))
-  .then(populations => Promise.all(populations.map(p => fetchLoadGeoJSON(p, 'population'))))
-  .then(stratumTree => {
-    cache.put(cacheKey, stratumTree, cacheDuration);
-    dispatch({ type: RECEIVE_STRATUM_TREE, data: stratumTree });
-  });
 }
 
 export function fetchSearchData(successCallback, errorCallback = (err) => console.log(err)) {

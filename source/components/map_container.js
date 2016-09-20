@@ -348,7 +348,6 @@ MapContainer.propTypes = {
   routeGeography: PropTypes.string,
   currentGeographyId: PropTypes.string,
   routeGeographyId: PropTypes.string,
-  parentGeographyData: PropTypes.array,
   subGeographyData: PropTypes.array,
   adjacentData: PropTypes.array,
   year: PropTypes.string.isRequired,

@@ -78,21 +78,21 @@ export default function CountsByInputZones(props) {
             label={`${zone.name}`}
           />
         </td>
-        <td style={ { textAlign: 'left' } }>{zone.cause_of_change}</td>
-        <td style={ { textAlign: 'left' } }>{zone.survey_type}</td>
-        <td style={ { textAlign: 'center' } }>{zone.survey_reliability}</td>
-        <td style={ { textAlign: 'center' } }>{zone.survey_year}</td>
+        <td className="td-left">{zone.cause_of_change}</td>
+        <td className="td-left">{zone.survey_type}</td>
+        <td className="td-center">{zone.survey_reliability}</td>
+        <td className="td-center">{zone.survey_year}</td>
         <td>{formatNumber(zone.population_estimate)}</td>
         <td>
           {zone.percent_cl &&
             <span>{zone.percent_cl.trim()}</span>
           }
         </td>
-        <td style={ { textAlign: 'left' } }>{zone.source}</td>
-        <td style={ { textAlign: 'center' } }>{zone.pfs}</td>
-        <td style={ { textAlign: 'center' } }>{formatNumber(zone.area)}</td>
-        <td style={ { textAlign: 'center' } }>{zone.lon}</td>
-        <td style={ { textAlign: 'center' } }>{zone.lat}</td>
+        <td className="td-left">{zone.source}</td>
+        <td className="td-center">{zone.pfs}</td>
+        <td className="td-center">{formatNumber(zone.area)}</td>
+        <td className="td-center">{zone.lon}</td>
+        <td className="td-center">{zone.lat}</td>
       </tr>
     );
     zone.strata.forEach((stratum) => {
@@ -104,17 +104,17 @@ export default function CountsByInputZones(props) {
               label={`${stratum.stratum}`}
             />
           </td>
-          <td style={ { textAlign: 'left' } }>{stratum.rc}</td>
-          <td style={ { textAlign: 'left' } }>{stratum.est_type}</td>
-          <td style={ { textAlign: 'center' } }>{stratum.category}</td>
-          <td style={ { textAlign: 'center' } }>{stratum.ayear}</td>
+          <td className="td-left">{stratum.rc}</td>
+          <td className="td-left">{stratum.est_type}</td>
+          <td className="td-center">{stratum.category}</td>
+          <td className="td-center">{stratum.ayear}</td>
           <td>{formatNumber(stratum.estimate)}</td>
           <td>{stratum.lcl95}</td>
-          <td style={ { textAlign: 'left' } }>{stratum.short_cit}</td>
+          <td className="td-left">{stratum.short_cit}</td>
           <td></td>
-          <td style={ { textAlign: 'center' } }>{formatNumber(stratum.area_rep)}</td>
-          <td style={ { textAlign: 'center' } }>{zone.lon}</td>
-          <td style={ { textAlign: 'center' } }>{zone.lat}</td>
+          <td className="td-center">{formatNumber(stratum.area_rep)}</td>
+          <td className="td-center">{zone.lon}</td>
+          <td className="td-center">{zone.lat}</td>
         </tr>
       );
     });
@@ -123,10 +123,12 @@ export default function CountsByInputZones(props) {
   if (sidebarState < SIDEBAR_FULL) {
     markup = (
       <div>
-        <ParentADD
-          data={totals}
-          year={currentYear}
-        />
+        {totals && currentYear &&
+          <ParentADD
+            data={totals}
+            year={currentYear}
+          />
+        }
         <div className="sidebar__count-summary sidebar__count-summary--input-zones">
           <div>
             <h4 className="heading__small">
@@ -184,5 +186,5 @@ CountsByInputZones.propTypes = {
   sidebarState: PropTypes.number.isRequired,
   params: PropTypes.object,
   currentYear: PropTypes.string,
-  totals: PropTypes.object.isRequired,
+  totals: PropTypes.object,
 };
