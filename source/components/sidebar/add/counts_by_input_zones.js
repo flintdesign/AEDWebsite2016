@@ -78,21 +78,21 @@ export default function CountsByInputZones(props) {
             label={`${zone.name}`}
           />
         </td>
-        <td>{zone.cause_of_change}</td>
-        <td>{zone.survey_type}</td>
-        <td>{zone.survey_reliability}</td>
-        <td>{zone.survey_year}</td>
+        <td style={ { textAlign: 'left' } }>{zone.cause_of_change}</td>
+        <td style={ { textAlign: 'left' } }>{zone.survey_type}</td>
+        <td style={ { textAlign: 'center' } }>{zone.survey_reliability}</td>
+        <td style={ { textAlign: 'center' } }>{zone.survey_year}</td>
         <td>{formatNumber(zone.population_estimate)}</td>
         <td>
           {zone.percent_cl &&
             <span>{zone.percent_cl.trim()}</span>
           }
         </td>
-        <td>{zone.source}</td>
-        <td>{zone.pfs}</td>
-        <td>{formatNumber(zone.area)}</td>
-        <td>{zone.lon}</td>
-        <td>{zone.lat}</td>
+        <td style={ { textAlign: 'left' } }>{zone.source}</td>
+        <td style={ { textAlign: 'center' } }>{zone.pfs}</td>
+        <td style={ { textAlign: 'center' } }>{formatNumber(zone.area)}</td>
+        <td style={ { textAlign: 'center' } }>{zone.lon}</td>
+        <td style={ { textAlign: 'center' } }>{zone.lat}</td>
       </tr>
     );
     zone.strata.forEach((stratum) => {
@@ -104,17 +104,17 @@ export default function CountsByInputZones(props) {
               label={`${stratum.stratum}`}
             />
           </td>
-          <td>{stratum.rc}</td>
-          <td>{stratum.est_type}</td>
-          <td>{stratum.category}</td>
-          <td>{stratum.ayear}</td>
+          <td style={ { textAlign: 'left' } }>{stratum.rc}</td>
+          <td style={ { textAlign: 'left' } }>{stratum.est_type}</td>
+          <td style={ { textAlign: 'center' } }>{stratum.category}</td>
+          <td style={ { textAlign: 'center' } }>{stratum.ayear}</td>
           <td>{formatNumber(stratum.estimate)}</td>
           <td>{stratum.lcl95}</td>
-          <td>{stratum.short_cit}</td>
+          <td style={ { textAlign: 'left' } }>{stratum.short_cit}</td>
           <td></td>
-          <td>{formatNumber(stratum.area_rep)}</td>
-          <td>{zone.lon}</td>
-          <td>{zone.lat}</td>
+          <td style={ { textAlign: 'center' } }>{formatNumber(stratum.area_rep)}</td>
+          <td style={ { textAlign: 'center' } }>{zone.lon}</td>
+          <td style={ { textAlign: 'center' } }>{zone.lat}</td>
         </tr>
       );
     });
@@ -143,20 +143,29 @@ export default function CountsByInputZones(props) {
         <table className="subgeography-totals table-fullwidth">
           <thead>
             <tr>
+              <th></th>
+              <th className="th-parent th-left">Reason for Change</th>
+              <th colSpan="3" className="th-parent th-center">Survey Details</th>
+              <th colSpan="2" className="th-parent th-center">Number of Elephants</th>
+              <th colSpan="2" className="th-parent"></th>
+              <th colSpan="1" className="th-parent th-center">Area</th>
+              <th colSpan="2" className="th-parent th-center">Map Location</th>
+            </tr>
+            <tr>
               <th className="subgeography-totals__subgeography-name">
                 Counts by Input Zones
               </th>
-              <th>Change</th>
-              <th>Type</th>
-              <th>Reliab.</th>
-              <th>Year</th>
+              <th className="th-left"></th>
+              <th className="th-left">Type</th>
+              <th className="th-center">Reliab.</th>
+              <th className="th-center">Year</th>
               <th>Estimate</th>
               <th>&plusmn;95&#37; CL</th>
-              <th>Source</th>
-              <th>PFS</th>
-              <th>(km<sup>2</sup>)</th>
-              <th>Lon.</th>
-              <th>Lat</th>
+              <th className="th-left">Source</th>
+              <th className="th-center">PFS</th>
+              <th className="th-center">(km<sup>2</sup>)</th>
+              <th className="th-center">Lon.</th>
+              <th className="th-center">Lat</th>
             </tr>
           </thead>
           <tbody>
