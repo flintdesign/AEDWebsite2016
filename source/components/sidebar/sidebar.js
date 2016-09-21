@@ -241,7 +241,7 @@ class Sidebar extends Component {
 
           {this.state.currentTitle === 'narrative' && canInput && !selectedStratum &&
             <div className="sidebar__narrative">
-              <Markdown source={currentNarrative} />
+              <Markdown source={currentNarrative} options={ { html: true } } />
             </div>
           }
 

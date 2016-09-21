@@ -40,7 +40,7 @@ export default function StratumSidebar(props) {
             </tr>
             <tr>
               <td>Area (km<sup>2</sup>)</td>
-              <td>{formatNumber(stratum.area_calc)}</td>
+              <td>{formatNumber(stratum.area_rep)}</td>
             </tr>
           </tbody>
         </table>
