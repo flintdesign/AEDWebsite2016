@@ -16,25 +16,25 @@ import thunk from 'redux-thunk';
 
 require('./css/main.styl');
 
-// const addLoggingToDispatch = (store) => {
-//   const rawDispatch = store.dispatch;
+const addLoggingToDispatch = (store) => {
+  const rawDispatch = store.dispatch;
 
-//   return (action) => {
-//     console.group(action.type);
-//     console.log('%c prev state', 'color: gray', store.getState());
-//     console.log('%c action', 'color: blue', action);
-//     const returnValue = rawDispatch(action);
-//     console.log('%c next state', 'color: green', store.getState());
-//     console.groupEnd(action.type);
-//     return returnValue;
-//   };
-// };
+  return (action) => {
+    console.group(action.type);
+    console.log('%c prev state', 'color: gray', store.getState());
+    console.log('%c action', 'color: blue', action);
+    const returnValue = rawDispatch(action);
+    console.log('%c next state', 'color: green', store.getState());
+    console.groupEnd(action.type);
+    return returnValue;
+  };
+};
 const store = createStore(rootReducer, compose(
   applyMiddleware(thunk),
   window.devToolsExtension ? window.devToolsExtension() : f => f
 ));
 
-// store.dispatch = addLoggingToDispatch(store);
+store.dispatch = addLoggingToDispatch(store);
 
 render((
   <Provider store={store}>
