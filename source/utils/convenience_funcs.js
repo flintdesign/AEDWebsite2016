@@ -84,6 +84,17 @@ export const geoTypeFromHref = event => {
 };
 
 export const getEntityName = (location, params) => {
+  const validRegions = ['eastern-africa', 'west-africa', 'southern-africa', 'central-africa'];
+  if (params.region) {
+    if (validRegions.indexOf(params.region) === -1) {
+      return '';
+    }
+  }
+  if (params.country) {
+    if (!mapSlugToId(params.country)) {
+      return '';
+    }
+  }
   if (location.query.input_zone) {
     return titleize(location.query.input_zone);
   }

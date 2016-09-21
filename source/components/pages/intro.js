@@ -2,7 +2,10 @@ import React, { PropTypes } from 'react';
 
 export default function Intro(props) {
   const { handleIntroClick, showIntro } = props;
-  const introClass = `intro ${showIntro ? 'shown' : 'dismissed'}`;
+  let introClass = `intro ${showIntro ? 'shown' : 'dismissed'}`;
+  if (showIntro === undefined) {
+    introClass = 'intro shown';
+  }
   return (
     <div className={introClass} onClick={handleIntroClick}>
       <div className={'intro-bg'}>
@@ -69,6 +72,6 @@ export default function Intro(props) {
 }
 
 Intro.propTypes = {
-  handleIntroClick: PropTypes.func.isRequired,
+  handleIntroClick: PropTypes.func,
   showIntro: PropTypes.bool
 };

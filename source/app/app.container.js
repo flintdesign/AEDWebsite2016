@@ -7,6 +7,7 @@ import Ranges from '../components/ranges';
 import Sidebar from '../components/sidebar/sidebar';
 import Intro from '../components/pages/intro';
 import TotalCount from '../components/total_count';
+import ErrorPage from '../components/pages/404';
 import find from 'lodash.find';
 import { getEntityName, getGeoFromId, flatten, slugify } from '../utils/convenience_funcs';
 import { formatNumber } from '../utils/format_utils';
@@ -375,6 +376,9 @@ class App extends Component {
           handleIntroClick={this.handleIntroClick}
           showIntro={this.state.showIntro}
         />
+        {error &&
+          <ErrorPage error={error} />
+        }
       </div>
     );
   }
