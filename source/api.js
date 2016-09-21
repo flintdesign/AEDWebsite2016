@@ -123,16 +123,22 @@ function fetchBounds(dispatch, geoType, mappedId) {
   const url = `${config.apiBaseURL}/${geoType}/${mappedId}/geojson_map?simplify=4.0`;
   // value not cached; fetching
   return fetch(url)
-    .then(r => r.json())
-    .then(d => {
-      const coords = d.coordinates.map(flatten);
-      const bounds = getCoordData(coords).bounds;
-      cache.put(cacheKey, bounds, cacheDuration);
-      dispatch({
-        type: RECEIVE_BOUNDS,
-        bounds: bounds
-      });
+  .then(r => r.json())
+  .then(d => {
+    const coords = d.coordinates.map(flatten);
+    const bounds = getCoordData(coords).bounds;
+    cache.put(cacheKey, bounds, cacheDuration);
+    dispatch({
+      type: RECEIVE_BOUNDS,
+      bounds: bounds
     });
+  })
+  .catch(() => {
+    dispatch({
+      type: RECEIVE_GEOGRAPHY_ERROR,
+      data: 'No border available'
+    });
+  });
 }
 
 function fetchBorder(dispatch, geoType, mappedId) {
@@ -268,6 +274,13 @@ export function fetchNarrative(data, dispatch) {
 *   count: One of ['add', 'dps']
 */
 export function fetchGeography(dispatch, type, slug, year, count) {
+  const validYears = [2015, 2013, '2015', '2013'];
+  if (validYears.indexOf(year) === -1) {
+    dispatch({
+      type: RECEIVE_GEOGRAPHY_ERROR,
+      data: 'Invalid Year'
+    });
+  }
   // Formatting and validation
   const id = slug.toLowerCase();
   const _count = count ? count.toLowerCase() : 'add';

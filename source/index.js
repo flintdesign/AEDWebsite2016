@@ -8,6 +8,7 @@ import Intro from './components/pages/intro';
 import Glossary from './components/pages/glossary';
 import References from './components/pages/references';
 import Errata2016 from './components/pages/errata_2016';
+import ErrorPage from './components/pages/404';
 import DARP from './components/pages/darp';
 import AboutContainer from './components/pages/about_container';
 import { createStore, applyMiddleware, compose } from 'redux';
@@ -16,25 +17,25 @@ import thunk from 'redux-thunk';
 
 require('./css/main.styl');
 
-const addLoggingToDispatch = (store) => {
-  const rawDispatch = store.dispatch;
+// const addLoggingToDispatch = (store) => {
+//   const rawDispatch = store.dispatch;
 
-  return (action) => {
-    console.group(action.type);
-    console.log('%c prev state', 'color: gray', store.getState());
-    console.log('%c action', 'color: blue', action);
-    const returnValue = rawDispatch(action);
-    console.log('%c next state', 'color: green', store.getState());
-    console.groupEnd(action.type);
-    return returnValue;
-  };
-};
+//   return (action) => {
+//     console.group(action.type);
+//     console.log('%c prev state', 'color: gray', store.getState());
+//     console.log('%c action', 'color: blue', action);
+//     const returnValue = rawDispatch(action);
+//     console.log('%c next state', 'color: green', store.getState());
+//     console.groupEnd(action.type);
+//     return returnValue;
+//   };
+// };
 const store = createStore(rootReducer, compose(
   applyMiddleware(thunk),
   window.devToolsExtension ? window.devToolsExtension() : f => f
 ));
 
-store.dispatch = addLoggingToDispatch(store);
+// store.dispatch = addLoggingToDispatch(store);
 
 render((
   <Provider store={store}>
@@ -52,6 +53,7 @@ render((
         <IndexRedirect to="/2015" />
         <Route path={'/:year(/:region)(/:country)(/:stratum)'} component={MapContainer} />
       </Route>
+      <Route path="*" component={ErrorPage} />
     </Router>
   </Provider>
 ), document.getElementById('react-root'));
