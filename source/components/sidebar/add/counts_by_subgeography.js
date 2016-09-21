@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { formatNumber } from '../../../utils/format_utils.js';
+import { formatNumber, formatFloat } from '../../../utils/format_utils.js';
 import { Link } from 'react-router';
 import ParentADD from './parent_add';
 import { capitalize, slugify } from '../../../utils/convenience_funcs.js';
@@ -64,6 +64,10 @@ export default function CountsBySubGeography(props) {
       // Full-screen sidebar
       markup = (
         <div>
+          <ParentADD
+            data={totals}
+            year={currentYear}
+          />
           <table className="subgeography-totals table-fullwidth">
             <thead>
               <tr>
@@ -101,8 +105,8 @@ export default function CountsBySubGeography(props) {
                   <td>{formatNumber(g.RANGE_AREA)}</td>
                   <td>{formatNumber(g.PERCENT_OF_RANGE_COVERED)}</td>
                   <td>{formatNumber(g.PERCENT_OF_RANGE_ASSESSED)}</td>
-                  <td>{formatNumber(g.IQI)}</td>
-                  <td>{formatNumber(g.PFS)}</td>
+                  <td>{formatFloat(g.IQI)}</td>
+                  <td>{formatFloat(g.PFS)}</td>
                 </tr>
               ))}
               <tr className="subgeography-totals__totals" key="totals">
@@ -114,8 +118,8 @@ export default function CountsBySubGeography(props) {
                 <td>{formatNumber(totals.RANGE_AREA)}</td>
                 <td>{formatNumber(totals.PERCENT_OF_RANGE_COVERED)}</td>
                 <td>{formatNumber(totals.PERCENT_OF_RANGE_ASSESSED)}</td>
-                <td>{formatNumber(totals.IQI)}</td>
-                <td>{formatNumber(totals.PFS)}</td>
+                <td>{formatFloat(totals.IQI)}</td>
+                <td>{formatFloat(totals.PFS)}</td>
               </tr>
             </tbody>
           </table>

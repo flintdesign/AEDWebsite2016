@@ -97,6 +97,18 @@ export default function InputZoneSidebar(props) {
                 <td>{formatNumber(zone.area)}</td>
               </tr>
               <tr>
+                <td>Reason for Change</td>
+                <td>{zone.cause_of_change}</td>
+              </tr>
+              <tr>
+                <td>Survey Type</td>
+                <td>{zone.survey_type}</td>
+              </tr>
+              <tr>
+                <td>Survey Reliab.</td>
+                <td>{zone.survey_reliability}</td>
+              </tr>
+              <tr>
                 <td>Year Conducted</td>
                 <td>{zone.analysis_year}</td>
               </tr>
@@ -107,6 +119,14 @@ export default function InputZoneSidebar(props) {
               <tr>
                 <td>Source</td>
                 <td>{zone.source}</td>
+              </tr>
+              <tr>
+                <td>Lat.</td>
+                <td>{zone.lat}</td>
+              </tr>
+              <tr>
+                <td>Lon.</td>
+                <td>{zone.lon}</td>
               </tr>
             </tbody>
           </table>
@@ -149,7 +169,7 @@ export default function InputZoneSidebar(props) {
               <th className="th-center">PFS</th>
               <th className="th-center">(km<sup>2</sup>)</th>
               <th className="th-center">Lon.</th>
-              <th className="th-center">Lat</th>
+              <th className="th-center">Lat.</th>
             </tr>
           </thead>
           <tbody>

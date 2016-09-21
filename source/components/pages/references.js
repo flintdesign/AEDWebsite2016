@@ -6,6 +6,7 @@ export default function References() {
   return (
     <div className="references">
       <div className="references__inner">
+        <a href="/about" className="references__inner__back" />
         <div className="references__header">
           <a className="references__header__logo" href="/" />
           <h1>References</h1>
