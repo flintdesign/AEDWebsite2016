@@ -58,12 +58,11 @@ export const replaceURLPart = (pathname, slug) => {
     case 3:
     case 4:
       // year, region, country; add stratum/zone
-      url += `/${urlParts[1]}/${urlParts[2]}${_slug}`;
+      url += `/${urlParts[1]}/${urlParts[2]}/${_slug}`;
       break;
     default:
       url = `/${urlParts[0]}`;
   }
-  console.log(url);
   return url;
 };
 
@@ -103,7 +102,8 @@ export const getEntityName = (location, params) => {
   let title;
   switch (parts.length) {
     case 4:
-      title = titleizeStratum(params.stratum);
+      // title = titleizeStratum(params.stratum);
+      title = titleize(params.input_zone);
       break;
     case 3:
       title = titleize(params.country);

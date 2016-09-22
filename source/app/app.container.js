@@ -1,3 +1,4 @@
+/* eslint max-len: [0] */
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Nav from '../components/nav/nav';
@@ -100,8 +101,13 @@ class App extends Component {
       if (location.query.count_type !== props.location.query.count_type) {
         this.fetchData(newProps, true);
       } else if (location.pathname !== props.location.pathname
-        && (!params.stratum || !location.query.input_zone)) {
-        this.fetchData(newProps, true);
+        && !params.input_zone) {
+        if (this.props.params.input_zone && params.country && this.props.params.country === params.country) {
+          const id = mapSlugToId(this.props.routeGeographyId);
+          fetchBounds(this.props.dispatch, this.props.routeGeography, id);
+        } else {
+          this.fetchData(newProps, true);
+        }
       } else {
         this.fetchData(newProps, false);
       }
@@ -114,13 +120,13 @@ class App extends Component {
     if (!params.stratum && props.params.stratum) {
       this.selectStratum(null);
     }
-    if (location.query.input_zone) {
-      this.setState({ selectedInputZoneId: location.query.input_zone });
+    if (params.input_zone) {
+      this.setState({ selectedInputZoneId: params.input_zone });
     } else {
       this.setState({ selectedInputZoneId: null });
       this.setState({ selectedInputZone: null });
     }
-    if (!location.query.input_zone && props.location.query.input_zone) {
+    if (!params.input_zone && this.props.params.input_zone) {
       if (location.pathname === props.location.pathname) {
         const id = mapSlugToId(this.props.routeGeographyId);
         fetchBounds(this.props.dispatch, this.props.routeGeography, id);

@@ -196,7 +196,7 @@ class MapContainer extends Component {
         }
         if (datum.geoType === 'input_zone') {
           geoJSONClassName = `region-${slugify(datum.region)}__stratum`;
-          objectHref = `?input_zone=${slugify(datum.name)}`;
+          objectHref = `/${slugify(datum.name)}`;
         }
         if (datum.geoType === 'region' && datum.coordinates && self.props.routeGeography === 'continent' && self.props.currentGeography === 'continent') {
           const icon = divIcon({

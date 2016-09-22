@@ -181,7 +181,7 @@ class Sidebar extends Component {
             <div>
               <h3 className="sidebar__entity-input-zone-subtitle">
                 Input Zone in&nbsp;
-                <Link to={`${location.pathname}`}>
+                <Link to={`/${params.year}/${params.region}/${params.country}`}>
                   {geographies.country}
                 </Link>
               </h3>
