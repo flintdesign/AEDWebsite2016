@@ -52,18 +52,20 @@ class App extends Component {
       showIntro: showIntroOnLoad,
       initialLoad: false,
       getStratumTree: false,
-      selectedInputZoneId: null
+      selectedInputZoneId: null,
+      selectedInputZone: null
     };
   }
 
   componentDidMount() {
+    // NEED VALIDATION - VERIFY AND/OR SEND TO 404
     // FETCH INITIAL DATA FOR MAP AND DATA
     this.fetchData(this.props, true);
     // FETCH ALL RANGES
-    fetchRanges('known', this.props.dispatch);
-    fetchRanges('possible', this.props.dispatch);
-    fetchRanges('protected', this.props.dispatch);
-    fetchRanges('doubtful', this.props.dispatch);
+    // fetchRanges('known', this.props.dispatch);
+    // fetchRanges('possible', this.props.dispatch);
+    // fetchRanges('protected', this.props.dispatch);
+    // fetchRanges('doubtful', this.props.dispatch);
     // URL QUERIES TO CONTROL STATE
     if (this.props.location.query.sidebar_state) {
       const requestedState = parseInt(this.props.location.query.sidebar_state, 10);
@@ -109,6 +111,7 @@ class App extends Component {
       this.setState({ selectedInputZoneId: location.query.input_zone });
     } else {
       this.setState({ selectedInputZoneId: null });
+      this.setState({ selectedInputZone: null });
     }
   }
 
@@ -184,7 +187,8 @@ class App extends Component {
       location,
       params
     } = props;
-
+    // has the route  changed in relation
+    // to the current state regarding geography(data)
     if (force || (routeGeography !== currentGeography && !loading)) {
       fetchGeography(
         dispatch,
@@ -247,7 +251,7 @@ class App extends Component {
       routeGeographyId,
       selectedStratum
     } = this.props;
-    // DETERMINE WHICH TOTAL FROM ESTIMATES TO DISPLAY
+    // DETERMINE WHICH ESTIMATE TOTAL TO DISPLAY
     let finalTotalEstimate = totalEstimate;
     let finalTotalConfidence = '';
     if (geographies.summary_sums) {
@@ -261,8 +265,8 @@ class App extends Component {
     }
     // DETERMINE WHETHER AN INPUT ZONE IS SELECTED
     let selectedZone;
-    if (this.state.selectedInputZoneId && geographies.input_zones) {
-      selectedZone = find(geographies.input_zones, z => {
+    if (this.state.selectedInputZoneId && subGeographyData.length) {
+      selectedZone = find(subGeographyData, z => {
         const zone = slugify(z.name) === this.state.selectedInputZoneId;
         return zone;
       });

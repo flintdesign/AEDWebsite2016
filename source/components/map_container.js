@@ -43,6 +43,17 @@ class MapContainer extends Component {
     this.setState({
       geoJSONData: nextProps.subGeographyData.map(this.setGeoJSON),
     });
+    if (nextProps.selectedInputZone) {
+      if (!this.props.selectedInputZone) {
+        this.combineAndUpdateBounds(nextProps.selectedInputZone.geometries);
+      } else {
+        if (nextProps.selectedInputZone.id !== this.props.selectedInputZone.id) {
+          const allCoords = nextProps.selectedInputZone.geometries.map(z => z.coordinates);
+          const coordData = getCoordData(allCoords.map(flatten));
+          this.props.updateBounds(coordData.bounds);
+        }
+      }
+    }
   }
 
   onZoomEnd(e) {
@@ -69,6 +80,7 @@ class MapContainer extends Component {
     } else {
       obj = { ...data,
         id: data.id,
+        type: data.type,
         center: coordData.center,
         bounds: coordData.bounds,
       };
@@ -94,6 +106,12 @@ class MapContainer extends Component {
         />
       );
     });
+  }
+
+  combineAndUpdateBounds(geometries) {
+    const allCoords = geometries.map(z => z.coordinates);
+    const coordData = getCoordData(allCoords.map(flatten));
+    this.props.updateBounds(coordData.bounds);
   }
 
   realignMap(timing = 1000, animate = true) {
@@ -174,6 +192,10 @@ class MapContainer extends Component {
         if (self.props.routeGeography === 'country' && datum.region) {
           geoJSONClassName = `region-${slugify(datum.region)}__stratum`;
           objectHref = `/${slugify(datum.name)}-${datum.id}`;
+        }
+        if (datum.geoType === 'input_zone') {
+          geoJSONClassName = `region-${slugify(datum.region)}__stratum`;
+          objectHref = `?input_zone=${slugify(datum.name)}`;
         }
         if (datum.geoType === 'region' && datum.coordinates && self.props.routeGeography === 'continent' && self.props.currentGeography === 'continent') {
           const icon = divIcon({
@@ -281,28 +303,38 @@ class MapContainer extends Component {
     }
 
     if (this.props.selectedInputZone) {
-      this.props.selectedInputZone.strata.forEach((stratum) => {
-        const stratumObj = find(this.props.subGeographyData, s => s.strcode === stratum.strcode);
-        if (stratumObj) {
-          const stratumObjCoords = stratumObj.coordinates.map(flatten);
-          const stratumObjCoordData = getCoordData(stratumObjCoords);
-          selectedStratumObjs.push(
-            <GeoJson
-              key={`/${slugify(stratumObj.stratum)}-${stratumObj.strcode}-input_zone`}
-              data={stratumObj}
-              className={`region-${slugify(stratumObj.region)}__stratum active active-zone`}
-              onMouseOver={this.handleMouseover}
-              onMouseOut={this.handleMouseout}
-              center={stratumObjCoordData.center}
-              bounds={stratumObjCoordData.bounds}
-              name={stratumObj.name}
-              region={slugify(stratumObj.region)}
-              estimate={stratumObj.estimate}
-              confidence={formatNumber(stratumObj.lcl95)}
-            />
-          );
-        }
-      });
+      const zGeo = find(this.props.subGeographyData, z => z.id === this.props.selectedInputZone.id);
+      if (zGeo) {
+        selectedStratumObjs.push(
+          <GeoJson
+            key={`/${slugify(zGeo.name)}-${zGeo.id}-input_zone`}
+            data={zGeo}
+            className={`region-${slugify(zGeo.region)}__stratum active active-zone`}
+          />
+        );
+      }
+      // this.props.selectedInputZone.strata.forEach((stratum) => {
+      //   const stratumObj = find(this.props.subGeographyData, s => s.strcode === stratum.strcode);
+      //   if (stratumObj) {
+      //     const stratumObjCoords = stratumObj.coordinates.map(flatten);
+      //     const stratumObjCoordData = getCoordData(stratumObjCoords);
+      //     selectedStratumObjs.push(
+      //       <GeoJson
+      //         key={`/${slugify(stratumObj.stratum)}-${stratumObj.strcode}-input_zone`}
+      //         data={stratumObj}
+      //         className={`region-${slugify(stratumObj.region)}__stratum active active-zone`}
+      //         onMouseOver={this.handleMouseover}
+      //         onMouseOut={this.handleMouseout}
+      //         center={stratumObjCoordData.center}
+      //         bounds={stratumObjCoordData.bounds}
+      //         name={stratumObj.name}
+      //         region={slugify(stratumObj.region)}
+      //         estimate={stratumObj.estimate}
+      //         confidence={formatNumber(stratumObj.lcl95)}
+      //       />
+      //     );
+      //   }
+      // });
     }
 
     if (this.props.border.coordinates && !this.props.loading && this.props.canInput) {

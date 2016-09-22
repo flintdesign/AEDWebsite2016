@@ -329,6 +329,7 @@ export function fetchGeography(dispatch, type, slug, year, count) {
       if (d[pluralize(subType)]) {
         dispatch({ type: FETCH_SUBGEOGRAPHY_DATA });
         let subGeoList = d[pluralize(subType)];
+        //IF INPUT ZONES
         if (subType === 'input_zone') {
           subGeoList = d[pluralize(subType)].filter(z => `${z.analysis_year}` === year);
           const firstStratum = d.strata[0];
