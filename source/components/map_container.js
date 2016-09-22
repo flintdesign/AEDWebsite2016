@@ -5,14 +5,15 @@ import {
   TileLayer,
   Marker,
   GeoJson,
-  ZoomControl
+  ZoomControl,
+  LayerGroup
 } from 'react-leaflet';
 import { divIcon, latLng, popup } from 'leaflet';
 import config from '../config';
 import { getCoordData, getLabelPosition } from '../utils/geo_funcs';
 import { formatNumber } from '../utils/format_utils.js';
 import keys from 'lodash.keys';
-import find from 'lodash.find';
+// import find from 'lodash.find';
 import {
   flatten,
   slugify,
@@ -24,6 +25,8 @@ class MapContainer extends Component {
   constructor(props, context) {
     super(props, context);
     this.handleClick = this.handleClick.bind(this);
+    this.handleHover = this.handleHover.bind(this);
+    this.handleHoverOut = this.handleHoverOut.bind(this);
     this.handleAdjacentClick = this.handleAdjacentClick.bind(this);
     this.handleMouseover = this.handleMouseover.bind(this);
     this.handleMouseout = this.handleMouseout.bind(this);
@@ -43,6 +46,17 @@ class MapContainer extends Component {
     this.setState({
       geoJSONData: nextProps.subGeographyData.map(this.setGeoJSON),
     });
+    if (nextProps.selectedInputZone) {
+      if (!this.props.selectedInputZone) {
+        this.combineAndUpdateBounds(nextProps.selectedInputZone.geometries);
+      } else {
+        if (nextProps.selectedInputZone.id !== this.props.selectedInputZone.id) {
+          const allCoords = nextProps.selectedInputZone.geometries.map(z => z.coordinates);
+          const coordData = getCoordData(allCoords.map(flatten));
+          this.props.updateBounds(coordData.bounds);
+        }
+      }
+    }
   }
 
   onZoomEnd(e) {
@@ -69,6 +83,7 @@ class MapContainer extends Component {
     } else {
       obj = { ...data,
         id: data.id,
+        type: data.type,
         center: coordData.center,
         bounds: coordData.bounds,
       };
@@ -94,6 +109,12 @@ class MapContainer extends Component {
         />
       );
     });
+  }
+
+  combineAndUpdateBounds(geometries) {
+    const allCoords = geometries.map(z => z.coordinates);
+    const coordData = getCoordData(allCoords.map(flatten));
+    this.props.updateBounds(coordData.bounds);
   }
 
   realignMap(timing = 1000, animate = true) {
@@ -122,6 +143,24 @@ class MapContainer extends Component {
     this.props.cancelSearch();
   }
 
+  handleHover(e) {
+    const slug = e.target.options.slug;
+    const panes = this.refs.map.leafletElement.getPanes();
+    const marker = panes.markerPane.getElementsByClassName(slug);
+    if (marker && marker.length) {
+      marker[0].className += ' active';
+    }
+  }
+
+  handleHoverOut(e) {
+    const slug = e.target.options.slug;
+    const panes = this.refs.map.leafletElement.getPanes();
+    const marker = panes.markerPane.getElementsByClassName(slug);
+    if (marker && marker.length) {
+      marker[0].className = marker[0].className.replace(' active', '');
+    }
+  }
+
   handleMouseout() {
     this.refs.map.leafletElement.closePopup();
   }
@@ -137,20 +176,21 @@ class MapContainer extends Component {
       confidence
     } = target.options;
     const popupHtml = `<div class='stratum-popup__container'>
-      <span class='stratum-popup__estimate-confidence'>
+      <span class='stratum-popup__estimate-confidence hidden'>
         ${estimate}<em>&nbsp;&plusmn;&nbsp;${confidence}</em>
       </span>
       <span class='stratum-popup__name'>
         ${name}
       </span>
       </div>`;
+    const popupPosition = latLng(bounds[1][0], center[1]);
     popup({
       minWidth: 150,
       closeButton: false,
       autoPan: false,
       className: `stratum-popup stratum-popup--${region}`
     })
-      .setLatLng(latLng(bounds[1][0], center[1]))
+      .setLatLng(popupPosition)
       .setContent(popupHtml)
       .openOn(this.refs.map.leafletElement);
   }
@@ -174,6 +214,10 @@ class MapContainer extends Component {
         if (self.props.routeGeography === 'country' && datum.region) {
           geoJSONClassName = `region-${slugify(datum.region)}__stratum`;
           objectHref = `/${slugify(datum.name)}-${datum.id}`;
+        }
+        if (datum.geoType === 'input_zone') {
+          geoJSONClassName = `region-${slugify(datum.region)}__stratum`;
+          objectHref = `/${slugify(datum.name)}`;
         }
         if (datum.geoType === 'region' && datum.coordinates && self.props.routeGeography === 'continent' && self.props.currentGeography === 'continent') {
           const icon = divIcon({
@@ -211,6 +255,40 @@ class MapContainer extends Component {
               onMouseOver={self.handleMouseover}
               onMouseOut={self.handleMouseout}
             / >
+          );
+        } else if (datum.geoType === 'input_zone') {
+          const datumCoords = datum.geometries.map(z => z.coordinates);
+          const datumCoordData = getCoordData(datumCoords.map(flatten));
+          geoJSONObjs.push(
+            <GeoJson
+              key={`${datum.id}_${slugify(datum.name || '')}`}
+              href={objectHref}
+              data={datum}
+              className={geoJSONClassName}
+              onClick={self.handleClick}
+              center={datumCoordData.center}
+              bounds={datumCoordData.bounds}
+              name={datum.name}
+              region={slugify(datum.region)}
+              estimate={datum.population_estimate}
+              confidence={formatNumber(datum.percent_cl)}
+              onMouseOver={self.handleMouseover}
+              onMouseOut={self.handleMouseout}
+            />
+          );
+        } else if (datum.geoType === 'region') {
+          geoJSONObjs.push(
+            <GeoJson
+              key={`${datum.id}_${slugify(datum.name || '')}`}
+              href={objectHref}
+              data={datum}
+              className={geoJSONClassName}
+              slug={slugify(datum.name)}
+              onClick={self.handleClick}
+              bounds={datum.bounds}
+              onMouseOver={self.handleHover}
+              onMouseOut={self.handleHoverOut}
+            />
           );
         } else {
           geoJSONObjs.push(
@@ -281,28 +359,50 @@ class MapContainer extends Component {
     }
 
     if (this.props.selectedInputZone) {
-      this.props.selectedInputZone.strata.forEach((stratum) => {
-        const stratumObj = find(this.props.subGeographyData, s => s.strcode === stratum.strcode);
-        if (stratumObj) {
-          const stratumObjCoords = stratumObj.coordinates.map(flatten);
-          const stratumObjCoordData = getCoordData(stratumObjCoords);
-          selectedStratumObjs.push(
+      const zGeo = this.props.selectedInputZone;
+      const allCoords = this.props.selectedInputZone.geometries.map(z => z.coordinates);
+      const coordData = getCoordData(allCoords.map(flatten));
+      if (zGeo) {
+        selectedStratumObjs.push(
+          <LayerGroup key={'/${slugify(zGeo.name)}-${zGeo.id}-input_zone-group'} ref="selectedZoneLayer">
             <GeoJson
-              key={`/${slugify(stratumObj.stratum)}-${stratumObj.strcode}-input_zone`}
-              data={stratumObj}
-              className={`region-${slugify(stratumObj.region)}__stratum active active-zone`}
+              key={`/${slugify(zGeo.name)}-${zGeo.id}-input_zone`}
+              data={zGeo}
+              className={`region-${slugify(zGeo.region)}__stratum active active-zone`}
               onMouseOver={this.handleMouseover}
               onMouseOut={this.handleMouseout}
-              center={stratumObjCoordData.center}
-              bounds={stratumObjCoordData.bounds}
-              name={stratumObj.name}
-              region={slugify(stratumObj.region)}
-              estimate={stratumObj.estimate}
-              confidence={formatNumber(stratumObj.lcl95)}
+              center={coordData.center}
+              bounds={coordData.bounds}
+              name={zGeo.name}
+              region={slugify(zGeo.region)}
+              estimate={zGeo.population_estimate}
+              confidence={formatNumber(zGeo.percent_cl)}
             />
-          );
-        }
-      });
+          </LayerGroup>
+        );
+      }
+      // this.props.selectedInputZone.strata.forEach((stratum) => {
+      //   const stratumObj = find(this.props.subGeographyData, s => s.strcode === stratum.strcode);
+      //   if (stratumObj) {
+      //     const stratumObjCoords = stratumObj.coordinates.map(flatten);
+      //     const stratumObjCoordData = getCoordData(stratumObjCoords);
+      //     selectedStratumObjs.push(
+      //       <GeoJson
+      //         key={`/${slugify(stratumObj.stratum)}-${stratumObj.strcode}-input_zone`}
+      //         data={stratumObj}
+      //         className={`region-${slugify(stratumObj.region)}__stratum active active-zone`}
+              // onMouseOver={this.handleMouseover}
+              // onMouseOut={this.handleMouseout}
+              // center={stratumObjCoordData.center}
+              // bounds={stratumObjCoordData.bounds}
+              // name={stratumObj.name}
+              // region={slugify(stratumObj.region)}
+              // estimate={stratumObj.estimate}
+              // confidence={formatNumber(stratumObj.lcl95)}
+      //       />
+      //     );
+      //   }
+      // });
     }
 
     if (this.props.border.coordinates && !this.props.loading && this.props.canInput) {
@@ -324,7 +424,7 @@ class MapContainer extends Component {
       <Map
         bounds={this.props.bounds}
         minZoom={4}
-        maxZoom={9}
+        maxZoom={8}
         onZoomEnd={this.onZoomEnd}
         onClick={this.props.cancelSearch}
         ref="map"

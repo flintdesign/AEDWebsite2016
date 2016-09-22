@@ -46,12 +46,13 @@ render((
       <Route path={'/references'} component={References} />
       <Route path={'/errata-2016'} component={Errata2016} />
       <Route path={'/darp'} component={DARP} />
+      <Route path={'/404'} component={ErrorPage} />
       <Route path={'/'} component={App}>
         // Yep, this is annoying. Stop React Router Link
         // from adding a trailing slash.
         <Redirect from="/*/" to="/*" />
         <IndexRedirect to="/2015" />
-        <Route path={'/:year(/:region)(/:country)(/:stratum)'} component={MapContainer} />
+        <Route path={'/:year(/:region)(/:country)(/:input_zone)'} component={MapContainer} />
       </Route>
       <Route path="*" component={ErrorPage} />
     </Router>

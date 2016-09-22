@@ -312,7 +312,9 @@ path
 .stratum-popup
   border-radius none
   opacity 0.85 !important
-  top -70px
+  border none
+  // top -1px
+  // top -70px
   &__estimate-confidence
     display block
     font-family 'acumin-pro-condensed', sans-serif
@@ -324,6 +326,10 @@ path
     em
       font-size 50%
       font-style normal
+    
+    &.hidden
+      display none 
+  
   &__name
     display block
     font-family 'acumin-pro', Helvetica, sans-serif
@@ -337,6 +343,10 @@ path
     color $white
     padding-top 1px
     text-align center 
+    border none
+  
+  .leaflet-popup-tip-container
+    top -1px
     
   &--eastern-africa
     .leaflet-popup-content-wrapper, .leaflet-popup-tip
@@ -350,3 +360,24 @@ path
   &--southern-africa
     .leaflet-popup-content-wrapper, .leaflet-popup-tip
       background-color $southern-africa
+
+.leaflet-marker-icon
+  &.west-africa
+    transition opacity 200ms ease-in-out
+    opacity 0
+    pointer-events none
+  &.southern-africa
+    transition opacity 200ms ease-in-out
+    opacity 0
+    pointer-events none
+  &.eastern-africa
+    transition opacity 200ms ease-in-out
+    opacity 0
+    pointer-events none
+  &.central-africa
+    transition opacity 200ms ease-in-out
+    opacity 0
+    pointer-events none
+  &.active
+    opacity 1
+  
