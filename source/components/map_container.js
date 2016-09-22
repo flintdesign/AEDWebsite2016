@@ -235,6 +235,26 @@ class MapContainer extends Component {
               onMouseOut={self.handleMouseout}
             / >
           );
+        } else if (datum.geoType === 'input_zone') {
+          const datumCoords = datum.geometries.map(z => z.coordinates);
+          const datumCoordData = getCoordData(datumCoords.map(flatten));
+          geoJSONObjs.push(
+            <GeoJson
+              key={`${datum.id}_${slugify(datum.name || '')}`}
+              href={objectHref}
+              data={datum}
+              className={geoJSONClassName}
+              onClick={self.handleClick}
+              center={datumCoordData.center}
+              bounds={datumCoordData.bounds}
+              name={datum.name}
+              region={slugify(datum.region)}
+              estimate={datum.population_estimate}
+              confidence={formatNumber(datum.percent_cl)}
+              onMouseOver={self.handleMouseover}
+              onMouseOut={self.handleMouseout}
+            />
+          );
         } else {
           geoJSONObjs.push(
             <GeoJson
@@ -305,6 +325,8 @@ class MapContainer extends Component {
 
     if (this.props.selectedInputZone) {
       const zGeo = this.props.selectedInputZone;
+      const allCoords = this.props.selectedInputZone.geometries.map(z => z.coordinates);
+      const coordData = getCoordData(allCoords.map(flatten));
       if (zGeo) {
         selectedStratumObjs.push(
           <LayerGroup key={'/${slugify(zGeo.name)}-${zGeo.id}-input_zone-group'} ref="selectedZoneLayer">
@@ -312,6 +334,14 @@ class MapContainer extends Component {
               key={`/${slugify(zGeo.name)}-${zGeo.id}-input_zone`}
               data={zGeo}
               className={`region-${slugify(zGeo.region)}__stratum active active-zone`}
+              onMouseOver={this.handleMouseover}
+              onMouseOut={this.handleMouseout}
+              center={coordData.center}
+              bounds={coordData.bounds}
+              name={zGeo.name}
+              region={slugify(zGeo.region)}
+              estimate={zGeo.population_estimate}
+              confidence={formatNumber(zGeo.percent_cl)}
             />
           </LayerGroup>
         );
@@ -326,14 +356,14 @@ class MapContainer extends Component {
       //         key={`/${slugify(stratumObj.stratum)}-${stratumObj.strcode}-input_zone`}
       //         data={stratumObj}
       //         className={`region-${slugify(stratumObj.region)}__stratum active active-zone`}
-      //         onMouseOver={this.handleMouseover}
-      //         onMouseOut={this.handleMouseout}
-      //         center={stratumObjCoordData.center}
-      //         bounds={stratumObjCoordData.bounds}
-      //         name={stratumObj.name}
-      //         region={slugify(stratumObj.region)}
-      //         estimate={stratumObj.estimate}
-      //         confidence={formatNumber(stratumObj.lcl95)}
+              // onMouseOver={this.handleMouseover}
+              // onMouseOut={this.handleMouseout}
+              // center={stratumObjCoordData.center}
+              // bounds={stratumObjCoordData.bounds}
+              // name={stratumObj.name}
+              // region={slugify(stratumObj.region)}
+              // estimate={stratumObj.estimate}
+              // confidence={formatNumber(stratumObj.lcl95)}
       //       />
       //     );
       //   }
@@ -359,7 +389,7 @@ class MapContainer extends Component {
       <Map
         bounds={this.props.bounds}
         minZoom={4}
-        maxZoom={8}
+        maxZoom={9}
         onZoomEnd={this.onZoomEnd}
         onClick={this.props.cancelSearch}
         ref="map"

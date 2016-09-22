@@ -58,11 +58,12 @@ export const replaceURLPart = (pathname, slug) => {
     case 3:
     case 4:
       // year, region, country; add stratum/zone
-      url += `/${urlParts[1]}/${urlParts[2]}/${_slug}`;
+      url += `/${urlParts[1]}/${urlParts[2]}${_slug}`;
       break;
     default:
       url = `/${urlParts[0]}`;
   }
+  console.log(url);
   return url;
 };
 

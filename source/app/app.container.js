@@ -9,13 +9,20 @@ import Intro from '../components/pages/intro';
 import TotalCount from '../components/total_count';
 import ErrorPage from '../components/pages/404';
 import find from 'lodash.find';
-import { getEntityName, getGeoFromId, flatten, slugify } from '../utils/convenience_funcs';
+import {
+  getEntityName,
+  getGeoFromId,
+  flatten,
+  slugify,
+  mapSlugToId
+} from '../utils/convenience_funcs';
 import { formatNumber } from '../utils/format_utils';
 import { getCoordData } from '../utils/geo_funcs';
 import {
   fetchGeography,
   fetchRanges,
-  fetchAdjacentGeography
+  fetchAdjacentGeography,
+  fetchBounds
 } from '../api';
 import {
   toggleSearch,
@@ -93,7 +100,7 @@ class App extends Component {
       if (location.query.count_type !== props.location.query.count_type) {
         this.fetchData(newProps, true);
       } else if (location.pathname !== props.location.pathname
-        && !params.stratum) {
+        && (!params.stratum || !location.query.input_zone)) {
         this.fetchData(newProps, true);
       } else {
         this.fetchData(newProps, false);
@@ -112,6 +119,12 @@ class App extends Component {
     } else {
       this.setState({ selectedInputZoneId: null });
       this.setState({ selectedInputZone: null });
+    }
+    if (!location.query.input_zone && props.location.query.input_zone) {
+      if (location.pathname === props.location.pathname) {
+        const id = mapSlugToId(this.props.routeGeographyId);
+        fetchBounds(this.props.dispatch, this.props.routeGeography, id);
+      }
     }
   }
 

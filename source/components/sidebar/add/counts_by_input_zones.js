@@ -26,7 +26,7 @@ export default function CountsByInputZones(props) {
     const titleMarkup = (
       <div className="subgeography__input-zone">
         <SidebarMapLink
-          path={`${basePathForLinks}/?input_zone=${slugify(zone.name)}`}
+          path={`${basePathForLinks}?input_zone=${slugify(zone.name)}`}
           label={`${zone.name}`}
         />
         <span className="subgeography-summary">
@@ -43,7 +43,7 @@ export default function CountsByInputZones(props) {
     );
     let childMarkup;
     if (zone.strata.length === 1 && zone.strata[0].stratum === zone.name) {
-      childMarkup = '';
+      childMarkup = [];
     } else {
       childMarkup = zone.strata.map((stratum, si) => (
         <tr key={si}>

@@ -113,7 +113,7 @@ export function loadSubGeography(dispatch, data, subGeoType) {
   });
 }
 
-function fetchBounds(dispatch, geoType, mappedId) {
+export function fetchBounds(dispatch, geoType, mappedId) {
   // look up in cache first
   const cacheKey = `${geoType}-${mappedId}`;
   const cacheResponse = cache.get(cacheKey);
