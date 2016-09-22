@@ -27,7 +27,7 @@ export default function InputZoneSidebar(props) {
     <tr key={`${zone.id}`}>
       <td className="subgeography-totals__subgeography-name">
         <SidebarMapLink
-          path={`${basePathForLinks}?input_zone=${slugify(zone.name)}`}
+          path={`${basePathForLinks}/${slugify(zone.name)}`}
           label={`${zone.name}`}
         />
       </td>
@@ -52,10 +52,7 @@ export default function InputZoneSidebar(props) {
     inputZoneTableList.push(
       <tr key={`${zone.id}-${stratum.strcode}`}>
         <td className="subgeography-totals__subgeography-name" style={ { paddingLeft: '50px' } }>
-          <SidebarMapLink
-            path={`${basePathForLinks}/${slugify(stratum.stratum)}-${stratum.strcode}`}
-            label={`${stratum.stratum}`}
-          />
+          {stratum.stratum}
         </td>
         <td className="td-left">{stratum.rc}</td>
         <td className="td-left">{stratum.est_type}</td>

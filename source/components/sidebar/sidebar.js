@@ -87,7 +87,8 @@ class Sidebar extends Component {
       error,
       selectedStratum,
       selectedInputZone,
-      params
+      params,
+      countType
     } = this.props;
     const years = ['2015'];
     const yearLinks = years.map(y => {
@@ -135,6 +136,10 @@ class Sidebar extends Component {
     if (currentGeography === 'country') {
       totalsTitle = 'Input Zone Totals';
     }
+    let backToCountryLink = `/${params.year}/${params.region}/${params.country}`;
+    if (countType && countType === 'DPPS') {
+      backToCountryLink += `?count_type=${countType}`;
+    }
     return (
       <aside className={sidebarClasses[sidebarState]}>
         <section className={`sidebar__inner ${sidebarInnerClassName}`}>
@@ -147,7 +152,7 @@ class Sidebar extends Component {
             <h1 className={`sidebar__entity-name ${selectedStratum ? ' sidebar__entity-name--stratum' : ''}`}>
               {selectedStratum &&
                 <Link
-                  to={`/${params.year}/${params.region}/${params.country}`}
+                  to={`${backToCountryLink}`}
                   className="sidebar__entity-name__back"
                   title={`Back to ${geographies.country}`}
                   dangerouslySetInnerHTML={{ __html: '&larr;' }}
@@ -159,7 +164,7 @@ class Sidebar extends Component {
           {selectedInputZone &&
             <h1 className="sidebar__entity-name sidebar__entity-name--input-zone">
               <Link
-                to={`/${params.year}/${params.region}/${params.country}`}
+                to={`${backToCountryLink}`}
                 className="sidebar__entity-name__back"
                 title={`Back to ${geographies.country}`}
                 dangerouslySetInnerHTML={{ __html: '&larr;' }}
@@ -181,7 +186,7 @@ class Sidebar extends Component {
             <div>
               <h3 className="sidebar__entity-input-zone-subtitle">
                 Input Zone in&nbsp;
-                <Link to={`${location.pathname}`}>
+                <Link to={`/${params.year}/${params.region}/${params.country}`}>
                   {geographies.country}
                 </Link>
               </h3>
@@ -264,6 +269,7 @@ class Sidebar extends Component {
               currentGeography={currentGeography}
               sidebarState={sidebarState}
               params={params}
+              location={location}
             />
           }
 

@@ -1,3 +1,4 @@
+/* eslint max-len: [0] */
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Nav from '../components/nav/nav';
@@ -9,13 +10,20 @@ import Intro from '../components/pages/intro';
 import TotalCount from '../components/total_count';
 import ErrorPage from '../components/pages/404';
 import find from 'lodash.find';
-import { getEntityName, getGeoFromId, flatten, slugify } from '../utils/convenience_funcs';
+import {
+  getEntityName,
+  getGeoFromId,
+  flatten,
+  slugify,
+  mapSlugToId
+} from '../utils/convenience_funcs';
 import { formatNumber } from '../utils/format_utils';
 import { getCoordData } from '../utils/geo_funcs';
 import {
   fetchGeography,
   fetchRanges,
-  fetchAdjacentGeography
+  fetchAdjacentGeography,
+  fetchBounds
 } from '../api';
 import {
   toggleSearch,
@@ -52,18 +60,20 @@ class App extends Component {
       showIntro: showIntroOnLoad,
       initialLoad: false,
       getStratumTree: false,
-      selectedInputZoneId: null
+      selectedInputZoneId: null,
+      selectedInputZone: null
     };
   }
 
   componentDidMount() {
+    // NEED VALIDATION - VERIFY AND/OR SEND TO 404
     // FETCH INITIAL DATA FOR MAP AND DATA
     this.fetchData(this.props, true);
     // FETCH ALL RANGES
-    fetchRanges('known', this.props.dispatch);
-    fetchRanges('possible', this.props.dispatch);
-    fetchRanges('protected', this.props.dispatch);
-    fetchRanges('doubtful', this.props.dispatch);
+    // fetchRanges('known', this.props.dispatch);
+    // fetchRanges('possible', this.props.dispatch);
+    // fetchRanges('protected', this.props.dispatch);
+    // fetchRanges('doubtful', this.props.dispatch);
     // URL QUERIES TO CONTROL STATE
     if (this.props.location.query.sidebar_state) {
       const requestedState = parseInt(this.props.location.query.sidebar_state, 10);
@@ -91,8 +101,13 @@ class App extends Component {
       if (location.query.count_type !== props.location.query.count_type) {
         this.fetchData(newProps, true);
       } else if (location.pathname !== props.location.pathname
-        && !params.stratum) {
-        this.fetchData(newProps, true);
+        && !params.input_zone) {
+        if (this.props.params.input_zone && params.country && this.props.params.country === params.country) {
+          const id = mapSlugToId(this.props.routeGeographyId);
+          fetchBounds(this.props.dispatch, this.props.routeGeography, id);
+        } else {
+          this.fetchData(newProps, true);
+        }
       } else {
         this.fetchData(newProps, false);
       }
@@ -105,10 +120,17 @@ class App extends Component {
     if (!params.stratum && props.params.stratum) {
       this.selectStratum(null);
     }
-    if (location.query.input_zone) {
-      this.setState({ selectedInputZoneId: location.query.input_zone });
+    if (params.input_zone) {
+      this.setState({ selectedInputZoneId: params.input_zone });
     } else {
       this.setState({ selectedInputZoneId: null });
+      this.setState({ selectedInputZone: null });
+    }
+    if (!params.input_zone && this.props.params.input_zone) {
+      if (location.pathname === props.location.pathname) {
+        const id = mapSlugToId(this.props.routeGeographyId);
+        fetchBounds(this.props.dispatch, this.props.routeGeography, id);
+      }
     }
   }
 
@@ -184,7 +206,8 @@ class App extends Component {
       location,
       params
     } = props;
-
+    // has the route  changed in relation
+    // to the current state regarding geography(data)
     if (force || (routeGeography !== currentGeography && !loading)) {
       fetchGeography(
         dispatch,
@@ -247,8 +270,11 @@ class App extends Component {
       routeGeographyId,
       selectedStratum
     } = this.props;
-    // DETERMINE WHICH TOTAL FROM ESTIMATES TO DISPLAY
-    let finalTotalEstimate = totalEstimate;
+    // DETERMINE WHICH ESTIMATE TOTAL TO DISPLAY
+    let finalTotalEstimate = '';
+    if (!this.state.selectedInputZoneId) {
+      finalTotalEstimate = totalEstimate;
+    }
     let finalTotalConfidence = '';
     if (geographies.summary_sums) {
       finalTotalConfidence = geographies.summary_sums[0].CONFIDENCE;
@@ -261,9 +287,10 @@ class App extends Component {
     }
     // DETERMINE WHETHER AN INPUT ZONE IS SELECTED
     let selectedZone;
-    if (this.state.selectedInputZoneId && geographies.input_zones) {
-      selectedZone = find(geographies.input_zones, z => {
-        const zone = slugify(z.name) === this.state.selectedInputZoneId;
+    if (this.state.selectedInputZoneId && subGeographyData.length) {
+      selectedZone = find(subGeographyData, z => {
+        const zName = slugify(z.name).replace(/%2F/g, '/');
+        const zone = zName === this.state.selectedInputZoneId;
         return zone;
       });
     }
@@ -359,7 +386,7 @@ class App extends Component {
           selectedStratum={selectedStratum}
           selectedInputZone={selectedZone}
         />
-        {totalEstimate &&
+        {totalEstimate && finalTotalEstimate !== '' && canInput && !loading &&
           <TotalCount
             entity={getEntityName(location, params)}
             count={formatNumber(finalTotalEstimate)}

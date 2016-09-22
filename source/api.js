@@ -113,7 +113,7 @@ export function loadSubGeography(dispatch, data, subGeoType) {
   });
 }
 
-function fetchBounds(dispatch, geoType, mappedId) {
+export function fetchBounds(dispatch, geoType, mappedId) {
   // look up in cache first
   const cacheKey = `${geoType}-${mappedId}`;
   const cacheResponse = cache.get(cacheKey);
@@ -172,7 +172,7 @@ function fetchAdjacentGeoJSON(type, item) {
   if (type === 'country') {
     region = regionById(item.region_id).className;
   }
-  return fetch(`${config.apiBaseURL}/${type}/${id}/geojson_map?simplify=0.3`)
+  return fetch(`${config.apiBaseURL}/${type}/${id}/geojson_map`)
   .then(r => r.json())
   .then(d => {
     const coords = d.coordinates.map(flatten);
@@ -329,6 +329,7 @@ export function fetchGeography(dispatch, type, slug, year, count) {
       if (d[pluralize(subType)]) {
         dispatch({ type: FETCH_SUBGEOGRAPHY_DATA });
         let subGeoList = d[pluralize(subType)];
+        //IF INPUT ZONES
         if (subType === 'input_zone') {
           subGeoList = d[pluralize(subType)].filter(z => `${z.analysis_year}` === year);
           const firstStratum = d.strata[0];
