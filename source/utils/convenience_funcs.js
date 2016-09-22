@@ -23,8 +23,8 @@ export const pluralize = word => {
 
 export const capitalize = word => `${word[0].toUpperCase()}${word.split('').splice(1).join('')}`;
 // Have to call compact because the slug of some regions has two hyphens (parc-national--du-faro)
-export const titleize = str => compact(str.split('-')).map(word => capitalize(word)).join(' ').replace('%2F', '/');
-export const slugify = str => str.toLowerCase().split(' ').join('-').replace('/', '%2F');
+export const titleize = str => compact(str.split('-')).map(word => capitalize(word)).join(' ').replace(/%2F/g, '/');
+export const slugify = str => str.toLowerCase().split(' ').join('-').replace(/\//g, '%2F');
 
 export const titleizeStratum = (p) => {
   const titleParts = p.split('-');

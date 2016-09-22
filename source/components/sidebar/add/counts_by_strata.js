@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { formatNumber } from '../../../utils/format_utils.js';
-import { slugify } from '../../../utils/convenience_funcs.js';
+// import { slugify } from '../../../utils/convenience_funcs.js';
 import { SIDEBAR_FULL } from '../../../constants';
 
 const SidebarMapLink = ({ label, path }) => (
@@ -18,8 +18,13 @@ SidebarMapLink.propTypes = {
 };
 
 export default function CountsByStrata(props) {
-  const { strata, params, sidebarState, title } = props;
-  const basePathForLinks = `/${params.year}/${params.region}/${params.country}`;
+  const {
+    strata,
+    // params,
+    sidebarState,
+    title
+  } = props;
+  // const basePathForLinks = `/${params.year}/${params.region}/${params.country}`;
   let markup = null;
   if (sidebarState < SIDEBAR_FULL) {
     markup = (
@@ -31,10 +36,7 @@ export default function CountsByStrata(props) {
           <tbody>{strata.map((g, i) => (
             <tr key={i}>
               <td className="subgeography-totals__subgeography-name">
-                <SidebarMapLink
-                  path={`${basePathForLinks}/${slugify(g.stratum)}-${g.strcode}`}
-                  label={g.stratum}
-                />
+                {g.stratum}
                 {'  '}
                 <span>
                   {g.est_type},&nbsp;
@@ -61,10 +63,7 @@ export default function CountsByStrata(props) {
           <tbody>{strata.map((g, i) => (
             <tr key={i}>
               <td className="subgeography-totals__subgeography-name">
-                <SidebarMapLink
-                  path={`${basePathForLinks}/${slugify(g.stratum)}-${g.strcode}`}
-                  label={g.stratum}
-                />
+                {g.stratum}
                 {'  '}
                 <span>{formatNumber(g.area_rep)} km<sup>2</sup></span>
               </td>

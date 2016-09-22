@@ -289,7 +289,8 @@ class App extends Component {
     let selectedZone;
     if (this.state.selectedInputZoneId && subGeographyData.length) {
       selectedZone = find(subGeographyData, z => {
-        const zone = slugify(z.name) === this.state.selectedInputZoneId;
+        const zName = slugify(z.name).replace(/%2F/g, '/');
+        const zone = zName === this.state.selectedInputZoneId;
         return zone;
       });
     }
@@ -385,7 +386,7 @@ class App extends Component {
           selectedStratum={selectedStratum}
           selectedInputZone={selectedZone}
         />
-        {totalEstimate && finalTotalEstimate !== '' &&
+        {totalEstimate && finalTotalEstimate !== '' && canInput && !loading &&
           <TotalCount
             entity={getEntityName(location, params)}
             count={formatNumber(finalTotalEstimate)}

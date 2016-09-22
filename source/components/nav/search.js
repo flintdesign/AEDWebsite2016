@@ -32,7 +32,7 @@ const getPathForResult = ({ result, year, data }) => {
       country = result.parent_country.name;
       region = find(countries, c => c.name === country).parent.name;
       slug = slugify(name);
-      path = `/${year}/${slugify(region)}/${slugify(country)}?input_zone=${slug}`;
+      path = `/${year}/${slugify(region)}/${slugify(country)}/${slug}`;
       break;
     default:
       break;

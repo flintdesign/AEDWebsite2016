@@ -20,13 +20,17 @@ SidebarMapLink.propTypes = {
 };
 
 export default function CountsByInputZones(props) {
-  const { inputZones, params, sidebarState, totals, currentYear } = props;
+  const { inputZones, params, sidebarState, totals, currentYear, location } = props;
   const basePathForLinks = `/${params.year}/${params.region}/${params.country}`;
   const inputZonesList = inputZones.map((zone, i) => {
+    let izHref = `${basePathForLinks}/${slugify(zone.name)}`;
+    if (location.query.count_type === 'DPPS') {
+      izHref += '?count_type=DPPS';
+    }
     const titleMarkup = (
       <div className="subgeography__input-zone">
         <SidebarMapLink
-          path={`${basePathForLinks}/${slugify(zone.name)}`}
+          path={izHref}
           label={`${zone.name}`}
         />
         <span className="subgeography-summary">
@@ -41,28 +45,42 @@ export default function CountsByInputZones(props) {
         </div>
       </div>
     );
-    let childMarkup;
-    if (zone.strata.length === 1 && zone.strata[0].stratum === zone.name) {
-      childMarkup = [];
-    } else {
-      childMarkup = zone.strata.map((stratum, si) => (
-        <tr key={si}>
-          <td className="subgeography-totals__subgeography-name">
-            <SidebarMapLink
-              path={`${basePathForLinks}/${slugify(stratum.stratum)}-${stratum.strcode}`}
-              label={`${stratum.stratum}`}
-            />
-            {'  '}
-            <span>{stratum.est_type},&nbsp;{formatNumber(stratum.area_rep)} km<sup>2</sup></span>
-          </td>
-          <td className="subgeography-totals__estimate">
-            {formatNumber(stratum.estimate)}
-            &nbsp;&plusmn;&nbsp;
-            {formatNumber(stratum.lcl95)}
-          </td>
-        </tr>
-      ));
-    }
+    const childMarkup = zone.strata.map((stratum, si) => (
+      <tr key={si}>
+        <td className="subgeography-totals__subgeography-name">
+          {stratum.stratum}
+          {'  '}
+          <span>{stratum.est_type},&nbsp;{formatNumber(stratum.area_rep)} km<sup>2</sup></span>
+        </td>
+        <td className="subgeography-totals__estimate">
+          {formatNumber(stratum.estimate)}
+          &nbsp;&plusmn;&nbsp;
+          {formatNumber(stratum.lcl95)}
+        </td>
+      </tr>
+    ));
+    // let childMarkup;
+    // if (zone.strata.length === 1 && zone.strata[0].stratum === zone.name) {
+    //   childMarkup = [];
+    // } else {
+    //   childMarkup = zone.strata.map((stratum, si) => (
+    //     <tr key={si}>
+    //       <td className="subgeography-totals__subgeography-name">
+    //         <SidebarMapLink
+    //           path={`${basePathForLinks}/${slugify(stratum.stratum)}-${stratum.strcode}`}
+    //           label={`${stratum.stratum}`}
+    //         />
+    //         {'  '}
+    //         <span>{stratum.est_type},&nbsp;{formatNumber(stratum.area_rep)} km<sup>2</sup></span>
+    //       </td>
+    //       <td className="subgeography-totals__estimate">
+    //         {formatNumber(stratum.estimate)}
+    //         &nbsp;&plusmn;&nbsp;
+    //         {formatNumber(stratum.lcl95)}
+    //       </td>
+    //     </tr>
+    //   ));
+    // }
     return (
       <InputZoneToggleTable
         key={i}
@@ -102,10 +120,7 @@ export default function CountsByInputZones(props) {
       inputZoneTableList.push(
         <tr key={`${zone.id}-${stratum.strcode}`}>
           <td className="subgeography-totals__subgeography-name" style={ { paddingLeft: '50px' } }>
-            <SidebarMapLink
-              path={`${basePathForLinks}/${slugify(stratum.stratum)}-${stratum.strcode}`}
-              label={`${stratum.stratum}`}
-            />
+            {stratum.stratum}
           </td>
           <td className="td-left">{stratum.rc}</td>
           <td className="td-left">{stratum.est_type}</td>
@@ -196,6 +211,7 @@ CountsByInputZones.propTypes = {
   inputZones: PropTypes.array,
   sidebarState: PropTypes.number.isRequired,
   params: PropTypes.object,
+  location: PropTypes.object,
   currentYear: PropTypes.string,
   totals: PropTypes.object,
 };

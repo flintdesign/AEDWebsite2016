@@ -86,6 +86,7 @@ export default function ADDSidebar(props) {
             params={params}
             totals={addSummaryData}
             currentYear={year}
+            location={location}
           />
         </div>
       }

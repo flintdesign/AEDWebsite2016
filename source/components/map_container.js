@@ -25,6 +25,8 @@ class MapContainer extends Component {
   constructor(props, context) {
     super(props, context);
     this.handleClick = this.handleClick.bind(this);
+    this.handleHover = this.handleHover.bind(this);
+    this.handleHoverOut = this.handleHoverOut.bind(this);
     this.handleAdjacentClick = this.handleAdjacentClick.bind(this);
     this.handleMouseover = this.handleMouseover.bind(this);
     this.handleMouseout = this.handleMouseout.bind(this);
@@ -141,6 +143,24 @@ class MapContainer extends Component {
     this.props.cancelSearch();
   }
 
+  handleHover(e) {
+    const slug = e.target.options.slug;
+    const panes = this.refs.map.leafletElement.getPanes();
+    const marker = panes.markerPane.getElementsByClassName(slug);
+    if (marker && marker.length) {
+      marker[0].className += ' active';
+    }
+  }
+
+  handleHoverOut(e) {
+    const slug = e.target.options.slug;
+    const panes = this.refs.map.leafletElement.getPanes();
+    const marker = panes.markerPane.getElementsByClassName(slug);
+    if (marker && marker.length) {
+      marker[0].className = marker[0].className.replace(' active', '');
+    }
+  }
+
   handleMouseout() {
     this.refs.map.leafletElement.closePopup();
   }
@@ -156,20 +176,21 @@ class MapContainer extends Component {
       confidence
     } = target.options;
     const popupHtml = `<div class='stratum-popup__container'>
-      <span class='stratum-popup__estimate-confidence'>
+      <span class='stratum-popup__estimate-confidence hidden'>
         ${estimate}<em>&nbsp;&plusmn;&nbsp;${confidence}</em>
       </span>
       <span class='stratum-popup__name'>
         ${name}
       </span>
       </div>`;
+    const popupPosition = latLng(bounds[1][0], center[1]);
     popup({
       minWidth: 150,
       closeButton: false,
       autoPan: false,
       className: `stratum-popup stratum-popup--${region}`
     })
-      .setLatLng(latLng(bounds[1][0], center[1]))
+      .setLatLng(popupPosition)
       .setContent(popupHtml)
       .openOn(this.refs.map.leafletElement);
   }
@@ -253,6 +274,20 @@ class MapContainer extends Component {
               confidence={formatNumber(datum.percent_cl)}
               onMouseOver={self.handleMouseover}
               onMouseOut={self.handleMouseout}
+            />
+          );
+        } else if (datum.geoType === 'region') {
+          geoJSONObjs.push(
+            <GeoJson
+              key={`${datum.id}_${slugify(datum.name || '')}`}
+              href={objectHref}
+              data={datum}
+              className={geoJSONClassName}
+              slug={slugify(datum.name)}
+              onClick={self.handleClick}
+              bounds={datum.bounds}
+              onMouseOver={self.handleHover}
+              onMouseOut={self.handleHoverOut}
             />
           );
         } else {
@@ -389,7 +424,7 @@ class MapContainer extends Component {
       <Map
         bounds={this.props.bounds}
         minZoom={4}
-        maxZoom={9}
+        maxZoom={8}
         onZoomEnd={this.onZoomEnd}
         onClick={this.props.cancelSearch}
         ref="map"

@@ -29,7 +29,8 @@ export default function DPPSSidebar(props) {
     currentTitle,
     currentGeography,
     params,
-    sidebarState
+    sidebarState,
+    location
   } = props;
   const subGeography = getNextGeography(currentGeography);
   const data = geographies[`${pluralize(subGeography)}_sum`] &&
@@ -98,6 +99,7 @@ export default function DPPSSidebar(props) {
               inputZones={geographies.input_zones}
               sidebarState={sidebarState}
               params={params}
+              location={location}
             />
           }
         </div>
@@ -111,5 +113,6 @@ DPPSSidebar.propTypes = {
   currentTitle: PropTypes.string.isRequired,
   currentGeography: PropTypes.string.isRequired,
   params: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
   sidebarState: PropTypes.number.isRequired,
 };

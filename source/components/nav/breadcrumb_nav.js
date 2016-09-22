@@ -21,12 +21,8 @@ BreadCrumbLink.propTypes = {
 
 const BreadCrumbNav = (props) => {
   const params = compact(PATH_PARTS.map(k => props.params[k]));
-  // if (props.location.query.input_zone) {
-  //   params.push(`${props.location.query.input_zone}`);
-  // }
   if (params.length < 2) { return null; } // only render if we are at least at the region level
   const crumbs = params.map((p, i) => {
-    console.log(p);
     let className = '';
     let title = titleize(p);
     if (i === 4 && props.params.stratum) {
