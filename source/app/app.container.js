@@ -252,7 +252,10 @@ class App extends Component {
       selectedStratum
     } = this.props;
     // DETERMINE WHICH ESTIMATE TOTAL TO DISPLAY
-    let finalTotalEstimate = totalEstimate;
+    let finalTotalEstimate = '';
+    if (!this.state.selectedInputZoneId) {
+      finalTotalEstimate = totalEstimate;
+    }
     let finalTotalConfidence = '';
     if (geographies.summary_sums) {
       finalTotalConfidence = geographies.summary_sums[0].CONFIDENCE;
@@ -363,7 +366,7 @@ class App extends Component {
           selectedStratum={selectedStratum}
           selectedInputZone={selectedZone}
         />
-        {totalEstimate &&
+        {totalEstimate && finalTotalEstimate !== '' &&
           <TotalCount
             entity={getEntityName(location, params)}
             count={formatNumber(finalTotalEstimate)}

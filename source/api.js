@@ -172,7 +172,7 @@ function fetchAdjacentGeoJSON(type, item) {
   if (type === 'country') {
     region = regionById(item.region_id).className;
   }
-  return fetch(`${config.apiBaseURL}/${type}/${id}/geojson_map?simplify=0.3`)
+  return fetch(`${config.apiBaseURL}/${type}/${id}/geojson_map`)
   .then(r => r.json())
   .then(d => {
     const coords = d.coordinates.map(flatten);

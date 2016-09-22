@@ -5,14 +5,15 @@ import {
   TileLayer,
   Marker,
   GeoJson,
-  ZoomControl
+  ZoomControl,
+  LayerGroup
 } from 'react-leaflet';
 import { divIcon, latLng, popup } from 'leaflet';
 import config from '../config';
 import { getCoordData, getLabelPosition } from '../utils/geo_funcs';
 import { formatNumber } from '../utils/format_utils.js';
 import keys from 'lodash.keys';
-import find from 'lodash.find';
+// import find from 'lodash.find';
 import {
   flatten,
   slugify,
@@ -303,14 +304,16 @@ class MapContainer extends Component {
     }
 
     if (this.props.selectedInputZone) {
-      const zGeo = find(this.props.subGeographyData, z => z.id === this.props.selectedInputZone.id);
+      const zGeo = this.props.selectedInputZone;
       if (zGeo) {
         selectedStratumObjs.push(
-          <GeoJson
-            key={`/${slugify(zGeo.name)}-${zGeo.id}-input_zone`}
-            data={zGeo}
-            className={`region-${slugify(zGeo.region)}__stratum active active-zone`}
-          />
+          <LayerGroup key={'/${slugify(zGeo.name)}-${zGeo.id}-input_zone-group'} ref="selectedZoneLayer">
+            <GeoJson
+              key={`/${slugify(zGeo.name)}-${zGeo.id}-input_zone`}
+              data={zGeo}
+              className={`region-${slugify(zGeo.region)}__stratum active active-zone`}
+            />
+          </LayerGroup>
         );
       }
       // this.props.selectedInputZone.strata.forEach((stratum) => {
@@ -356,7 +359,7 @@ class MapContainer extends Component {
       <Map
         bounds={this.props.bounds}
         minZoom={4}
-        maxZoom={9}
+        maxZoom={8}
         onZoomEnd={this.onZoomEnd}
         onClick={this.props.cancelSearch}
         ref="map"

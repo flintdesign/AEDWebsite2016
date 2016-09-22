@@ -26,7 +26,7 @@ export default function CountsByInputZones(props) {
     const titleMarkup = (
       <div className="subgeography__input-zone">
         <SidebarMapLink
-          path={`${basePathForLinks}?input_zone=${slugify(zone.name)}`}
+          path={`${basePathForLinks}/?input_zone=${slugify(zone.name)}`}
           label={`${zone.name}`}
         />
         <span className="subgeography-summary">
@@ -41,25 +41,28 @@ export default function CountsByInputZones(props) {
         </div>
       </div>
     );
-
-    const childMarkup = zone.strata.map((stratum, si) => (
-      <tr key={si}>
-        <td className="subgeography-totals__subgeography-name">
-          <SidebarMapLink
-            path={`${basePathForLinks}/${slugify(stratum.stratum)}-${stratum.strcode}`}
-            label={`${stratum.stratum}`}
-          />
-          {'  '}
-          <span>{stratum.est_type},&nbsp;{formatNumber(stratum.area_rep)} km<sup>2</sup></span>
-        </td>
-        <td className="subgeography-totals__estimate">
-          {formatNumber(stratum.estimate)}
-          &nbsp;&plusmn;&nbsp;
-          {formatNumber(stratum.lcl95)}
-        </td>
-      </tr>
-    ));
-
+    let childMarkup;
+    if (zone.strata.length === 1 && zone.strata[0].stratum === zone.name) {
+      childMarkup = '';
+    } else {
+      childMarkup = zone.strata.map((stratum, si) => (
+        <tr key={si}>
+          <td className="subgeography-totals__subgeography-name">
+            <SidebarMapLink
+              path={`${basePathForLinks}/${slugify(stratum.stratum)}-${stratum.strcode}`}
+              label={`${stratum.stratum}`}
+            />
+            {'  '}
+            <span>{stratum.est_type},&nbsp;{formatNumber(stratum.area_rep)} km<sup>2</sup></span>
+          </td>
+          <td className="subgeography-totals__estimate">
+            {formatNumber(stratum.estimate)}
+            &nbsp;&plusmn;&nbsp;
+            {formatNumber(stratum.lcl95)}
+          </td>
+        </tr>
+      ));
+    }
     return (
       <InputZoneToggleTable
         key={i}
