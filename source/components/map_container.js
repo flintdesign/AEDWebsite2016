@@ -8,7 +8,7 @@ import {
   ZoomControl,
   LayerGroup
 } from 'react-leaflet';
-import { divIcon, latLng, popup } from 'leaflet';
+import { divIcon, latLng, popup, Point } from 'leaflet';
 import config from '../config';
 import { getCoordData, getLabelPosition } from '../utils/geo_funcs';
 import { formatNumber } from '../utils/format_utils.js';
@@ -169,7 +169,7 @@ class MapContainer extends Component {
     const target = e.target;
     const {
       center,
-      bounds,
+      // bounds,
       region,
       estimate,
       name,
@@ -183,11 +183,14 @@ class MapContainer extends Component {
         ${name}
       </span>
       </div>`;
-    const popupPosition = latLng(bounds[1][0], center[1]);
+    const popupPosition = latLng(center[0], center[1]);
     popup({
       minWidth: 150,
       closeButton: false,
-      autoPan: false,
+      offset: new Point(0, -10),
+      autoPan: true,
+      autoPanPaddingTopLeft: new Point(20, 100),
+      autoPanPaddingBottomRight: new Point(50, 50),
       className: `stratum-popup stratum-popup--${region}`
     })
       .setLatLng(popupPosition)
@@ -201,6 +204,7 @@ class MapContainer extends Component {
     const labels = [];
     const adjacentGeoJSONObjs = [];
     const selectedStratumObjs = [];
+    const selectedInputZoneObjs = [];
     const rangeMarkup = this.getRangeMarkup(this.props.ranges, this.props.ui);
     if (this.state.geoJSONData) {
       const self = this;
@@ -363,7 +367,7 @@ class MapContainer extends Component {
       const allCoords = this.props.selectedInputZone.geometries.map(z => z.coordinates);
       const coordData = getCoordData(allCoords.map(flatten));
       if (zGeo) {
-        selectedStratumObjs.push(
+        selectedInputZoneObjs.push(
           <LayerGroup key={'/${slugify(zGeo.name)}-${zGeo.id}-input_zone-group'} ref="selectedZoneLayer">
             <GeoJson
               key={`/${slugify(zGeo.name)}-${zGeo.id}-input_zone`}
@@ -436,6 +440,7 @@ class MapContainer extends Component {
         {this.props.canInput && geoJSONBorderObjs}
         {this.props.canInput && geoJSONObjs}
         {this.props.canInput && adjacentGeoJSONObjs}
+        {this.props.canInput && selectedInputZoneObjs}
         {this.props.canInput && selectedStratumObjs}
         {this.props.canInput && labels}
       </Map>
