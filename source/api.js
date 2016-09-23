@@ -42,7 +42,7 @@ const getSimplifyParam = (geoType) => {
     continent: 3.0,
     region: 1.5,
     country: 0.05,
-    input_zone: 1.0
+    input_zone: 0.05
   };
   return `?simplify=${geoMap[geoType]}`;
 };
@@ -207,27 +207,24 @@ export function fetchSubGeography(dispatch, geoType, geoId, subGeoType) {
   .then(d => loadSubGeography(dispatch, d, subGeoType));
 }
 
-export function fetchAdjacentGeography(dispatch, parentType, parentSlug, currentType) {
-  const mappedParentId = mapSlugToId(parentSlug);
+export function fetchAdjacentGeography(dispatch, currentType) {
   dispatch({ type: FETCH_ADJACENT_DATA });
-
-  const cacheKey = `adjacent-${parentType}-${parentSlug}`;
+  const cacheKey = `adjacent-${pluralize(currentType)}`;
   const cacheResponse = cache.get(cacheKey);
   if (cacheResponse) {
     return dispatch({ type: RECEIVE_ADJACENT_DATA, data: cacheResponse });
   }
 
-  let url = `${config.apiBaseURL}/${parentType}/${mappedParentId}/${pluralize(currentType)}`;
-  if (currentType === 'country') {
-    url = `${config.apiBaseURL}/countries`;
-  }
+  const url = `${config.apiBaseURL}/${pluralize(currentType)}`;
 
   return fetch(url)
   .then(r => r.json())
   .then(d => {
-    let data = d;
+    let data;
     if (currentType === 'country') {
-      data = data.countries.filter(item => item.is_surveyed || (item.name === 'Somalia'));
+      data = d.countries.filter(item => item.is_surveyed || (item.name === 'Somalia'));
+    } else if (currentType === 'region') {
+      data = d.regions;
     }
     return Promise.all(data.map(c => fetchAdjacentGeoJSON(currentType, c)))
     .then(adjacentData => {
@@ -320,10 +317,8 @@ export function fetchGeography(dispatch, type, slug, year, count) {
       } else {
         fetchNarrative(output, dispatch);
       }
-
       // fetch subgeography data
       const subType = getNextGeography(type);
-
       // if the returned data (d) of, say, a continent
       // contains a `regions` (pluralized subType) key
       if (d[pluralize(subType)]) {
@@ -370,14 +365,24 @@ export function fetchSearchData(successCallback, errorCallback = (err) => consol
 
 /* Known, possible, doubtful, protected */
 export const fetchRanges = (type, dispatch) => {
-  const url = `${config.apiBaseURL}/${type}/geojson_map`;
   dispatch({ type: FETCH_RANGE });
-  fetch(url)
+  const url = `${config.apiBaseURL}/${type}/geojson_map`;
+  const cacheKey = url;
+  const cacheResponse = cache.get(cacheKey);
+  if (cacheResponse) {
+    return dispatch({
+      type: RECEIVE_RANGE,
+      data: { rangeType: type, geometries: cacheResponse }
+    });
+  }
+  return fetch(url)
   .then(r => r.json())
-  .then(d =>
+  .then(d => {
+    cache.put(cacheKey, d.geometries, cacheDuration);
     dispatch({
       type: RECEIVE_RANGE,
       data: { rangeType: type, geometries: d.geometries }
-    }));
+    });
+  });
 };
 

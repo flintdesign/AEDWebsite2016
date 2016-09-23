@@ -13,7 +13,6 @@ import config from '../config';
 import { getCoordData, getLabelPosition } from '../utils/geo_funcs';
 import { formatNumber } from '../utils/format_utils.js';
 import keys from 'lodash.keys';
-// import find from 'lodash.find';
 import {
   flatten,
   slugify,
@@ -196,6 +195,11 @@ class MapContainer extends Component {
       .setLatLng(popupPosition)
       .setContent(popupHtml)
       .openOn(this.refs.map.leafletElement);
+    // const geoType = e.target.options.geoType;
+    // if (geoType === 'input_zone') {
+    //   const panes = this.refs.map.leafletElement.getPanes();
+    //   console.log(this.refs.map.leafletElement);
+    // }
   }
 
   render() {
@@ -220,7 +224,7 @@ class MapContainer extends Component {
           objectHref = `/${slugify(datum.name)}-${datum.id}`;
         }
         if (datum.geoType === 'input_zone') {
-          geoJSONClassName = `region-${slugify(datum.region)}__stratum`;
+          geoJSONClassName = `region-${slugify(datum.region)}__stratum ${slugify(datum.name)}`;
           objectHref = `/${slugify(datum.name)}`;
         }
         if (datum.geoType === 'region' && datum.coordinates && self.props.routeGeography === 'continent' && self.props.currentGeography === 'continent') {
@@ -278,6 +282,7 @@ class MapContainer extends Component {
               confidence={formatNumber(datum.percent_cl)}
               onMouseOver={self.handleMouseover}
               onMouseOut={self.handleMouseout}
+              geoType={datum.geoType}
             />
           );
         } else if (datum.geoType === 'region') {

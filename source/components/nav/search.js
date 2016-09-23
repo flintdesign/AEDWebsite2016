@@ -37,6 +37,7 @@ const getPathForResult = ({ result, year, data }) => {
     default:
       break;
   }
+  path += '?search=true';
   return path;
 };
 
