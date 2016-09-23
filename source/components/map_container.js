@@ -162,13 +162,18 @@ class MapContainer extends Component {
 
   handleMouseout() {
     this.refs.map.leafletElement.closePopup();
+    const panes = this.refs.map.leafletElement.getPanes();
+    const overlayPane = panes.overlayPane;
+    const items = overlayPane.getElementsByClassName('is-input-zone');
+    for (let i = 0; i < items.length; i++) {
+      items[i].classList.remove('active');
+    }
   }
 
   handleMouseover(e) {
     const target = e.target;
     const {
       center,
-      // bounds,
       region,
       estimate,
       name,
@@ -195,11 +200,16 @@ class MapContainer extends Component {
       .setLatLng(popupPosition)
       .setContent(popupHtml)
       .openOn(this.refs.map.leafletElement);
-    // const geoType = e.target.options.geoType;
-    // if (geoType === 'input_zone') {
-    //   const panes = this.refs.map.leafletElement.getPanes();
-    //   console.log(this.refs.map.leafletElement);
-    // }
+    const geoType = e.target.options.geoType;
+    if (geoType === 'input_zone') {
+      const slug = e.target.options.slug;
+      const panes = this.refs.map.leafletElement.getPanes();
+      const overlayPane = panes.overlayPane;
+      const items = overlayPane.getElementsByClassName(slug);
+      for (let i = 0; i < items.length; i++) {
+        items[i].classList.add('active');
+      }
+    }
   }
 
   render() {
@@ -224,7 +234,7 @@ class MapContainer extends Component {
           objectHref = `/${slugify(datum.name)}-${datum.id}`;
         }
         if (datum.geoType === 'input_zone') {
-          geoJSONClassName = `region-${slugify(datum.region)}__stratum ${slugify(datum.name)}`;
+          geoJSONClassName = `region-${slugify(datum.region)}__stratum ${slugify(datum.name)} is-input-zone`;
           objectHref = `/${slugify(datum.name)}`;
         }
         if (datum.geoType === 'region' && datum.coordinates && self.props.routeGeography === 'continent' && self.props.currentGeography === 'continent') {
@@ -277,6 +287,7 @@ class MapContainer extends Component {
               center={datumCoordData.center}
               bounds={datumCoordData.bounds}
               name={datum.name}
+              slug={slugify(datum.name)}
               region={slugify(datum.region)}
               estimate={datum.population_estimate}
               confidence={formatNumber(datum.percent_cl)}
