@@ -57,7 +57,8 @@ class App extends Component {
       showIntro: showIntroOnLoad,
       initialLoad: false,
       getStratumTree: false,
-      selectedInputZoneId: null
+      selectedInputZoneId: null,
+      hasFetchedRanges: false
     };
   }
 
@@ -65,11 +66,6 @@ class App extends Component {
     // NEED VALIDATION - VERIFY AND/OR SEND TO 404
     // FETCH INITIAL DATA FOR MAP AND DATA
     this.fetchData(this.props, true);
-    // FETCH ALL RANGES
-    fetchRanges('known', this.props.dispatch);
-    fetchRanges('possible', this.props.dispatch);
-    fetchRanges('protected', this.props.dispatch);
-    fetchRanges('doubtful', this.props.dispatch);
     // URL QUERIES TO CONTROL STATE
     if (this.props.location.query.sidebar_state) {
       const requestedState = parseInt(this.props.location.query.sidebar_state, 10);
@@ -90,6 +86,13 @@ class App extends Component {
       params,
       // subGeographyData
     } = newProps;
+    if (!newProps.loading && !this.state.hasFetchedRanges) {
+      this.setState({ hasFetchedRanges: true });
+      fetchRanges('possible', this.props.dispatch);
+      fetchRanges('protected', this.props.dispatch);
+      fetchRanges('doubtful', this.props.dispatch);
+      fetchRanges('known', this.props.dispatch);
+    }
     if (canInput && !this.state.initialLoad && !loading) {
       this.setState({ initialLoad: true });
     }
@@ -182,10 +185,18 @@ class App extends Component {
       location,
       params
     } = props;
+
+    if (params.country && params.region && !params.stratum) {
+      fetchAdjacentGeography(dispatch, routeGeography);
+    } else if (params.region && !params.country && !params.stratum) {
+      fetchAdjacentGeography(dispatch, routeGeography);
+    } else {
+      this.clearAdjacentData();
+    }
     // has the route  changed in relation
     // to the current state regarding geography(data)
     if (force || (routeGeography !== currentGeography && !loading)) {
-      fetchGeography(
+      return fetchGeography(
         dispatch,
         routeGeography,
         routeGeographyId,
@@ -194,13 +205,7 @@ class App extends Component {
       );
     }
     // DETERMINE WHICH ADJACENT GEOGRAPHY TO FETCH AND SHOW
-    if (params.country && params.region && !params.stratum) {
-      fetchAdjacentGeography(dispatch, routeGeography);
-    } else if (params.region && !params.country && !params.stratum) {
-      fetchAdjacentGeography(dispatch, routeGeography);
-    } else {
-      this.clearAdjacentData();
-    }
+    return false;
   }
 
   render() {

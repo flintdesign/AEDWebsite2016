@@ -299,7 +299,7 @@ export function fetchGeography(dispatch, type, slug, year, count) {
 
   const fetchURL = `${config.apiBaseURL}/${type}/${apiId}/${year}/${_count}`;
   // Dispatch async call to the APIk
-  fetch(fetchURL)
+  return fetch(fetchURL)
     .then(r => r.json())
     .then(d => {
       output = { ...d, ...output };
