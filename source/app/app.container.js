@@ -66,10 +66,10 @@ class App extends Component {
     // FETCH INITIAL DATA FOR MAP AND DATA
     this.fetchData(this.props, true);
     // FETCH ALL RANGES
-    // fetchRanges('known', this.props.dispatch);
-    // fetchRanges('possible', this.props.dispatch);
-    // fetchRanges('protected', this.props.dispatch);
-    // fetchRanges('doubtful', this.props.dispatch);
+    fetchRanges('known', this.props.dispatch);
+    fetchRanges('possible', this.props.dispatch);
+    fetchRanges('protected', this.props.dispatch);
+    fetchRanges('doubtful', this.props.dispatch);
     // URL QUERIES TO CONTROL STATE
     if (this.props.location.query.sidebar_state) {
       const requestedState = parseInt(this.props.location.query.sidebar_state, 10);
