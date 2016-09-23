@@ -5,6 +5,7 @@ import InputZoneToggleTable from '../input_zone_toggle_table';
 import { formatNumber } from '../../../utils/format_utils.js';
 import { slugify } from '../../../utils/convenience_funcs.js';
 import { SIDEBAR_FULL } from '../../../constants';
+import { sortBy } from 'lodash';
 
 const SidebarMapLink = ({ label, path }) => (
   <Link
@@ -22,7 +23,8 @@ SidebarMapLink.propTypes = {
 export default function CountsByInputZones(props) {
   const { inputZones, params, sidebarState, totals, currentYear, location } = props;
   const basePathForLinks = `/${params.year}/${params.region}/${params.country}`;
-  const inputZonesList = inputZones.map((zone, i) => {
+  const alphaInputZones = sortBy(inputZones, z => z.name);
+  const inputZonesList = alphaInputZones.map((zone, i) => {
     let izHref = `${basePathForLinks}/${slugify(zone.name)}`;
     if (location.query.count_type === 'DPPS') {
       izHref += '?count_type=DPPS';
