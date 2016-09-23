@@ -5,10 +5,10 @@ import compact from 'lodash.compact';
 
 const PATH_PARTS = ['year', 'region', 'country', 'input_zone'];
 
-const BreadCrumbLink = ({ label, path, className }) => (
+const BreadCrumbLink = ({ label, path, className, canInput }) => (
   <Link
     to={path}
-    className={`${className} breadcrumb-nav__link`}
+    className={`${className} breadcrumb-nav__link${!canInput ? ' inactive' : ''}`}
   >
     {label}
   </Link>
@@ -16,7 +16,8 @@ const BreadCrumbLink = ({ label, path, className }) => (
 BreadCrumbLink.propTypes = {
   path: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  className: PropTypes.string.isRequired
+  className: PropTypes.string.isRequired,
+  canInput: PropTypes.bool.isRequired
 };
 
 const BreadCrumbNav = (props) => {
@@ -38,6 +39,7 @@ const BreadCrumbNav = (props) => {
           path={`/${params.slice(0, i + 1).join('/')}`}
           label={(i === 0 ? 'Africa' : title)}
           className={className}
+          canInput={props.canInput}
         />
         {(i === params.length - 1 ?
           null :
@@ -50,7 +52,8 @@ const BreadCrumbNav = (props) => {
 
 BreadCrumbNav.propTypes = {
   params: PropTypes.object,
-  location: PropTypes.object
+  location: PropTypes.object,
+  canInput: PropTypes.bool
 };
 
 export default BreadCrumbNav;

@@ -296,6 +296,7 @@ class App extends Component {
             params={this.props.params}
             location={this.props.location}
             selectedStratum={selectedStratum}
+            canInput={canInput}
           />
           <Nav
             expandSidebar={this.expandSidebar}
