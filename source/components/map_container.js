@@ -390,28 +390,6 @@ class MapContainer extends Component {
           </LayerGroup>
         );
       }
-      // this.props.selectedInputZone.strata.forEach((stratum) => {
-      //   const stratumObj = find(this.props.subGeographyData, s => s.strcode === stratum.strcode);
-      //   if (stratumObj) {
-      //     const stratumObjCoords = stratumObj.coordinates.map(flatten);
-      //     const stratumObjCoordData = getCoordData(stratumObjCoords);
-      //     selectedStratumObjs.push(
-      //       <GeoJson
-      //         key={`/${slugify(stratumObj.stratum)}-${stratumObj.strcode}-input_zone`}
-      //         data={stratumObj}
-      //         className={`region-${slugify(stratumObj.region)}__stratum active active-zone`}
-              // onMouseOver={this.handleMouseover}
-              // onMouseOut={this.handleMouseout}
-              // center={stratumObjCoordData.center}
-              // bounds={stratumObjCoordData.bounds}
-              // name={stratumObj.name}
-              // region={slugify(stratumObj.region)}
-              // estimate={stratumObj.estimate}
-              // confidence={formatNumber(stratumObj.lcl95)}
-      //       />
-      //     );
-      //   }
-      // });
     }
 
     if (this.props.border.coordinates && !this.props.loading && this.props.canInput) {
@@ -441,7 +419,7 @@ class MapContainer extends Component {
       >
         <TileLayer url={tileURL} />
         <ZoomControl position={'bottomright'} />
-        {this.props.canInput && rangeMarkup}
+        {rangeMarkup}
         {this.props.canInput && geoJSONBorderObjs}
         {this.props.canInput && geoJSONObjs}
         {this.props.canInput && adjacentGeoJSONObjs}
