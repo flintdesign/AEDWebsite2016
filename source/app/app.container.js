@@ -306,6 +306,7 @@ class App extends Component {
             params={this.props.params}
             loading={loading}
             searchActive={searchActive}
+            showIntro={this.state.showIntro}
           />
           {React.cloneElement(children, {
             adjacentData: adjacentData,
@@ -357,7 +358,7 @@ class App extends Component {
             summary={geographies.summary_sums || []}
           />
         }
-        <HelpNav location={location} />
+        <HelpNav location={location} showIntro={this.state.showIntro} />
         {searchOverlay}
         {loadingOverlay}
         <Intro

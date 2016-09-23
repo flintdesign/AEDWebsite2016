@@ -42,8 +42,8 @@ class Sidebar extends Component {
   }
 
   handleSpanClick(e) {
-    if (e.target.dataset.title) {
-      this.setState({ currentTitle: e.target.dataset.title });
+    if (e.currentTarget.dataset.title) {
+      this.setState({ currentTitle: e.currentTarget.dataset.title });
     }
   }
 
@@ -196,29 +196,32 @@ class Sidebar extends Component {
             <div>
               <nav className="sidebar__viz-type">
                 <ul>
-                  <li onClick={self.handleSpanClick}>
-                    <span
+                  <li onClick={self.handleSpanClick} data-title={'narrative'}>
+                    <div
                       className={this.getCurrentTitle('narrative')}
-                      data-title={'narrative'}
                     >
-                      {overviewTitleMap[currentGeography]} OVERVIEW
-                    </span>
+                      <span>
+                        {overviewTitleMap[currentGeography]} OVERVIEW
+                      </span>
+                    </div>
                   </li>
-                  <li onClick={self.handleSpanClick}>
-                    <span
+                  <li onClick={self.handleSpanClick} data-title={'summary_area'}>
+                    <div
                       className={this.getCurrentTitle('summary_area')}
-                      data-title={'summary_area'}
                     >
-                      Summary totals &amp; {totalsTitle}
-                    </span>
+                      <span>
+                        Summary totals &amp; {totalsTitle}
+                      </span>
+                    </div>
                   </li>
-                  <li onClick={self.handleSpanClick}>
-                    <span
+                  <li onClick={self.handleSpanClick} data-title={'totals'}>
+                    <div
                       className={this.getCurrentTitle('totals')}
-                      data-title={'totals'}
                     >
-                      Reasons for change &amp; survey categories
-                    </span>
+                      <span>
+                        Data Categories &amp; Interpretation of Changes
+                      </span>
+                    </div>
                   </li>
                 </ul>
               </nav>

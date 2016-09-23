@@ -11,7 +11,7 @@ export default function AreaRange(props) {
 
   return (
     <div>
-      <h4 className="heading__small">Area of Range Covered</h4>
+      <h4 className="heading__small">Summary Totals - Area of range</h4>
       <table className="sidebar__stats-table bold-all">
         <tbody>
           <tr>

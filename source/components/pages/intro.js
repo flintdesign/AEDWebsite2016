@@ -7,7 +7,7 @@ export default function Intro(props) {
     introClass = 'intro shown';
   }
   return (
-    <div className={introClass} onClick={handleIntroClick}>
+    <div className={introClass}>
       <div className={'intro-bg'}>
       </div>
       <div className={'intro__container'}>

@@ -411,7 +411,7 @@ class MapContainer extends Component {
       <Map
         bounds={this.props.bounds}
         minZoom={4}
-        maxZoom={8}
+        maxZoom={9}
         onZoomEnd={this.onZoomEnd}
         onClick={this.props.cancelSearch}
         ref="map"
@@ -420,7 +420,7 @@ class MapContainer extends Component {
         <TileLayer url={tileURL} />
         <ZoomControl position={'bottomright'} />
         {rangeMarkup}
-        {this.props.canInput && geoJSONBorderObjs}
+        {geoJSONBorderObjs}
         {this.props.canInput && geoJSONObjs}
         {this.props.canInput && adjacentGeoJSONObjs}
         {this.props.canInput && selectedInputZoneObjs}
