@@ -128,7 +128,11 @@ aside table
   border-bottom 1px solid transparent
   line-height 1
   margin-bottom 10px
-  display table
+  // display table
+  display block
+  white-space nowrap
+  text-overflow ellipsis
+  overflow hidden
   color $gray-lightest
   font-size 0.7em
   font-weight 700
@@ -138,9 +142,11 @@ aside table
   cursor pointer
   transition border-color 0.25s
   &.active, &:hover
-    @extend .small-current
     color $white
     transition border-color 0.25s
+    span
+      transition border 0.25s
+      border-bottom 1px solid white
 
 .sidebar__entity-name
   font-family 'Noe Display', Georgia, serif

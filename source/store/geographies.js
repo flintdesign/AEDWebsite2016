@@ -98,7 +98,8 @@ export function geographies(state = initialState, action) {
         ...state,
         currentlyLoadingData: true,
         loading: true,
-        canInput: false
+        canInput: false,
+        geographies: {}
       };
     case FETCH_SUBGEOGRAPHY_DATA:
       return {

@@ -36,7 +36,7 @@ export default function CountsBySubGeography(props) {
           />
           <div>
             <h4 className="heading__small">
-              Counts by {capitalize(subGeography)}
+              {capitalize(subGeography)} Totals and Data Quality
             </h4>
             <table className="subgeography-totals">
               <tbody>{geographies.map((g, i) => (

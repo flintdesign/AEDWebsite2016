@@ -1,13 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
+import { findDOMNode } from 'react-dom';
 import { toggleSearch, receiveAutocompleteData } from '../../actions';
 import { connect } from 'react-redux';
-import { SEARCH_PLACEHOLDER } from '../../constants';
+import {
+  SEARCH_PLACEHOLDER,
+  SIDEBAR_CLOSED,
+  SIDEBAR_OPEN
+} from '../../constants';
 import { slugify, titleize } from '../../utils/convenience_funcs';
 import Bloodhound from 'bloodhound-js';
 import { fetchSearchData } from '../../api';
 // import assign from 'lodash.assign';
 import find from 'lodash.find';
+import ReactTooltip from 'react-tooltip';
 
 const getPathForResult = ({ result, year, data }) => {
   let path = '';
@@ -135,7 +141,7 @@ class Search extends Component {
       searchDataFetched: false,
       searchReady: false,
       searchData: null,
-      results: []
+      results: [],
     };
     fetchSearchData((d) => {
       props.dispatch(receiveAutocompleteData(d));
@@ -145,6 +151,12 @@ class Search extends Component {
   componentWillReceiveProps(props) {
     if (!props.searchActive && this.state.results.length) {
       this.setState({ results: [] });
+    }
+    if (this.props.showIntro && !props.showIntro) {
+      ReactTooltip.show(findDOMNode(this.refs.searchTrigger));
+      setTimeout(() => {
+        ReactTooltip.hide(findDOMNode(this.refs.searchTrigger));
+      }, 10000);
     }
   }
 
@@ -238,7 +250,37 @@ class Search extends Component {
               this.props.dispatch(toggleSearch());
             }}
             className="search__trigger"
+            data-tip
+            data-for="searchSidebar"
+            ref="searchTrigger"
           />
+          {this.props.sidebarState === SIDEBAR_CLOSED
+            && !this.props.searchActive &&
+            <ReactTooltip
+              id="searchSidebar"
+              place="bottom"
+              type="dark"
+              effect="solid"
+            >
+              <span>
+                Click spyglass to open search.<br />
+                Click arrow to open sidebar.
+              </span>
+            </ReactTooltip>
+          }
+          {this.props.sidebarState === SIDEBAR_OPEN
+            && !this.props.searchActive &&
+            <ReactTooltip
+              id="searchSidebar"
+              place="left"
+              type="dark"
+              effect="solid"
+            >
+              <span>
+                Click to open search bar.
+              </span>
+            </ReactTooltip>
+          }
           {this.results()}
         </div>
       </div>
@@ -249,7 +291,9 @@ class Search extends Component {
 Search.propTypes = {
   dispatch: PropTypes.func.isRequired,
   params: PropTypes.object,
-  searchActive: PropTypes.bool.isRequired
+  searchActive: PropTypes.bool.isRequired,
+  sidebarState: PropTypes.number.isRequired,
+  showIntro: PropTypes.bool.isRequired
 };
 
 export default connect(state => state.search)(Search);

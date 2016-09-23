@@ -151,7 +151,7 @@ export default function CountsByInputZones(props) {
         <div className="sidebar__count-summary sidebar__count-summary--input-zones">
           <div>
             <h4 className="heading__small">
-              Counts by Input Zones
+              Elephant Estimates
             </h4>
             {inputZonesList}
           </div>

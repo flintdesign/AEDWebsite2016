@@ -37,7 +37,7 @@ export default function CountsBySurveyCategory(props) {
       <div>
         <div className="sidebar__count-summary">
           <h3 className="heading__small">
-            Counts by Survey Category
+            Area of range by data category
             <a
               href={`${glossaryLink}#survey-categories`}
               className="sidebar__glossary-link"
@@ -60,7 +60,7 @@ export default function CountsBySurveyCategory(props) {
         {changeTotals && (
           <div className="sidebar__count-summary sidebar__count-summary--causes-of-change">
             <h3 className="heading__small">
-              Counts by Reason for Change
+               Interpretation of changes from previous<br />report
               <a
                 href={`${glossaryLink}#reason-for-change`}
                 className="sidebar__glossary-link"
@@ -97,7 +97,7 @@ export default function CountsBySurveyCategory(props) {
             </tr>
             <tr>
               <th className="subgeography-totals__subgeography-name">
-                Survey Category
+                Area of Range by Data Category
                 <a
                   href={`${glossaryLink}#survey-categories`}
                   className="sidebar__glossary-link"
@@ -149,7 +149,7 @@ export default function CountsBySurveyCategory(props) {
               </tr>
               <tr>
                 <th className="subgeography-totals__subgeography-name">
-                  Reason for Change
+                   Interpretation of Changes from Previous Report
                   <a
                     href={`${glossaryLink}#reason-for-change`}
                     className="sidebar__glossary-link"

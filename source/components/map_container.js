@@ -13,7 +13,6 @@ import config from '../config';
 import { getCoordData, getLabelPosition } from '../utils/geo_funcs';
 import { formatNumber } from '../utils/format_utils.js';
 import keys from 'lodash.keys';
-// import find from 'lodash.find';
 import {
   flatten,
   slugify,
@@ -163,13 +162,18 @@ class MapContainer extends Component {
 
   handleMouseout() {
     this.refs.map.leafletElement.closePopup();
+    const panes = this.refs.map.leafletElement.getPanes();
+    const overlayPane = panes.overlayPane;
+    const items = overlayPane.getElementsByClassName('is-input-zone');
+    for (let i = 0; i < items.length; i++) {
+      items[i].classList.remove('active');
+    }
   }
 
   handleMouseover(e) {
     const target = e.target;
     const {
       center,
-      // bounds,
       region,
       estimate,
       name,
@@ -196,6 +200,16 @@ class MapContainer extends Component {
       .setLatLng(popupPosition)
       .setContent(popupHtml)
       .openOn(this.refs.map.leafletElement);
+    const geoType = e.target.options.geoType;
+    if (geoType === 'input_zone') {
+      const slug = e.target.options.slug;
+      const panes = this.refs.map.leafletElement.getPanes();
+      const overlayPane = panes.overlayPane;
+      const items = overlayPane.getElementsByClassName(slug);
+      for (let i = 0; i < items.length; i++) {
+        items[i].classList.add('active');
+      }
+    }
   }
 
   render() {
@@ -220,7 +234,7 @@ class MapContainer extends Component {
           objectHref = `/${slugify(datum.name)}-${datum.id}`;
         }
         if (datum.geoType === 'input_zone') {
-          geoJSONClassName = `region-${slugify(datum.region)}__stratum`;
+          geoJSONClassName = `region-${slugify(datum.region)}__stratum ${slugify(datum.name)} is-input-zone`;
           objectHref = `/${slugify(datum.name)}`;
         }
         if (datum.geoType === 'region' && datum.coordinates && self.props.routeGeography === 'continent' && self.props.currentGeography === 'continent') {
@@ -273,11 +287,13 @@ class MapContainer extends Component {
               center={datumCoordData.center}
               bounds={datumCoordData.bounds}
               name={datum.name}
+              slug={slugify(datum.name)}
               region={slugify(datum.region)}
               estimate={datum.population_estimate}
               confidence={formatNumber(datum.percent_cl)}
               onMouseOver={self.handleMouseover}
               onMouseOut={self.handleMouseout}
+              geoType={datum.geoType}
             />
           );
         } else if (datum.geoType === 'region') {
@@ -385,28 +401,6 @@ class MapContainer extends Component {
           </LayerGroup>
         );
       }
-      // this.props.selectedInputZone.strata.forEach((stratum) => {
-      //   const stratumObj = find(this.props.subGeographyData, s => s.strcode === stratum.strcode);
-      //   if (stratumObj) {
-      //     const stratumObjCoords = stratumObj.coordinates.map(flatten);
-      //     const stratumObjCoordData = getCoordData(stratumObjCoords);
-      //     selectedStratumObjs.push(
-      //       <GeoJson
-      //         key={`/${slugify(stratumObj.stratum)}-${stratumObj.strcode}-input_zone`}
-      //         data={stratumObj}
-      //         className={`region-${slugify(stratumObj.region)}__stratum active active-zone`}
-              // onMouseOver={this.handleMouseover}
-              // onMouseOut={this.handleMouseout}
-              // center={stratumObjCoordData.center}
-              // bounds={stratumObjCoordData.bounds}
-              // name={stratumObj.name}
-              // region={slugify(stratumObj.region)}
-              // estimate={stratumObj.estimate}
-              // confidence={formatNumber(stratumObj.lcl95)}
-      //       />
-      //     );
-      //   }
-      // });
     }
 
     if (this.props.border.coordinates && !this.props.loading && this.props.canInput) {
@@ -428,7 +422,7 @@ class MapContainer extends Component {
       <Map
         bounds={this.props.bounds}
         minZoom={4}
-        maxZoom={8}
+        maxZoom={9}
         onZoomEnd={this.onZoomEnd}
         onClick={this.props.cancelSearch}
         ref="map"
@@ -436,8 +430,8 @@ class MapContainer extends Component {
       >
         <TileLayer url={tileURL} />
         <ZoomControl position={'bottomright'} />
-        {this.props.canInput && rangeMarkup}
-        {this.props.canInput && geoJSONBorderObjs}
+        {rangeMarkup}
+        {geoJSONBorderObjs}
         {this.props.canInput && geoJSONObjs}
         {this.props.canInput && adjacentGeoJSONObjs}
         {this.props.canInput && selectedInputZoneObjs}

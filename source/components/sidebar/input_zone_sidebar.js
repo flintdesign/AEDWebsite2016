@@ -74,7 +74,7 @@ export default function InputZoneSidebar(props) {
     markup = (
       <div>
         <div>
-          <h3 className="heading__small">Total Input Zone Elephant Counts</h3>
+          <h3 className="heading__small">Elephant Estimates</h3>
           <table className="sidebar__stats-table bold-all">
             <tbody>
               <tr>
@@ -130,7 +130,7 @@ export default function InputZoneSidebar(props) {
         </div>
         <div>
           <CountsByStrata
-            title={'COUNTS BY STRATUM'}
+            title={'Stratum Totals'}
             strata={zone.strata}
             sidebarState={sidebarState}
             params={params}
@@ -154,7 +154,7 @@ export default function InputZoneSidebar(props) {
             </tr>
             <tr>
               <th className="subgeography-totals__subgeography-name">
-                Counts by Input Zones
+                Input Zone &amp; Stratum Totals
               </th>
               <th className="th-left"></th>
               <th className="th-left">Type</th>

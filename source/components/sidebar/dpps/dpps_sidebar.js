@@ -50,14 +50,14 @@ export default function DPPSSidebar(props) {
               geographies.area_of_range_covered_by_continent ||
               geographies.area_of_range_covered_by_region ||
               geographies.area_of_range_covered_by_country}
-            tablesTitle="Counts by Survey Category"
+            tablesTitle="Area of Range by Data Category"
           />
           <CauseOfChangeDPPS
             surveys={
               geographies.causes_of_change_by_continent ||
               geographies.causes_of_change_by_region ||
               geographies.causes_of_change_by_country}
-            tablesTitle="Counts by Reasons for Change"
+            tablesTitle=" Interpretation of changes from previous report"
           />
         </div>
       }

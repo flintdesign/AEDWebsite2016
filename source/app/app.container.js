@@ -12,13 +12,10 @@ import ErrorPage from '../components/pages/404';
 import find from 'lodash.find';
 import {
   getEntityName,
-  getGeoFromId,
-  flatten,
   slugify,
   mapSlugToId
 } from '../utils/convenience_funcs';
 import { formatNumber } from '../utils/format_utils';
-import { getCoordData } from '../utils/geo_funcs';
 import {
   fetchGeography,
   fetchRanges,
@@ -60,8 +57,7 @@ class App extends Component {
       showIntro: showIntroOnLoad,
       initialLoad: false,
       getStratumTree: false,
-      selectedInputZoneId: null,
-      selectedInputZone: null
+      selectedInputZoneId: null
     };
   }
 
@@ -92,7 +88,7 @@ class App extends Component {
       loading,
       location,
       params,
-      subGeographyData
+      // subGeographyData
     } = newProps;
     if (canInput && !this.state.initialLoad && !loading) {
       this.setState({ initialLoad: true });
@@ -112,25 +108,15 @@ class App extends Component {
         this.fetchData(newProps, false);
       }
     }
-    if (!props.subGeographyData.length &&
-      subGeographyData.length &&
-      props.params.stratum) {
-      this.loadStratumFromGeography(props.params.stratum, subGeographyData);
-    }
-    if (!params.stratum && props.params.stratum) {
-      this.selectStratum(null);
-    }
     if (params.input_zone) {
-      this.setState({ selectedInputZoneId: params.input_zone });
+      if (params.country !== props.params.country) {
+        this.fetchData(newProps, true);
+        this.setState({ selectedInputZoneId: null });
+      } else {
+        this.setState({ selectedInputZoneId: params.input_zone });
+      }
     } else {
       this.setState({ selectedInputZoneId: null });
-      this.setState({ selectedInputZone: null });
-    }
-    if (!params.input_zone && this.props.params.input_zone) {
-      if (location.pathname === props.location.pathname) {
-        const id = mapSlugToId(this.props.routeGeographyId);
-        fetchBounds(this.props.dispatch, this.props.routeGeography, id);
-      }
     }
   }
 
@@ -185,21 +171,11 @@ class App extends Component {
     this.props.dispatch(toggleLegend());
   }
 
-  // LOAD STRATUM DATA FROM ALREADY COLLECTED DATA
-  loadStratumFromGeography(stratumId, geography) {
-    const stratumData = getGeoFromId(stratumId, geography);
-    const _coords = stratumData.coordinates.map(flatten);
-    const stratumBounds = getCoordData(_coords).bounds;
-    this.updateBounds(stratumBounds);
-    this.selectStratum(stratumData);
-  }
-
   fetchData(props, force = false) {
     const {
       routeGeography,
       routeGeographyId,
       currentGeography,
-      subGeographyData,
       routeYear,
       loading,
       dispatch,
@@ -219,25 +195,9 @@ class App extends Component {
     }
     // DETERMINE WHICH ADJACENT GEOGRAPHY TO FETCH AND SHOW
     if (params.country && params.region && !params.stratum) {
-      // we looking at a country, grab its surrounding countries inside its region
-      fetchAdjacentGeography(
-        dispatch,
-        'region',
-        params.region,
-        routeGeography,
-        routeGeographyId
-      );
+      fetchAdjacentGeography(dispatch, routeGeography);
     } else if (params.region && !params.country && !params.stratum) {
-      // we look at a region, grabs its surrounding regions inside the continent
-      fetchAdjacentGeography(
-        dispatch,
-        'continent',
-        'africa',
-        routeGeography,
-        routeGeographyId
-      );
-    } else if (params.region && params.country && params.stratum && subGeographyData.length) {
-      this.loadStratumFromGeography(params.stratum, subGeographyData);
+      fetchAdjacentGeography(dispatch, routeGeography);
     } else {
       this.clearAdjacentData();
     }
@@ -336,6 +296,7 @@ class App extends Component {
             params={this.props.params}
             location={this.props.location}
             selectedStratum={selectedStratum}
+            canInput={canInput}
           />
           <Nav
             expandSidebar={this.expandSidebar}
@@ -345,6 +306,7 @@ class App extends Component {
             params={this.props.params}
             loading={loading}
             searchActive={searchActive}
+            showIntro={this.state.showIntro}
           />
           {React.cloneElement(children, {
             adjacentData: adjacentData,
@@ -396,7 +358,7 @@ class App extends Component {
             summary={geographies.summary_sums || []}
           />
         }
-        <HelpNav location={location} />
+        <HelpNav location={location} showIntro={this.state.showIntro} />
         {searchOverlay}
         {loadingOverlay}
         <Intro

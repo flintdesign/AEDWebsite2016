@@ -8,7 +8,7 @@ export default function ParentADD(props) {
   const unassessedPercent = 100 - data.PERCENT_OF_RANGE_ASSESSED;
   return (
     <div>
-      <h3 className="heading__small">Summary Totals</h3>
+      <h3 className="heading__small">Summary Totals - Estimates and Guesses</h3>
       <table className="sidebar__stats-table bold-all">
         <tbody>
           <tr>
