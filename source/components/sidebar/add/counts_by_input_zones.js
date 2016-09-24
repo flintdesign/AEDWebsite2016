@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-import ParentADD from './parent_add';
 import InputZoneToggleTable from '../input_zone_toggle_table';
 import { formatNumber } from '../../../utils/format_utils.js';
 import { slugify } from '../../../utils/convenience_funcs.js';
@@ -21,7 +20,7 @@ SidebarMapLink.propTypes = {
 };
 
 export default function CountsByInputZones(props) {
-  const { inputZones, params, sidebarState, totals, currentYear, location } = props;
+  const { inputZones, params, sidebarState, location } = props;
   const basePathForLinks = `/${params.year}/${params.region}/${params.country}`;
   const alphaInputZones = sortBy(inputZones, z => z.name);
   const inputZonesList = alphaInputZones.map((zone, i) => {
@@ -143,14 +142,7 @@ export default function CountsByInputZones(props) {
   if (sidebarState < SIDEBAR_FULL) {
     markup = (
       <div>
-        {totals && currentYear &&
-          <ParentADD
-            data={totals}
-            year={currentYear}
-            sidebarState={sidebarState}
-          />
-        }
-        <div className="sidebar__count-summary sidebar__count-summary--input-zones">
+        <div className="sidebar__count-summary">
           <div>
             <h4 className="heading__small">
               Elephant Estimates
@@ -163,13 +155,6 @@ export default function CountsByInputZones(props) {
   } else {
     markup = (
       <div>
-        {totals && currentYear &&
-          <ParentADD
-            data={totals}
-            year={currentYear}
-            sidebarState={sidebarState}
-          />
-        }
         <table className="subgeography-totals table-fullwidth">
           <thead>
             <tr>
@@ -213,7 +198,5 @@ CountsByInputZones.propTypes = {
   inputZones: PropTypes.array,
   sidebarState: PropTypes.number.isRequired,
   params: PropTypes.object,
-  location: PropTypes.object,
-  currentYear: PropTypes.string,
-  totals: PropTypes.object,
+  location: PropTypes.object
 };

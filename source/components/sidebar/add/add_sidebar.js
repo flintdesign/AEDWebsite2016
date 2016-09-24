@@ -5,6 +5,7 @@ import CountsBySubGeography from './counts_by_subgeography';
 import CountsByInputZones from './counts_by_input_zones';
 import CountsBySurveyCategory from './counts_by_survey_category';
 import { pluralize, getNextGeography } from '../../../utils/convenience_funcs';
+import ParentADD from './parent_add';
 
 export default function ADDSidebar(props) {
   const {
@@ -49,8 +50,21 @@ export default function ADDSidebar(props) {
   }
   return (
     <div>
-      {!isEmpty(geographies) && currentTitle === 'totals' &&
+      {!isEmpty(geographies) && currentTitle === 'summary_area' &&
         <div>
+          {!geographies.input_zones &&
+            <ParentADD
+              data={{ ...data('summary'), ...data(pluralize(subGeography)) }}
+              year={year}
+            />
+          }
+          {geographies.input_zones &&
+            <ParentADD
+              data={addSummaryData}
+              year={year}
+              sidebarState={sidebarState}
+            />
+          }
           <CountsBySurveyCategory
             summary_totals={geographies.summary_totals}
             areas={geographies.areas}
@@ -65,7 +79,7 @@ export default function ADDSidebar(props) {
         </div>
       }
 
-      {!isEmpty(geographies) && currentTitle === 'summary_area' && !geographies.strata &&
+      {!isEmpty(geographies) && currentTitle === 'totals' && !geographies.strata &&
         <div>
           <CountsBySubGeography
             geographies={geographies[pluralize(subGeography)]}
@@ -77,7 +91,7 @@ export default function ADDSidebar(props) {
           />
         </div>
       }
-      {!isEmpty(geographies) && currentTitle === 'summary_area' && geographies.input_zones &&
+      {!isEmpty(geographies) && currentTitle === 'totals' && geographies.input_zones &&
         <div>
           <CountsByInputZones
             geographies={geographies}

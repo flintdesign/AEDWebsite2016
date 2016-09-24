@@ -24,7 +24,7 @@ export default function SurveyTypeDPPS(props) {
   });
 
   return (
-    <div className="sidebar__count-summary">
+    <div className="sidebar__count-summary sidebar__count-summary--causes-of-change">
       <h3 className="heading__small">
         {tablesTitle}
         <a

@@ -35,30 +35,8 @@ export default function CountsBySurveyCategory(props) {
     // Half-width sidebar
     markup = (
       <div>
-        <div className="sidebar__count-summary">
-          <h3 className="heading__small">
-            Area of range by data category
-            <a
-              href={`${glossaryLink}#survey-categories`}
-              className="sidebar__glossary-link"
-              target="_blank"
-            />
-          </h3>
-          {surveyCategories.map(categoryData => (
-            <SurveyCategory
-              key={categoryData.SURVEYTYPE}
-              surveyType={categoryData.SURVEYTYPE}
-              estimate={categoryData.ESTIMATE}
-              confidence={categoryData.CONFIDENCE}
-              guess_min={categoryData.GUESS_MIN}
-              guess_max={categoryData.GUESS_MAX}
-              range_assessed={categoryData.CATEGORY_RANGE_ASSESSED}
-              range_area={categoryData.AREA}
-            />)
-          )}
-        </div>
         {changeTotals && (
-          <div className="sidebar__count-summary sidebar__count-summary--causes-of-change">
+          <div className="sidebar__count-summary">
             <h3 className="heading__small">
                Interpretation of changes from previous<br />report
               <a
@@ -81,6 +59,28 @@ export default function CountsBySurveyCategory(props) {
             )}
           </div>
         )}
+        <div className="sidebar__count-summary sidebar__count-summary--causes-of-change">
+          <h3 className="heading__small">
+            Area of range by data category
+            <a
+              href={`${glossaryLink}#survey-categories`}
+              className="sidebar__glossary-link"
+              target="_blank"
+            />
+          </h3>
+          {surveyCategories.map(categoryData => (
+            <SurveyCategory
+              key={categoryData.SURVEYTYPE}
+              surveyType={categoryData.SURVEYTYPE}
+              estimate={categoryData.ESTIMATE}
+              confidence={categoryData.CONFIDENCE}
+              guess_min={categoryData.GUESS_MIN}
+              guess_max={categoryData.GUESS_MAX}
+              range_assessed={categoryData.CATEGORY_RANGE_ASSESSED}
+              range_area={categoryData.AREA}
+            />)
+          )}
+        </div>
       </div>
     );
   } else {
