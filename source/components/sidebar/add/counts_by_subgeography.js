@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import { formatNumber, formatFloat } from '../../../utils/format_utils.js';
 import { Link } from 'react-router';
-import ParentADD from './parent_add';
 import { capitalize, slugify } from '../../../utils/convenience_funcs.js';
 import { SIDEBAR_FULL } from '../../../constants';
 
@@ -30,13 +29,10 @@ export default function CountsBySubGeography(props) {
       // Half-width sidebar
       markup = (
         <div>
-          <ParentADD
-            data={totals}
-            year={currentYear}
-          />
           <div>
             <h4 className="heading__small">
-              {capitalize(subGeography)} Totals and Data Quality
+              {capitalize(subGeography === 'region' ? 'regional' : subGeography)}
+              &nbsp;Totals and Data Quality
             </h4>
             <table className="subgeography-totals">
               <tbody>{geographies.map((g, i) => (
@@ -64,10 +60,6 @@ export default function CountsBySubGeography(props) {
       // Full-screen sidebar
       markup = (
         <div>
-          <ParentADD
-            data={totals}
-            year={currentYear}
-          />
           <table className="subgeography-totals table-fullwidth">
             <thead>
               <tr>
@@ -82,7 +74,10 @@ export default function CountsBySubGeography(props) {
                 <th rowSpan="1" className="th-parent th-right">PFS</th>
               </tr>
               <tr>
-                <th className="subgeography-totals__subgeography-name">Country</th>
+                <th className="subgeography-totals__subgeography-name">
+                  {capitalize(subGeography === 'region' ? 'regional' : subGeography)}
+                  &nbsp;Totals and Data Quality
+                </th>
                 <th>Estimate</th>
                 <th>&plusmn;95&#37; CL</th>
                 <th>From</th>

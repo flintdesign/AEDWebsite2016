@@ -24,7 +24,7 @@ export default function CauseOfChangeDPPS(props) {
   });
 
   return (
-    <div className="sidebar__count-summary sidebar__count-summary--causes-of-change">
+    <div className="sidebar__count-summary">
       <h3 className="heading__small">
         {tablesTitle}
         <a
