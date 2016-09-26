@@ -163,7 +163,7 @@ export default function InputZoneSidebar(props) {
               <th>Estimate</th>
               <th>&plusmn;95&#37; CL</th>
               <th className="th-left">Source</th>
-              <th className="th-center">PFS</th>
+              <th className="th-center">PFS<sup>3</sup></th>
               <th className="th-center">(km<sup>2</sup>)</th>
               <th className="th-center">Lon.</th>
               <th className="th-center">Lat.</th>
