@@ -70,8 +70,8 @@ export default function CountsBySubGeography(props) {
                 <th colSpan="1" className="th-parent th-right">% Known &amp;<br />
                 Possible Range</th>
                 <th colSpan="1" className="th-parent th-right">% of Range<br />Assessed</th>
-                <th rowSpan="1" className="th-parent th-right">IQI</th>
-                <th rowSpan="1" className="th-parent th-right">PFS</th>
+                <th rowSpan="1" className="th-parent th-right">IQI<sup>1</sup></th>
+                <th rowSpan="1" className="th-parent th-right">PFS<sup>2</sup></th>
               </tr>
               <tr>
                 <th className="subgeography-totals__subgeography-name">
@@ -84,6 +84,27 @@ export default function CountsBySubGeography(props) {
                 <th>To</th>
               </tr>
             </thead>
+            <tfoot>
+              <tr>
+                <td colSpan="6">
+                  <div className="subgeography-totals__footnote">
+                    <sup>1</sup> Information Quality Index: This index quantifies&nbsp;
+                    overall data quality at the regional level based on the precision&nbsp;
+                    of estimates and the proportion of assessed elephant range&nbsp;
+                    (i.e. range for which estimates are available). The IQI ranges&nbsp;
+                    from zero (no reliable information) to one (perfect information).
+                  </div>
+                  <div className="subgeography-totals__footnote">
+                    <sup>2</sup> Priority for Future Surveys (PFS) is ranked&nbsp;
+                    from 1 to 5 (highest to lowest). Based on the precision of&nbsp;
+                    estimates and the proportion of national range accounted for&nbsp;
+                    by the site in question, PFS is a measure of the importance and&nbsp;
+                    urgency for future population surveys. All areas of unassessed&nbsp;
+                    range have a priority of 1.
+                  </div>
+                </td>
+              </tr>
+            </tfoot>
             <tbody>
               {geographies.map((g, i) => (
                 <tr key={i}>
@@ -98,23 +119,30 @@ export default function CountsBySubGeography(props) {
                   <td>{formatNumber(g.GUESS_MIN)}</td>
                   <td>{formatNumber(g.GUESS_MAX)}</td>
                   <td>{formatNumber(g.RANGE_AREA)}</td>
-                  <td>{formatNumber(g.PERCENT_OF_RANGE_COVERED)}</td>
-                  <td>{formatNumber(g.PERCENT_OF_RANGE_ASSESSED)}</td>
-                  <td>{formatFloat(g.IQI)}</td>
-                  <td>{formatFloat(g.PFS)}</td>
+                  <td>{formatFloat(g.PERCENT_OF_RANGE_COVERED, 0)}</td>
+                  <td>{formatFloat(g.PERCENT_OF_RANGE_ASSESSED, 0)}</td>
+                  <td>{formatFloat(g.IQI, 2)}</td>
+                  <td>{formatFloat(g.PFS, 0)}</td>
                 </tr>
               ))}
               <tr className="subgeography-totals__totals" key="totals">
-                <td className="subgeography-totals__subgeography-name">Totals</td>
+                <td className="subgeography-totals__subgeography-name">
+                  {subGeography === 'region' &&
+                    'Continental Totals'
+                  }
+                  {subGeography === 'country' &&
+                    'Regional Totals'
+                  }
+                </td>
                 <td>{formatNumber(totals.ESTIMATE)}</td>
                 <td>{formatNumber(totals.CONFIDENCE)}</td>
                 <td>{formatNumber(totals.GUESS_MIN)}</td>
                 <td>{formatNumber(totals.GUESS_MAX)}</td>
                 <td>{formatNumber(totals.RANGE_AREA)}</td>
-                <td>{formatNumber(totals.PERCENT_OF_RANGE_COVERED)}</td>
-                <td>{formatNumber(totals.PERCENT_OF_RANGE_ASSESSED)}</td>
-                <td>{formatFloat(totals.IQI)}</td>
-                <td>{formatFloat(totals.PFS)}</td>
+                <td>{formatFloat(totals.PERCENT_OF_RANGE_COVERED, 0)}</td>
+                <td>{formatFloat(totals.PERCENT_OF_RANGE_ASSESSED, 0)}</td>
+                <td>{formatFloat(totals.IQI, 2)}</td>
+                <td>{formatFloat(totals.PFS, 0)}</td>
               </tr>
             </tbody>
           </table>

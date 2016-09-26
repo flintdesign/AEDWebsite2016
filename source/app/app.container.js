@@ -19,6 +19,7 @@ import { formatNumber } from '../utils/format_utils';
 import {
   fetchGeography,
   fetchRanges,
+  fetchLocalRanges,
   fetchAdjacentGeography,
   fetchBounds
 } from '../api';
@@ -66,6 +67,10 @@ class App extends Component {
     // NEED VALIDATION - VERIFY AND/OR SEND TO 404
     // FETCH INITIAL DATA FOR MAP AND DATA
     this.fetchData(this.props, true);
+    fetchLocalRanges('known', this.props.dispatch);
+    fetchLocalRanges('protected', this.props.dispatch);
+    fetchLocalRanges('possible', this.props.dispatch);
+    fetchLocalRanges('doubtful', this.props.dispatch);
     // URL QUERIES TO CONTROL STATE
     if (this.props.location.query.sidebar_state) {
       const requestedState = parseInt(this.props.location.query.sidebar_state, 10);

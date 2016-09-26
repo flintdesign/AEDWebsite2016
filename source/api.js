@@ -386,3 +386,17 @@ export const fetchRanges = (type, dispatch) => {
   });
 };
 
+export const fetchLocalRanges = (type, dispatch) => {
+  dispatch({ type: FETCH_RANGE });
+  const url = `/ranges/${type}.json`;
+  return fetch(url)
+  .then(r => r.json())
+  .then(d => {
+    const geo = d[0].geometries;
+    dispatch({
+      type: RECEIVE_RANGE,
+      data: { rangeType: type, geometries: geo }
+    });
+  });
+};
+

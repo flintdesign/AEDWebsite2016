@@ -126,7 +126,7 @@ export default function CountsByInputZones(props) {
           <td className="td-left">{stratum.rc}</td>
           <td className="td-left">{stratum.est_type}</td>
           <td className="td-center">{stratum.category}</td>
-          <td className="td-center">{stratum.ayear}</td>
+          <td className="td-center">{stratum.year}</td>
           <td>{formatNumber(stratum.estimate)}</td>
           <td>{stratum.lcl95}</td>
           <td className="td-left">{stratum.short_cit}</td>
@@ -159,8 +159,8 @@ export default function CountsByInputZones(props) {
           <thead>
             <tr>
               <th></th>
-              <th className="th-parent th-left">Reason for Change</th>
-              <th colSpan="3" className="th-parent th-center">Survey Details</th>
+              <th className="th-parent th-left">Reason for Change<sup>1</sup></th>
+              <th colSpan="3" className="th-parent th-center">Survey Details<sup>2</sup></th>
               <th colSpan="2" className="th-parent th-center">Number of Elephants</th>
               <th colSpan="2" className="th-parent"></th>
               <th colSpan="1" className="th-parent th-center">Area</th>
@@ -168,7 +168,7 @@ export default function CountsByInputZones(props) {
             </tr>
             <tr>
               <th className="subgeography-totals__subgeography-name">
-                Input Zones
+                Elephant Estimates
               </th>
               <th className="th-left"></th>
               <th className="th-left">Type</th>
@@ -177,12 +177,42 @@ export default function CountsByInputZones(props) {
               <th>Estimate</th>
               <th>&plusmn;95&#37; CL</th>
               <th className="th-left">Source</th>
-              <th className="th-center">PFS</th>
+              <th className="th-center">PFS<sup>3</sup></th>
               <th className="th-center">(km<sup>2</sup>)</th>
               <th className="th-center">Lon.</th>
               <th className="th-center">Lat</th>
             </tr>
           </thead>
+          <tfoot>
+            <tr>
+              <td colSpan="6">
+                <div className="subgeography-totals__footnote">
+                  <sup>*</sup> Range of Informed Guess
+                </div>
+                <div className="subgeography-totals__footnote">
+                  <sup>1</sup> DA: Different Area; DD: Data Degraded;&nbsp;
+                  DT: Different Technique; NA: New Analysis; NG: New Guess;&nbsp;
+                  NP: New population; PL: Population Lost; RS: Repeat Survey&nbsp;
+                  (RS denotes a repeat survey that is not statistically comparable&nbsp;
+                  for reasons such as different season); ― : No Change
+                </div>
+                <div className="subgeography-totals__footnote">
+                  <sup>2</sup> AS: Aerial Sample Count; AT: Aerial Total Count;&nbsp;
+                  DC: Dung Count; GD: Genetic Dung Count; GS: Ground Sample Count;&nbsp;
+                  GT: Ground Total Count; IG: Informed Guess; IR: Individual Registration;&nbsp;
+                  OG: Other Guess. Survey Reliability is keyed A-E (best to worst).
+                </div>
+                <div className="subgeography-totals__footnote">
+                  <sup>3</sup> Priority for Future Surveys (PFS) is ranked&nbsp;
+                  from 1 to 5 (highest to lowest). Based on the precision of&nbsp;
+                  estimates and the proportion of national range accounted for&nbsp;
+                  by the site in question, PFS is a measure of the importance and&nbsp;
+                  urgency for future population surveys. All areas of unassessed&nbsp;
+                  range have a priority of 1.
+                </div>
+              </td>
+            </tr>
+          </tfoot>
           <tbody>
             {inputZoneTableList}
           </tbody>

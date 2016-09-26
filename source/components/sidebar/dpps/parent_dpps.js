@@ -63,7 +63,7 @@ export default function ParentDPPS(props) {
           {pfs &&
             <tr>
               <td>PFS</td>
-              <td>{formatFloat(pfs)}</td>
+              <td>{formatFloat(pfs, 0)}</td>
             </tr>
           }
         </tbody>

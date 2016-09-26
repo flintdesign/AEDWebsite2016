@@ -225,7 +225,11 @@ class Sidebar extends Component {
                   </li>
                 </ul>
               </nav>
-              <CountTypeToggle location={location} />
+              <CountTypeToggle
+                geographies={geographies}
+                currentTitle={this.state.currentTitle}
+                location={location}
+              />
             </div>
           }
         </section>

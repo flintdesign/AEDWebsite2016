@@ -86,55 +86,6 @@ export default function CountsBySurveyCategory(props) {
   } else {
     markup = (
       <div>
-        <table className="subgeography-totals table-fullwidth">
-          <thead>
-            <tr>
-              <th></th>
-              <th colSpan="2" className="th-parent">Estimates from surveys</th>
-              <th colSpan="2" className="th-parent">Guesses</th>
-              <th colSpan="1" className="th-parent th-right">% Known &amp;<br /> Possible Range</th>
-              <th colSpan="1" className="th-parent th-right">Area <span>(KM<sup>2</sup>)</span></th>
-            </tr>
-            <tr>
-              <th className="subgeography-totals__subgeography-name">
-                Area of Range by Data Category
-                <a
-                  href={`${glossaryLink}#survey-categories`}
-                  className="sidebar__glossary-link"
-                  target="_blank"
-                />
-              </th>
-              <th rowSpan="2" style={{ textAlign: 'right' }}>Estimate</th>
-              <th rowSpan="2" style={{ textAlign: 'right' }}>&plusmn;95&#37; CL</th>
-              <th>From</th>
-              <th>To</th>
-            </tr>
-          </thead>
-          <tbody>
-            {surveyCategories.map((categoryData, i) => (
-              <tr key={i}>
-                <td className="subgeography-totals__subgeography-name">
-                  {categoryData.SURVEYTYPE}
-                </td>
-                <td>{formatNumber(categoryData.ESTIMATE)}</td>
-                <td>{formatNumber(categoryData.CONFIDENCE)}</td>
-                <td>{formatNumber(categoryData.GUESS_MIN)}</td>
-                <td>{formatNumber(categoryData.GUESS_MAX)}</td>
-                <td>{formatNumber(categoryData.CATEGORY_RANGE_ASSESSED)}</td>
-                <td>{formatNumber(categoryData.AREA)}</td>
-              </tr>
-            ))}
-            <tr className="subgeography-totals__totals" key="totals">
-              <td className="subgeography-totals__subgeography-name">Totals</td>
-              <td>{formatNumber(totals.ESTIMATE)}</td>
-              <td>{formatNumber(totals.CONFIDENCE) || '-'}</td>
-              <td>{formatNumber(totals.GUESS_MIN)}</td>
-              <td>{formatNumber(totals.GUESS_MAX)}</td>
-              <td>{formatNumber(totals.PERCENT_OF_RANGE_ASSESSED)}</td>
-              <td>{formatNumber(totals.RANGE_AREA)}</td>
-            </tr>
-          </tbody>
-        </table>
         {changeTotals && (
           <table className="subgeography-totals causes-of-change table-fullwidth">
             <thead>
@@ -188,6 +139,55 @@ export default function CountsBySurveyCategory(props) {
             </tbody>
           </table>
         )}
+        <table className="subgeography-totals table-fullwidth">
+          <thead>
+            <tr>
+              <th></th>
+              <th colSpan="2" className="th-parent">Estimates from surveys</th>
+              <th colSpan="2" className="th-parent">Guesses</th>
+              <th colSpan="1" className="th-parent th-right">% Known &amp;<br /> Possible Range</th>
+              <th colSpan="1" className="th-parent th-right">Area <span>(KM<sup>2</sup>)</span></th>
+            </tr>
+            <tr>
+              <th className="subgeography-totals__subgeography-name">
+                Area of Range by Data Category
+                <a
+                  href={`${glossaryLink}#survey-categories`}
+                  className="sidebar__glossary-link"
+                  target="_blank"
+                />
+              </th>
+              <th rowSpan="2" style={{ textAlign: 'right' }}>Estimate</th>
+              <th rowSpan="2" style={{ textAlign: 'right' }}>&plusmn;95&#37; CL</th>
+              <th>From</th>
+              <th>To</th>
+            </tr>
+          </thead>
+          <tbody>
+            {surveyCategories.map((categoryData, i) => (
+              <tr key={i}>
+                <td className="subgeography-totals__subgeography-name">
+                  {categoryData.SURVEYTYPE}
+                </td>
+                <td>{formatNumber(categoryData.ESTIMATE)}</td>
+                <td>{formatNumber(categoryData.CONFIDENCE)}</td>
+                <td>{formatNumber(categoryData.GUESS_MIN)}</td>
+                <td>{formatNumber(categoryData.GUESS_MAX)}</td>
+                <td>{formatNumber(categoryData.CATEGORY_RANGE_ASSESSED)}</td>
+                <td>{formatNumber(categoryData.AREA)}</td>
+              </tr>
+            ))}
+            <tr className="subgeography-totals__totals" key="totals">
+              <td className="subgeography-totals__subgeography-name">Totals</td>
+              <td>{formatNumber(totals.ESTIMATE)}</td>
+              <td>{formatNumber(totals.CONFIDENCE) || '-'}</td>
+              <td>{formatNumber(totals.GUESS_MIN)}</td>
+              <td>{formatNumber(totals.GUESS_MAX)}</td>
+              <td>{formatNumber(totals.PERCENT_OF_RANGE_ASSESSED)}</td>
+              <td>{formatNumber(totals.RANGE_AREA)}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     );
   }
