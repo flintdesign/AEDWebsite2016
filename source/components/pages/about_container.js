@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { withRouter } from 'react-router';
 import IntroMarkup from 'html!./../../data/about/introduction.html';
-import AboutUsMarkup from 'html!./../../data/about/about-us.html';
-import PartnersResourcesMarkup from 'html!./../../data/about/partners-resources.html';
-import KeyPointsMarkup from 'html!./../../data/about/key-points.html';
+import PartnersSponsorsMarkup from 'html!./../../data/about/partners-sponsors.html';
+import BackgroundHistoryMarkup from 'html!./../../data/about/background-history.html';
 import ReportsMarkup from 'html!./../../data/about/reports.html';
 
 class AboutContainer extends Component {
@@ -55,30 +54,28 @@ class AboutContainer extends Component {
                     Introduction
                   </a>
                 </li>
-                <li className={this.setMenuItemClass('#key-points')}>
-                  <a href="#key-points">
-                    Key Points
+                <li className={this.setMenuItemClass('#background-history')}>
+                  <a href="#background-history">
+                    Background &amp; History
                   </a>
                 </li>
-                <li className={this.setMenuItemClass('#about-us')}>
-                  <a href="#about-us">
-                    About Us
-                  </a>
-                </li>
-                <li className={this.setMenuItemClass('#partners-resources')}>
-                  <a href="#partners-resources">
-                    Partners &amp; Resources
+                <li className={this.setMenuItemClass('#partners-sponsors')}>
+                  <a href="#partners-sponsors">
+                    Partners &amp; Sponsors
                   </a>
                 </li>
                 <li className={this.setMenuItemClass('#reports')}>
                   <a href="#reports">
-                    Reports
+                    Reports &amp; Publications
                   </a>
                 </li>
               </ul>
             </nav>
             <div className="about-sidebar__actions">
               <h4>Resources for AED</h4>
+              <a className="button" href="/overview?return_to=/about">
+                Overview of the AED Data and Tables
+              </a>
               <a className="button" href="/glossary?return_to=/about">Glossary of Terms</a>
               <a className="button" href="/references">References</a>
               <a className="button button__disabled" href="/errata-2016">AESR 2016 Errata</a>
@@ -90,19 +87,14 @@ class AboutContainer extends Component {
                 <div dangerouslySetInnerHTML={ { __html: IntroMarkup } }></div>
               </div>
             </div>
-            <div className="about-content__section" id="key-points">
+            <div className="about-content__section" id="background-history">
               <div className="about-content__section__content">
-                <div dangerouslySetInnerHTML={ { __html: KeyPointsMarkup } }></div>
+                <div dangerouslySetInnerHTML={ { __html: BackgroundHistoryMarkup } }></div>
               </div>
             </div>
-            <div className="about-content__section" id="about-us">
+            <div className="about-content__section" id="partners-sponsors">
               <div className="about-content__section__content">
-                <div dangerouslySetInnerHTML={ { __html: AboutUsMarkup } }></div>
-              </div>
-            </div>
-            <div className="about-content__section" id="partners-resources">
-              <div className="about-content__section__content">
-                <div dangerouslySetInnerHTML={ { __html: PartnersResourcesMarkup } }></div>
+                <div dangerouslySetInnerHTML={ { __html: PartnersSponsorsMarkup } }></div>
               </div>
             </div>
             <div className="about-content__section" id="reports">

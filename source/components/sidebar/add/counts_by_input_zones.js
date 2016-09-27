@@ -4,7 +4,7 @@ import InputZoneToggleTable from '../input_zone_toggle_table';
 import { formatNumber } from '../../../utils/format_utils.js';
 import { slugify } from '../../../utils/convenience_funcs.js';
 import { SIDEBAR_FULL } from '../../../constants';
-import { sortBy } from 'lodash';
+import _ from 'lodash';
 
 const SidebarMapLink = ({ label, path }) => (
   <Link
@@ -22,74 +22,119 @@ SidebarMapLink.propTypes = {
 export default function CountsByInputZones(props) {
   const { inputZones, params, sidebarState, location } = props;
   const basePathForLinks = `/${params.year}/${params.region}/${params.country}`;
-  const alphaInputZones = sortBy(inputZones, z => z.name);
-  const inputZonesList = alphaInputZones.map((zone, i) => {
-    let izHref = `${basePathForLinks}/${slugify(zone.name)}`;
-    if (location.query.count_type === 'DPPS') {
-      izHref += '?count_type=DPPS';
-    }
-    const titleMarkup = (
-      <div className="subgeography__input-zone">
-        <SidebarMapLink
-          path={izHref}
-          label={`${zone.name}`}
-        />
-        <span className="subgeography-summary">
-          {zone.survey_type},&nbsp;
-          {formatNumber(zone.area)} km<sup>2</sup>
-        </span>
-        <div className="subgeography__input-zone__totals">
-          {formatNumber(zone.population_estimate)}
-          {zone.percent_cl &&
-            <span>&nbsp;&plusmn;&nbsp;{zone.percent_cl}</span>
-          }
+  const alphaInputZones = _.sortBy(inputZones, z => z.name);
+  const popGroup = _.chain(alphaInputZones)
+    .groupBy('population_name')
+    .map((value, key) => {
+      const pop = { name: key, zones: value };
+      return pop;
+    })
+    .value();
+  const alphaPopulations = _.sortBy(popGroup, p => p.name);
+  const popList = alphaPopulations.map((pop, i) => {
+    const zonesMarkup = pop.zones.map((zone, z) => {
+      let izHref = `${basePathForLinks}/${slugify(zone.name)}`;
+      if (location.query.count_type === 'DPPS') {
+        izHref += '?count_type=DPPS';
+      }
+      const titleMarkup = (
+        <div className="subgeography__input-zone">
+          <SidebarMapLink
+            path={izHref}
+            label={`${zone.name}`}
+          />
+          <span className="subgeography-summary">
+            {zone.survey_type},&nbsp;
+            {formatNumber(zone.area)} km<sup>2</sup>
+          </span>
+          <div className="subgeography__input-zone__totals">
+            {formatNumber(zone.population_estimate)}
+            {zone.percent_cl &&
+              <span>&nbsp;&plusmn;&nbsp;{zone.percent_cl}</span>
+            }
+          </div>
         </div>
+      );
+      const childMarkup = zone.strata.map((stratum, si) => (
+        <tr key={si}>
+          <td className="subgeography-totals__subgeography-name">
+            {stratum.stratum}
+            {'  '}
+            <span>{stratum.est_type},&nbsp;{formatNumber(stratum.area_rep)} km<sup>2</sup></span>
+          </td>
+          <td className="subgeography-totals__estimate">
+            {formatNumber(stratum.estimate)}
+            &nbsp;&plusmn;&nbsp;
+            {formatNumber(stratum.lcl95)}
+          </td>
+        </tr>
+      ));
+      return (
+        <InputZoneToggleTable
+          key={z}
+          titleMarkup={titleMarkup}
+          rowMarkup={childMarkup}
+        />
+      );
+    });
+    return (
+      <div key={i} style={ { margin: '1em 0' } }>
+        <h3 className="heading__small"
+          style={ {
+            color: '#000',
+            fontFamily: '"acumin-pro", Helvetica, sans-serif' } }
+        >
+          {pop.name}
+        </h3>
+        {zonesMarkup}
       </div>
     );
-    const childMarkup = zone.strata.map((stratum, si) => (
-      <tr key={si}>
-        <td className="subgeography-totals__subgeography-name">
-          {stratum.stratum}
-          {'  '}
-          <span>{stratum.est_type},&nbsp;{formatNumber(stratum.area_rep)} km<sup>2</sup></span>
-        </td>
-        <td className="subgeography-totals__estimate">
-          {formatNumber(stratum.estimate)}
-          &nbsp;&plusmn;&nbsp;
-          {formatNumber(stratum.lcl95)}
-        </td>
-      </tr>
-    ));
-    // let childMarkup;
-    // if (zone.strata.length === 1 && zone.strata[0].stratum === zone.name) {
-    //   childMarkup = [];
-    // } else {
-    //   childMarkup = zone.strata.map((stratum, si) => (
-    //     <tr key={si}>
-    //       <td className="subgeography-totals__subgeography-name">
-    //         <SidebarMapLink
-    //           path={`${basePathForLinks}/${slugify(stratum.stratum)}-${stratum.strcode}`}
-    //           label={`${stratum.stratum}`}
-    //         />
-    //         {'  '}
-    //         <span>{stratum.est_type},&nbsp;{formatNumber(stratum.area_rep)} km<sup>2</sup></span>
-    //       </td>
-    //       <td className="subgeography-totals__estimate">
-    //         {formatNumber(stratum.estimate)}
-    //         &nbsp;&plusmn;&nbsp;
-    //         {formatNumber(stratum.lcl95)}
-    //       </td>
-    //     </tr>
-    //   ));
-    // }
-    return (
-      <InputZoneToggleTable
-        key={i}
-        titleMarkup={titleMarkup}
-        rowMarkup={childMarkup}
-      />
-    );
   });
+  // const inputZonesList = alphaInputZones.map((zone, i) => {
+  //   let izHref = `${basePathForLinks}/${slugify(zone.name)}`;
+  //   if (location.query.count_type === 'DPPS') {
+  //     izHref += '?count_type=DPPS';
+  //   }
+  //   const titleMarkup = (
+  //     <div className="subgeography__input-zone">
+  //       <SidebarMapLink
+  //         path={izHref}
+  //         label={`${zone.name}`}
+  //       />
+  //       <span className="subgeography-summary">
+  //         {zone.survey_type},&nbsp;
+  //         {formatNumber(zone.area)} km<sup>2</sup>
+  //       </span>
+  //       <div className="subgeography__input-zone__totals">
+  //         {formatNumber(zone.population_estimate)}
+  //         {zone.percent_cl &&
+  //           <span>&nbsp;&plusmn;&nbsp;{zone.percent_cl}</span>
+  //         }
+  //       </div>
+  //     </div>
+  //   );
+  //   const childMarkup = zone.strata.map((stratum, si) => (
+  //     <tr key={si}>
+  //       <td className="subgeography-totals__subgeography-name">
+  //         {stratum.stratum}
+  //         {'  '}
+  //         <span>{stratum.est_type},&nbsp;{formatNumber(stratum.area_rep)} km<sup>2</sup></span>
+  //       </td>
+  //       <td className="subgeography-totals__estimate">
+  //         {formatNumber(stratum.estimate)}
+  //         &nbsp;&plusmn;&nbsp;
+  //         {formatNumber(stratum.lcl95)}
+  //       </td>
+  //     </tr>
+  //   ));
+  //   return (
+  //     <InputZoneToggleTable
+  //       key={i}
+  //       titleMarkup={titleMarkup}
+  //       rowMarkup={childMarkup}
+  //     />
+  //   );
+  // });
   const inputZoneTableList = [];
   inputZones.forEach((zone) => {
     inputZoneTableList.push(
@@ -147,7 +192,7 @@ export default function CountsByInputZones(props) {
             <h4 className="heading__small">
               Elephant Estimates
             </h4>
-            {inputZonesList}
+            {popList}
           </div>
         </div>
       </div>
