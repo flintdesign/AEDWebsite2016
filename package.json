@@ -12,11 +12,11 @@
   },
   "homepage": "https://github.com/AfESG/AEDWebsite2016",
   "description": "African Elephant Database Front End 2016",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "build": "webpack -p --config webpack/webpack-production.config.js",
-    "production": "npm run build && node server.js production",
+    "production": "npm run build && node ./server.js production",
     "test": "NODE_ENV=test BABEL_DISABLE_CACHE=1 babel-tape-runner source/**/*.spec.js | faucet",
     "postinstall": "npm run build"
   },
@@ -33,7 +33,6 @@
     "autoprefixer",
     "eslint"
   ],
-  "author": "Nate Bailey",
   "license": "ISC",
   "dependencies": {
     "autoprefixer": "^6.3.6",
