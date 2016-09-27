@@ -18,7 +18,6 @@ export default function CountsBySurveyCategory(props) {
   } = props;
   const surveyCategories = [];
   const causesOfChange = [];
-  console.log(totals);
   const unassessedRangeTotal =
     ((100 - totals.PERCENT_OF_RANGE_ASSESSED) / 100) * totals.ASSESSED_RANGE;
   const unassessedPercentTotal = 100 - totals.PERCENT_OF_RANGE_ASSESSED;

@@ -23,13 +23,11 @@ export default function CountsByInputZones(props) {
   const { inputZones, params, sidebarState, location } = props;
   const basePathForLinks = `/${params.year}/${params.region}/${params.country}`;
   const alphaInputZones = _.sortBy(inputZones, z => z.name);
-  const popGroup = _.chain(alphaInputZones)
-    .groupBy('population_name')
+  const popGroup = _.chain(alphaInputZones).groupBy('population_name')
     .map((value, key) => {
       const pop = { name: key, zones: value };
       return pop;
-    })
-    .value();
+    }).value();
   const alphaPopulations = _.sortBy(popGroup, p => p.name);
   const popList = alphaPopulations.map((pop, i) => {
     const zonesMarkup = pop.zones.map((zone, z) => {
@@ -90,99 +88,116 @@ export default function CountsByInputZones(props) {
       </div>
     );
   });
-  // const inputZonesList = alphaInputZones.map((zone, i) => {
-  //   let izHref = `${basePathForLinks}/${slugify(zone.name)}`;
-  //   if (location.query.count_type === 'DPPS') {
-  //     izHref += '?count_type=DPPS';
-  //   }
-  //   const titleMarkup = (
-  //     <div className="subgeography__input-zone">
-  //       <SidebarMapLink
-  //         path={izHref}
-  //         label={`${zone.name}`}
-  //       />
-  //       <span className="subgeography-summary">
-  //         {zone.survey_type},&nbsp;
-  //         {formatNumber(zone.area)} km<sup>2</sup>
-  //       </span>
-  //       <div className="subgeography__input-zone__totals">
-  //         {formatNumber(zone.population_estimate)}
-  //         {zone.percent_cl &&
-  //           <span>&nbsp;&plusmn;&nbsp;{zone.percent_cl}</span>
-  //         }
-  //       </div>
-  //     </div>
-  //   );
-  //   const childMarkup = zone.strata.map((stratum, si) => (
-  //     <tr key={si}>
-  //       <td className="subgeography-totals__subgeography-name">
-  //         {stratum.stratum}
-  //         {'  '}
-  //         <span>{stratum.est_type},&nbsp;{formatNumber(stratum.area_rep)} km<sup>2</sup></span>
-  //       </td>
-  //       <td className="subgeography-totals__estimate">
-  //         {formatNumber(stratum.estimate)}
-  //         &nbsp;&plusmn;&nbsp;
-  //         {formatNumber(stratum.lcl95)}
-  //       </td>
-  //     </tr>
-  //   ));
-  //   return (
-  //     <InputZoneToggleTable
-  //       key={i}
-  //       titleMarkup={titleMarkup}
-  //       rowMarkup={childMarkup}
-  //     />
-  //   );
-  // });
   const inputZoneTableList = [];
-  inputZones.forEach((zone) => {
+  alphaPopulations.forEach((pop, i) => {
     inputZoneTableList.push(
-      <tr key={`${zone.id}`}>
-        <td className="subgeography-totals__subgeography-name">
-          <SidebarMapLink
-            path={`${basePathForLinks}/${slugify(zone.name)}`}
-            label={`${zone.name}`}
-          />
+      <tr key={`pop-${i}`} className="population" colSpan="12">
+        <td className="subgeography-totals__population-name" colSpan="12">
+          {pop.name}
         </td>
-        <td className="td-left">{zone.cause_of_change}</td>
-        <td className="td-left">{zone.survey_type}</td>
-        <td className="td-center">{zone.survey_reliability}</td>
-        <td className="td-center">{zone.survey_year}</td>
-        <td>{formatNumber(zone.population_estimate)}</td>
-        <td>
-          {zone.percent_cl &&
-            <span>{zone.percent_cl.trim()}</span>
-          }
-        </td>
-        <td className="td-left">{zone.source}</td>
-        <td className="td-center">{zone.pfs}</td>
-        <td className="td-center">{formatNumber(zone.area)}</td>
-        <td className="td-center">{zone.lon}</td>
-        <td className="td-center">{zone.lat}</td>
       </tr>
     );
-    zone.strata.forEach((stratum) => {
+    pop.zones.forEach((zone) => {
       inputZoneTableList.push(
-        <tr key={`${zone.id}-${stratum.strcode}`}>
-          <td className="subgeography-totals__subgeography-name" style={ { paddingLeft: '50px' } }>
-            {stratum.stratum}
+        <tr key={`${zone.id}`}>
+          <td className="subgeography-totals__subgeography-name">
+            <SidebarMapLink
+              path={`${basePathForLinks}/${slugify(zone.name)}`}
+              label={`${zone.name}`}
+            />
           </td>
-          <td className="td-left">{stratum.rc}</td>
-          <td className="td-left">{stratum.est_type}</td>
-          <td className="td-center">{stratum.category}</td>
-          <td className="td-center">{stratum.year}</td>
-          <td>{formatNumber(stratum.estimate)}</td>
-          <td>{stratum.lcl95}</td>
-          <td className="td-left">{stratum.short_cit}</td>
-          <td></td>
-          <td className="td-center">{formatNumber(stratum.area_rep)}</td>
+          <td className="td-left">{zone.cause_of_change}</td>
+          <td className="td-left">{zone.survey_type}</td>
+          <td className="td-center">{zone.survey_reliability}</td>
+          <td className="td-center">{zone.survey_year}</td>
+          <td>{formatNumber(zone.population_estimate)}</td>
+          <td>
+            {zone.percent_cl &&
+              <span>{zone.percent_cl.trim()}</span>
+            }
+          </td>
+          <td className="td-left">{zone.source}</td>
+          <td className="td-center">{zone.pfs}</td>
+          <td className="td-center">{formatNumber(zone.area)}</td>
           <td className="td-center">{zone.lon}</td>
           <td className="td-center">{zone.lat}</td>
         </tr>
       );
+      zone.strata.forEach((stratum) => {
+        inputZoneTableList.push(
+          <tr key={`${zone.id}-${stratum.strcode}`}>
+            <td
+              className="subgeography-totals__subgeography-name"
+              style={ { paddingLeft: '50px' } }
+            >
+              {stratum.stratum}
+            </td>
+            <td className="td-left">{stratum.rc}</td>
+            <td className="td-left">{stratum.est_type}</td>
+            <td className="td-center">{stratum.category}</td>
+            <td className="td-center">{stratum.year}</td>
+            <td>{formatNumber(stratum.estimate)}</td>
+            <td>{stratum.lcl95}</td>
+            <td className="td-left">{stratum.short_cit}</td>
+            <td></td>
+            <td className="td-center">{formatNumber(stratum.area_rep)}</td>
+            <td className="td-center">{zone.lon}</td>
+            <td className="td-center">{zone.lat}</td>
+          </tr>
+        );
+      });
     });
   });
+  // inputZones.forEach((zone) => {
+  //   inputZoneTableList.push(
+  //     <tr key={`${zone.id}`}>
+  //       <td className="subgeography-totals__subgeography-name">
+  //         <SidebarMapLink
+  //           path={`${basePathForLinks}/${slugify(zone.name)}`}
+  //           label={`${zone.name}`}
+  //         />
+  //       </td>
+  //       <td className="td-left">{zone.cause_of_change}</td>
+  //       <td className="td-left">{zone.survey_type}</td>
+  //       <td className="td-center">{zone.survey_reliability}</td>
+  //       <td className="td-center">{zone.survey_year}</td>
+  //       <td>{formatNumber(zone.population_estimate)}</td>
+  //       <td>
+  //         {zone.percent_cl &&
+  //           <span>{zone.percent_cl.trim()}</span>
+  //         }
+  //       </td>
+  //       <td className="td-left">{zone.source}</td>
+  //       <td className="td-center">{zone.pfs}</td>
+  //       <td className="td-center">{formatNumber(zone.area)}</td>
+  //       <td className="td-center">{zone.lon}</td>
+  //       <td className="td-center">{zone.lat}</td>
+  //     </tr>
+  //   );
+  //   zone.strata.forEach((stratum) => {
+  //     inputZoneTableList.push(
+  //       <tr key={`${zone.id}-${stratum.strcode}`}>
+  //         <td
+  //           className="subgeography-totals__subgeography-name"
+  //           style={ { paddingLeft: '50px' } }
+  //         >
+  //           {stratum.stratum}
+  //         </td>
+  //         <td className="td-left">{stratum.rc}</td>
+  //         <td className="td-left">{stratum.est_type}</td>
+  //         <td className="td-center">{stratum.category}</td>
+  //         <td className="td-center">{stratum.year}</td>
+  //         <td>{formatNumber(stratum.estimate)}</td>
+  //         <td>{stratum.lcl95}</td>
+  //         <td className="td-left">{stratum.short_cit}</td>
+  //         <td></td>
+  //         <td className="td-center">{formatNumber(stratum.area_rep)}</td>
+  //         <td className="td-center">{zone.lon}</td>
+  //         <td className="td-center">{zone.lat}</td>
+  //       </tr>
+  //     );
+  //   });
+  // });
   let markup = null;
   if (sidebarState < SIDEBAR_FULL) {
     markup = (
