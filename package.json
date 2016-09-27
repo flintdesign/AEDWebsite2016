@@ -1,7 +1,6 @@
 {
   "name": "africanelephantdatabase",
-  "version": "1.0.0",
-  "author": "Kevin Bleich at Flint <kevincbleich@gmail.com> (http://github.com/dmak78)",
+  "version": "0.1.0",
   "engines": {
     "npm": "3.8.9",
     "node": "5.11.1"
@@ -10,9 +9,8 @@
     "type": "git",
     "url": "https://github.com/AfESG/AEDWebsite2016"
   },
-  "homepage": "https://github.com/AfESG/AEDWebsite2016",
   "description": "African Elephant Database Front End 2016",
-  "main": "./public/index.js",
+  "main": "index.js",
   "scripts": {
     "start": "node server.js",
     "build": "webpack -p --config webpack/webpack-production.config.js",
@@ -33,6 +31,7 @@
     "autoprefixer",
     "eslint"
   ],
+  "author": "Nate Bailey",
   "license": "ISC",
   "dependencies": {
     "autoprefixer": "^6.3.6",
