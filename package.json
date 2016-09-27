@@ -1,8 +1,9 @@
 {
-  "name": "scaffold",
+  "name": "africanelephantdatabase",
   "version": "0.1.0",
   "engines": {
-    "npm": "3.8.9"
+    "npm": "3.8.9",
+    "node": "5.11.1"
   },
   "description": "A scaffold for creative front end web development",
   "main": "index.js",
