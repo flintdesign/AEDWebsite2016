@@ -123,8 +123,8 @@ export default function CountsBySurveyCategory(props) {
                   <td>{formatNumber(categoryData.CONFIDENCE)}</td>
                   <td>{formatNumber(categoryData.GUESS_MIN)}</td>
                   <td>{formatNumber(categoryData.GUESS_MAX)}</td>
-                  <td>{formatNumber(categoryData.AREA)}</td>
                   <td>{formatNumber(categoryData.CATEGORY_RANGE_ASSESSED)}</td>
+                  <td>{formatNumber(categoryData.AREA)}</td>
                 </tr>
               ))}
               <tr className="subgeography-totals__totals" key="totals">
@@ -133,8 +133,8 @@ export default function CountsBySurveyCategory(props) {
                 <td>{formatNumber(changeTotals.CONFIDENCE)}</td>
                 <td>{formatNumber(changeTotals.GUESS_MIN)}</td>
                 <td>{formatNumber(changeTotals.GUESS_MAX)}</td>
-                <td>{formatNumber(changeTotals.RANGE_AREA)}</td>
                 <td>{formatNumber(changeTotals.PERCENT_OF_RANGE_ASSESSED)}</td>
+                <td>{formatNumber(changeTotals.RANGE_AREA)}</td>
               </tr>
             </tbody>
           </table>

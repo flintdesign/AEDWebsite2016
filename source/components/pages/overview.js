@@ -8,7 +8,7 @@ import SurveyCategoriesToggle from 'json!./../../data/glossary/survey-categories
 import CausesOfChangeIntro from 'html!./../../data/glossary/causes-of-change.html';
 import CausesOfChangeToggle from 'json!./../../data/glossary/causes-of-change-toggle-list.json';
 
-class Glossary extends Component {
+class Overview extends Component {
   constructor(props, context) {
     super(props, context);
     this.goBack = this.goBack.bind(this);
@@ -20,7 +20,7 @@ class Glossary extends Component {
       returnLink += `?sidebar_state=${props.location.query.sidebar_state}`;
     }
     this.state = {
-      title: 'Glossary',
+      title: 'Overview',
       returnLink: returnLink,
       activeId: props.location.hash || '#range-categories'
     };
@@ -54,27 +54,24 @@ class Glossary extends Component {
             <a onClick={this.goBack} className="glossary-sidebar__close"></a>
             <div className="glossary-sidebar__header">
               <h2 className="glossary-sidebar__header__title">
-                Glossary of Terms
+                Overview of AED Data and Tables
               </h2>
             </div>
             <div className="glossary-menu">
-              <h4 className="glossary-menu__title">
-                DATA TYPES &amp; CATEGORIZATION
-              </h4>
               <ul className="glossary-menu__list">
                 <li className={this.setMenuItemClass('#range-categories')}>
                   <a href="#range-categories">
-                    Range Categories
+                    Data Types and Categorization
                   </a>
                 </li>
                 <li className={this.setMenuItemClass('#survey-categories')}>
                   <a href="#survey-categories">
-                    Survey Categories
+                    Integration and Presentation of Data
                   </a>
                 </li>
                 <li className={this.setMenuItemClass('#reason-for-change')}>
                   <a href="#reason-for-change">
-                    Reason for Change
+                    AED Tables and Data Dictionary
                   </a>
                 </li>
               </ul>
@@ -126,12 +123,12 @@ class Glossary extends Component {
   }
 }
 
-Glossary.propTypes = {
+Overview.propTypes = {
   title: PropTypes.string,
   params: PropTypes.object.isRequired,
   router: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
 };
 
-export default withRouter(Glossary);
+export default withRouter(Overview);
 
