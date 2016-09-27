@@ -52,13 +52,13 @@ export default function ADDSidebar(props) {
     <div>
       {!isEmpty(geographies) && currentTitle === 'summary_area' &&
         <div>
-          {!geographies.input_zones &&
+          {!geographies.input_zones && sidebarState === 1 &&
             <ParentADD
               data={{ ...data('summary'), ...data(pluralize(subGeography)) }}
               year={year}
             />
           }
-          {geographies.input_zones &&
+          {geographies.input_zones && sidebarState === 1 &&
             <ParentADD
               data={addSummaryData}
               year={year}
