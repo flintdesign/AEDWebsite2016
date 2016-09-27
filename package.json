@@ -1,15 +1,10 @@
 {
-  "name": "africanelephantdatabase",
+  "name": "scaffold",
   "version": "0.1.0",
   "engines": {
-    "npm": "3.8.9",
-    "node": "5.11.1"
+    "npm": "3.8.9"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/AfESG/AEDWebsite2016"
-  },
-  "description": "African Elephant Database Front End 2016",
+  "description": "A scaffold for creative front end web development",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
