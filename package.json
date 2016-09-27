@@ -1,11 +1,17 @@
 {
   "name": "africanelephantdatabase",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "author": "Kevin Bleich at Flint <kevincbleich@gmail.com> (http://github.com/dmak78)",
   "engines": {
     "npm": "3.8.9",
     "node": "5.11.1"
   },
-  "description": "A scaffold for creative front end web development",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AfESG/AEDWebsite2016"
+  },
+  "homepage": "https://github.com/AfESG/AEDWebsite2016",
+  "description": "African Elephant Database Front End 2016",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
