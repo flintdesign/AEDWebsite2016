@@ -1,12 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { withRouter } from 'react-router';
-import GlossaryToggleItem from './glossary_toggle';
-import RangeCategories from 'html!./../../data/glossary/range-categories.html';
-import SurveyCategoriesIntro from 'html!./../../data/glossary/survey-categories.html';
-import SurveyCategoriesContent from 'html!./../../data/glossary/survey-reliability.html';
-import SurveyCategoriesToggle from 'json!./../../data/glossary/survey-categories-toggle-list.json';
-import CausesOfChangeIntro from 'html!./../../data/glossary/causes-of-change.html';
-import CausesOfChangeToggle from 'json!./../../data/glossary/causes-of-change-toggle-list.json';
+import TypesMarkup from 'html!markdown!./../../data/overview/types-categorization.md';
+import IntegrationMarkup from 'html!markdown!./../../data/overview/integration-presentation.md';
+import TablesMarkup from 'html!markdown!./../../data/overview/tables-dictionary.md';
 
 class Overview extends Component {
   constructor(props, context) {
@@ -22,7 +18,7 @@ class Overview extends Component {
     this.state = {
       title: 'Overview',
       returnLink: returnLink,
-      activeId: props.location.hash || '#range-categories'
+      activeId: props.location.hash || '#types-categorization'
     };
   }
 
@@ -59,18 +55,18 @@ class Overview extends Component {
             </div>
             <div className="glossary-menu">
               <ul className="glossary-menu__list">
-                <li className={this.setMenuItemClass('#range-categories')}>
-                  <a href="#range-categories">
+                <li className={this.setMenuItemClass('#types-categorization')}>
+                  <a href="#types-categorization">
                     Data Types and Categorization
                   </a>
                 </li>
-                <li className={this.setMenuItemClass('#survey-categories')}>
-                  <a href="#survey-categories">
+                <li className={this.setMenuItemClass('#integration-presentation')}>
+                  <a href="#integration-presentation">
                     Integration and Presentation of Data
                   </a>
                 </li>
-                <li className={this.setMenuItemClass('#reason-for-change')}>
-                  <a href="#reason-for-change">
+                <li className={this.setMenuItemClass('#tables-dictionary')}>
+                  <a href="#tables-dictionary">
                     AED Tables and Data Dictionary
                   </a>
                 </li>
@@ -78,43 +74,14 @@ class Overview extends Component {
             </div>
           </div>
           <div className="glossary-content">
-            <div className="glossary-content__section" id="range-categories">
-              <div dangerouslySetInnerHTML={ { __html: RangeCategories } } />
+            <div className="glossary-content__section" id="types-categorization">
+              <div dangerouslySetInnerHTML={ { __html: TypesMarkup } } />
             </div>
-            <div className="glossary-content__section" id="survey-categories">
-              <div className="survey-categories">
-                <div dangerouslySetInnerHTML={ { __html: SurveyCategoriesIntro } } />
-                <div className="glossary-content__section__inner">
-                  <ul className="glossary-toggle-list">
-                    {SurveyCategoriesToggle.data.map((item, i) => (
-                      <GlossaryToggleItem
-                        key={`survery-cat-toggle-${i}`}
-                        abbrv={item.abbrv}
-                        headerTitle={item.headerTitle}
-                        content={item.content}
-                      />
-                    ))}
-                  </ul>
-                  <div dangerouslySetInnerHTML={ { __html: SurveyCategoriesContent } } />
-                </div>
-              </div>
+            <div className="glossary-content__section" id="integration-presentation">
+              <div dangerouslySetInnerHTML={ { __html: IntegrationMarkup } } />
             </div>
-            <div className="glossary-content__section" id="reason-for-change">
-              <div className="causes-of-change">
-                <div dangerouslySetInnerHTML={ { __html: CausesOfChangeIntro } } />
-                <div className="glossary-content__section__inner">
-                  <ul className="glossary-toggle-list">
-                    {CausesOfChangeToggle.data.map((item, i) => (
-                      <GlossaryToggleItem
-                        key={`cause-toggle-${i}`}
-                        abbrv={item.abbrv}
-                        headerTitle={item.headerTitle}
-                        content={item.content}
-                      />
-                    ))}
-                  </ul>
-                </div>
-              </div>
+            <div className="glossary-content__section" id="tables-dictionary">
+              <div dangerouslySetInnerHTML={ { __html: TablesMarkup } } />
             </div>
           </div>
         </div>

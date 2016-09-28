@@ -3,8 +3,8 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { Router, Route, Redirect, IndexRedirect, browserHistory } from 'react-router';
 import App from './app/app.container';
-import MapContainer from './components/map_container';
-import Intro from './components/pages/intro';
+// import MapContainer from './components/map_container';
+import Intro from './components/pages/placeholder';
 import Glossary from './components/pages/glossary';
 import Overview from './components/pages/overview';
 import References from './components/pages/references';
@@ -41,7 +41,7 @@ const store = createStore(rootReducer, compose(
 render((
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path={'/intro'} component={Intro} />
+      <Route path={'/coming-soon'} component={Intro} />
       <Route path={'/about'} component={AboutContainer} />
       <Route path={'/glossary'} component={Glossary} />
       <Route path={'/overview'} component={Overview} />
@@ -53,8 +53,7 @@ render((
         // Yep, this is annoying. Stop React Router Link
         // from adding a trailing slash.
         <Redirect from="/*/" to="/*" />
-        <IndexRedirect to="/2015" />
-        <Route path={'/:year(/:region)(/:country)(/:input_zone)'} component={MapContainer} />
+        <IndexRedirect to="/coming-soon" />
       </Route>
       <Route path="*" component={ErrorPage} />
     </Router>
