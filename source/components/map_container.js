@@ -290,7 +290,7 @@ class MapContainer extends Component {
               slug={slugify(datum.name)}
               region={slugify(datum.region)}
               estimate={datum.population_estimate}
-              confidence={formatNumber(datum.percent_cl)}
+              confidence={datum.percent_cl}
               onMouseOver={self.handleMouseover}
               onMouseOut={self.handleMouseout}
               geoType={datum.geoType}
@@ -396,7 +396,7 @@ class MapContainer extends Component {
               name={zGeo.name}
               region={slugify(zGeo.region)}
               estimate={zGeo.population_estimate}
-              confidence={formatNumber(zGeo.percent_cl)}
+              confidence={zGeo.percent_cl}
             />
           </LayerGroup>
         );

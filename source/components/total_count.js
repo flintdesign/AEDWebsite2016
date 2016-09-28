@@ -31,7 +31,12 @@ class TotalCount extends Component {
                 {confidence &&
                   <span>
                     &nbsp;&plusmn;&nbsp;
-                    {formatNumber(confidence)}
+                    {confidence.indexOf(',') !== -1 &&
+                      `${confidence}`
+                    }
+                    {confidence.indexOf(',') === -1 &&
+                      `${formatNumber(confidence)}`
+                    }
                   </span>
                 }
               </span>

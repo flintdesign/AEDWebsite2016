@@ -84,7 +84,7 @@ export default function InputZoneSidebar(props) {
                   {zone.percent_cl &&
                     <span>
                       &nbsp;&plusmn;&nbsp;
-                      {formatNumber(zone.percent_cl)}
+                      {zone.percent_cl}
                     </span>
                   }
                 </td>
