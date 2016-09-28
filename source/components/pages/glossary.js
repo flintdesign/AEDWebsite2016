@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import GlossaryToggleItem from './glossary_toggle';
 import RangeCategories from 'html!./../../data/glossary/range-categories.html';
 import SurveyCategoriesIntro from 'html!./../../data/glossary/survey-categories.html';
-import SurveyCategoriesContent from 'html!./../../data/glossary/survey-categories-2.html';
+import SurveyReliabilityContent from 'html!./../../data/glossary/survey-categories-2.html';
 import SurveyCategoriesToggle from 'json!./../../data/glossary/survey-categories-toggle-list.json';
 import CausesOfChangeIntro from 'html!./../../data/glossary/causes-of-change.html';
 import CausesOfChangeToggle from 'json!./../../data/glossary/causes-of-change-toggle-list.json';
@@ -72,6 +72,11 @@ class Glossary extends Component {
                     Survey Categories
                   </a>
                 </li>
+                <li className={this.setMenuItemClass('#survey-reliability')}>
+                  <a href="#survey-reliability">
+                    Survey Reliability
+                  </a>
+                </li>
                 <li className={this.setMenuItemClass('#reason-for-change')}>
                   <a href="#reason-for-change">
                     Reason for Change
@@ -98,8 +103,12 @@ class Glossary extends Component {
                       />
                     ))}
                   </ul>
-                  <div dangerouslySetInnerHTML={ { __html: SurveyCategoriesContent } } />
                 </div>
+              </div>
+            </div>
+            <div className="glossary-content__section" id="survey-reliability">
+              <div className="survey-reliability">
+                <div dangerouslySetInnerHTML={ { __html: SurveyReliabilityContent } } />
               </div>
             </div>
             <div className="glossary-content__section" id="reason-for-change">
