@@ -43,41 +43,22 @@ export default function DPPSSidebar(props) {
   const unassessedInKM = (unassessedPercent / 100) * totalRange;
   return (
     <div>
-      {!isEmpty(geographies) && currentTitle === 'totals' && data &&
-        <div>
-          <SurveyTypeDPPS
-            surveys={
-              geographies.area_of_range_covered_by_continent ||
-              geographies.area_of_range_covered_by_region ||
-              geographies.area_of_range_covered_by_country}
-            tablesTitle="Area of Range by Data Category"
-          />
-          <CauseOfChangeDPPS
-            surveys={
-              geographies.causes_of_change_by_continent ||
-              geographies.causes_of_change_by_region ||
-              geographies.causes_of_change_by_country}
-            tablesTitle=" Interpretation of changes from previous report"
-          />
-        </div>
-      }
-
       {!isEmpty(geographies) && currentTitle === 'summary_area' && data &&
         <div>
+          <ParentDPPS
+            currentGeography={currentGeography}
+            definite={data.DEFINITE}
+            probable={data.PROBABLE}
+            possible={data.POSSIBLE}
+            speculative={data.SPECUL}
+            rangeArea={data.RANGEAREA}
+            rangePercentage={data.RANGEPERC}
+            rangeAssessed={data.SURVRANGPERC}
+            iqi={data.INFQLTYIDX}
+            pfs={data.PFS}
+          />
           {sidebarState !== 2 &&
             <div>
-              <ParentDPPS
-                currentGeography={currentGeography}
-                definite={data.DEFINITE}
-                probable={data.PROBABLE}
-                possible={data.POSSIBLE}
-                speculative={data.SPECUL}
-                rangeArea={data.RANGEAREA}
-                rangePercentage={data.RANGEPERC}
-                rangeAssessed={data.SURVRANGPERC}
-                iqi={data.INFQLTYIDX}
-                pfs={data.PFS}
-              />
               <AreaRange
                 totalRange={formatNumber(data.RANGEAREA)}
                 assessedInKM={formatNumber(assessedInKM)}
@@ -87,9 +68,28 @@ export default function DPPSSidebar(props) {
               />
             </div>
           }
+          <CauseOfChangeDPPS
+            surveys={
+              geographies.causes_of_change_by_continent ||
+              geographies.causes_of_change_by_region ||
+              geographies.causes_of_change_by_country}
+            tablesTitle=" Interpretation of changes from previous report"
+          />
+          <SurveyTypeDPPS
+            surveys={
+              geographies.area_of_range_covered_by_continent ||
+              geographies.area_of_range_covered_by_region ||
+              geographies.area_of_range_covered_by_country}
+            tablesTitle="Area of Range by Data Category"
+          />
+        </div>
+      }
+
+      {!isEmpty(geographies) && currentTitle === 'totals' && data &&
+        <div>
           {!geographies.strata &&
             <ChildDPPS
-              tablesTitle={`Numbers by ${subGeography}`}
+              tablesTitle={`${subGeography === 'region' ? 'Regional' : subGeography} Totals`}
               geographies={geographies[pluralize(subGeography)]}
             />
           }

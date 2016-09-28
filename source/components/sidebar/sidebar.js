@@ -210,7 +210,7 @@ class Sidebar extends Component {
                       className={this.getCurrentTitle('summary_area')}
                     >
                       <span>
-                        Summary totals &amp; {totalsTitle}
+                        Summary totals &amp; Interpretation of Changes
                       </span>
                     </div>
                   </li>
@@ -219,13 +219,15 @@ class Sidebar extends Component {
                       className={this.getCurrentTitle('totals')}
                     >
                       <span>
-                        Data Categories &amp; Interpretation of Changes
+                        {totalsTitle}
                       </span>
                     </div>
                   </li>
                 </ul>
               </nav>
               <CountTypeToggle
+                geographies={geographies}
+                currentTitle={this.state.currentTitle}
                 location={location}
               />
             </div>

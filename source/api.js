@@ -299,7 +299,7 @@ export function fetchGeography(dispatch, type, slug, year, count) {
 
   const fetchURL = `${config.apiBaseURL}/${type}/${apiId}/${year}/${_count}`;
   // Dispatch async call to the APIk
-  fetch(fetchURL)
+  return fetch(fetchURL)
     .then(r => r.json())
     .then(d => {
       output = { ...d, ...output };
@@ -382,6 +382,20 @@ export const fetchRanges = (type, dispatch) => {
     dispatch({
       type: RECEIVE_RANGE,
       data: { rangeType: type, geometries: d.geometries }
+    });
+  });
+};
+
+export const fetchLocalRanges = (type, dispatch) => {
+  dispatch({ type: FETCH_RANGE });
+  const url = `/ranges/${type}.json`;
+  return fetch(url)
+  .then(r => r.json())
+  .then(d => {
+    const geo = d[0].geometries;
+    dispatch({
+      type: RECEIVE_RANGE,
+      data: { rangeType: type, geometries: geo }
     });
   });
 };

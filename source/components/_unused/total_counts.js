@@ -54,7 +54,7 @@ export default function TotalCounts(props) {
           </tr>
           <tr>
             <td>PFS</td>
-            <td>{formatFloat(pfs)}</td>
+            <td>{formatNumber(pfs)}</td>
           </tr>
         </tbody>
       </table>

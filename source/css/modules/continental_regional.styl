@@ -9,6 +9,9 @@
     &:hover
       background #f8f8f8
       transition background-color 0.3s
+    
+    &.population
+      border none
   thead tr
     border-top 0
   th:not(:first-child), td:not(:first-child)
@@ -33,6 +36,10 @@
     
   &--causes-of-change
     margin-top: 30px
+  
+  &__population-name
+    border none
+    padding-top 1.5em
 
 .subgeography-totals__subgeography-name
   position relative
@@ -76,6 +83,18 @@
   border-bottom 0 !important
   border-top 1px solid black !important
 
+.subgeography-totals__footnote
+  font-family 'acumin-pro', Helvetica, sans-serif
+  color #888
+  font-size 0.8em
+  font-weight 600
+  line-height 1.3
+  text-transform uppercase
+  margin-bottom 1em
+  
+  sup
+    bottom 0.5em
+
 .table-fullwidth
   margin-bottom 4em
   thead
@@ -105,6 +124,15 @@
     border-bottom 1px solid $gray-lightest
     td
       padding 1em 0.75em
+      
+      &.subgeography-totals__population-name
+        font-family 'acumin-pro', Helvetica, sans-serif
+        font-size 0.8em
+        font-weight 600
+        line-height 1.3
+        text-transform uppercase
+        border-bottom 2px solid $gray-light !important
+        border-top 1px solid $gray-light !important
     
     .td-center
       text-align center
@@ -117,3 +145,7 @@
       
   .subgeography-totals__totals
     border-top 2px solid $gray-light !important
+    border-bottom 1px solid $gray-light !important
+    &.range-totals
+      border-top 1px solid $gray-light !important
+      border-bottom none !important

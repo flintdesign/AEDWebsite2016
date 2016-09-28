@@ -9,4 +9,8 @@ export const formatNumber = num => {
   if (!num) return '-';
   return numberWithCommas(parseInt(num, 10));
 };
-export const formatFloat = num => parseFloat(num, 10).toFixed(1);
+export const formatFloat = (num, places = 1) => {
+  if (!num) return '-';
+  const output = parseFloat(num, 10).toFixed(places);
+  return output;
+};

@@ -17,7 +17,7 @@ export default function ParentDPPS(props) {
 
   return (
     <div>
-      <h3 className="heading__small">{currentGeography} Elephant Numbers</h3>
+      <h3 className="heading__small">Summary Totals</h3>
       <table className="sidebar__stats-table bold-all">
         <tbody>
           <tr>
@@ -63,7 +63,7 @@ export default function ParentDPPS(props) {
           {pfs &&
             <tr>
               <td>PFS</td>
-              <td>{formatFloat(pfs)}</td>
+              <td>{formatFloat(pfs, 0)}</td>
             </tr>
           }
         </tbody>

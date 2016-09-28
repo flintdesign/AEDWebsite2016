@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import find from 'lodash.find';
 import SurveyCategory from './survey_category';
 import { SIDEBAR_FULL } from '../../../constants';
-import { formatNumber } from '../../../utils/format_utils.js';
+import { formatNumber, formatFloat } from '../../../utils/format_utils.js';
 
 export default function CountsBySurveyCategory(props) {
   const {
@@ -13,10 +13,14 @@ export default function CountsBySurveyCategory(props) {
     sidebarState,
     totals,
     changeTotals,
-    location
+    location,
+    year
   } = props;
   const surveyCategories = [];
   const causesOfChange = [];
+  const unassessedRangeTotal =
+    ((100 - totals.PERCENT_OF_RANGE_ASSESSED) / 100) * totals.ASSESSED_RANGE;
+  const unassessedPercentTotal = 100 - totals.PERCENT_OF_RANGE_ASSESSED;
 
   summary_totals.forEach(countType => {
     const area = find(areas, a => a.category === countType.CATEGORY);
@@ -35,30 +39,8 @@ export default function CountsBySurveyCategory(props) {
     // Half-width sidebar
     markup = (
       <div>
-        <div className="sidebar__count-summary">
-          <h3 className="heading__small">
-            Area of range by data category
-            <a
-              href={`${glossaryLink}#survey-categories`}
-              className="sidebar__glossary-link"
-              target="_blank"
-            />
-          </h3>
-          {surveyCategories.map(categoryData => (
-            <SurveyCategory
-              key={categoryData.SURVEYTYPE}
-              surveyType={categoryData.SURVEYTYPE}
-              estimate={categoryData.ESTIMATE}
-              confidence={categoryData.CONFIDENCE}
-              guess_min={categoryData.GUESS_MIN}
-              guess_max={categoryData.GUESS_MAX}
-              range_assessed={categoryData.CATEGORY_RANGE_ASSESSED}
-              range_area={categoryData.AREA}
-            />)
-          )}
-        </div>
         {changeTotals && (
-          <div className="sidebar__count-summary sidebar__count-summary--causes-of-change">
+          <div className="sidebar__count-summary">
             <h3 className="heading__small">
                Interpretation of changes from previous<br />report
               <a
@@ -81,6 +63,28 @@ export default function CountsBySurveyCategory(props) {
             )}
           </div>
         )}
+        <div className="sidebar__count-summary sidebar__count-summary--causes-of-change">
+          <h3 className="heading__small">
+            Area of range by data category
+            <a
+              href={`${glossaryLink}#survey-categories`}
+              className="sidebar__glossary-link"
+              target="_blank"
+            />
+          </h3>
+          {surveyCategories.map(categoryData => (
+            <SurveyCategory
+              key={categoryData.SURVEYTYPE}
+              surveyType={categoryData.SURVEYTYPE}
+              estimate={categoryData.ESTIMATE}
+              confidence={categoryData.CONFIDENCE}
+              guess_min={categoryData.GUESS_MIN}
+              guess_max={categoryData.GUESS_MAX}
+              range_assessed={categoryData.CATEGORY_RANGE_ASSESSED}
+              range_area={categoryData.AREA}
+            />)
+          )}
+        </div>
       </div>
     );
   } else {
@@ -97,7 +101,7 @@ export default function CountsBySurveyCategory(props) {
             </tr>
             <tr>
               <th className="subgeography-totals__subgeography-name">
-                Area of Range by Data Category
+                Summary Totals
                 <a
                   href={`${glossaryLink}#survey-categories`}
                   className="sidebar__glossary-link"
@@ -120,17 +124,35 @@ export default function CountsBySurveyCategory(props) {
                 <td>{formatNumber(categoryData.CONFIDENCE)}</td>
                 <td>{formatNumber(categoryData.GUESS_MIN)}</td>
                 <td>{formatNumber(categoryData.GUESS_MAX)}</td>
-                <td>{formatNumber(categoryData.CATEGORY_RANGE_ASSESSED)}</td>
+                <td>{formatFloat(categoryData.CATEGORY_RANGE_ASSESSED)}</td>
                 <td>{formatNumber(categoryData.AREA)}</td>
               </tr>
             ))}
             <tr className="subgeography-totals__totals" key="totals">
-              <td className="subgeography-totals__subgeography-name">Totals</td>
+              <td className="subgeography-totals__subgeography-name">Totals {year}</td>
               <td>{formatNumber(totals.ESTIMATE)}</td>
               <td>{formatNumber(totals.CONFIDENCE) || '-'}</td>
               <td>{formatNumber(totals.GUESS_MIN)}</td>
               <td>{formatNumber(totals.GUESS_MAX)}</td>
-              <td>{formatNumber(totals.PERCENT_OF_RANGE_ASSESSED)}</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td colSpan="4"></td>
+              <td>Assessed Range</td>
+              <td>{formatFloat(totals.PERCENT_OF_RANGE_ASSESSED)}</td>
+              <td>{formatNumber(totals.ASSESSED_RANGE)}</td>
+            </tr>
+            <tr>
+              <td colSpan="4"></td>
+              <td>Unassessed Range</td>
+              <td>{formatFloat(unassessedPercentTotal)}</td>
+              <td>{formatNumber(unassessedRangeTotal)}</td>
+            </tr>
+            <tr className="subgeography-totals__totals range-totals">
+              <td colSpan="4"></td>
+              <td>Total Range</td>
+              <td>100</td>
               <td>{formatNumber(totals.RANGE_AREA)}</td>
             </tr>
           </tbody>
@@ -172,8 +194,8 @@ export default function CountsBySurveyCategory(props) {
                   <td>{formatNumber(categoryData.CONFIDENCE)}</td>
                   <td>{formatNumber(categoryData.GUESS_MIN)}</td>
                   <td>{formatNumber(categoryData.GUESS_MAX)}</td>
+                  <td>{formatFloat(categoryData.CATEGORY_RANGE_ASSESSED)}</td>
                   <td>{formatNumber(categoryData.AREA)}</td>
-                  <td>{formatNumber(categoryData.CATEGORY_RANGE_ASSESSED)}</td>
                 </tr>
               ))}
               <tr className="subgeography-totals__totals" key="totals">
@@ -182,8 +204,8 @@ export default function CountsBySurveyCategory(props) {
                 <td>{formatNumber(changeTotals.CONFIDENCE)}</td>
                 <td>{formatNumber(changeTotals.GUESS_MIN)}</td>
                 <td>{formatNumber(changeTotals.GUESS_MAX)}</td>
+                <td>{formatFloat(changeTotals.PERCENT_OF_RANGE_ASSESSED)}</td>
                 <td>{formatNumber(changeTotals.RANGE_AREA)}</td>
-                <td>{formatNumber(changeTotals.PERCENT_OF_RANGE_ASSESSED)}</td>
               </tr>
             </tbody>
           </table>
