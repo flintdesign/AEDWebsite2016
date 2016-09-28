@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import GlossaryToggleItem from './glossary_toggle';
 import RangeCategories from 'html!./../../data/glossary/range-categories.html';
 import SurveyCategoriesIntro from 'html!./../../data/glossary/survey-categories.html';
-import SurveyReliabilityContent from 'html!./../../data/glossary/survey-categories-2.html';
+import SurveyReliabilityContent from 'html!./../../data/glossary/survey-reliability.html';
 import SurveyCategoriesToggle from 'json!./../../data/glossary/survey-categories-toggle-list.json';
 import CausesOfChangeIntro from 'html!./../../data/glossary/causes-of-change.html';
 import CausesOfChangeToggle from 'json!./../../data/glossary/causes-of-change-toggle-list.json';
