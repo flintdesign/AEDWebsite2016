@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react';
 import { formatNumber } from '../../../utils/format_utils.js';
 import ToggleTable from './toggle_table.js';
+import { SIDEBAR_FULL } from '../../../constants';
 
 export default function CauseOfChangeDPPS(props) {
-  const { tablesTitle, surveys } = props;
+  const { tablesTitle, surveys, sidebarState } = props;
 
   const tables = surveys.map((survey, i) => {
     const titleMarkup = (<span>{survey.CauseofChange}</span>);
@@ -22,9 +23,9 @@ export default function CauseOfChangeDPPS(props) {
       />
     );
   });
-
-  return (
-    <div className="sidebar__count-summary">
+  let markup = null;
+  if (sidebarState < SIDEBAR_FULL) {
+    markup = (<div className="sidebar__count-summary">
       <h3 className="heading__small">
         {tablesTitle}
         <a
@@ -34,11 +35,16 @@ export default function CauseOfChangeDPPS(props) {
         />
       </h3>
       {tables}
-    </div>
-  );
+    </div>);
+  } else {
+    markup = (<div />);
+  }
+
+  return markup;
 }
 
 CauseOfChangeDPPS.propTypes = {
   tablesTitle: PropTypes.string.isRequired,
-  surveys: PropTypes.array.isRequired
+  surveys: PropTypes.array.isRequired,
+  sidebarState: PropTypes.number.isRequired
 };
