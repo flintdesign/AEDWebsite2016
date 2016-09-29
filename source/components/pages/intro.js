@@ -79,7 +79,7 @@ export default function Intro(props) {
                       SSC
                   </a>
                   <a
-                    className="about-us__link-grid__link afesg"
+                    className="about-us__link-grid__link afesg_white"
                     href="https://www.iucn.org/ssc-specialist-groups/african-elephant-sg/about/ssc-specialist-groups-and-red-list-authorities-10"
                     target="_blank"
                   >
