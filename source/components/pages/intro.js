@@ -1,3 +1,4 @@
+/* eslint max-len: [0] */
 import React, { PropTypes } from 'react';
 
 export default function Intro(props) {
@@ -61,6 +62,29 @@ export default function Intro(props) {
                   <button className="intro__actions__button" onClick={handleIntroClick}>
                     Enter the database
                   </button>
+                </div>
+                <div className="intro__logo-grid">
+                  <a
+                    className="about-us__link-grid__link iucn"
+                    href="https://www.iucn.org/"
+                    target="_blank"
+                  >
+                      IUCN
+                  </a>
+                  <a
+                    className="about-us__link-grid__link ssc"
+                    href="https://www.iucn.org/theme/species/about/species-survival-commission"
+                    target="_blank"
+                  >
+                      SSC
+                  </a>
+                  <a
+                    className="about-us__link-grid__link afesg"
+                    href="https://www.iucn.org/ssc-specialist-groups/african-elephant-sg/about/ssc-specialist-groups-and-red-list-authorities-10"
+                    target="_blank"
+                  >
+                      AfESG
+                  </a>
                 </div>
               </div>
             </div>
