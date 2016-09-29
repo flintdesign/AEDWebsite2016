@@ -8,6 +8,7 @@ import CountsByInputZones from './../add/counts_by_input_zones';
 import ChildDPPS from './child_dpps';
 import { formatNumber } from '../../../utils/format_utils.js';
 import { pluralize, getNextGeography } from '../../../utils/convenience_funcs';
+import access from 'safe-access';
 
 export default function DPPSSidebar(props) {
   const {
@@ -23,8 +24,8 @@ export default function DPPSSidebar(props) {
     geographies[`${pluralize(subGeography)}_sum`][0] || geographies.summary;
   // console.log(geographies);
   const summaryTotals = geographies[`${currentGeography}_totals`];
-  const rangeSurveyed = data.SURVRANGPERC;
-  const totalRange = data.RANGEAREA;
+  const rangeSurveyed = access(data, 'SURVRANGPERC');
+  const totalRange = access(data, 'RANGEAREA');
   const assessedInKM = (rangeSurveyed / 100) * totalRange;
   const unassessedPercent = 100 - rangeSurveyed;
   const unassessedInKM = (unassessedPercent / 100) * totalRange;

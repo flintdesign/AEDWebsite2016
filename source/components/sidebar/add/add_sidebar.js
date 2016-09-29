@@ -6,6 +6,7 @@ import CountsByInputZones from './counts_by_input_zones';
 import CountsBySurveyCategory from './counts_by_survey_category';
 import { pluralize, getNextGeography } from '../../../utils/convenience_funcs';
 import ParentADD from './parent_add';
+import access from 'safe-access';
 
 export default function ADDSidebar(props) {
   const {
@@ -25,27 +26,27 @@ export default function ADDSidebar(props) {
   let addChangeData;
   if (currentGeography === 'country') {
     addSummaryData = {
-      PERCENT_OF_RANGE_ASSESSED: geographies.areas[0].percent_range_assessed,
+      PERCENT_OF_RANGE_ASSESSED: access(geographies, 'areas[0].percent_range_assessed'),
       ASSESSED_RANGE: geographies.assessed_range,
-      ESTIMATE: geographies.summary_sums[0].ESTIMATE,
-      CONFIDENCE: geographies.summary_sums[0].CONFIDENCE,
-      GUESS_MIN: geographies.summary_sums[0].GUESS_MIN,
-      GUESS_MAX: geographies.summary_sums[0].GUESS_MAX,
-      RANGE_AREA: geographies.areas[0].range_area
+      ESTIMATE: access(geographies, 'summary_sums[0].ESTIMATE'),
+      CONFIDENCE: access(geographies, 'summary_sums[0].CONFIDENCE'),
+      GUESS_MIN: access(geographies, 'summary_sums[0].GUESS_MIN'),
+      GUESS_MAX: access(geographies, 'summary_sums[0].GUESS_MAX'),
+      RANGE_AREA: access(geographies, 'areas[0].range_area')
     };
   } else {
     addSummaryData = data(pluralize(subGeography));
   }
 
-  if (geographies.causes_of_change_sums.length > 0) {
+  if (access(geographies, 'causes_of_change_sums')) {
     addChangeData = {
-      PERCENT_OF_RANGE_ASSESSED: geographies.areas[0].percent_range_assessed,
-      ASSESSED_RANGE: geographies.assessed_range,
-      ESTIMATE: geographies.causes_of_change_sums[0].ESTIMATE,
-      CONFIDENCE: geographies.causes_of_change_sums[0].CONFIDENCE,
-      GUESS_MIN: geographies.causes_of_change_sums[0].GUESS_MIN,
-      GUESS_MAX: geographies.causes_of_change_sums[0].GUESS_MAX,
-      RANGE_AREA: geographies.areas[0].range_area
+      PERCENT_OF_RANGE_ASSESSED: access(geographies, 'areas[0].percent_range_assessed'),
+      ASSESSED_RANGE: access(geographies, 'assessed_range'),
+      ESTIMATE: access(geographies, 'causes_of_change_sums[0].ESTIMATE'),
+      CONFIDENCE: access(geographies, 'causes_of_change_sums[0].CONFIDENCE'),
+      GUESS_MIN: access(geographies, 'causes_of_change_sums[0].GUESS_MIN'),
+      GUESS_MAX: access(geographies, 'causes_of_change_sums[0].GUESS_MAX'),
+      RANGE_AREA: access(geographies, 'areas[0].range_area')
     };
   }
   return (

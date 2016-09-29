@@ -93,6 +93,7 @@
     "react-tooltip": "^3.1.8",
     "redux": "^3.0.2",
     "redux-thunk": "^2.1.0",
+    "safe-access": "^0.1.0",
     "sass-loader": "^3.2.0",
     "style-loader": "^0.13.1",
     "stylelint-webpack-plugin": "^0.2.0",
