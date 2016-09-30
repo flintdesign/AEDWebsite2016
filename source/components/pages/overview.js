@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { withRouter } from 'react-router';
+import IntroMarkup from 'html!markdown!./../../data/overview/introduction.md';
 import TypesMarkup from 'html!markdown!./../../data/overview/types-categorization.md';
 import IntegrationMarkup from 'html!markdown!./../../data/overview/integration-presentation.md';
 import TablesMarkup from 'html!markdown!./../../data/overview/tables-dictionary.md';
@@ -45,7 +46,7 @@ class Overview extends Component {
   render() {
     return (
       <div>
-        <div className="glossary">
+        <div className="glossary overview">
           <div className="glossary-sidebar">
             <a onClick={this.goBack} className="glossary-sidebar__close"></a>
             <div className="glossary-sidebar__header">
@@ -55,6 +56,11 @@ class Overview extends Component {
             </div>
             <div className="glossary-menu">
               <ul className="glossary-menu__list">
+                <li className={this.setMenuItemClass('#introduction')}>
+                  <a href="#introduction">
+                    Overview
+                  </a>
+                </li>
                 <li className={this.setMenuItemClass('#types-categorization')}>
                   <a href="#types-categorization">
                     Data Types and Categorization
@@ -74,6 +80,9 @@ class Overview extends Component {
             </div>
           </div>
           <div className="glossary-content">
+            <div className="glossary-content__section" id="introduction">
+              <div dangerouslySetInnerHTML={ { __html: IntroMarkup } } />
+            </div>
             <div className="glossary-content__section" id="types-categorization">
               <div dangerouslySetInnerHTML={ { __html: TypesMarkup } } />
             </div>

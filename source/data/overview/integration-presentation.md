@@ -19,7 +19,7 @@ In order to disentangle these confounding factors from real changes in elephant 
 **TABLE 4. CODES & DESCRIPTIONS OF REASONS FOR CHANGE AS IMPLEMENTED IN THE AED**
 !['Table 4'][table4]
 
-*** Overall Quality of Information and Survey Priorities
+### Overall Quality of Information and Survey Priorities
 
 The state of knowledge on elephant numbers and distribution varies widely across the continent. Some populations have never been surveyed, or are only surveyed rarely, while others are counted more frequently. The objectives of the AED include promoting the use of standardized, reliable survey techniques, as well as facilitating the task of donors, wildlife authorities and decision-makers in prioritizing their efforts to monitor elephant populations.
 
