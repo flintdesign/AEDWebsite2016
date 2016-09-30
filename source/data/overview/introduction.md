@@ -1,3 +1,5 @@
+## Overview
+
 A system for categorising and tracking changes in numbers was first introduced in the AESR 2007, resulting in the display of a “Cause of Change” for each area and an Interpretation of Changes table for each country and region as well as the continent. (“Cause of Change” has been renamed “Reason for Change” on this website; see below.) This system is intended to distinguish between real changes in numbers and changes in survey techniques or area of survey coverage, thus limiting inappropriate extrapolations about trends over time.
 
 The Definite, Probable, Possible, and Speculative (DPPS) system, in use since 1995, was designed to describe uncertainty and data quality. However, the calculations underpinning it are complex and its display of population numbers difficult to understand and interpret. Although the AESR 2007 emphasizes that “comparing guesses to derive population trends is a meaningless exercise,” the four-category “DPPS” itself does not explicitly articulate the proportion of elephant numbers that are guesses (i.e. population figures that do not meet the criteria required to qualify as population estimates).
