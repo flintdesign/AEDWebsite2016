@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import InputZoneToggleTable from '../input_zone_toggle_table';
-import { formatNumber } from '../../../utils/format_utils.js';
+import { formatNumber, formatFloat } from '../../../utils/format_utils.js';
 import { slugify } from '../../../utils/convenience_funcs.js';
 import { SIDEBAR_FULL } from '../../../constants';
 import _ from 'lodash';
@@ -117,7 +117,7 @@ export default function CountsByInputZones(props) {
             }
           </td>
           <td className="td-left">{zone.source}</td>
-          <td className="td-center">{zone.pfs}</td>
+          <td className="td-center">{formatFloat(zone.pfs, 0)}ss</td>
           <td className="td-center">{formatNumber(zone.area)}</td>
           <td className="td-center">{zone.lon}</td>
           <td className="td-center">{zone.lat}</td>

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import CountsByStrata from './add/counts_by_strata';
-import { formatNumber } from '../../utils/format_utils';
+import { formatNumber, formatFloat } from '../../utils/format_utils';
 import { SIDEBAR_FULL } from '../../constants';
 import { Link } from 'react-router';
 import { slugify } from '../../utils/convenience_funcs.js';
@@ -42,7 +42,7 @@ export default function InputZoneSidebar(props) {
           }
         </td>
         <td className="td-left">{zone.source}</td>
-        <td className="td-center">{zone.pfs}</td>
+        <td className="td-center">{formatFloat(zone.pfs, 0)}</td>
         <td className="td-center">{formatNumber(zone.area)}</td>
         <td className="td-center">{zone.lon}</td>
         <td className="td-center">{zone.lat}</td>
@@ -111,7 +111,7 @@ export default function InputZoneSidebar(props) {
               </tr>
               <tr>
                 <td>PFS</td>
-                <td>{zone.pfs}</td>
+                <td>{formatFloat(zone.pfs, 0)}</td>
               </tr>
               <tr>
                 <td>Source</td>
