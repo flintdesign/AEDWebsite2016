@@ -117,7 +117,7 @@ export default function CountsByInputZones(props) {
             }
           </td>
           <td className="td-left">{zone.source}</td>
-          <td className="td-center">{formatFloat(zone.pfs, 0)}ss</td>
+          <td className="td-center">{formatFloat(zone.pfs, 0)}</td>
           <td className="td-center">{formatNumber(zone.area)}</td>
           <td className="td-center">{zone.lon}</td>
           <td className="td-center">{zone.lat}</td>
