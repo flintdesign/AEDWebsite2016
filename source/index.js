@@ -7,6 +7,7 @@ import MapContainer from './components/map_container';
 import Intro from './components/pages/intro';
 import Glossary from './components/pages/glossary';
 import Overview from './components/pages/overview';
+import AESR2016 from './components/pages/aesr2016';
 import References from './components/pages/references';
 import Errata2016 from './components/pages/errata_2016';
 import ErrorPage from './components/pages/404';
@@ -45,6 +46,7 @@ render((
       <Route path={'/about'} component={AboutContainer} />
       <Route path={'/glossary'} component={Glossary} />
       <Route path={'/overview'} component={Overview} />
+      <Route path={'/aesr-2016'} component={AESR2016} />
       <Route path={'/references'} component={References} />
       <Route path={'/errata-2016'} component={Errata2016} />
       <Route path={'/darp'} component={DARP} />
