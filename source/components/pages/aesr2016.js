@@ -45,7 +45,7 @@ class aesr2016 extends Component {
   render() {
     return (
       <div>
-        <div className="glossary">
+        <div className="glossary glossary--aesr-2016">
           <div className="glossary-sidebar">
             <a onClick={this.goBack} className="glossary-sidebar__close"></a>
             <div className="glossary-sidebar__header">
@@ -76,14 +76,14 @@ class aesr2016 extends Component {
               </ul>
             </div>
           </div>
-          <div className="glossary-content">
-            <div className="glossary-content__section" id="introduction">
+          <div className="about-content">
+            <div className="about-content__section" id="introduction">
               <div dangerouslySetInnerHTML={ { __html: Introduction } } />
             </div>
-            <div className="glossary-content__section" id="executive-summary">
+            <div className="about-content__section" id="executive-summary">
               <div dangerouslySetInnerHTML={ { __html: ExecutiveSummary } } />
             </div>
-            <div className="glossary-content__section" id="errata-2016">
+            <div className="about-content__section" id="errata-2016">
               <div dangerouslySetInnerHTML={ { __html: Errata2016 } } />
             </div>
           </div>
